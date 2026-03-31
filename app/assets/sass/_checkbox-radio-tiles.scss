@@ -1,0 +1,66 @@
+    :root { --tile-min-height: 190px; }
+
+    /* Grid stretching so tiles equalise height */
+    .nhsuk-grid-row { align-items: stretch; }
+    .nhsuk-grid-row > [class^="nhsuk-grid-column-"] { display: flex; flex-direction: column; }
+
+    .tile { position: relative; margin-bottom: 24px; display: flex; flex: 1 1 auto; }
+    .tile--lg { width: 100%; }
+
+    .tile__label { cursor: pointer; display: flex; flex-direction: column; height: 100%; width: 100%; }
+    .tile__label .nhsuk-card {
+      position: relative;
+      display: flex; flex-direction: column; justify-content: space-between;
+      flex: 1 1 auto; /* allow cards to grow to equal height */
+      min-height: var(--tile-min-height);
+      transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      overflow: visible;
+    }
+
+    /* Ensure text wraps and never overlaps the badge */
+    .tile__label .nhsuk-card__content { padding: 24px; padding-right: 76px; }
+    .tile__label .nhsuk-card__content > :last-child { margin-bottom: 0; }
+
+    .tile__input { position: absolute; opacity: 0; pointer-events: none; }
+    .tile__input:focus-visible + .tile__label .nhsuk-card { outline: 4px solid #ffdd00; box-shadow: 0 0 0 4px #ffdd00; }
+
+    /* Checked state (NHS blue background) */
+    .tile__input:checked + .tile__label .nhsuk-card { background-color: #005eb8; color: #ffffff; border-color: #005eb8; }
+    .tile__input:checked + .tile__label .nhsuk-card .nhsuk-card__heading,
+    .tile__input:checked + .tile__label .nhsuk-card .nhsuk-card__description,
+    .tile__input:checked + .tile__label .nhsuk-card .nhsuk-card__heading a { color: #ffffff; }
+
+    /* Explicitly enforce radio group equal heights as well */
+    fieldset[aria-describedby="choices-hint-radio"] .nhsuk-grid-row > [class^="nhsuk-grid-column-"] .tile__label .nhsuk-card { min-height: var(--tile-min-height); }
+
+    /* --- Corner badge using an inline SVG --- */
+    .tile__badge {
+      position: absolute; right: 12px; bottom: 12px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background-color: #d8dde0;
+      border: 2px solid #d8dde0;
+      display: flex; align-items: center; justify-content: center;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
+      pointer-events: none; z-index: 2;
+    }
+    .tile__badge svg { width: 22px; height: 22px; stroke: #005eb8; stroke-width: 2.75; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transition: opacity 0.15s ease; vector-effect: non-scaling-stroke; }
+
+    /* When checked: white circle and show the tick */
+    .tile__input:checked + .tile__label .tile__badge { background-color: #ffffff; border-color: #ffffff; }
+    .tile__input:checked + .tile__label .tile__badge svg { opacity: 1; }
+
+    .tile__label .nhsuk-card:hover { box-shadow: 0 2px 0 rgba(0,0,0,0.2); }
+
+    @media (max-width: 640px) {
+      :root { --tile-min-height: 160px; }
+      .tile__label .nhsuk-card__content { padding: 20px; padding-right: 64px; }
+      .tile__badge { right: 10px; bottom: 10px; width: 32px; height: 32px; }
+      .tile__badge svg { width: 20px; height: 20px; }
+    }
+
+    /* ===== Counter styles ===== */
+    .counter-panel { margin-top: 0px; margin-bottom: 40px }
+    .counter-panel .nhsuk-input { text-align: center; font-weight: bold;}
+    .counter-inline { display:flex; align-items: center; gap: 16px; }
+    @media (max-width: 640px){ .counter-inline { justify-content: flex-start; } }
+    

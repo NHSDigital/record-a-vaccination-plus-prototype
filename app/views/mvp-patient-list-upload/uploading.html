@@ -1,0 +1,65 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% set uploadLabels = {
+  "infantUpload": "infant",
+  "maternityUpload": "maternity",
+  "ohUpload": "occupational health"
+} %}
+
+{% block pageTitle %}
+  Uploading patient list
+{% endblock %}
+
+{% block beforeContent %}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l nhsuk-u-padding-bottom-2">
+        Uploading {{ uploadLabels[data['upload-type']]|title }} patient list
+      </h1>
+
+      <div aria-live="polite" class="nhsuk-body">
+        <div class="spinner spinner--extra-large" aria-hidden="true"></div>
+        <p class="nhsuk-body nhsuk-u-padding-top-5">Please wait, uploading {{ uploadLabels[data['upload-type']]|title }} patient data...</p>
+      </div>
+
+    </div>
+  </div>
+
+  {% if data.failedUpload == "true" %}
+    {% set uploadDestinations = {
+      "infantUpload": "upload-success",
+      "maternityUpload": "upload-success",
+      "ohUpload": "upload-success"
+    } %}
+  {% else %}
+    {% set uploadDestinations = {
+      "infantUpload": "upload-success",
+      "maternityUpload": "upload-fail",
+      "ohUpload": "upload-success"
+    } %}
+  {% endif %}
+
+  <script>
+    const uploadType = "{{ data['upload-type'] }}";
+
+    const destinationMap = {
+      {% for key, page in uploadDestinations %}
+        "{{ key }}": "{{ page }}",
+      {% endfor %}
+    };
+
+    const targetPage = destinationMap[uploadType] || "upload-success";
+
+    // Wait 2.5 seconds, then redirect
+    setTimeout(function () {
+      window.location.href = targetPage;
+    }, 2500);
+  </script>
+
+{% endblock %}

@@ -1,0 +1,189 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Maternity Digital Vaccination Services - Guidance - Record vaccines" %}
+
+{% set currentSection = "prepare" %}
+
+{% block pageTitle %}
+  Maternity Digital Vaccination Services - Guidance
+{% endblock %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-prepare">Prepare</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/guidance">Guidance</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Record vaccines</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <span class="nhsuk-caption-l">Tooling</span>
+      <h1 class="nhsuk-heading-l">
+        Record vaccines
+      </h1>
+    </div>
+  </div>
+
+    {# MAIN COLUMN #}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">    
+
+      <!--<h2 class="nhsuk-heading-m" id="section-1">
+        Contents
+      </h2>-->
+
+        {{ contentsList({
+          items: [
+            {
+              text: "Vaccination data",
+              href: "#vaccination-data"
+            },
+            {
+              text: "Patient record",
+              href: "#patient-record"
+            },
+            {
+              text: "Recording a vaccination",
+              href: "#/",
+              current: "true"
+            },
+            {
+              text: "Managing vaccines",
+              href: "#managing-vaccines"
+            },
+            {
+              text: "Managing users",
+              href: "#managing-users"
+            }
+          ]
+        }) }}
+
+      <h2 class="nhsuk-heading-l" id="vaccination-data">
+        Choosing a vaccine
+      </h2>
+      <p class="nhsuk-body">
+        Select the vaccine and vaccine product you wish to give the patient. You'll only see vaccine products with active batches.
+      </p>
+
+      <h3 class="nhsuk-heading" id="vaccination-data">
+        Selecting a delivery team
+      </h3>
+      <p class="nhsuk-body">
+        If your organisation has several sub-sites or teams, select a 'Delivery team' before you select the 'Vaccine' you wish to administer. This information will remain the same until you make new selections during your session or log out.
+      </p>
+
+      <img src="/images/choose-vaccine-warning.png" alt="Girl in a jacket" width="100%" style="border: solid 4px #fff">
+
+      <br><br><br>
+
+      <h2 class="nhsuk-heading-l" id="section-two">
+        Assessing patients
+      </h2>
+      <p class="nhsuk-body">
+        Check if the patient is suitable for the vaccination before continuing to capture consent.
+      </p>
+
+      <h3 class="nhsuk-heading" id="screening-questions">
+        Screening questions
+      </h3>
+      <p class="nhsuk-body">
+        We've provided COVID-19 screening questions to consider when assessing a patient. Recording this information is no longer necessary. Refer to your organisation's standard operating procedures, if you're screening patients for other vaccines.
+      </p>
+<!--
+      <h2 class="nhsuk-heading-m" id="section-two">
+        Section two
+      </h2>
+      <p class="nhsuk-body">
+        Information information information information information.
+      </p>
+      <p class="nhsuk-body">
+        Information information information information information information information information information information information. Information information information information.
+      </p>
+      <p class="nhsuk-body">
+        Information information information information information information information information information information information.
+      </p>
+      <p class="nhsuk-body">
+        Information information information information information.
+      </p>
+
+      <h2 class="nhsuk-heading-m" id="section-three">
+        Section three
+      </h2>
+      <p class="nhsuk-body">
+        Information information information information information information.
+      </p>
+-->
+    </div>
+
+    {# RELATED CONTENT #}
+    <div class="nhsuk-grid-column-one-third">
+
+      <h2 class="nhsuk-heading-m">
+        Related content
+      </h2>
+
+      <ul class="nhsuk-list">
+        <li><a href="#/">Selecting a cohort and sending invites</a></li>
+        <li><a href="#/">Manage clinics</a></li>
+        <li>Record vaccines</li>
+        <li><a href="#/">Understand uptake and reporting</a></li>
+        <li><a href="#/">Payments</a></li>
+        <li><a href="#/">Managing users and sites</a></li>
+      </ul>
+
+    </div>
+
+  </div>
+
+  {# CONTACT #}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+
+      <h2 class="nhsuk-heading-m">Contact</h2>
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Extra support</a> </h2>
+              <p class="nhsuk-card__description">Additional information</p>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Providing feedback</a> </h2>
+              <p class="nhsuk-card__description">Additional information</p>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Taking part in research</a> </h2>
+              <p class="nhsuk-card__description">Additional information</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+
+{% endblock %}

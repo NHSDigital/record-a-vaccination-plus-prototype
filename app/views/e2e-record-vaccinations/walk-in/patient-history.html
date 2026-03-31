@@ -1,0 +1,348 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Check the patient's details" %}
+
+{% set currentSection = "run" %}
+
+{% if (data.vaccine === "COVID-19") %}
+  {% set nextPage = "warning" %}
+{% elseif ((data.vaccine == "RSV") and (data.eligibility | arrayOrStringIncludes("Pregnant"))) or (data.vaccine == "Pertussis") %}
+  {% set nextPage = "patient-estimated-due-date" %}
+{% else %}
+  {% set nextPage = "consent" %}
+{% endif %}
+
+{% set dateOfBirthHtml %}
+  {% if data.dateOfBirth %}
+    {{ (data.dateOfBirth | isoDateFromDateInput | govukDate) }}
+    <br>(75 years old)
+  {% endif %}
+{% endset %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if data['e2eCurrentUserType'] == 'infant' %}
+        <h1 class="nhsuk-heading-l">Check Sam Brown's details and vaccination history</h1>
+      {% else %}
+        <h1 class="nhsuk-heading-l">Check Jodie Brown's details and vaccination history</h1>
+      {% endif %}
+
+      {% if data['e2eCurrentUserType'] == 'infant' %}
+        {{ summaryList({
+          classes: 'xnhsuk-summary-list--no-border',
+          rows: [
+            {
+              key: {
+                text: "Name"
+              },
+              value: {
+                text: "Sam Brown"
+              }
+            },
+            {
+              key: {
+                html: "Parents / legal&nbsp;guardians"
+              },
+              value: {
+                  html: "<ul class='nhsuk-list'><li><a href='#/'>Jodie Brown</a></li><li><a href='#/'>Samual Johnson</a></li></ul>"
+              }
+            },
+            {
+              key: {
+                text: "Date of birth"
+              },
+              value: {
+                html: "	26 June 2024<br>(aged 1 year 4 months)"
+              }
+            },
+            {
+              key: {
+                text: "Address"
+              },
+              value: {
+                html: "121 Rogers Estate <br>Globe Road <br>E2 0JY"
+              }
+            },
+            {
+              key: {
+                text: "NHS number"
+              },
+              value: {
+                text: "9434765919"
+              }
+            }
+          ]
+        }) }}
+      {% else %}
+        {{ summaryList({
+          classes: 'xnhsuk-summary-list--no-border',
+          rows: [
+            {
+              key: {
+                text: "Name"
+              },
+              value: {
+                text: "Jodie Brown"
+              }
+            },
+            {
+              key: {
+                text: "Date of birth"
+              },
+              value: {
+                text: "1 April 2000"
+              }
+            },
+            {
+              key: {
+                text: "Address"
+              },
+              value: {
+                html: "20 Greenfield Road <br>Harborne <br>Birmingham <br>B17 0EE"
+              }
+            },
+            {
+              key: {
+                text: "NHS number"
+              },
+              value: {
+                text: "9165325689"
+              }
+            },
+            {
+              key: {
+                text: "Pregnancy due date"
+              },
+              value: {
+                text: "20 February 2026"
+              }
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      {% if data.vaccine == "COVID-19" %}
+
+        {% set screeningConsiderations %}
+          <ul>
+            <li>Does the patient have a history of anaphylaxis or significant allergic reactions to any vaccines or their ingredients?</li>
+            <li>Has the patient had a serious adverse reaction after the COVID-19 vaccine?</li>
+            <li>Is the patient pregnant or could they be?</li>
+          </ul>
+        {% endset %}
+
+        {{ details({
+          summaryText: "Screening considerations",
+          html: screeningConsiderations
+        }) }}
+
+      {% endif %}
+
+      <h2 class="nhsuk-heading-m">Vaccination history</h2>
+
+      {% if data['e2eCurrentUserType'] == 'infant' %}
+        <p>This shows NHS vaccinations given in England.</p>
+      {% else %}
+        <p>This shows NHS vaccinations given in England. Currently it includes COVID-19, flu, pertussis and RSV.</p>
+        <p>However, pertussis vaccinations given at a GP surgery are not shown.</p>
+
+        {{ warningCallout({
+          heading: "Important",
+          html: "<p>Some RSV vaccination records entered into GP systems are incorrect and the patient may not yet have had their vaccination.</p><p>Check with the patient or their GP.</p>"
+        }) }}
+      {% endif %}
+
+    </div>
+  </div>
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      {% if data['e2eCurrentUserType'] == 'infant' %}
+        {{ table({
+          panel: false,
+          caption: "",
+          firstCellIsHeader: false,
+          head: [
+            {
+              text: "Date"
+            },
+            {
+              text: "Vaccine"
+            },
+            {
+              text: "Product"
+            }
+          ],
+          rows: [
+            [
+              {
+                text: "21 November 2024"
+              },
+              {
+                text: "6-in-1 (3rd dose)"
+              },
+              {
+                text: "Infanrix hexa"
+              }
+            ],
+            [
+              {
+                text: "21 November 2024"
+              },
+              {
+                text: "MenB (2nd dose)"
+              },
+              {
+                text: "Bexsero"
+              }
+            ],
+            [
+              {
+                text: "24 October 2024"
+              },
+              {
+                text: "6-in-1 (2nd dose)"
+              },
+              {
+                text: "Infanrix hexa"
+              }
+            ],
+            [
+              {
+                text: "24 October 2024"
+              },
+              {
+                text: "Pneumococcal (1st dose)"
+              },
+              {
+                text: "Prevenar 13"
+              }
+            ],
+            [
+              {
+                text: "24 October 2024"
+              },
+              {
+                text: "Rotavirus (2nd dose)"
+              },
+              {
+                html: "Rotarix&sup2;"
+              }
+            ],
+            [
+              {
+                text: "25 September 2024"
+              },
+              {
+                text: "6-in-1 (1st dose)"
+              },
+              {
+                text: "Infanrix hexa"
+              }
+            ],
+            [
+              {
+                text: "25 September 2024"
+              },
+              {
+                text: "MenB (1st dose)"
+              },
+              {
+                text: "Bexsero"
+              }
+            ],
+            [
+              {
+                text: "25 September 2024"
+              },
+              {
+                text: "Rotavirus (1st dose)"
+              },
+              {
+                html: "Rotarix&sup2;"
+              }
+            ]
+          ]
+        }) }}
+      {% else %}
+        {{ table({
+          panel: false,
+          caption: "",
+          firstCellIsHeader: false,
+          head: [
+            {
+              text: "Date"
+            },
+            {
+              text: "Vaccine"
+            },
+            {
+              text: "Product"
+            }
+          ],
+          rows: [
+            [
+              {
+                text: "25 October 2024"
+              },
+              {
+                text: "Flu"
+              },
+              {
+                text: "Adjuvanted Quadrivalent Influenza Vaccine (aQIV)"
+              }
+            ],
+            [
+              {
+                text: "15 October 2023"
+              },
+              {
+                text: "COVID-19"
+              },
+              {
+                text: "Comirnaty 30 Omicron XBB.1.5"
+              }
+            ],
+            [
+              {
+                text: "10 October 2023"
+              },
+              {
+                text: "Flu"
+              },
+              {
+                text: "Adjuvanted Quadrivalent Influenza Vaccine (aQIV)"
+              }
+            ],
+            [
+              {
+                text: "11 March 2022"
+              },
+              {
+                text: "COVID-19"
+              },
+              {
+                text: "Moderna mRNA (Spikevax) Original"
+              }
+            ]
+          ]
+        }) }}
+      {% endif %}
+
+      <form action="consent" method="post" novalidate>
+        {{ button({
+          text: "Continue"
+        })}}
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
+

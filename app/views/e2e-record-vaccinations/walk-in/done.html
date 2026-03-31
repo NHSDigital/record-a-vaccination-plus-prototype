@@ -1,0 +1,87 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Vaccination saved" %}
+
+{% set patientName = data.patientName if data.patientName else "Jodie Smith" %}
+
+{% set currentSection = "run" %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% set panelHtml %}
+        {% if data['e2eCurrentUserType'] == 'infant' %}
+          <a href="#" class="nhsuk-link--reverse">Sam Brown's vaccination record</a> will be sent to their patient record.
+        {% else %}
+          <a href="#" class="nhsuk-link--reverse">Jodie Brown's Pertussis record</a> will be sent to their GP.
+        {% endif %}
+      {% endset %}
+
+      {{ panel({
+        titleText: "Vaccination saved",
+        html: panelHtml
+      }) }}
+
+    </div>
+  </div>
+
+  {# What would you like to do next? #}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      
+      <h2 class="nhsuk-heading-m nhsuk-u-padding-top-5">
+        What would you like to do next?
+      </h2>
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              {% if data['e2eCurrentUserType'] == 'infant' %}
+                <h2 class="nhsuk-card__heading nhsuk-heading-xs"> <a class="nhsuk-card__link" href="vaccine">Record a second vaccination for Sam Brown</a> </h2>
+              {% else %}
+                <h2 class="nhsuk-card__heading nhsuk-heading-xs"> <a class="nhsuk-card__link" href="/e2e-record-vaccinations/walk-in/vaccine">Record a second vaccination for Jodie Brown</a> </h2>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              {% if data['e2eCurrentUserType'] == 'infant' %}
+                <h2 class="nhsuk-card__heading nhsuk-heading-xs"> <a class="nhsuk-card__link" href="/staff-book-patient-appointment/book-patient-sites?journey=">Book another appointment for Sam Brown</a> </h2>
+              {% else %}
+                <h2 class="nhsuk-card__heading nhsuk-heading-xs"> <a class="nhsuk-card__link" href="/staff-book-patient-appointment/book-patient-sites?journey=">Book another appointment for Jodie Brown</a> </h2>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              {% if data['e2eCurrentUserType'] == 'infant' %}
+                <h2 class="nhsuk-card__heading nhsuk-heading-xs"><a class="nhsuk-card__link" href="/patient-tracker/profile?addHistory=&selectVaccine=&chosenReason=&further-information=">Check Sam Brown's status and history, book and manage appointments</a></h2>
+              {% else %}
+                <h2 class="nhsuk-card__heading nhsuk-heading-xs"><a class="nhsuk-card__link" href="/patient-tracker/profile?addHistory=&selectVaccine=&chosenReason=&further-information=">Check Jodie Brown's status and history, book and manage appointments</a></h2>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <a class="nhsuk-action-link" href="/e2e-record-vaccinations/walk-in/">
+        <svg class="nhsuk-icon nhsuk-icon--arrow-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+          <path d="M12 2a10 10 0 0 0-10 9h11.7l-4-4a1 1 0 0 1 1.5-1.4l5.6 5.7a1 1 0 0 1 0 1.4l-5.6 5.7a1 1 0 0 1-1.5 0 1 1 0 0 1 0-1.4l4-4H2A10 10 0 1 0 12 2z" />
+        </svg>
+        <span class="nhsuk-action-link__text">Enter a vaccination for someone else</span>
+      </a>
+
+      <p class="nhsuk-body">
+        <a href="/e2e-record-vaccinations/site-overview">Return to <strong>Site details</strong></a>
+      </p>
+
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'e2e-layout3.html' %}
+
+{% block pageTitle %}
+  Send invites
+{% endblock %}
+
+{% set currentSection = "organise" %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Send invites</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+
+  {#<a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>#}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if vaccinationTodayError %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: vaccinationTodayError,
+              href: "#vaccinationToday-1"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <form action="/send-invites/choose-task" method="post" novalidate>
+
+        {% set hintHtml -%}
+          <p class="nhsuk-u-margin-bottom-2">Use this tooling to send targeted invites to your patients for the vaccinations they are eligible for. To send invites there are three things you need to do:</p>
+          <ul class="nhsuk-list nhsuk-list--bullet">
+            <li>Set invite templates - write the messages that get sent to patients</li>
+            <li>Set invite rules - with reference to how close each patient is to her due date, you can set rules to determine when patients are invited to specific vaccines</li>
+            <li>Upload patient list and send invites - to send a round of invites you need to upload your Trust's patient list to this system, the rules you have set previously determine which SMS template each patient receives</li>
+          </ul>
+        {%- endset %}
+
+        {{ radios({
+          name: "taskChoice",
+          data: "taskChoice",
+          id: "taskChoice",
+          value: data['taskChoice'],
+          fieldset: {
+            classes: "nhsuk-u-margin-bottom-6",
+            legend: {
+              text: "Send invites",
+              classes: "nhsuk-fieldset__legend--l",
+              isPageHeading: true
+            }
+          },
+          hint: {
+            html: hintHtml
+          },
+          items: [
+            {
+              value: "invite-templates",
+              text: "Invite templates"
+            },
+            {
+              value: "invite-rules",
+              text: "Invite rules"
+            },
+            {
+              value: "upload-patient-list-and-send-invites",
+              text: "Upload patient list and send invites"
+            }
+          ]
+        }) }}
+
+        <div class="govuk-button-group">
+          <button type="submit" class="nhsuk-button nhsuk-u-margin-right-3" data-module="nhsuk-button">
+            Continue
+          </button>
+          <p class="nhsuk-body"><a class="nhsuk-link" href="/iteration-2/landing-organise-clinics">Cancel</a></p>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

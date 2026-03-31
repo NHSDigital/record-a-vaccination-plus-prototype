@@ -1,0 +1,352 @@
+<!-- Use this page as the index for your project -->
+
+<!-- ADDING CUSTOM CSS - Add your custom CSS or Sass in /app/assets/sass/main.scss -->
+
+<!-- Extends the layout from /views/layout.html -->
+{% extends 'e2e-layout3-index-only.html' %}
+<!--
+  In /views/layout.html you can:
+    - change the header and footer
+    - add custom CSS and JavaScript
+-->
+
+<!-- Set the page title -->
+{% set pageName = "NHS Record a vaccination prototypes" %}
+
+<!-- For adding a breadcrumb or back link -->
+{% block beforeContent %}
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">
+        Line chart
+      </h1>
+
+      <figure class="nhsuk-u-margin-top-6">
+        <figcaption class="nhsuk-u-font-size-24 nhsuk-u-font-weight-bold">
+          Appointments completed per month
+        </figcaption>
+
+        <!-- Chart -->
+        <div class="nhsuk-u-margin-top-3" style="min-height: 260px;">
+          <canvas id="chart-line-appointments"
+            data-chart="line"
+            data-source="#table-line-appointments"
+            aria-describedby="caption-line-appointments">
+          </canvas>
+        </div>
+
+        <!-- Accessible table (authoritative data) -->
+        <figcaption id="caption-line-appointments" class="nhsuk-u-visually-hidden">
+          Table of monthly appointments completed
+        </figcaption>
+        <table class="nhsuk-table nhsuk-u-margin-top-4" id="table-line-appointments">
+          <thead>
+            <tr>
+              <th scope="col">Month</th>
+              <th scope="col" class="numeric">Completed</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Jan</th><td class="numeric">120</td></tr>
+            <tr><th scope="row">Feb</th><td class="numeric">150</td></tr>
+            <tr><th scope="row">Mar</th><td class="numeric">180</td></tr>
+            <tr><th scope="row">Apr</th><td class="numeric">160</td></tr>
+            <tr><th scope="row">May</th><td class="numeric">210</td></tr>
+          </tbody>
+        </table>
+      </figure>
+
+      <h1 class="nhsuk-heading-l">
+        Bar chart
+      </h1>
+
+      <figure class="nhsuk-u-margin-top-6">
+        <figcaption class="nhsuk-u-font-size-24 nhsuk-u-font-weight-bold">
+          Appointments by department (last month)
+        </figcaption>
+
+        <!-- Chart -->
+        <div class="nhsuk-u-margin-top-3" style="min-height: 260px;">
+          <canvas id="chart-bar-depts"
+            data-chart="bar"
+            data-source="#table-bar-depts"
+            aria-describedby="caption-bar-depts">
+          </canvas>
+        </div>
+
+        <!-- Accessible table (authoritative data) -->
+        <figcaption id="caption-bar-depts" class="nhsuk-u-visually-hidden">
+          Table of appointments by department last month
+        </figcaption>
+        <table class="nhsuk-table nhsuk-u-margin-top-4" id="table-bar-depts">
+          <thead>
+            <tr>
+              <th scope="col">Department</th>
+              <th scope="col" class="numeric">Completed</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Cardiology</th><td class="numeric">340</td></tr>
+            <tr><th scope="row">Dermatology</th><td class="numeric">220</td></tr>
+            <tr><th scope="row">Physiotherapy</th><td class="numeric">190</td></tr>
+            <tr><th scope="row">Radiology</th><td class="numeric">275</td></tr>
+          </tbody>
+        </table>
+      </figure>
+
+      <h1 class="nhsuk-heading-l">
+        Stacked bar chart
+      </h1>
+
+      <figure class="nhsuk-u-margin-top-6">
+        <figcaption class="nhsuk-u-font-size-24 nhsuk-u-font-weight-bold">
+          Appointments by Department: Last Week vs Next Week (Predicted)
+        </figcaption>
+
+        <div class="nhsuk-u-margin-top-3" style="min-height: 320px;">
+          <canvas id="chart-stacked-example"
+                  data-chart="bar"
+                  data-source="#table-stacked-example"
+                  data-x-title="Department"
+                  data-y-title="Appointments"
+                  data-stacked="true"
+                  aria-describedby="caption-stacked-example"></canvas>
+        </div>
+
+        <figcaption id="caption-stacked-example" class="nhsuk-u-visually-hidden">
+          Table of appointments by department for last week and predicted for next week
+        </figcaption>
+
+        <table class="nhsuk-table nhsuk-u-margin-top-4" id="table-stacked-example">
+          <thead>
+            <tr>
+              <th scope="col">Department</th>
+              <th scope="col" class="numeric">Last week</th>
+              <th scope="col" class="numeric">Next week (predicted)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Cardiology</th><td class="numeric">340</td><td class="numeric">360</td></tr>
+            <tr><th scope="row">Dermatology</th><td class="numeric">220</td><td class="numeric">250</td></tr>
+            <tr><th scope="row">Physiotherapy</th><td class="numeric">190</td><td class="numeric">210</td></tr>
+            <tr><th scope="row">Radiology</th><td class="numeric">275</td><td class="numeric">290</td></tr>
+            <tr><th scope="row">Oncology</th><td class="numeric">160</td><td class="numeric">175</td></tr>
+          </tbody>
+        </table>
+      </figure>
+
+      <h1 class="nhsuk-heading-l">
+        Multiple line chart
+      </h1>
+
+      <figure class="nhsuk-u-margin-top-6">
+        <figcaption class="nhsuk-u-font-size-24 nhsuk-u-font-weight-bold">
+          Monthly Appointments by Site
+        </figcaption>
+
+        <!-- Chart area -->
+        <div class="nhsuk-u-margin-top-3" style="min-height: 260px;">
+          <canvas
+            id="chart-line-multi"
+            data-chart="line"
+            data-source="#table-line-multi"
+            data-x-title="Month"
+            data-y-title="Appointments"
+            aria-describedby="caption-line-multi">
+          </canvas>
+        </div>
+
+        <!-- Accessible table (authoritative source) -->
+        <figcaption id="caption-line-multi" class="nhsuk-u-visually-hidden">
+          Table of monthly appointments by site
+        </figcaption>
+        <table class="nhsuk-table nhsuk-u-margin-top-4" id="table-line-multi">
+          <thead>
+            <tr>
+              <th scope="col">Month</th>
+              <th scope="col">Site A</th>
+              <th scope="col">Site B</th>
+              <th scope="col">Site C</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Jan</th><td>120</td><td>95</td><td>80</td></tr>
+            <tr><th scope="row">Feb</th><td>150</td><td>110</td><td>90</td></tr>
+            <tr><th scope="row">Mar</th><td>180</td><td>130</td><td>100</td></tr>
+            <tr><th scope="row">Apr</th><td>160</td><td>125</td><td>95</td></tr>
+            <tr><th scope="row">May</th><td>210</td><td>140</td><td>120</td></tr>
+          </tbody>
+        </table>
+      </figure>
+
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <!-- LAST WEEK -->
+    <div class="nhsuk-grid-column-one-half">
+      <figure class="nhsuk-u-margin-top-6">
+        <figcaption class="nhsuk-u-font-size-24 nhsuk-u-font-weight-bold">
+          Appointments by Department — Last Week (Actual)
+        </figcaption>
+
+        <div class="nhsuk-u-margin-top-3" style="min-height: 320px;">
+          <canvas id="chart-stacked-last"
+                  data-chart="bar"
+                  data-source="#table-stacked-last"
+                  data-x-title="Department"
+                  data-y-title="Appointments"
+                  data-stacked="true"
+                  aria-describedby="caption-stacked-last"></canvas>
+        </div>
+
+        <figcaption id="caption-stacked-last" class="nhsuk-u-visually-hidden">
+          Table of last week's appointments by department, split by mode
+        </figcaption>
+        <table class="nhsuk-table nhsuk-u-margin-top-4" id="table-stacked-last">
+          <thead>
+            <tr>
+              <th scope="col">Department</th>
+              <th scope="col" class="numeric">Face-to-face</th>
+              <th scope="col" class="numeric">Telephone</th>
+              <th scope="col" class="numeric">Video</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Cardiology</th><td class="numeric">180</td><td class="numeric">110</td><td class="numeric">50</td></tr>
+            <tr><th scope="row">Dermatology</th><td class="numeric">120</td><td class="numeric">70</td><td class="numeric">30</td></tr>
+            <tr><th scope="row">Physiotherapy</th><td class="numeric">90</td><td class="numeric">70</td><td class="numeric">30</td></tr>
+            <tr><th scope="row">Radiology</th><td class="numeric">200</td><td class="numeric">60</td><td class="numeric">15</td></tr>
+            <tr><th scope="row">Oncology</th><td class="numeric">110</td><td class="numeric">35</td><td class="numeric">15</td></tr>
+          </tbody>
+        </table>
+      </figure>
+    </div>
+
+    <!-- NEXT WEEK (PREDICTED) -->
+    <div class="nhsuk-grid-column-one-half">
+      <figure class="nhsuk-u-margin-top-6">
+        <figcaption class="nhsuk-u-font-size-24 nhsuk-u-font-weight-bold">
+          Appointments by Department — Next Week (Predicted)
+        </figcaption>
+
+        <div class="nhsuk-u-margin-top-3" style="min-height: 320px;">
+          <canvas id="chart-stacked-next"
+            data-chart="bar"
+            data-source="#table-stacked-next"
+            data-x-title="Department"
+            data-y-title="Appointments"
+            data-stacked="true"
+            aria-describedby="caption-stacked-next"
+            data-legend-position="bottom"
+            data-legend-wrap="true">
+          </canvas>
+        </div>
+
+        <figcaption id="caption-stacked-next" class="nhsuk-u-visually-hidden">
+          Table of next week's predicted appointments by department, split by mode
+        </figcaption>
+        <table class="nhsuk-table nhsuk-u-margin-top-4" id="table-stacked-next">
+          <thead>
+            <tr>
+              <th scope="col">Department</th>
+              <th scope="col" class="numeric">Face-to-face</th>
+              <th scope="col" class="numeric">Telephone</th>
+              <th scope="col" class="numeric">Video</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Cardiology</th><td class="numeric">190</td><td class="numeric">120</td><td class="numeric">55</td></tr>
+            <tr><th scope="row">Dermatology</th><td class="numeric">130</td><td class="numeric">85</td><td class="numeric">35</td></tr>
+            <tr><th scope="row">Physiotherapy</th><td class="numeric">100</td><td class="numeric">80</td><td class="numeric">32</td></tr>
+            <tr><th scope="row">Radiology</th><td class="numeric">210</td><td class="numeric">65</td><td class="numeric">20</td></tr>
+            <tr><th scope="row">Oncology</th><td class="numeric">115</td><td class="numeric">45</td><td class="numeric">20</td></tr>
+          </tbody>
+        </table>
+      </figure>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">
+        Stacked last week vs next week
+      </h1>
+
+      <figure class="nhsuk-u-margin-top-6">
+        <figcaption class="nhsuk-u-font-size-24 nhsuk-u-font-weight-bold">
+          Appointments by department — last week vs next week
+        </figcaption>
+
+        <!-- Chart -->
+        <div class="nhsuk-u-margin-top-3" style="min-height: 300px;">
+          <canvas
+            id="chart-bar-weeks"
+            data-chart="bar"
+            data-source="#table-bar-weeks"
+            data-stacked="true"
+            data-x-title="Department"
+            data-y-title="Appointments"
+            data-legend-wrap="true"
+            aria-describedby="caption-bar-weeks"
+            data-palette="default">
+          </canvas>
+        </div>
+
+        <!-- Accessible table (authoritative data) -->
+        <figcaption id="caption-bar-weeks" class="nhsuk-u-visually-hidden">
+          Stacked bar chart data for last week and next week by department
+        </figcaption>
+        <table class="nhsuk-table nhsuk-u-margin-top-4" id="table-bar-weeks">
+          <thead>
+            <tr>
+              <th scope="col">Department</th>
+              <!-- Group 1: stack="Last" -->
+              <th scope="col" data-stack="Last" data-color="#005EB8">Last week — Face-to-face</th>
+              <th scope="col" data-stack="Last" data-color="#00A499">Last week — Remote</th>
+              <!-- Group 2: stack="Next" -->
+              <th scope="col" data-stack="Next" data-color="#0072CE">Next week — Face-to-face</th>
+              <th scope="col" data-stack="Next" data-color="#AE2573">Next week — Remote</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Cardiology</th>
+              <td>140</td><td>60</td>
+              <td>160</td><td>70</td>
+            </tr>
+            <tr>
+              <th scope="row">Dermatology</th>
+              <td>100</td><td>55</td>
+              <td>120</td><td>65</td>
+            </tr>
+            <tr>
+              <th scope="row">Physiotherapy</th>
+              <td>90</td><td>45</td>
+              <td>110</td><td>50</td>
+            </tr>
+            <tr>
+              <th scope="row">Radiology</th>
+              <td>130</td><td>50</td>
+              <td>140</td><td>60</td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+
+    </div>
+  </div>
+
+{% endblock %}

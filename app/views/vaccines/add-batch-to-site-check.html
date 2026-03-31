@@ -1,0 +1,125 @@
+{# extends 'layout.html' #}
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Check and confirm" %}
+
+{# set currentSection = "vaccines" #}
+{% set currentSection = "organise" %}
+
+{% set organisation = {name: data.nhsTrusts[data.organisationCode]} %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {# backLink({
+    href: "/vaccines/" + vaccine.id + "/add",
+    text: "Go back"
+  }) #}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <span class="nhsuk-caption-l">Hornsey Central Pharmacy</span>
+      <h1 class="nhsuk-heading-l">Check and confirm</h1>
+      {#<h1 class="nhsuk-heading-xl">Check and confirm</h1>#}
+
+      {{ summaryList({
+        classes: "nhsuk-u-margin-bottom-2",
+        rows: [
+          {
+            key: {
+              text: "Site name"
+            },
+            value: {
+              text: site.name
+            }
+          },
+          {
+            key: {
+              text: "ODS Code"
+            },
+            value: {
+              html: vaccine.siteId
+            }
+          },
+          {
+            key: {
+              text: "Address"
+            },
+            value: {
+              html: site.address
+            }
+          }
+        ]
+      }) }}
+
+      {{ summaryList({
+        classes: "nhsuk-u-margin-bottom-2 nhsuk-u-margin-top-6",
+        rows: [
+          {
+            key: {
+              text: "Vaccine"
+            },
+            value: {
+              html: vaccine.vaccine
+            }
+          },
+          {
+            key: {
+              text: "Product"
+            },
+            value: {
+              html: vaccine.vaccineProduct
+            }
+          },
+          {
+            key: {
+              text: "Pack size"
+            },
+            value: {
+              html: data.packType
+            }
+          } if data.packType
+        ]
+      }) }}
+
+      {{ summaryList({
+        classes: "nhsuk-u-margin-bottom-2 nhsuk-u-margin-top-6",
+        rows: [
+          {
+            key: {
+              text: "Batch number"
+            },
+            value: {
+              html: data["batchNumber"]
+            }
+          },
+          {
+            key: {
+              text: "Expiry date"
+            },
+            value: {
+              html: (data.batchExpiryDate | isoDateFromDateInput | govukDate )
+            }
+          }
+        ]
+      }) }}
+
+      <p class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-8"><a class="nhsuk-link nhsuk-link--no-visited-state" href="/vaccines/{{ vaccine.id }}/add">Edit batch</a></p>
+
+
+
+      <form action="/vaccines/{{ vaccine.id }}/added" method="post">
+        {{ button({
+          "text": "Confirm"
+        }) }}
+      </form>
+
+
+    </div>
+  </div>
+{% endblock %}

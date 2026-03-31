@@ -1,0 +1,73 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Patient list upload successful
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <div class="nhsuk-panel">
+        <h1 class="nhsuk-panel__title">
+          Patient cohort list upload successful
+        </h1>
+        <div class="nhsuk-panel__body">
+          <strong>763</strong> patients have been successfully uploaded
+        </div>
+      </div>
+
+      {#<div class="nhsuk-inset-text">
+        <p class="nhsuk-card__description nhsuk-u-font-size-26"><span class="nhsuk-u-visually-hidden">Information: </span><strong>763</strong> patients uploaded</p>
+      </div>#}
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      {# What would you like to do next? #}
+
+      <h2 class="nhsuk-heading-m nhsuk-u-padding-top-4">
+        What would you like to do next?
+      </h2>
+
+      <ul class="nhsuk-grid-row nhsuk-card-group nhsuk-u-margin-bottom-0">
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-xs"><a class="nhsuk-card__link" href="/send-invites/send-invites?invitesSent=">Create and send invitations</a></h2>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-xs"><a class="nhsuk-card__link" href="/send-invites/understand-cohort-mvp-1">View patient cohort list</a></h2>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-xs"><a class="nhsuk-card__link" href="/patient-tracker/index?nhsNumberKnown&nhsNumber">Find an individual patient</a></h2>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <p class="nhsuk-body">
+        <a href="patient-upload-v2">Return to <strong>Manage patient lists</strong>.</a>
+      </p>
+
+      {#<form class="form" action="patient-upload" class="submit">
+        <button class="nhsuk-button" data-module="nhsuk-button" type="submit">
+          Continue
+        </button>
+      </form>#}
+
+    </div>
+  </div>
+{% endblock %}

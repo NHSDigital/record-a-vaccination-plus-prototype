@@ -1,0 +1,518 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Send invites
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="choose-task?taskChoice">Send invites</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Invites templates</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+
+  {#<a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>#}
+{% endblock %}
+
+{% block head %}
+  <style>
+    :root { --tile-min-height: 190px; }
+
+    /* Grid stretching so tiles equalise height */
+    .nhsuk-grid-row { align-items: stretch; }
+    .nhsuk-grid-row > [class^="nhsuk-grid-column-"] { display: flex; flex-direction: column; }
+
+    .tile { position: relative; margin-bottom: 24px; display: flex; flex: 1 1 auto; }
+    .tile--lg { width: 100%; }
+
+    .tile__label { cursor: pointer; display: flex; flex-direction: column; height: 100%; width: 100%; }
+    .tile__label .nhsuk-card {
+      position: relative;
+      display: flex; flex-direction: column; justify-content: space-between;
+      flex: 1 1 auto; /* allow cards to grow to equal height */
+      min-height: var(--tile-min-height);
+      transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      overflow: visible;
+    }
+
+    /* Ensure text wraps and never overlaps the badge */
+    .tile__label .nhsuk-card__content { padding: 24px; padding-right: 76px; }
+    .tile__label .nhsuk-card__content > :last-child { margin-bottom: 0; }
+
+    .tile__input { position: absolute; opacity: 0; pointer-events: none; }
+    .tile__input:focus-visible + .tile__label .nhsuk-card { outline: 4px solid #ffdd00; box-shadow: 0 0 0 4px #ffdd00; }
+
+    /* Checked state (NHS blue background) */
+    .tile__input:checked + .tile__label .nhsuk-card { background-color: #005eb8; color: #ffffff; border-color: #005eb8; }
+    .tile__input:checked + .tile__label .nhsuk-card .nhsuk-card__heading,
+    .tile__input:checked + .tile__label .nhsuk-card .nhsuk-card__description,
+    .tile__input:checked + .tile__label .nhsuk-card .nhsuk-card__heading a { color: #ffffff; }
+
+    /* Explicitly enforce radio group equal heights as well */
+    fieldset[aria-describedby="choices-hint-radio"] .nhsuk-grid-row > [class^="nhsuk-grid-column-"] .tile__label .nhsuk-card { min-height: var(--tile-min-height); }
+
+    /* --- Corner badge using an inline SVG --- */
+    .tile__badge {
+      position: absolute; right: 12px; bottom: 12px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background-color: #d8dde0;
+      border: 2px solid #d8dde0;
+      display: flex; align-items: center; justify-content: center;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
+      pointer-events: none; z-index: 2;
+    }
+    .tile__badge svg { width: 22px; height: 22px; stroke: #005eb8; stroke-width: 2.75; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transition: opacity 0.15s ease; vector-effect: non-scaling-stroke; }
+
+    /* When checked: white circle and show the tick */
+    .tile__input:checked + .tile__label .tile__badge { background-color: #ffffff; border-color: #ffffff; }
+    .tile__input:checked + .tile__label .tile__badge svg { opacity: 1; }
+
+    .tile__label .nhsuk-card:hover { box-shadow: 0 2px 0 rgba(0,0,0,0.2); }
+
+    @media (max-width: 640px) {
+      :root { --tile-min-height: 160px; }
+      .tile__label .nhsuk-card__content { padding: 20px; padding-right: 64px; }
+      .tile__badge { right: 10px; bottom: 10px; width: 32px; height: 32px; }
+      .tile__badge svg { width: 20px; height: 20px; }
+    }
+
+    /* ===== Counter styles ===== */
+    .counter-panel { margin-top: 0px; margin-bottom: 40px }
+    .counter-panel .nhsuk-input { text-align: center; font-weight: bold;}
+
+    .counter-inline { display: flex; align-items: center;font-weight: bold; gap: 0.5rem; /* tweak spacing as needed */ flex-wrap: wrap; /* allows wrapping when space is tight */ }
+
+    /* Optional: keep the input a sensible width */
+    #remaining.nhsuk-input--width-4 {
+      max-width: 6ch;
+      text-align: center;
+    }
+
+    /* Small screens: stack vertically, left-aligned */
+    @media (max-width: 480px) {
+      .counter-inline {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+      }
+    }
+
+    /* Scrollable container (ONS-like) with NHS look */
+    .ons-like-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; background: #ffffff; border: 1px solid #d8dde0; border-left: 0; border-right: 0; padding: 0; margin: 0; }
+    .ons-like-scroll:focus { outline: 3px solid #ffbf47; outline-offset: 0; }
+
+    /* NHS table base */
+    .nhsuk-table { margin-bottom: 0; min-width: 640px; width: 100%; border-collapse: collapse; table-layout: auto; }
+    .nhsuk-table thead th { position: sticky; top: 0; z-index: 2; background: #f0f4f5; box-shadow: inset 0 -1px 0 #d8dde0; white-space: nowrap; }
+
+    /* Cells */
+    .nhsuk-table__cell, .nhsuk-table__header { background-color: #f0f4f5; white-space: nowrap; }
+    .nhsuk-table__row:hover .nhsuk-table__cell, .nhsuk-table__row:hover .nhsuk-table__header { background-color: #f0f4f5; }
+
+    /* Sticky first column for actions */
+    .is-sticky-col { position: sticky; left: 0; z-index: 3; background: #f0f4f5; box-shadow: inset -1px 0 0 #d8dde0; }
+
+    /* Column utilities */
+    .table-col-action { width: 1%; white-space: nowrap; }
+    .is-numeric { text-align: right; }
+
+    /* Remove link (standard NHS link) */
+    .link-row-remove.nhsuk-link { white-space: nowrap; }
+
+    /* Empty state */
+    .table-empty { text-align: center; font-style: italic; color: #425563; white-space: normal; }
+
+    /* Truncate long text with ellipsis on selected columns */
+    .truncate { max-width: 16rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    <h1 class="nhsuk-heading-l nhsuk-u-padding-bottom-2">
+      Choose RSV invite recipients
+    </h1>
+
+    {# Counter #}
+    <div class="nhsuk-grid-row" data-counter data-start="763" data-format="number" data-currency="GBP" data-min="0">
+      <div class="nhsuk-grid-column-full">
+        <div class="counter-panel">
+
+          <div class="counter-inline">
+            <!-- Label before -->
+            <label id="remaining-label-before" class="nhsuk-label nhsuk-u-margin-bottom-0" for="remaining">
+              763 Patients uploaded, 
+            </label>
+
+            <!-- Counter input -->
+            <input
+              class="nhsuk-input nhsuk-input--width-4"
+              id="remaining"
+              name="remaining"
+              type="text"
+              readonly
+              aria-describedby="remaining-hint"
+              aria-labelledby="remaining-label-before remaining remaining-label-after"
+              value="100"
+            >
+
+            <!-- Label after -->
+            <label id="remaining-label-after" class="nhsuk-label nhsuk-u-margin-bottom-0" for="remaining">
+              patients selected
+            </label>
+          </div>
+
+          <div class="nhsuk-u-visually-hidden" aria-live="polite" id="remaining-live"></div>
+
+        </div>
+      </div>
+    </div>
+
+    <form method="post" action="#/">
+
+      {# CHOOSE INVITE TYPES #}
+
+      <fieldset class="nhsuk-fieldset">
+        {#<legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+          <h1 class="nhsuk-fieldset__heading">Choose RSV invite recipients</h1>
+        </legend>#}
+
+        <div class="nhsuk-grid-row">
+
+          <div class="nhsuk-grid-column-one-third">
+            <div class="tile tile--lg">
+              <input class="tile__input" type="checkbox" id="tile-patientAtLeast28Weeks" name="inviteType" value="patientAtLeast28Weeks" data-amount="82" />
+              <label class="tile__label" for="tile-patientAtLeast28Weeks">
+                <div class="nhsuk-card nhsuk-card--clickable">
+                  <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-s">Patient is at least 28 weeks pregnant</h2>
+                    {#<p class="nhsuk-card__description"></p>#}
+                  </div>
+                  <!-- SVG tick badge -->
+                  <span class="tile__badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="nhsuk-grid-column-one-third">
+            <div class="tile tile--lg">
+              <input class="tile__input" type="checkbox" id="tile-patientHappyToBeContacted" name="inviteType" value="patientHappyToBeContacted" data-amount="101" />
+              <label class="tile__label" for="tile-patientHappyToBeContacted">
+                <div class="nhsuk-card nhsuk-card--clickable">
+                  <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-s">Patient is happy to be contacted</h2>
+                    {#<p class="nhsuk-card__description"></p>#}
+                  </div>
+                  <!-- SVG tick badge -->
+                  <span class="tile__badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="nhsuk-grid-column-one-third">
+            <div class="tile tile--lg">
+              <input class="tile__input" type="checkbox" id="tile-patientHasProvidedMobile" name="inviteType" value="patientHasProvidedMobile" data-amount="93" />
+              <label class="tile__label" for="tile-patientHasProvidedMobile">
+                <div class="nhsuk-card nhsuk-card--clickable">
+                  <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-s">Patient has provided mobile phone number</h2>
+                    {#<p class="nhsuk-card__description"></p>#}
+                  </div>
+                  <!-- SVG tick badge -->
+                  <span class="tile__badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="nhsuk-grid-column-one-third">
+            <div class="tile tile--lg">
+              <input class="tile__input" type="checkbox" id="tile-patientRSVexplained" name="inviteType" value="patientRSVexplained" data-amount="116" />
+              <label class="tile__label" for="tile-patientRSVexplained">
+                <div class="nhsuk-card nhsuk-card--clickable">
+                  <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-s">RSV vaccine explained and side effects were discussed</h2>
+                    {#<p class="nhsuk-card__description"></p>#}
+                  </div>
+                  <!-- SVG tick badge -->
+                  <span class="tile__badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="nhsuk-grid-column-one-third">
+            <div class="tile tile--lg">
+              <input class="tile__input" type="checkbox" id="tile-patientNotHadRSVinLastYear" name="inviteType" value="patientNotHadRSVinLastYear" data-amount="83" />
+              <label class="tile__label" for="tile-patientNotHadRSVinLastYear">
+                <div class="nhsuk-card nhsuk-card--clickable">
+                  <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-s">Patient has not received RSV vaccination in the last year</h2>
+                    {#<p class="nhsuk-card__description"></p>#}
+                  </div>
+                  <!-- SVG tick badge -->
+                  <span class="tile__badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="nhsuk-grid-column-one-third">
+            <div class="tile tile--lg">
+              <input class="tile__input" type="checkbox" id="tile-patientDoesNotHaveExistingRSVbooking" name="inviteType" value="patientDoesNotHaveExistingRSVbooking" data-amount="97" />
+              <label class="tile__label" for="tile-patientDoesNotHaveExistingRSVbooking">
+                <div class="nhsuk-card nhsuk-card--clickable">
+                  <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-s">Patient does not have an existing booking for an RSV vaccination</h2>
+                    {#<p class="nhsuk-card__description"></p>#}
+                  </div>
+                  <!-- SVG tick badge -->
+                  <span class="tile__badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="nhsuk-grid-column-one-third">
+            <div class="tile tile--lg">
+              <input class="tile__input" type="checkbox" id="tile-patientHasNotBeenInvitedRSVlastFornight" name="inviteType" value="patientHasNotBeenInvitedRSVlastFornight" data-amount="91" />
+              <label class="tile__label" for="tile-patientHasNotBeenInvitedRSVlastFornight">
+                <div class="nhsuk-card nhsuk-card--clickable">
+                  <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-s">Patient has not been invited for an RSV in last fortnight</h2>
+                    {#<p class="nhsuk-card__description"></p>#}
+                  </div>
+                  <!-- SVG tick badge -->
+                  <span class="tile__badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="nhsuk-grid-column-one-third">
+            <div class="tile tile--lg">
+              <input class="tile__input" type="checkbox" id="tile-patientHasNotBeenInvitedForVaccinationInLastFornight" name="inviteType" value="patientHasNotBeenInvitedForVaccinationInLastFornight" data-amount="100" />
+              <label class="tile__label" for="tile-patientHasNotBeenInvitedForVaccinationInLastFornight">
+                <div class="nhsuk-card nhsuk-card--clickable">
+                  <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-s">Patient has not received another vaccination invite in last fortnight</h2>
+                    {#<p class="nhsuk-card__description"></p>#}
+                  </div>
+                  <!-- SVG tick badge -->
+                  <span class="tile__badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+        </div>
+      </fieldset>
+
+      <details class="nhsuk-details nhsuk-expander">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">
+            View patient list
+          </span>
+        </summary>
+        <div class="nhsuk-details__text">
+          <p>Patient list details</p>
+        </div>
+      </details>
+
+      <div class="ons-like-scroll" role="region" tabindex="0" aria-label="Scrollable data table" data-src="{{ assetPath }}/send-invites-patient-data.json">
+        <table class="nhsuk-table" aria-describedby="table-caption">
+          <caption id="table-caption" class="nhsuk-table__caption nhsuk-u-visually-hidden">Patient list</caption>
+          <thead class="nhsuk-table__head">
+            <tr class="nhsuk-table__row" id="table-head-row">
+              <!-- Header cells are generated from JSON (Actions + spreadsheet columns) -->
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body" id="removable-table-body">
+            <!-- Rows populated from JSON -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="nhsuk-u-visually-hidden" aria-live="polite" id="table-live"></div>
+
+      <fieldset class="nhsuk-fieldset">
+        <div class="nhsuk-button-group">
+          <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Confirm</button>
+        </div>
+      </fieldset>
+    </form>
+
+    <script>
+      (function(){
+        function parseAmount(el){
+          var v = Number(el.getAttribute('data-amount'));
+          return isNaN(v) ? 0 : v;
+        }
+
+        function sumSelectedAmounts(container){
+          var inputs = container.querySelectorAll('.tile .tile__input');
+          var total = 0;
+          inputs.forEach(function(input){
+            if (input.checked) {
+              total += parseAmount(input);
+            }
+          });
+          return total;
+        }
+
+        function formatValue(n, format, currency){
+          if (format === 'currency') {
+            try { return new Intl.NumberFormat('en-GB', { style:'currency', currency: currency || 'GBP' }).format(n); }
+            catch(e){ return '£' + n.toFixed(2); }
+          }
+          return String(n);
+        }
+
+        function clamp(n, min){ return (typeof min === 'number') ? Math.max(min, n) : n; }
+
+        var counterContainers = document.querySelectorAll('[data-counter]');
+        counterContainers.forEach(function(container){
+          var start = Number(container.getAttribute('data-start'));
+          if (isNaN(start)) start = 0;
+          var min = container.hasAttribute('data-min') ? Number(container.getAttribute('data-min')) : null;
+          var fmt = container.getAttribute('data-format') || 'number';
+          var cur = container.getAttribute('data-currency') || 'GBP';
+
+          var output = container.querySelector('#remaining');
+          var live = container.querySelector('#remaining-live');
+
+          function recalc(){
+            var remaining = sumSelectedAmounts(document);
+            output.value = (fmt === 'currency')
+              ? formatValue(remaining, 'currency', cur)
+              : formatValue(remaining, 'number');
+            if (live) live.textContent = 'Remaining: ' + output.value;
+          }
+
+          // Initialise and bind
+          recalc();
+          document.addEventListener('change', function(e){
+            if (e.target && e.target.classList && e.target.classList.contains('tile__input')) {
+              recalc();
+            }
+          });
+        });
+      })();
+
+      (function(){
+        var theadRow = document.getElementById('table-head-row');
+        var tbody = document.getElementById('removable-table-body');
+        var live = document.getElementById('table-live');
+        var container = document.querySelector('.ons-like-scroll');
+
+        function announce(msg){ if(live){ live.textContent = msg; } }
+
+        function updateEmptyState(){
+          if (!tbody) return;
+          if (tbody.children.length === 0) {
+            var tr = document.createElement('tr'); tr.className = 'nhsuk-table__row';
+            var td = document.createElement('td'); td.className = 'nhsuk-table__cell table-empty';
+            td.colSpan = (theadRow && theadRow.children.length) ? theadRow.children.length : 1;
+            td.textContent = 'There are no entries in the table.'; tr.appendChild(td); tbody.appendChild(tr);
+          }
+        }
+
+        function buildHeader(columns){
+          theadRow.innerHTML = '';
+          var thAction = document.createElement('th'); thAction.scope = 'col'; thAction.className = 'nhsuk-table__header table-col-action is-sticky-col'; thAction.textContent = 'Actions';
+          theadRow.appendChild(thAction);
+          columns.forEach(function(col){
+            var th = document.createElement('th'); th.scope = 'col'; th.className = 'nhsuk-table__header'; th.textContent = col; theadRow.appendChild(th);
+          });
+        }
+
+        function buildRow(values){
+          var tr = document.createElement('tr'); tr.className = 'nhsuk-table__row';
+          // Action cell
+          var tdAction = document.createElement('td'); tdAction.className = 'nhsuk-table__cell table-col-action is-sticky-col';
+          var a = document.createElement('a'); a.href = '#'; a.className = 'nhsuk-link nhsuk-link--no-visited-state link-row-remove'; a.setAttribute('data-remove',''); a.innerHTML = 'Remove<span class="nhsuk-u-visually-hidden"> this row</span>';
+          tdAction.appendChild(a); tr.appendChild(tdAction);
+          // Data cells
+          values.forEach(function(v, i){ 
+            var td = document.createElement('td'); td.className = 'nhsuk-table__cell';
+            // Example: truncate only on columns beyond index 3
+            if(i >= 3){ td.classList.add('truncate'); }
+            td.textContent = (v==null?'':String(v)); tr.appendChild(td);
+          });
+          return tr;
+        }
+
+        function onClick(e){
+          var btn = e.target.closest('[data-remove]'); if(!btn) return; e.preventDefault();
+          var row = btn.closest('tr'); if(!row) return; var labelCell = row.querySelector('td:nth-child(2)');
+          var label = labelCell ? labelCell.textContent.trim() : 'row'; row.remove(); announce(label + ' removed from table'); updateEmptyState();
+        }
+        document.addEventListener('click', onClick);
+
+        async function loadData(){
+          var src = container ? container.getAttribute('data-src') : null; if (!src) return null;
+          try { const res = await fetch(src, { cache: 'no-cache' }); if (res.ok) return await res.json(); console.error('Fetch failed', res.status, res.statusText); } catch(e){ console.error('Fetch error', e); }
+          return null;
+        }
+
+        (async function init(){
+          var data = await loadData(); if (!data) { updateEmptyState(); return; }
+          var columns, rows;
+          if (Array.isArray(data)) { columns = Object.keys(data[0]||{}); rows = data.map(function(o){ return columns.map(function(c){ return o[c]; }); }); }
+          else if (data.columns && data.rows) { columns = data.columns; rows = data.rows; }
+          else { updateEmptyState(); return; }
+          buildHeader(columns);
+          var frag = document.createDocumentFragment(); rows.forEach(function(vals){ frag.appendChild(buildRow(vals)); });
+          tbody.innerHTML = ''; tbody.appendChild(frag); updateEmptyState();
+        })();
+      })();
+    </script>
+
+  </div>
+</div>
+
+{% endblock %}

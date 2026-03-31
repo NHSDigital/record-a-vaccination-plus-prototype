@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+{% set pageName = "Which vaccine product was it? – Records" %}
+
+{% set currentSection = "records" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/records/records/" + vaccination.id,
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form action="/records/records/{{ vaccination.id }}" method="post">
+        <input type="hidden" name="changedField" value="Product">
+
+        {{ radios({
+          idPrefix: "vaccineProduct",
+          name: "vaccineProduct",
+          fieldset: {
+            legend: {
+              text: "Which " + vaccination.vaccine + " vaccine did you give?",
+              classes: "nhsuk-fieldset__legend--l",
+              isPageHeading: true
+            }
+          },
+          items: [
+            {
+              value: "Abrysvo",
+              text: "Abrysvo",
+              checked: (data.vaccineProduct === "Abrysvo")
+            },
+            {
+              value: "Arexvy",
+              text: "Arexvy (example only)",
+              checked: (data.vaccineProduct === "Arexvy")
+            }
+          ]
+        }) }}
+
+        {{ button({
+          text: "Save"
+        })}}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
+

@@ -1,0 +1,119 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Add services to your session
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block outerContent %}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <span class="nhsuk-caption-l">Percy Road Medical Centre</span>
+      <h1 class="nhsuk-heading-l">Add services to your session</h1>
+
+      {# MOJ Navigation START #}
+      <nav class="moj-sub-navigation nhsuk-u-padding-bottom-2" aria-label="Sub navigation">
+        <ul class="moj-sub-navigation__list">
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" aria-current="page">By vaccine</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="add-services-to-your-session-by-schedule">By schedule</a>
+          </li>
+        </ul>
+      </nav>
+      {# MOJ Navigation END #}
+
+      <form action="#/" class="form">
+        <div class="nhsuk-form-group">
+
+          <fieldset class="nhsuk-fieldset">
+            <legend class="nhsuk-fieldset__legend">
+              Select all options that are relevant to you
+            </legend>
+            <div class="nhsuk-checkboxes" data-module="nhsuk-checkboxes">
+
+              <div class="nhsuk-checkboxes__item">
+                <input class="nhsuk-checkboxes__input" id="vaccines" name="vaccines" type="checkbox" value="rotavirus" data-checkbox-exclusive-group="vaccines-list">
+                <label class="nhsuk-label nhsuk-checkboxes__label" for="vaccines">
+                  Rotavirus
+                </label>
+              </div>
+
+              <div class="nhsuk-checkboxes__item">
+                <input class="nhsuk-checkboxes__input" id="vaccines-2" name="vaccines" type="checkbox" value="sixinone" data-checkbox-exclusive-group="vaccines-list">
+                <label class="nhsuk-label nhsuk-checkboxes__label" for="vaccines-2">
+                  6-in-1
+                </label>
+              </div>
+
+              <div class="nhsuk-checkboxes__item">
+                <input class="nhsuk-checkboxes__input" id="vaccines-3" name="vaccines" type="checkbox" value="menb" data-checkbox-exclusive-group="vaccines-list">
+                <label class="nhsuk-label nhsuk-checkboxes__label" for="vaccines-3">
+                  Men B
+                </label>
+              </div>
+
+              <div class="nhsuk-checkboxes__item">
+                <input class="nhsuk-checkboxes__input" id="vaccines-4" name="vaccines" type="checkbox" value="pcv" data-checkbox-exclusive-group="vaccines-list">
+                <label class="nhsuk-label nhsuk-checkboxes__label" for="vaccines-4">
+                  PCV
+                </label>
+              </div>
+
+              <div class="nhsuk-checkboxes__item">
+                <input class="nhsuk-checkboxes__input" id="vaccines-5" name="vaccines" type="checkbox" value="mmr" data-checkbox-exclusive-group="vaccines-list">
+                <label class="nhsuk-label nhsuk-checkboxes__label" for="vaccines-5">
+                  MMR
+                </label>
+              </div>
+
+              <div class="nhsuk-checkboxes__item">
+                <input class="nhsuk-checkboxes__input" id="vaccines-6" name="vaccines" type="checkbox" value="mmrv" data-checkbox-exclusive-group="vaccines-list">
+                <label class="nhsuk-label nhsuk-checkboxes__label" for="vaccines-6">
+                  MMRV
+                </label>
+              </div>
+
+              <div class="nhsuk-checkboxes__item">
+                <input class="nhsuk-checkboxes__input" id="vaccines-7" name="vaccines" type="checkbox" value="fourinone" data-checkbox-exclusive-group="vaccines-list">
+                <label class="nhsuk-label nhsuk-checkboxes__label" for="vaccines-7">
+                  4-in-1
+                </label>
+              </div>
+
+              <div class="nhsuk-checkboxes__item">
+                <input class="nhsuk-checkboxes__input" id="vaccines-8" name="vaccines" type="checkbox" value="flu" data-checkbox-exclusive-group="vaccines-list">
+                <label class="nhsuk-label nhsuk-checkboxes__label" for="vaccines-8">
+                  Flu
+                </label>
+              </div>
+              <div class="nhsuk-checkboxes__divider">or</div>
+              <div class="nhsuk-checkboxes__item">
+                <input class="nhsuk-checkboxes__input" id="vaccines-9" name="vaccines" type="checkbox" value="all" data-checkbox-exclusive data-checkbox-exclusive-group="vaccines-list">
+                <label class="nhsuk-label nhsuk-checkboxes__label" for="vaccines-9">
+                  Select all vaccines
+                </label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <button class="nhsuk-button nhsuk-u-margin-top-4" data-module="nhsuk-button" type="submit">
+          Continue
+        </button>
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

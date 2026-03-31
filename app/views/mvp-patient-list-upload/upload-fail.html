@@ -1,0 +1,49 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% set uploadLabels = {
+  "infantUpload": "infant",
+  "maternityUpload": "maternity",
+  "ohUpload": "occupational health"
+} %}
+
+{% block pageTitle %}
+  {{ uploadLabels[data['upload-type']]|title }} patient cohort list upload failed
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <div class="nhsuk-notification-banner nhsuk-notification-banner--fail nhsuk-u-margin-bottom-4" role="alert" aria-labelledby="notification-banner-title" data-module="nhsuk-notification-banner">
+        <div class="nhsuk-notification-banner__header">
+          <h2 class="nhsuk-notification-banner__title" id="nhsuk-notification-banner-title">
+            Warning
+          </h2>
+        </div>
+        <div class="nhsuk-notification-banner__content">
+          <h3 class="nhsuk-notification-banner__heading">
+            Upload failed
+          </h3>
+
+        </div>
+      </div>
+
+      <h1 class="nhsuk-heading-lf nhsuk-u-padding-top-4">
+        {{ uploadLabels[data['upload-type']]|title }} patient cohort list upload failed
+      </h1>
+
+      <p class="nhsuk-body">Patient details have not been uploaded:</p>
+      <ul class="nhsuk-list nhsuk-list--bullet">
+        <li>Check file is saved as a <strong>'CSV'</strong></li>
+        <li>Make sure your list is organised in line with the <a href="#" class="nhsuk-link">guidelines provided</a></li>
+      </ul>
+
+      <p class="nhsuk-body nhsuk-u-padding-top-4">
+        <a href="start-page?uploadedList&failedUpload=true">Return to <strong>Provide your patient list</strong>.</a>
+      </p>
+
+    </div>
+  </div>
+{% endblock %}

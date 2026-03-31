@@ -1,0 +1,271 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Add user" %}
+
+{% set currentSection = "prepare" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:history.back()",
+    text: "Go back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">Add user</h1>
+
+      <form class="form" action="/user-admin/add-user-mvp" method="post" class="submit">
+
+        {{ radios({
+          "name": "clinician",
+          "fieldset": {
+            "legend": {
+              "text": "Are they a clinician?"
+            }
+          },
+          "items": [
+            {
+              "value": "yes",
+              "text": "Yes",
+              id: "clinician",
+              checked: (data.clinician == "yes")
+            },
+            {
+              "value": "no",
+              "text": "No",
+              checked: (data.clinician == "no")
+            }
+          ]
+        }) }}
+
+        {{ input({
+          "label": {
+            "text": "First name"
+          },
+          "id": "first-name",
+          "name": "firstName",
+          classes: "nhsuk-input--width-20",
+          value: userFirstName
+        }) }}
+
+        {{ input({
+          "label": {
+            "text": "Last name"
+          },
+          "id": "last-name",
+          "name": "lastName",
+          classes: "nhsuk-input--width-20",
+          value: userLastName
+        }) }}
+
+        {{ input({
+          "label": {
+            "text": "NHS-approved email address"
+          },
+          "id": "email",
+          "name": "email",
+          type: "email",
+          value: userEmail
+        }) }}
+
+        {# Start date #}
+        <!--
+        {% set startDateCustomHtml %}
+          {{ dateInput({
+            id: "customStartDate",
+            namePrefix: "customStartDate",
+            fieldset: {
+              legend: {
+                text: "Enter start date",
+                classes: "nhsuk-label",
+                isPageHeading: false
+              }
+            },
+            hint: {
+              text: "For example, 15 3 2025"
+            },
+            items: [
+              {
+                name: "day",
+                classes: "nhsuk-input--width-2"
+              },
+              {
+                name: "month",
+                classes: "nhsuk-input--width-2"
+              },
+              {
+                name: "year",
+                classes: "nhsuk-input--width-4"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {{ radios({
+          idPrefix: "startDate",
+          name: "startDate",
+          fieldset: {
+            legend: {
+              text: "Start date",
+              classes: "nhsuk-fieldset__legend",
+              isPageHeading: "false"
+            }
+          },
+          items: [
+            {
+              value: "startDateToday",
+              text: "Today"
+            },
+            {
+              value: "startDateCustom",
+              text: "Specified start date",
+              conditional: {
+                html: startDateCustomHtml
+              }
+            }
+          ]
+        }) }}
+        -->
+
+        {# End date #}
+        <!--
+        {% set endDateCustomHtml %}
+          {{ dateInput({
+            id: "customEndDate",
+            namePrefix: "customEndDate",
+            fieldset: {
+              legend: {
+                text: "Enter end date",
+                classes: "nhsuk-label",
+                isPageHeading: false
+              }
+            },
+            hint: {
+              text: "For example, 15 3 2025"
+            },
+            items: [
+              {
+                name: "day",
+                classes: "nhsuk-input--width-2"
+              },
+              {
+                name: "month",
+                classes: "nhsuk-input--width-2"
+              },
+              {
+                name: "year",
+                classes: "nhsuk-input--width-4"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {{ radios({
+          idPrefix: "endDate",
+          name: "endDate",
+          fieldset: {
+            legend: {
+              text: "End date",
+              classes: "nhsuk-fieldset__legend",
+              isPageHeading: "false"
+            }
+          },
+          items: [
+            {
+              value: "endDateToday",
+              text: "No end date"
+            },
+            {
+              value: "endDateCustom",
+              text: "Specified end date",
+              conditional: {
+                html: endDateCustomHtml
+              }
+            }
+          ]
+        }) }}
+        -->
+
+        {{ radios({
+          "name": "e2ePermissionLevel",
+          idPrefix: "e2e-permission-level",
+          "fieldset": {
+            "legend": {
+              "html": "<strong>Permission level</strong>",
+              classes: "nhsuk-u-padding-top-2"
+            }
+          },
+          value: data.e2ePermissionLevel,
+          "items": [
+            {
+              "value": "userGroup1",
+              "text": "Recorder",
+              "hint": {
+                "text": "Record vaccinations only"
+              },
+              id: userGroup1
+            },
+            {
+              "value": "userGroup2",
+              "text": "Administrator",
+              "hint": {
+                "text": "Record vaccinations, create reports and manage vaccines"
+              },
+              id: userGroup2
+            },
+            {
+              "value": "userGroup3",
+              "text": "Lead administrator",
+              "hint": {
+                "text": "Record vaccinations, create reports, manage vaccines and users"
+              },
+              id: userGroup3
+            }
+          ]
+        }) }}
+
+        {{ radios({
+          "name": "clinicmanager",
+          "fieldset": {
+            "legend": {
+              "html": "<strong>Are they a Clinic Manager?</strong>"
+            }
+          },
+          hint: {
+            text: "Create availability, send invites, view the patient list"
+          },
+          "items": [
+            {
+              "value": "yes",
+              "text": "Yes",
+              id: "clinicmanager",
+              checked: (data.clinicmanager == "yes")
+            },
+            {
+              "value": "no",
+              "text": "No",
+              checked: (data.clinicmanager == "no")
+            }
+          ]
+        }) }}
+
+        <div class="nhsuk-inset-text nhsuk-u-margin-top-4">
+          <span class="nhsuk-u-visually-hidden">Information: </span>
+          <p>Pathways can be allocated on the next screen.</p>
+        </div>
+
+        {{ button({
+          "text": "Continue",
+          "classes": "nhsuk-u-margin-top-2"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+
+
+{% endblock %}

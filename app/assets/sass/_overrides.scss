@@ -1,0 +1,43 @@
+.app-u-hide-on-mobile {
+  @include nhsuk-media-query($until: tablet) {
+    display: none;
+  }
+}
+
+// moj-sortable-table__button
+.moj-sortable-table__button {
+  background: none; border: 0; padding: 0; font: inherit; cursor: pointer;
+}
+
+/* Monospace code */
+.nhsuk-u-font-monospace {
+  font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.nhsuk-notification-banner--fail {
+  border-color: #d5281b;
+}
+
+.nhsuk-notification-banner--fail .nhsuk-notification-banner__header {
+  background-color: #d5281b;
+}
+
+.nhsuk-notification-banner--fail .nhsuk-notification-banner__title {
+  color: #ffffff;
+}
+
+.nhsuk-notification-banner--fail .nhsuk-notification-banner__content {
+  color: #4a0d0b;
+}
+
+.nhsuk-notification-banner--fail .nhsuk-notification-banner__content a, .nhsuk-notification-banner--fail .nhsuk-notification-banner__content a:visited {
+  color: #8a100b;
+}
+
+.nhsuk-notification-banner--fail .nhsuk-notification-banner__content a:hover {
+  text-decoration-thickness: max(3px, .1875rem);
+}
+
+.is-right-aligned {
+  text-align: right !important;
+}

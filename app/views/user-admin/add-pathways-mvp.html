@@ -1,0 +1,304 @@
+{% extends 'e2e-layout3.html' %}
+{% set pageName = "Add pathways" %}
+{% set currentSection = "prepare" %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "javascript:history.back()", text: "Go back" }) }}
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <form class="form" action="check" method="post">
+
+      <div class="nhsuk-form-group">
+        <fieldset class="nhsuk-fieldset" aria-describedby="pathways-hint">
+          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+            <h1 class="nhsuk-fieldset__heading">Which pathways is this person a clinic manager for?</h1>
+          </legend>
+
+          <div class="nhsuk-hint" id="pathways-hint">
+            Clinic managers can create availability, send invites and view the patient list
+          </div>
+
+          <div class="nhsuk-checkboxes" data-module="nhsuk-checkboxes">
+
+            <!-- Seasonal -->
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="seasonal" name="pathways" type="checkbox" value="seasonal" aria-controls="conditional-seasonal" aria-expanded="false">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="seasonal">Seasonal</label>
+            </div>
+
+            <!-- Maternity -->
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="maternity" name="pathways" type="checkbox" value="maternity" aria-controls="conditional-maternity" aria-expanded="false">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="maternity">Maternity</label>
+            </div>
+
+            <!-- Infants -->
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="infants" name="pathways" type="checkbox" value="infants" aria-controls="conditional-infants" aria-expanded="false">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="infants">Infants</label>
+            </div>
+
+            <!-- Occupational Health -->
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="occupational" name="pathways" type="checkbox" value="occupational-Health" aria-controls="conditional-occupational" aria-expanded="false">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="occupational">Occupational Health</label>
+            </div>
+
+          </div>
+
+          {#
+          <div class="nhsuk-checkboxes nhsuk-checkboxes--conditional" data-module="nhsuk-checkboxes">
+
+            <!-- Seasonal -->
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="seasonal" name="pathways" type="checkbox" value="seasonal" aria-controls="conditional-seasonal" aria-expanded="false">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="seasonal">Seasonal</label>
+            </div>
+            <div class="nhsuk-checkboxes__conditional nhsuk-checkboxes__conditional--hidden" id="conditional-seasonal">
+              <div class="site-inputs-container" data-pathway="seasonal">
+                <div class="nhsuk-form-group site-input-group">
+                  <label class="nhsuk-label" for="seasonal_site_1">Enter site name or ODS code</label>
+                  <div class="site-input-row">
+                    <div class="site-input-col nhsuk-u-width-two-thirds">
+                      <input class="nhsuk-input" id="seasonal_site_1" name="seasonal_sites[]" type="text" autocomplete="off">
+                    </div>
+                    <button type="button" class="add-site-link" data-pathway="seasonal" aria-label="Add another site for Seasonal">Add</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Maternity -->
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="maternity" name="pathways" type="checkbox" value="maternity" aria-controls="conditional-maternity" aria-expanded="false">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="maternity">Maternity</label>
+            </div>
+            <div class="nhsuk-checkboxes__conditional nhsuk-checkboxes__conditional--hidden" id="conditional-maternity">
+              <div class="site-inputs-container" data-pathway="maternity">
+                <div class="nhsuk-form-group site-input-group">
+                  <label class="nhsuk-label" for="maternity_site_1">Enter site name or ODS code</label>
+                  <div class="site-input-row">
+                    <div class="site-input-col nhsuk-u-width-two-thirds">
+                      <input class="nhsuk-input" id="maternity_site_1" name="maternity_sites[]" type="text" autocomplete="off">
+                    </div>
+                    <button type="button" class="add-site-link" data-pathway="maternity" aria-label="Add another site for Maternity">Add</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Infants -->
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="infants" name="pathways" type="checkbox" value="infants" aria-controls="conditional-infants" aria-expanded="false">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="infants">Infants</label>
+            </div>
+            <div class="nhsuk-checkboxes__conditional nhsuk-checkboxes__conditional--hidden" id="conditional-infants">
+              <div class="site-inputs-container" data-pathway="infants">
+                <div class="nhsuk-form-group site-input-group">
+                  <label class="nhsuk-label" for="infants_site_1">Enter site name or ODS code</label>
+                  <div class="site-input-row">
+                    <div class="site-input-col nhsuk-u-width-two-thirds">
+                      <input class="nhsuk-input" id="infants_site_1" name="infants_sites[]" type="text" autocomplete="off">
+                    </div>
+                    <button type="button" class="add-site-link" data-pathway="infants" aria-label="Add another site for Infants">Add</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Occupational Health -->
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="occupational" name="pathways" type="checkbox" value="occupational" aria-controls="conditional-occupational" aria-expanded="false">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="occupational">Occupational Health</label>
+            </div>
+            <div class="nhsuk-checkboxes__conditional nhsuk-checkboxes__conditional--hidden" id="conditional-occupational">
+              <div class="site-inputs-container" data-pathway="occupational">
+                <div class="nhsuk-form-group site-input-group">
+                  <label class="nhsuk-label" for="occupational_site_1">Enter site name or ODS code</label>
+                  <div class="site-input-row">
+                    <div class="site-input-col nhsuk-u-width-two-thirds">
+                      <input class="nhsuk-input" id="occupational_site_1" name="occupational_sites[]" type="text" autocomplete="off">
+                    </div>
+                    <button type="button" class="add-site-link" data-pathway="occupational" aria-label="Add another site for Occupational Health">Add</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          #}
+
+        </fieldset>
+      </div>
+
+      {{ button({ "text": "Continue" }) }}
+    </form>
+
+  </div>
+</div>
+
+<!-- Accessible Autocomplete assets via CDN -->
+<link rel="stylesheet" href="https://unpkg.com/accessible-autocomplete/dist/accessible-autocomplete.min.css">
+<script src="https://unpkg.com/accessible-autocomplete/dist/accessible-autocomplete.min.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  // This file assumes your compiled CSS already includes _autocomplete-overrides.scss
+
+  var SITES = [
+    { name: 'Birmingham Children’s Hospital', ods: 'RQ301' },
+    { name: 'Birmingham Women’s Hospital', ods: 'RQ370' },
+    { name: 'Good Hope Hospital', ods: 'RRK98' },
+    { name: 'Heartlands Hospital', ods: 'RRK97' },
+    { name: 'Queen Elizabeth Hospital Birmingham', ods: 'RRK15' },
+    { name: 'Solihull Hospital', ods: 'RRK99' }
+  ];
+  var SITE_OPTIONS = SITES.map(function (s) { return s.name + ' (' + s.ods + ')'; });
+
+  function siteSource (query, populate) {
+    var q = (query || '').toLowerCase().trim();
+    if (!q) return populate(SITE_OPTIONS);
+    populate(SITE_OPTIONS.filter(function (opt) { return opt.toLowerCase().indexOf(q) > -1; }));
+  }
+
+  function enhanceInput(input) {
+    if (!input) return;
+    if (input.dataset.enhanced === 'true') return;
+
+    if (!window.accessibleAutocomplete) {
+      input.dataset.enhanced = 'true';
+      return;
+    }
+
+    var col = input.closest('.site-input-col');
+    var mount = document.createElement('div');
+    mount.className = 'autocomplete-mount';
+    col.replaceChild(mount, input);
+
+    accessibleAutocomplete({
+      element: mount,
+      id: input.id,
+      name: input.name,
+      source: siteSource,
+      minLength: 1,
+      autoselect: true,
+      confirmOnBlur: false,
+      displayMenu: 'inline',
+      defaultValue: input.value || ''
+    });
+
+    var generated = col.querySelector('.autocomplete__wrapper input');
+    if (generated) {
+      generated.classList.add('nhsuk-input');
+      generated.setAttribute('autocomplete', 'off');
+    }
+
+    input.dataset.enhanced = 'true';
+  }
+
+  function updateLinks(container) {
+    var groups = container.querySelectorAll('.site-input-group');
+    for (var i = 0; i < groups.length; i++) {
+      var group = groups[i];
+      var addBtn = group.querySelector('.add-site-link');
+      if (!addBtn) continue;
+
+      if (i === groups.length - 1) {
+        addBtn.hidden = false;
+        addBtn.setAttribute('data-pathway', container.dataset.pathway);
+        if (groups.length > 1) {
+          for (var j = 0; j < groups.length - 1; j++) {
+            ensureRemove(groups[j]);
+          }
+        }
+      } else {
+        addBtn.hidden = true;
+      }
+    }
+  }
+
+  function ensureRemove(group) {
+    var row = group.querySelector('.site-input-row');
+    var existing = row.querySelector('.remove-site-link');
+    if (!existing) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'remove-site-link';
+      btn.textContent = 'Remove';
+      row.appendChild(btn);
+    }
+  }
+
+  function createInputGroup(pathway) {
+    var container = document.querySelector('.site-inputs-container[data-pathway="' + pathway + '"]');
+    var count = container.querySelectorAll('.site-input-group').length + 1;
+
+    var group = document.createElement('div');
+    group.className = 'nhsuk-form-group site-input-group';
+    group.innerHTML =
+      '<label class="nhsuk-label" for="' + pathway + '_site_' + count + '">Enter site name or ODS code</label>' +
+      '<div class="site-input-row">' +
+      '  <div class="site-input-col nhsuk-u-width-two-thirds">' +
+      '    <input class="nhsuk-input" id="' + pathway + '_site_' + count + '" name="' + pathway + '_sites[]" type="text" autocomplete="off">' +
+      '  </div>' +
+      '  <button type="button" class="add-site-link" data-pathway="' + pathway + '">Add</button>' +
+      '</div>';
+
+    enhanceInput(group.querySelector('input'));
+    return group;
+  }
+
+  function init() {
+    if (window.__sitesInitDone) return;
+    window.__sitesInitDone = true;
+
+    var inputs = document.querySelectorAll('.site-input-group input[type="text"]');
+    for (var i = 0; i < inputs.length; i++) { enhanceInput(inputs[i]); }
+
+    var containers = document.querySelectorAll('.site-inputs-container');
+    for (var j = 0; j < containers.length; j++) { updateLinks(containers[j]); }
+
+    document.addEventListener('click', function (e) {
+      var addBtn = e.target.closest && e.target.closest('.add-site-link');
+      var removeBtn = e.target.closest && e.target.closest('.remove-site-link');
+
+      if (addBtn) {
+        e.preventDefault();
+        var pathway = addBtn.getAttribute('data-pathway') || (addBtn.closest('.site-inputs-container') && addBtn.closest('.site-inputs-container').dataset.pathway);
+        if (!pathway) return;
+        var cont = document.querySelector('.site-inputs-container[data-pathway="' + pathway + '"]');
+        if (!cont) return;
+        var newGroup = createInputGroup(pathway);
+        cont.appendChild(newGroup);
+        updateLinks(cont);
+        var focus = newGroup.querySelector('input');
+        if (focus) focus.focus();
+        return;
+      }
+
+      if (removeBtn) {
+        e.preventDefault();
+        var grp = removeBtn.closest('.site-input-group');
+        var cont2 = removeBtn.closest('.site-inputs-container');
+        if (grp && cont2) {
+          grp.remove();
+          updateLinks(cont2);
+        }
+      }
+    }, true);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+{% endblock %}

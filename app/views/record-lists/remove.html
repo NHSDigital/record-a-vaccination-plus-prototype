@@ -1,0 +1,31 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Remove Tom Smith from the list?" %}
+
+{% set currentSection = "run" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/record-lists/list",
+    text: "Go back"
+  }) }}
+{% endblock %}
+
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+   <br>
+      <form action="/record-lists/list" method="post">
+        <button class="nhsuk-button" data-module="nhsuk-button" type="submit">
+        Yes, remove
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  {% endblock %}

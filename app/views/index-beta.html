@@ -1,0 +1,37 @@
+{% extends 'e2e-layout3-index-only.html' %}
+
+{% set pageName = "NHS Record a vaccination prototypes" %}
+
+{% block beforeContent %}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">Beta prototype</h1>
+
+      <h2 class="nhsuk-heading-m">Maternity: Upload journey</h2>
+      <ul>
+        <li><a href="/beta-v1/send-invites/patient-upload?e2eCurrentUserType&uploadedList">Upload new patient list</a></li>
+        <li><a href="/beta-v1/send-invites/uploading?e2eCurrentUserType&uploadedList=true">Uploading patient list</a></li>
+        <li><a href="/beta-v1/send-invites/success-upload?e2eCurrentUserType">Patient list upload successful</a></li>
+      </ul>
+
+      <h2 class="nhsuk-heading-m">Infant: Upload journey</h2>
+      <ul>
+        <li><a href="/beta-v1/send-invites/patient-upload?e2eCurrentUserType=infant&uploadedList">Upload new patient list</a></li>
+        <li><a href="/beta-v1/send-invites/uploading?e2eCurrentUserType=infant&uploadedList=true">Uploading patient list</a></li>
+        <li><a href="/beta-v1/send-invites/success-upload?e2eCurrentUserType=infant">Patient list upload successful</a></li>
+      </ul>
+
+      <h2 class="nhsuk-heading-m">Occupational Health: Upload journey</h2>
+      <ul>
+        <li><a href="/beta-v1/send-invites/patient-upload?e2eCurrentUserType=OH&uploadedList">Upload new patient list</a></li>
+        <li><a href="/beta-v1/send-invites/uploading?e2eCurrentUserType=OH&uploadedList=true">Uploading patient list</a></li>
+        <li><a href="/beta-v1/send-invites/success-upload?e2eCurrentUserType=OH">Patient list upload successful</a></li>
+      </ul>
+
+    </div>
+  </div>
+{% endblock %}

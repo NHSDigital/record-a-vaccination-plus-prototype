@@ -1,0 +1,331 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  View patient list
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/send-invites/patient-upload?uploadedList">Manage patient lists</a></li>
+      <li class="nhsuk-breadcrumb__list-item">View patient list</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">Go back</a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    <h1 class="nhsuk-heading-l">View patient list</h1>
+
+    <p class="nhsuk-body">Scroll horizontally to view full patient record details</p>
+
+    {# Simple secondary navigation #}
+    <nav class="x-govuk-secondary-navigation nhsuk-u-margin-bottom-6" aria-label="Secondary menu">
+      <ul class="x-govuk-secondary-navigation__list">
+        <li id="liAll" class="x-govuk-secondary-navigation__list-item x-govuk-secondary-navigation__list-item--current">
+          <a id="linkAll" class="x-govuk-secondary-navigation__link" aria-current="page" href="javascript:void(0)" onclick="switchToAll()">
+            All patients (0)
+          </a>
+        </li>
+        <li id="liSuppressed" class="x-govuk-secondary-navigation__list-item">
+          <a id="linkSuppressed" class="x-govuk-secondary-navigation__link" href="javascript:void(0)" onclick="switchToSuppressed()">
+            Suppressed (0)
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    {# All patients #}
+    <div id="panelAll">
+      <div class="ons-like-scroll" role="region" tabindex="0" aria-label="Scrollable data table" data-src="/send-invite-data/send-invites-patient-data.json">
+        <table class="nhsuk-table" aria-describedby="table-caption">
+          <caption id="table-caption" class="nhsuk-table__caption nhsuk-u-visually-hidden">Patient list</caption>
+          <thead><tr id="table-head-row"></tr></thead>
+          <tbody id="all-table-body"></tbody>
+        </table>
+      </div>
+      <div id="all-pagination" class="nhsuk-u-margin-top-4"></div>
+    </div>
+
+    {# Suppressed #}
+    <div id="panelSuppressed" class="hiddenPanel" aria-hidden="true">
+      <div class="ons-like-scroll" role="region" tabindex="0" aria-label="Scrollable data table (suppressed)">
+        <table class="nhsuk-table" aria-describedby="suppressed-table-caption">
+          <caption id="suppressed-table-caption" class="nhsuk-table__caption nhsuk-u-visually-hidden">Suppressed patient list</caption>
+          <thead><tr id="suppressed-head-row"></tr></thead>
+          <tbody id="suppressed-table-body"></tbody>
+        </table>
+      </div>
+      <div id="suppressed-pagination" class="nhsuk-u-margin-top-4"></div>
+    </div>
+
+    <div class="nhsuk-u-visually-hidden" aria-live="polite" id="table-live"></div>
+  </div>
+
+  <style>
+    .ons-like-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; background: #ffffff; border: 1px solid #d8dde0; border-left: 0; border-right: 0; }
+    .nhsuk-table { margin-bottom: 0; min-width: 640px; width: 100%; border-collapse: collapse; }
+    .nhsuk-table thead th { position: sticky; top: 0; z-index: 2; background: #fff; }
+    .nhsuk-table__cell, .nhsuk-table__header { background: #fff; white-space: nowrap; }
+    .is-sticky-col { position: sticky; left: 0; z-index: 3; background: #fff; box-shadow: inset -1px 0 0 #d8dde0; }
+    .table-empty { text-align: left; color: #425563; }
+    .hiddenPanel { display: none; }
+  </style>
+
+  <script>
+    function switchToAll() {
+      var panelAll = document.getElementById('panelAll');
+      var panelSupp = document.getElementById('panelSuppressed');
+      var liAll = document.getElementById('liAll');
+      var liSupp = document.getElementById('liSuppressed');
+      var linkAll = document.getElementById('linkAll');
+      var linkSupp = document.getElementById('linkSuppressed');
+
+      liAll.classList.add('x-govuk-secondary-navigation__list-item--current');
+      liSupp.classList.remove('x-govuk-secondary-navigation__list-item--current');
+      linkAll.setAttribute('aria-current','page');
+      linkSupp.removeAttribute('aria-current');
+      panelAll.classList.remove('hiddenPanel');
+      panelAll.removeAttribute('aria-hidden');
+      panelSupp.classList.add('hiddenPanel');
+      panelSupp.setAttribute('aria-hidden','true');
+    }
+
+    function switchToSuppressed() {
+      var panelAll = document.getElementById('panelAll');
+      var panelSupp = document.getElementById('panelSuppressed');
+      var liAll = document.getElementById('liAll');
+      var liSupp = document.getElementById('liSuppressed');
+      var linkAll = document.getElementById('linkAll');
+      var linkSupp = document.getElementById('linkSuppressed');
+
+      liAll.classList.remove('x-govuk-secondary-navigation__list-item--current');
+      liSupp.classList.add('x-govuk-secondary-navigation__list-item--current');
+      linkAll.removeAttribute('aria-current');
+      linkSupp.setAttribute('aria-current','page');
+      panelAll.classList.add('hiddenPanel');
+      panelAll.setAttribute('aria-hidden','true');
+      panelSupp.classList.remove('hiddenPanel');
+      panelSupp.removeAttribute('aria-hidden');
+    }
+  </script>
+
+  <script type="module">
+    (function(){
+      var PAGE_SIZE = 50;
+      var theadRow  = document.getElementById('table-head-row');
+      var allTbody  = document.getElementById('all-table-body');
+      var suppressedHead  = document.getElementById('suppressed-head-row');
+      var suppressedTbody = document.getElementById('suppressed-table-body');
+      var live      = document.getElementById('table-live');
+      var container = document.querySelector('.ons-like-scroll[data-src]');
+      var colIndexMap = {}; // normalised header -> index within JSON columns
+      var linkAll = document.getElementById('linkAll');
+      var linkSuppressed = document.getElementById('linkSuppressed');
+      var allPager = document.getElementById('all-pagination');
+      var suppressedPager = document.getElementById('suppressed-pagination');
+      var state = { allPage: 1, suppressedPage: 1 };
+
+      function announce(msg){ if(live){ live.textContent = msg; } }
+      function clearEmptyStates(){
+        [allTbody, suppressedTbody].forEach(tb => tb.querySelectorAll('.empty-state').forEach(r => r.remove()));
+      }
+      function updateEmptyState(){
+        clearEmptyStates();
+        if (allTbody.querySelectorAll('tr').length === 0) {
+          var tr = document.createElement('tr'); tr.className = 'nhsuk-table__row empty-state';
+          var td = document.createElement('td'); td.className = 'nhsuk-table__cell table-empty';
+          td.colSpan = (theadRow && theadRow.children.length) ? theadRow.children.length : 1;
+          td.textContent = 'There are no patients in the list.';
+          tr.appendChild(td); allTbody.appendChild(tr);
+        }
+      }
+      function updateNavCounts(){
+        try {
+          var allCount = allTbody ? allTbody.querySelectorAll('tr').length : 0;
+          var suppressedCount = suppressedTbody ? suppressedTbody.querySelectorAll('tr').length : 0;
+          if (linkAll) linkAll.innerHTML = 'All patients (' + allCount + ')';
+          if (linkSuppressed) linkSuppressed.innerHTML = 'Suppressed (' + suppressedCount + ')';
+        } catch(e){ /* no-op */ }
+      }
+
+      // Normalise header keys (lowercase, trim, collapse whitespace)
+      function norm(s){ return String(s || '').toLowerCase().trim().replace(/\s+/g, ' '); }
+
+      function buildHeader(columns){
+        // Build headers for main table and mirror to suppressed
+        theadRow.innerHTML = '';
+        var thAction = document.createElement('th');
+        thAction.scope = 'col'; thAction.className = 'nhsuk-table__header table-col-action is-sticky-col';
+        thAction.textContent = 'Action'; theadRow.appendChild(thAction);
+
+        colIndexMap = {};
+        columns.forEach(function(col, i){
+          var th = document.createElement('th'); th.scope = 'col'; th.className = 'nhsuk-table__header'; th.textContent = col;
+          colIndexMap[norm(col)] = i; theadRow.appendChild(th);
+        });
+
+        if (suppressedHead) {
+          suppressedHead.innerHTML = '';
+          var thAction2 = document.createElement('th'); thAction2.scope='col'; thAction2.className='nhsuk-table__header table-col-action is-sticky-col'; thAction2.textContent='Action';
+          suppressedHead.appendChild(thAction2);
+          columns.forEach(function(col){ var th=document.createElement('th'); th.scope='col'; th.className='nhsuk-table__header'; th.textContent=col; suppressedHead.appendChild(th); });
+        }
+      }
+
+      function buildRow(values){
+        var tr = document.createElement('tr'); tr.className = 'nhsuk-table__row';
+        var tdAction = document.createElement('td'); tdAction.className = 'nhsuk-table__cell table-col-action is-sticky-col';
+        var a = document.createElement('a'); a.href = '#'; a.className = 'nhsuk-link nhsuk-link--no-visited-state'; a.setAttribute('data-suppress',''); a.innerHTML = 'Suppress<span class="nhsuk-u-visually-hidden"> this patient</span>';
+        tdAction.appendChild(a); tr.appendChild(tdAction);
+        values.forEach(function(v){ var td = document.createElement('td'); td.className = 'nhsuk-table__cell'; td.textContent = (v==null?'':String(v)); tr.appendChild(td); });
+        return tr;
+      }
+
+      function swapActionCell(row, to){ // to: 'restore' or 'suppress'
+        var actionCell = row.querySelector('td.table-col-action') || row.querySelector('td:first-child');
+        if (!actionCell) return;
+        var link = document.createElement('a'); link.href='#'; link.className='nhsuk-link nhsuk-link--no-visited-state';
+        if (to === 'restore') { link.setAttribute('data-restore',''); link.innerHTML='Restore<span class="nhsuk-u-visually-hidden"> this patient</span>'; }
+        else { link.setAttribute('data-suppress',''); link.innerHTML='Suppress<span class="nhsuk-u-visually-hidden"> this patient</span>'; }
+        actionCell.innerHTML=''; actionCell.appendChild(link);
+      }
+
+      // Pagination helpers
+      function getRows(tb){ return Array.from(tb.querySelectorAll('tr:not(.empty-state)')); }
+      function totalPages(tb){ return Math.max(1, Math.ceil(getRows(tb).length / PAGE_SIZE)); }
+      function showPage(tb, page){
+        var rows = getRows(tb);
+        var start = (page-1)*PAGE_SIZE, end = start + PAGE_SIZE;
+        rows.forEach(function(r, i){ r.style.display = (i >= start && i < end) ? '' : 'none'; });
+      }
+      function buildNumberedList(total, current, ctx){
+        var ul = document.createElement('ul');
+        ul.className = 'nhsuk-pagination__list--numbered';
+        for (var i=1; i<=total; i++){
+          var li = document.createElement('li'); li.className = 'nhsuk-pagination--numbered__item';
+          var a = document.createElement('a'); a.className = 'nhsuk-pagination--numbered__link'; a.href = '#/'; a.setAttribute('aria-label', 'Page ' + i);
+          if (i === current){ a.setAttribute('aria-current','page'); }
+          a.textContent = i;
+          a.dataset.page = i; a.dataset.pager = ctx; li.appendChild(a); ul.appendChild(li);
+        }
+        return ul;
+      }
+      function buildNav(total, current, ctx){
+        var nav = document.createElement('nav');
+        nav.className = 'nhsuk-pagination nhsuk-pagination--numbered';
+        nav.setAttribute('role','navigation');
+        nav.setAttribute('aria-label','Pagination');
+
+        // Prev
+        var prevWrap = document.createElement('div'); prevWrap.className='nhsuk-pagination--numbered__prev';
+        if (current > 1){
+          var prev = document.createElement('a'); prev.className='nhsuk-pagination--numbered__link'; prev.href='#/'; prev.rel='prev'; prev.dataset.page = current - 1; prev.dataset.pager = ctx;
+          prev.innerHTML = '\n            <svg class="nhsuk-icon nhsuk-icon--arrow-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">\n              <path d="M10.7 6.3c.4.4.4 1 0 1.4L7.4 11H19a1 1 0 0 1 0 2H7.4l3.3 3.3c.4.4.4 1 0 1.4a1 1 0 0 1-1.4 0l-5-5A 1 1 0 0 1 4 12c0-.3.1-.5.3-.7l5-5a1 1 0 0 1 1.4 0Z"/>\n            </svg>\n            Previous<span class="nhsuk-u-visually-hidden"> page</span>';
+          prevWrap.appendChild(prev);
+        }
+        nav.appendChild(prevWrap);
+
+        // Numbers
+        nav.appendChild(buildNumberedList(total, current, ctx));
+
+        // Next
+        var nextWrap = document.createElement('div'); nextWrap.className='nhsuk-pagination--numbered__next';
+        if (current < total){
+          var next = document.createElement('a'); next.className='nhsuk-pagination--numbered__link'; next.href='#/'; next.rel='next'; next.dataset.page = current + 1; next.dataset.pager = ctx;
+          next.innerHTML = 'Next<span class="nhsuk-u-visually-hidden"> page</span>\n            <svg class="nhsuk-icon nhsuk-icon--arrow-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">\n              <path d="m14.7 6.3 5 5c.2.2.3.4.3.7 0 .3-.1.5-.3.7l-5 5a 1 1 0 0 1-1.4-1.4l3.3-3.3H5a 1 1 0 0 1 0-2h11.6l-3.3-3.3a 1 1 0 1 1 1.4-1.4Z"/>\n            </svg>';
+          nextWrap.appendChild(next);
+        }
+        nav.appendChild(nextWrap);
+        return nav;
+      }
+      function renderPagination(tb, pagerEl, current, ctx){
+        var total = totalPages(tb);
+        current = Math.min(Math.max(1, current), total);
+        showPage(tb, current);
+        pagerEl.innerHTML = '';
+        pagerEl.appendChild(buildNav(total, current, ctx));
+      }
+
+      document.addEventListener('click', function(e){
+        var link = e.target.closest('.nhsuk-pagination--numbered__link');
+        if (!link) return;
+        var page = parseInt(link.dataset.page, 10);
+        var which = link.dataset.pager;
+        if (!page || !which) return;
+        e.preventDefault();
+        if (which === 'all') { state.allPage = page; renderPagination(allTbody, allPager, state.allPage, 'all'); announce('Page ' + page + ' of all patients'); }
+        if (which === 'suppressed') { state.suppressedPage = page; renderPagination(suppressedTbody, suppressedPager, state.suppressedPage, 'suppressed'); announce('Page ' + page + ' of suppressed patients'); }
+        // keep focus on the newly current page link for accessibility
+        pagerEl = which === 'all' ? allPager : suppressedPager;
+        var currentLink = pagerEl.querySelector('[aria-current="page"]'); if(currentLink) currentLink.focus();
+      });
+
+      document.addEventListener('click', function(e){
+        var suppressBtn = e.target.closest('[data-suppress]');
+        var restoreBtn = e.target.closest('[data-restore]');
+        if (!suppressBtn && !restoreBtn) return;
+        e.preventDefault();
+
+        if (suppressBtn) {
+          var row = suppressBtn.closest('tr'); if(!row) return;
+          var labelCell = row.querySelector('td:nth-child(2)');
+          var label = labelCell ? labelCell.textContent.trim() : 'row';
+          swapActionCell(row, 'restore');
+          suppressedTbody.appendChild(row);
+          announce(label + ' suppressed from patient list');
+          updateNavCounts(); updateEmptyState();
+          renderPagination(allTbody, allPager, state.allPage, 'all');
+          renderPagination(suppressedTbody, suppressedPager, state.suppressedPage, 'suppressed');
+        } else if (restoreBtn) {
+          var row = restoreBtn.closest('tr'); if(!row) return;
+          var labelCell = row.querySelector('td:nth-child(2)');
+          var label = labelCell ? labelCell.textContent.trim() : 'row';
+          swapActionCell(row, 'suppress');
+          allTbody.appendChild(row);
+          announce(label + ' restored to patient list');
+          updateNavCounts(); updateEmptyState();
+          renderPagination(allTbody, allPager, state.allPage, 'all');
+          renderPagination(suppressedTbody, suppressedPager, state.suppressedPage, 'suppressed');
+        }
+      });
+
+      async function loadData(){
+        var src = container ? container.getAttribute('data-src') : null; if (!src) return null;
+        try {
+          const res = await fetch(src, { cache: 'no-cache' });
+          if (res.ok) return await res.json();
+          console.error('Fetch failed', res.status, res.statusText);
+        } catch(e){ console.error('Fetch error', e); }
+        return null;
+      }
+
+      (async function init(){
+        var data = await loadData(); if(!data){ updateEmptyState(); updateNavCounts(); return; }
+        var columns, rows;
+        if(data.columns && data.rows){ columns = data.columns; rows = data.rows; }
+        else if(Array.isArray(data)){ columns = Object.keys(data[0]||{}); rows = data.map(o => columns.map(c => o[c])); }
+        else { updateEmptyState(); updateNavCounts(); return; }
+
+        buildHeader(columns);
+        var frag = document.createDocumentFragment();
+        rows.forEach(vals => frag.appendChild(buildRow(vals)));
+        allTbody.innerHTML = ''; allTbody.appendChild(frag);
+        updateNavCounts(); updateEmptyState();
+        // initial pagination render
+        renderPagination(allTbody, allPager, state.allPage, 'all');
+        renderPagination(suppressedTbody, suppressedPager, state.suppressedPage, 'suppressed');
+      })();
+    })();
+  </script>
+
+  </div>
+</div>
+{% endblock %}

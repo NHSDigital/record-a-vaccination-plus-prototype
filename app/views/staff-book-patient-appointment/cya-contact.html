@@ -1,0 +1,270 @@
+<!-- Use this page as the index for your project -->
+
+<!-- ADDING CUSTOM CSS - Add your custom CSS or Sass in /app/assets/sass/main.scss -->
+
+<!-- Extends the layout from /views/layout.html -->
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+<!-- Set the page title -->
+{% block pageTitle %}
+Book vaccinations prototype
+{% endblock %}
+
+<!-- For adding a breadcrumb -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/breadcrumbs -->
+{% block beforeContent %}
+{#
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Manage clinics</li>
+      <li class="nhsuk-breadcrumb__list-item">BREADCRUMB TBC</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+#}
+
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+  
+{% endblock %}
+
+<!-- For adding a back link -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/back-link -->
+{% block outerContent %}
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <!-- Change the page title here -->
+      <h1 class="nhsuk-heading-l">Arrange Jodie Brown's appointment</h1>
+
+      <!-- Add your content here -->
+      <!-- Styles and components can be found at https://service-manual.nhs.uk/design-system -->
+
+        <form action="booking-complete" method="get" class="form">
+
+            <h2 class="nhsuk-heading-m">
+              Check Jodie's contact details
+            </h2>
+
+              <!--<h2 class="nhsuk-heading-m">Booked for</h2>
+
+              <table class="nhsuk-table">
+                <thead role="rowgroup" class="nhsuk-table__head">
+                  <tr role="row">
+                    <th role="columnheader" class="" scope="col">
+                      Name
+                    </th>
+                    <th role="columnheader" class="" scope="col">
+                        Date of birth
+                      </th>
+                    </tr>
+                </thead>
+                <tbody class="nhsuk-table__body">
+                  <tr role="row" class="nhsuk-table__row">
+                    <td class="nhsuk-table__cell">{{data['first-name']}} {{data['last-name']}}</td>
+                    <td class="nhsuk-table__cell "><span id="dobDisplay"></span></td>
+                  </tr>
+                </tbody>
+              </table>
+              
+    
+    
+              <p><a class="nhsuk-link" href="#">Change who this booking is for</a></p>
+
+              <h2 class="nhsuk-heading-m">Appointment details</h2>
+          <dl class="nhsuk-summary-list">
+
+            <div class="nhsuk-summary-list__row">
+              <dt class="nhsuk-summary-list__key">
+                Postcode near appointment
+              </dt>
+              <dd class="nhsuk-summary-list__value">
+                N16 6AB
+              </dd>
+          
+              <dd class="nhsuk-summary-list__actions">
+          
+                <a href="appt-postcode">
+                  Change<span class="nhsuk-u-visually-hidden"> postcode near where you'd like your appointment</span>
+                </a>
+          
+              </dd>
+          
+            </div>
+
+            <div class="nhsuk-summary-list__row">
+                <dt class="nhsuk-summary-list__key">
+                  Access needs
+                </dt>
+                <dd class="nhsuk-summary-list__value">
+                  Accessible toilet available</br>
+                  Braille translation service
+                </dd>
+            
+                <dd class="nhsuk-summary-list__actions">
+            
+                  <a href="appt-postcode">
+                    Change<span class="nhsuk-u-visually-hidden"> Access needs for anyone attending the appointment</span>
+                  </a>
+            
+                </dd>
+            
+              </div>
+  
+            <div class="nhsuk-summary-list__row">
+              <dt class="nhsuk-summary-list__key">
+                Site location
+              </dt>
+              <dd class="nhsuk-summary-list__value">
+                Benjamin Chemist<br>190 S/Newington High st<br>Stoke Newington<br>London<br>N16 7JD
+              </dd>
+          
+              <dd class="nhsuk-summary-list__actions">
+          
+                <a href="#">
+                  Change<span class="nhsuk-u-visually-hidden"> contact information</span>
+                </a>
+          
+              </dd>
+          
+            </div>
+
+            <div class="nhsuk-summary-list__row">
+                <dt class="nhsuk-summary-list__key">
+                  Date
+                </dt>
+                <dd class="nhsuk-summary-list__value">
+                  {{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +7}) }}
+                </dd>
+            
+                <dd class="nhsuk-summary-list__actions">
+            
+                  <a href="choose-date">
+                    Change<span class="nhsuk-u-visually-hidden"> appointment date</span>
+                  </a>
+            
+                </dd>
+            
+              </div>
+  
+              <div class="nhsuk-summary-list__row">
+                <dt class="nhsuk-summary-list__key">
+                  Time
+                </dt>
+                <dd class="nhsuk-summary-list__value">
+                  10am
+                </dd>
+            
+                <dd class="nhsuk-summary-list__actions">
+            
+                  <a href="choose-time-range">
+                    Change<span class="nhsuk-u-visually-hidden"> appointment time</span>
+                  </a>
+            
+                </dd>
+            
+              </div>
+  
+          
+          </dl>-->       
+
+          <dl class="nhsuk-summary-list">
+
+            <!--<div class="nhsuk-summary-list__row">
+              <dt class="nhsuk-summary-list__key">
+                Can we send confirmation and reminders?
+              </dt>
+              <dd class="nhsuk-summary-list__value">
+                Yes
+              </dd>
+          
+              <dd class="nhsuk-summary-list__actions">
+          
+                <a href="appt-postcode">
+                  Change<span class="nhsuk-u-visually-hidden"> if we can send you confirmation and reminder messages</span>
+                </a>
+          
+              </dd>
+          
+            </div>-->
+
+                        <div class="nhsuk-summary-list__row">
+              <dt class="nhsuk-summary-list__key">
+                Email address
+              </dt>
+              <dd class="nhsuk-summary-list__value">
+                jodie.brown@email.com
+              </dd>
+          
+              <dd class="nhsuk-summary-list__actions">
+          
+                <a href="contact-details">
+                  Change<span class="nhsuk-u-visually-hidden"> email address</span>
+                </a>
+          
+              </dd>
+          
+            </div>
+
+            <div class="nhsuk-summary-list__row">
+                <dt class="nhsuk-summary-list__key">
+                  Mobile number
+                </dt>
+                <dd class="nhsuk-summary-list__value">
+                  07123 456 789
+                </dd>
+            
+                <dd class="nhsuk-summary-list__actions">
+            
+                <a href="contact-details">
+                    Change<span class="nhsuk-u-visually-hidden"> mobile number</span>
+                  </a>
+            
+                </dd>
+            
+              </div>
+  
+
+  
+  
+          
+          </dl>       
+
+        <button class="nhsuk-button" data-module="nhsuk-button" type="submit">
+          Continue
+        </button>
+
+  
+    </form>
+
+
+
+      
+      </div>
+      <!-- End of content -->
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let dob = localStorage.getItem("dob");
+            let age = localStorage.getItem("age");
+    
+            if (dob) {
+                document.getElementById("dobDisplay").textContent = `${dob}`;
+                document.getElementById("ageDisplay").textContent = `Your age: ${age}`;
+            }
+        });
+    </script>
+    
+    </div>
+  </div>
+{% endblock %}

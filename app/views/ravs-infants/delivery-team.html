@@ -1,0 +1,72 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Which site is it?" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% set organisationSetting = currentUser.organisations | findById(data.currentOrganisationId) %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "is-the-vaccination-today" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if (errors | length) > 0 %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: errors
+        }) }}
+      {% endif %}
+
+      <form action="delivery-team" method="post" novalidate>
+
+        {% set items = [] %}
+        {% for deliveryTeam in (sitesInUse | sort(false, false, "name")) %}
+          {% set items = (items.push({
+            text: deliveryTeam.name,
+            value: deliveryTeam.id
+          }), items) %}
+        {% endfor %}
+
+        {{ radios({
+          idPrefix: "delivery-team",
+          name: "deliveryTeam",
+          fieldset: {
+            legend: {
+              text: "Which site is it?",
+              classes: "nhsuk-fieldset__legend--l",
+              isPageHeading: true
+            }
+          },
+          errorMessage: {
+            text: (errors | first).text
+          } if (errors | length) > 0,
+            items: [
+              {
+                value: "Leeds General Infirmary (LGI)",
+                text: "Leeds General Infirmary (LGI)"
+              },
+              {
+                value: "Seacroft Hospital",
+                text: "Seacroft Hospital"
+              }
+            ]
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        })}}
+      </form>
+
+      {{ details({
+        summaryText: "If your site is not listed",
+        html: "You need to <a href=\"#/\">add vaccines</a> for the site."
+      }) }}
+
+    </div>
+  </div>
+
+{% endblock %}

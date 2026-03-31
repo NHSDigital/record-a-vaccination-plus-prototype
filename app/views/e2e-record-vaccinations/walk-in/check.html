@@ -1,0 +1,464 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Check and confirm" %}
+
+{% set currentSection = "run" %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% set consentHtml %}
+  {% if data.consent == "patient" %}
+    Patient
+  {% elseif data.consent == "Clinician acting in the patient’s best interests" %}
+    {{ data.consentClinicianName }}
+    <br>Clinician
+  {% elseif data.consent == "Person with lasting power of attorney for health and welfare" %}
+    {{ data.consentAttorneyName }}
+    <br>{{ data.consentAttorneyRelationship }}
+    <br>Power of attorney
+  {% elseif data.consent == "Parent or guardian" %}
+    {{ data.consentParentName }}
+    <br>Parent or guardian
+  {% elseif data.consent == "Independent mental capacity advocate" %}
+    {{ data.consentAdvocateName }}
+    <br>Independent mental capacity advocate
+  {% elseif data.consent == "Court appointed deputy" %}
+    {{ data.consentDeputyName }}
+    <br>{{ data.consentDeputyRelationship }}
+    <br>Court appointed deputy
+  {% endif %}
+{% endset %}
+
+{% set batchHtml %}
+  {% if data.vaccineBatch == "add-new" %}
+    {{ data.newBatchNumber }}
+    <br>Expires {{ (data.newBatchExpiryDate | isoDateFromDateInput | govukDate)  }}
+  {% else %}
+    {{ data.vaccineBatch }}
+    <br>Expires 2 March 2026
+  {% endif %}
+{% endset %}
+
+{% set locationHtml %}
+  {% if  data.locationType == "Care home" %}
+    {% for careHome in data.careHomes %}
+      {% if data.careHome == careHome.code %}
+        {{ careHome.name }}<br>
+        {{ careHome.address1 }}<br>
+        {{ careHome.town }}<br>
+        {{ careHome.postcode }}
+      {% endif %}
+    {% endfor %}
+
+  {% else %}
+    {{ data.locationType }}
+  {% endif %}
+{% endset %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">Check and confirm</h1>
+
+      <h2 class="nhsuk-heading-m">Patient</h2>
+      {% if data['e2eCurrentUserType'] == 'infant' %}
+        {{ summaryList({
+          rows: [
+            {
+              key: {
+                text: "Name"
+              },
+              value: {
+                text: "Sam Brown"
+              },
+              actions: {
+                items: [
+                  {
+                    href: "#/",
+                    text: "Change",
+                    visuallyHiddenText: "name"
+                  } if not data.nhsNumber
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Date of birth"
+              },
+              value: {
+                html: "26 June 2024<br>(aged 1 year 4 months)"
+              },
+              actions: {
+                items: [
+                  {
+                    href: "#/",
+                    text: "Change",
+                    visuallyHiddenText: "date of birth"
+                  } if not data.nhsNumber
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Address"
+              },
+              value: {
+                html: "121 Rogers Estate <br>Globe Road <br>E2 0JY"
+              },
+              actions: {
+                items: [
+                ]
+              }
+            } if data.nhsNumber,
+            {
+              key: {
+                text: "Postcode"
+              },
+              value: {
+                text: "E2 0JY"
+              },
+              actions: {
+                items: [
+                  {
+                    href: "#/",
+                    text: "Change",
+                    visuallyHiddenText: "postcode"
+                  } if not data.nhsNumber
+                ]
+              }
+            } if not data.nhsNumber,
+            {
+              key: {
+                text: "NHS number"
+              },
+              value: {
+                text: "9434765919"
+              },
+              actions: {
+                items: [
+                ]
+              }
+            } if data.nhsNumber,
+            {
+              key: {
+                text: "Gender"
+              },
+              value: {
+                text: data.gender
+              },
+              actions: {
+                items: [
+                  {
+                    href: "#/",
+                    text: "Change",
+                    visuallyHiddenText: "gender"
+                  } if not data.nhsNumber
+                ]
+              }
+            } if not data.nhsNumber
+          ]
+        }) }}
+      {% else %}
+        {{ summaryList({
+          rows: [
+            {
+              key: {
+                text: "Name"
+              },
+              value: {
+                text: "Jodie Brown"
+              },
+              actions: {
+                items: [
+                  {
+                    href: "#/",
+                    text: "Change",
+                    visuallyHiddenText: "name"
+                  } if not data.nhsNumber
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Date of birth"
+              },
+              value: {
+                text: "1 April 2020"
+              },
+              actions: {
+                items: [
+                  {
+                    href: "#/",
+                    text: "Change",
+                    visuallyHiddenText: "date of birth"
+                  } if not data.nhsNumber
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Address"
+              },
+              value: {
+                html: "20 Greenfield Road<br> Harborne <br>Birmingham <br>B17 0EE"
+              },
+              actions: {
+                items: [
+                ]
+              }
+            } if data.nhsNumber,
+            {
+              key: {
+                text: "Postcode"
+              },
+              value: {
+                text: data.postcode
+              },
+              actions: {
+                items: [
+                  {
+                    href: "#/",
+                    text: "Change",
+                    visuallyHiddenText: "postcode"
+                  } if not data.nhsNumber
+                ]
+              }
+            } if not data.nhsNumber,
+            {
+              key: {
+                text: "NHS number"
+              },
+              value: {
+                text: "9165325689"
+              },
+              actions: {
+                items: [
+                ]
+              }
+            } if data.nhsNumber,
+            {
+              key: {
+                text: "Gender"
+              },
+              value: {
+                text: data.gender
+              },
+              actions: {
+                items: [
+                  {
+                    href: "#/",
+                    text: "Change",
+                    visuallyHiddenText: "gender"
+                  } if not data.nhsNumber
+                ]
+              }
+            } if not data.nhsNumber,
+            {
+              key: {
+                text: "Pregnancy due date"
+              },
+              value: {
+                text: "20 February 2026"
+              }
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <h2 class="nhsuk-heading-m">Vaccination</h2>
+      {{ summaryList({
+        rows: [
+          {
+            key: {
+              text: "Date"
+            },
+            value: {
+              text: ("Today" if data.vaccinationToday == "yes" else (data.vaccinationDate | isoDateFromDateInput | govukDate))
+            },
+            actions: {
+              items: [
+                {
+                  href: "#/",
+                  text: "Change",
+                  visuallyHiddenText: "vaccination date"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Vaccine"
+            },
+            value: {
+              html: "Pertussis"
+            },
+            actions: {
+              items: [
+                {
+                  href: "#/",
+                  text: "Change",
+                  visuallyHiddenText: "vaccine"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Batch"
+            },
+            value: {
+              html: batchHtml
+            },
+            actions: {
+              items: [
+                {
+                  href: "#/",
+                  text: "Change",
+                  visuallyHiddenText: "vaccine batch"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Team"
+            },
+            value: {
+              text: "Heartlands Hospital"
+            },
+            actions: {
+              items: [
+                {
+                  href: "#/",
+                  text: "Change",
+                  visuallyHiddenText: "team"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Vaccinator"
+            },
+            value: {
+              text: "Jane Smith"
+            },
+            actions: {
+              items: [
+                {
+                  href: "#/",
+                  text: "Change",
+                  visuallyHiddenText: "contact information"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Location"
+            },
+            value: {
+              html: locationHtml
+            },
+            actions: {
+              items: [
+                {
+                  href: "#/",
+                  text: "Change",
+                  visuallyHiddenText: "contact information"
+                }
+              ]
+            }
+          } if (data.vaccine === "Flu" or data.vaccine == "COVID-19"),
+          {
+            key: {
+              text: "Eligibility"
+            },
+            value: {
+              text: "Pregnancy"
+            },
+            actions: {
+            }
+          } if (data.vaccine != "Pertussis"),
+          {
+            key: {
+              text: "Healthcare worker role"
+            },
+            value: {
+              html: data.healthcareWorker
+            },
+            actions: {
+              items: [
+                {
+                  href: "#/",
+                  text: "Change",
+                  visuallyHiddenText: "healthcare worker role"
+                }
+              ]
+            }
+          } if (data.healthcareWorker),
+          {
+            key: {
+              text: "Consent given by"
+            },
+            value: {
+              html: consentHtml
+            },
+            actions: {
+              items: [
+                {
+                  href: "#/",
+                  text: "Change",
+                  visuallyHiddenText: "consnet"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Injection site"
+            },
+            value: {
+              html: (data.otherInjectionSite if data.injectionSite == "other" else data.injectionSite)
+            },
+            actions: {
+              items: [
+                {
+                  href: "#/",
+                  text: "Change",
+                  visuallyHiddenText: "contact details"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+
+      <form action="done" method="post" novalidate>
+
+        {{ textarea({
+          name: "notes",
+          id: "notes",
+          label: {
+            text: "Optional note"
+          },
+          hint: {
+            text: "This note will not be sent to the patient's GP. Only your organisation will see it."
+          },
+          rows: 3,
+          classes: "nhsuk-u-margin-bottom-7"
+        }) }}
+
+
+        {{ button({
+          text: "Confirm and save"
+        })}}
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

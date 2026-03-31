@@ -1,0 +1,488 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Invite rules - Send invites
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/send-invites/choose-task?taskChoice">Send invites</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Invites rules</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+  {#<a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>#}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row nhsuk-u-margin-bottom-2">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">
+        <!--<span class="nhsuk-caption-l">Engage patients</span>-->
+        Invite rules
+      </h1>
+
+      <p class="nhsuk-body">
+        Set rules to determine when patients are sent different vaccine invites.
+      </p>
+      <p class="nhsuk-body">
+        The send invites feature is designed to be used routinely - for example, once a week or once a fortnight.
+      </p>
+      <p class="nhsuk-body">
+        This screen shows the rules that determines which type of invite (if any) a patient will be sent. There are two types of rules:
+      </p>
+      <ul class="nhsuk-list nhsuk-list--bullet">
+        <li>rules relating to when a targeted invite should be sent (Pertussis, RSV, Seasonal or 'Mop up')</li>
+        <li>rules relating to how often a patient should be communicated with if they still have outstanding vaccinations (upper and lower limits)</li>
+      </ul>
+      <p class="nhsuk-body">
+        In all instances, when there is more than one instance of a message being scheduled, these messages will not be sent if the patient has already had the 
+        vaccine in question OR has made a booking to receive it.
+      </p>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      {# PERTUSSIS COMMS #}
+      <div id="pertussis-comms">
+        <h2 class="nhsuk-heading-l">
+          Pertussis [SMS]
+        </h2>
+
+        <div id="divPertussisOne" class="custom-expander nhsuk-u-margin-bottom-4">
+          <div class="content">
+            <ol class="nhsuk-list nhsuk-list--number">
+              <li>Week 14 of pregnancy</li>
+            </ol>
+          </div>
+          <div>
+            <button class="set-comms-rules-link-button" onclick="hideDiv('divPertussisOne')">Delete</button>
+          </div>
+        </div>
+
+        <div id="divPertussisTwo" class="custom-expander nhsuk-u-margin-bottom-4">
+          <div class="content">
+            <ol start="2" class="nhsuk-list nhsuk-list--number">
+              <li>Week 18 of pregnancy</li>
+            </ol>
+          </div>
+          <div>
+            <button class="set-comms-rules-link-button" onclick="hideDiv('divPertussisTwo')">Delete</button>
+          </div>
+        </div>
+
+        <div id="divPertussisThree" class="custom-expander nhsuk-u-margin-bottom-4" style="display: none">
+          <div class="content">
+            <ol start="3" class="nhsuk-list nhsuk-list--number">
+              <li>Week 26 of pregnancy</li>
+            </ol>
+          </div>
+          <div>
+            <button class="set-comms-rules-link-button" onclick="hideDiv('divPertussisThree')">Delete</button>
+          </div>
+        </div>
+
+        <div id="detailsPertussisThree">
+          <details class="nhsuk-details nhsuk-expander">
+            <summary class="nhsuk-details__summary">
+              <span class="nhsuk-details__summary-text">
+                Set new communication rule for Pertussis
+              </span>
+            </summary>
+            <div class="nhsuk-details__text nhsuk-u-padding-bottom-0">
+              <fieldset class="nhsuk-fieldset">
+                <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--s">
+                  <h3 class="nhsuk-fieldset__heading">
+                    New pertussis communication rule
+                  </h3>
+                </legend>
+                <div class="nhsuk-radios nhsuk-radios--conditional">
+                  <div class="nhsuk-radios__item">
+                    <input class="nhsuk-radios__input" id="pertussis-1" name="pertussis" type="radio" value="enteredAsSoonAsAware">
+                    <label class="nhsuk-label nhsuk-radios__label" for="pertussis-1">
+                      As soon as aware of pregnancy
+                    </label>
+                  </div>
+                  <div class="nhsuk-radios__item">
+                    <input class="nhsuk-radios__input" id="pertussis-2" name="pertussis" type="radio" value="enteredTimed" aria-controls="conditional-pertussis-2">
+                    <label class="nhsuk-label nhsuk-radios__label" for="pertussis-2">
+                      Timed
+                    </label>
+                  </div>
+                  <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-pertussis-2">
+                    <label class="nhsuk-label" for="selectDeprivation">
+                      <span class="nhsuk-u-visually-hidden">Timed</span>
+                    </label>
+                    <div class="nhsuk-form-group">
+                      <label class="nhsuk-label" for="enteredPertussisThree">
+                        Week of pregnancy
+                      </label> <input class="nhsuk-input nhsuk-u-width-one-quarter" id="enteredPertussisThree" name="enteredPertussisThree" type="text" value="{{ data['enteredPertussisThree'] }}">
+                    </div>
+                  </div>
+                </div>
+                <button class="nhsuk-button app-button--small nhsuk-button--secondary-custom nhsuk-u-margin-top-4" data-module="nhsuk-button" type="submit" onclick="hideDiv('detailsPertussisThree'); showDiv('divPertussisThree'); showDetails('detailsPertussisFour')">
+                  Confirm
+                </button>
+              </fieldset>
+            </div>
+          </details>
+        </div>
+
+        <div id="detailsPertussisFour" style="display: none">
+          <details class="nhsuk-details nhsuk-expander">
+            <summary class="nhsuk-details__summary">
+              <span class="nhsuk-details__summary-text">
+                Set new communication rule for Pertussis
+              </span>
+            </summary>
+            <div class="nhsuk-details__text nhsuk-u-padding-bottom-0">
+              <fieldset class="nhsuk-fieldset">
+                <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--s">
+                  <h3 class="nhsuk-fieldset__heading">
+                    New pertussis communication rule
+                  </h3>
+                </legend>
+                <div class="nhsuk-radios nhsuk-radios--conditional">
+                  <div class="nhsuk-radios__item">
+                    <input class="nhsuk-radios__input" id="pertussis4-1" name="pertussis4" type="radio" value="enteredAsSoonAsAware">
+                    <label class="nhsuk-label nhsuk-radios__label" for="pertussis4-1">
+                      As soon as aware of pregnancy
+                    </label>
+                  </div>
+                  <div class="nhsuk-radios__item">
+                    <input class="nhsuk-radios__input" id="pertussis4-2" name="pertussis4" type="radio" value="enteredTimed" aria-controls="conditional-pertussis4-2">
+                    <label class="nhsuk-label nhsuk-radios__label" for="pertussis4-2">
+                      Timed
+                    </label>
+                  </div>
+                  <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-pertussis4-2">
+                    <label class="nhsuk-label" for="selectDeprivation">
+                      <span class="nhsuk-u-visually-hidden">Timed</span>
+                    </label>
+                    <div class="nhsuk-form-group">
+                      <label class="nhsuk-label" for="enteredPertussisFour">
+                        Week of pregnancy
+                      </label> <input class="nhsuk-input nhsuk-u-width-one-quarter" id="enteredPertussisFour" name="enteredPertussisFour" type="text" value="{{ data['enteredPertussisFour'] }}">
+                    </div>
+                  </div>
+                </div>
+                <button class="nhsuk-button app-button--small nhsuk-button--secondary-custom nhsuk-u-margin-top-4" data-module="nhsuk-button" type="submit">
+                  Confirm
+                </button>
+              </fieldset>
+            </div>
+          </details>
+        </div>
+
+      </div>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+
+      {# RSV COMMS #}
+      <div id="RSV-comms">
+        <h2 class="nhsuk-heading-l">
+          RSV [SMS]
+        </h2>
+
+        <div id="divRSVOne" class="custom-expander nhsuk-u-margin-bottom-4">
+          <div class="content">
+            <ol class="nhsuk-list nhsuk-list--number">
+              <li>Week 20 of pregnancy</li>
+            </ol>
+          </div>
+          <div>
+            <button class="set-comms-rules-link-button" onclick="hideDiv('divRSVOne')">Delete</button>
+          </div>
+        </div>
+
+        <div id="divRSVTwo" class="custom-expander nhsuk-u-margin-bottom-4">
+          <div class="content">
+            <ol start="2" class="nhsuk-list nhsuk-list--number">
+              <li>Week 24 of pregnancy</li>
+            </ol>
+          </div>
+          <div>
+            <button class="set-comms-rules-link-button" onclick="hideDiv('divRSVTwo')">Delete</button>
+          </div>
+        </div>
+
+        <div id="detailsRSVThree">
+          <details class="nhsuk-details nhsuk-expander">
+            <summary class="nhsuk-details__summary">
+              <span class="nhsuk-details__summary-text">
+                Set new communication rule for RSV
+              </span>
+            </summary>
+            <div class="nhsuk-details__text nhsuk-u-padding-bottom-0">
+              <fieldset class="nhsuk-fieldset">
+                <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--s">
+                  <h3 class="nhsuk-fieldset__heading">
+                    New RSV communication rule
+                  </h3>
+                </legend>
+                <div class="nhsuk-radios nhsuk-radios--conditional">
+                  <div class="nhsuk-radios__item">
+                    <input class="nhsuk-radios__input" id="RSV-1" name="RSV" type="radio" value="enteredAsSoonAsAware">
+                    <label class="nhsuk-label nhsuk-radios__label" for="RSV-1">
+                      As soon as aware of pregnancy
+                    </label>
+                  </div>
+                  <div class="nhsuk-radios__item">
+                    <input class="nhsuk-radios__input" id="RSV-2" name="RSV" type="radio" value="enteredTimed" aria-controls="conditional-RSV-2">
+                    <label class="nhsuk-label nhsuk-radios__label" for="RSV-2">
+                      Timed
+                    </label>
+                  </div>
+                  <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-RSV-2">
+                    <label class="nhsuk-label" for="selectDeprivation">
+                      <span class="nhsuk-u-visually-hidden">Timed</span>
+                    </label>
+                    <div class="nhsuk-form-group">
+                      <label class="nhsuk-label" for="enteredRSVThree">
+                        Week of pregnancy
+                      </label> <input class="nhsuk-input nhsuk-u-width-one-quarter" id="enteredRSVThree" name="enteredRSVThree" type="text" value="{{ data['enteredRSVThree'] }}">
+                    </div>
+                  </div>
+                </div>
+                <button class="nhsuk-button app-button--small nhsuk-button--secondary-custom nhsuk-u-margin-top-4" data-module="nhsuk-button" type="submit">
+                  Confirm
+                </button>
+              </fieldset>
+            </div>
+          </details>
+        </div>
+
+      </div>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+
+      {# SEASONAL COMMS #}
+      <div id="Seasonal-comms">
+        <h2 class="nhsuk-heading-l">
+          Seasonal [SMS]
+        </h2>
+
+        <div id="divSeasonalOne" class="custom-expander nhsuk-u-margin-bottom-4">
+          <div class="content">
+            <ol class="nhsuk-list nhsuk-list--number">
+              <li>As soon as aware of pregnancy</li>
+            </ol>
+          </div>
+          <div>
+            <button class="set-comms-rules-link-button" onclick="hideDiv('divSeasonalOne')">Delete</button>
+          </div>
+        </div>
+
+        <div id="detailsSeasonalThree">
+          <details class="nhsuk-details nhsuk-expander">
+            <summary class="nhsuk-details__summary">
+              <span class="nhsuk-details__summary-text">
+                Set new communication rule for seasonal
+              </span>
+            </summary>
+            <div class="nhsuk-details__text nhsuk-u-padding-bottom-0">
+              <fieldset class="nhsuk-fieldset">
+                <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--s">
+                  <h3 class="nhsuk-fieldset__heading">
+                    New seasonal communication rule
+                  </h3>
+                </legend>
+                <div class="nhsuk-radios nhsuk-radios--conditional">
+                  <div class="nhsuk-radios__item">
+                    <input class="nhsuk-radios__input" id="Seasonal-1" name="Seasonal" type="radio" value="enteredAsSoonAsAware">
+                    <label class="nhsuk-label nhsuk-radios__label" for="Seasonal-1">
+                      As soon as aware of pregnancy
+                    </label>
+                  </div>
+                  <div class="nhsuk-radios__item">
+                    <input class="nhsuk-radios__input" id="Seasonal-2" name="Seasonal" type="radio" value="enteredTimed" aria-controls="conditional-Seasonal-2">
+                    <label class="nhsuk-label nhsuk-radios__label" for="Seasonal-2">
+                      Timed
+                    </label>
+                  </div>
+                  <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-Seasonal-2">
+                    <label class="nhsuk-label" for="selectDeprivation">
+                      <span class="nhsuk-u-visually-hidden">Timed</span>
+                    </label>
+                    <div class="nhsuk-form-group">
+                      <label class="nhsuk-label" for="enteredSeasonalThree">
+                        Week of pregnancy
+                      </label> <input class="nhsuk-input nhsuk-u-width-one-quarter" id="enteredSeasonalThree" name="enteredSeasonalThree" type="text" value="{{ data['enteredSeasonalThree'] }}">
+                    </div>
+                  </div>
+                </div>
+                <button class="nhsuk-button app-button--small nhsuk-button--secondary-custom nhsuk-u-margin-top-4" data-module="nhsuk-button" type="submit">
+                  Confirm
+                </button>
+              </fieldset>
+            </div>
+          </details>
+        </div>
+
+      </div>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+
+      {# MOP UP - LAST CHANCE #}
+      <div id="MopUp-LastChance-comms">
+        <h2 class="nhsuk-heading-l">
+          Mop up [SMS]
+        </h2>
+
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-two-thirds">
+            <p class="nhsuk-body">
+              This message is sent if a patient has any outstanding vaccinations at the time it is set.
+            </p>
+          </div>
+        </div>
+
+        <div id="divMopUp-LastChanceOne" class="custom-expander nhsuk-u-margin-bottom-4">
+          <div class="content">
+            <ol class="nhsuk-list nhsuk-list--number">
+              <li>Week 37 of pregnancy</li>
+            </ol>
+          </div>
+          <div>
+            <button class="set-comms-rules-link-button" onclick="hideDiv('divMopUp-LastChanceOne')">Delete</button>
+          </div>
+        </div>
+
+        <div id="detailsMopUp-LastChanceThree">
+          <details class="nhsuk-details nhsuk-expander">
+            <summary class="nhsuk-details__summary">
+              <span class="nhsuk-details__summary-text">
+                Set new communication rule for mop up - last chance
+              </span>
+            </summary>
+            <div class="nhsuk-details__text nhsuk-u-padding-bottom-0">
+              <fieldset class="nhsuk-fieldset">
+                <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--s">
+                  <h3 class="nhsuk-fieldset__heading">
+                    New mop up - last chance communication rule
+                  </h3>
+                </legend>
+                <div class="nhsuk-radios nhsuk-radios--conditional">
+                  <div class="nhsuk-radios__item">
+                    <input class="nhsuk-radios__input" id="MopUp-LastChance-1" name="MopUp-LastChance" type="radio" value="enteredAsSoonAsAware">
+                    <label class="nhsuk-label nhsuk-radios__label" for="MopUp-LastChance-1">
+                      As soon as aware of pregnancy
+                    </label>
+                  </div>
+                  <div class="nhsuk-radios__item">
+                    <input class="nhsuk-radios__input" id="MopUp-LastChance-2" name="MopUp-LastChance" type="radio" value="enteredTimed" aria-controls="conditional-MopUp-LastChance-2">
+                    <label class="nhsuk-label nhsuk-radios__label" for="MopUp-LastChance-2">
+                      Timed
+                    </label>
+                  </div>
+                  <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-MopUp-LastChance-2">
+                    <label class="nhsuk-label" for="selectDeprivation">
+                      <span class="nhsuk-u-visually-hidden">Timed</span>
+                    </label>
+                    <div class="nhsuk-form-group">
+                      <label class="nhsuk-label" for="enteredMopUp-LastChanceThree">
+                        Week of pregnancy
+                      </label> <input class="nhsuk-input nhsuk-u-width-one-quarter" id="enteredMopUp-LastChanceThree" name="enteredMopUp-LastChanceThree" type="text" value="{{ data['enteredMopUp-LastChanceThree'] }}">
+                    </div>
+                  </div>
+                </div>
+                <button class="nhsuk-button app-button--small nhsuk-button--secondary-custom nhsuk-u-margin-top-4" data-module="nhsuk-button" type="submit">
+                  Confirm
+                </button>
+              </fieldset>
+            </div>
+          </details>
+        </div>
+
+      </div>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+
+      {# OVERALL FREQUENCY OF COMMUNICATIONS   #}
+      <div id="overallFrequencyOfCommunications">
+        <h2 class="nhsuk-heading-l">
+          Overall frequency of communications
+        </h2>
+
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-two-thirds">
+            <p class="nhsuk-body">
+              When the rules dictate that a patient should receive an invite but does not line up to receive a Pertussis, RSV, Seasonal or 'Mop up' invite (as per your rules), 
+              the patient will receive the 'routine' SMS template.
+            </p>
+          </div>
+        </div>
+
+        <div id="divMopUp-LastChanceOne" class="custom-expander nhsuk-u-margin-bottom-4">
+          <div class="content">
+            <p>If a patient still has at least one outstanding vaccination:</p>
+            <ul class="nhsuk-list nhsuk-list--bullet">
+              <li>Communicate no more than once a fortnight</li>
+              <li>Communicate at least once a month</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="details-overallFrequencyOfCommunications">
+          <details class="nhsuk-details nhsuk-expander">
+            <summary class="nhsuk-details__summary">
+              <span class="nhsuk-details__summary-text">
+                Edit rules
+              </span>
+            </summary>
+            <div class="nhsuk-details__text nhsuk-u-padding-bottom-0">
+            </div>
+          </details>
+        </div>
+
+      </div>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+
+      <form class="form" action="set-commincationss-rules-updated" method="post" class="submit">
+        <div class="govuk-button-group">
+          <button type="submit" class="nhsuk-button nhsuk-u-margin-right-3" data-module="nhsuk-button">
+            Confirm
+          </button>
+          <p class="nhsuk-body"><a class="nhsuk-link" href="/send-invites/choose-task?taskChoice">Cancel</a></p>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <script>
+    function hideDiv(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.display = 'none';
+      }
+    }
+
+    function showDiv(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.display = 'flex';
+      }
+    }
+
+    function showDetails(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.display = 'block';
+      }
+    }
+  </script>
+
+{% endblock %}

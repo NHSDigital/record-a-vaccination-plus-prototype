@@ -1,0 +1,232 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Which batch are you using?" %}
+{% set currentSection = "run" %}
+{% set organisationSetting = currentUser.organisations | findById(data.currentOrganisationId) %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    {% macro vaccineBatchBlock(key, label, product) -%}
+      {% set idPrefix = 'vaccineBatch_' ~ key %}
+      <div class="nhsuk-form-group" id="group-{{ key }}">
+        <fieldset class="nhsuk-fieldset" id="fieldset-{{ key }}" aria-describedby="fieldset-{{ key }}-hint">
+          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--m">
+            Which batch are you using for{% if product %} {{ product }}{% endif %}?
+          </legend>
+          <div class="nhsuk-hint" id="fieldset-{{ key }}-hint">
+            {{ label }} vaccine
+          </div>
+          <div class="nhsuk-radios nhsuk-radios--conditional">
+            {% if batches and (batches | length) %}
+              {% for batch in batches %}
+                <div class="nhsuk-radios__item">
+                  <input class="nhsuk-radios__input" id="{{ idPrefix }}-{{ loop.index }}" name="{{ idPrefix }}" type="radio" value="{{ batch.id }}" {% if data[idPrefix] == batch.id %}checked{% endif %}>
+                  <label class="nhsuk-label nhsuk-radios__label" for="{{ idPrefix }}-{{ loop.index }}">{{ batch.batchNumber }}</label>
+                </div>
+              {% endfor %}
+            {% else %}
+              {# Use a distinct placeholder per vaccine key; ONLY batch number labels/values change #}
+              {% if key == 'mmr' %}
+                {% set placeholder = 'XZ456645' %}
+              {% elif key == 'hibmenc' %}
+                {% set placeholder = 'AB593456' %}
+              {% elif key == 'menb' %}
+                {% set placeholder = 'MB599699' %}
+              {% elif key == 'pcv' %}
+                {% set placeholder = 'BT595920' %}
+              {% else %}
+                {% set placeholder = 'YZ496002' %}
+              {% endif %}
+
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="{{ idPrefix }}-1" name="{{ idPrefix }}" type="radio" value="{{ placeholder }}" {% if data[idPrefix] == placeholder %}checked{% endif %}>
+                <label class="nhsuk-label nhsuk-radios__label" for="{{ idPrefix }}-1">{{ placeholder }}</label>
+              </div>
+            {% endif %}
+
+            {% if organisationSetting.permissionLevel != 'Recorder' %}
+              <div class="nhsuk-radios__divider">or</div>
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="{{ idPrefix }}-add" name="{{ idPrefix }}" type="radio" value="addBatch" data-aria-controls="conditional-{{ idPrefix }}-add" {% if data[idPrefix] == 'addBatch' %}checked{% endif %}>
+                <label class="nhsuk-label nhsuk-radios__label" for="{{ idPrefix }}-add">Add a batch</label>
+              </div>
+
+              <div class="nhsuk-radios__conditional" id="conditional-{{ idPrefix }}-add">
+                {% if product %}
+                  {% set labelText = product ~ " batch number" %}
+                {% else %}
+                  {% set labelText = "Batch number" %}
+                {% endif %}
+                {{ input({
+                  "label": {
+                    "text": labelText,
+                    "classes": "nhsuk-label--s"
+                  },
+                  "hint": { "text": "For example, XX123456" },
+                  "id": idPrefix ~ "-new-batch-number",
+                  "name": idPrefix ~ "_newBatchNumber",
+                  "classes": "nhsuk-input--width-20",
+                  "value": data[idPrefix ~ '_newBatchNumber']
+                }) }}
+
+                {{ dateInput({
+                  "id": idPrefix ~ "-batch-expiry-date",
+                  "namePrefix": idPrefix ~ "_newBatchExpiryDate",
+                  "fieldset": {
+                    "legend": {
+                      "text": "Expiry date",
+                      "classes": "nhsuk-label--s"
+                    }
+                  },
+                  "values": data[idPrefix ~ '_newBatchExpiryDate']
+                }) }}
+              </div>
+            {% endif %}
+          </div>
+        </fieldset>
+      </div>
+    {%- endmacro %}
+
+    <form action="location" method="post" novalidate>
+      {% set v4 = data.vaccinesVisitFour %}
+
+      {% if not v4 or (
+            ('mmrVisitFour' not in v4) and
+            ('hibmencVisitFour' not in v4) and
+            ('menbVisitFour' not in v4) and
+            ('pcvVisitFour' not in v4)
+          ) %}
+        <h1 class="nhsuk-heading-l">Which batch are you using?</h1>
+        <fieldset class="nhsuk-fieldset">
+          <div class="nhsuk-radios nhsuk-radios--conditional">
+            {% if batches and (batches | length) %}
+              {% for batch in batches %}
+                <div class="nhsuk-radios__item">
+                  <input class="nhsuk-radios__input" id="vaccineBatch_generic-{{ loop.index }}" name="vaccineBatch_generic" type="radio" value="{{ batch.id }}" {% if data.vaccineBatch_generic == batch.id %}checked{% endif %}>
+                  <label class="nhsuk-label nhsuk-radios__label" for="vaccineBatch_generic-{{ loop.index }}">{{ batch.batchNumber }}</label>
+                </div>
+              {% endfor %}
+            {% else %}
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="vaccineBatch_generic-1" name="vaccineBatch_generic" type="radio" value="XX123456" {% if data.vaccineBatch_generic == 'XX123456' %}checked{% endif %}>
+                <label class="nhsuk-label nhsuk-radios__label" for="vaccineBatch_generic-1">XX123456</label>
+              </div>
+            {% endif %}
+
+            {% if organisationSetting.permissionLevel != 'Recorder' %}
+              <div class="nhsuk-radios__divider">or</div>
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="vaccineBatch_generic-add" name="vaccineBatch_generic" type="radio" value="addBatch" data-aria-controls="conditional-vaccineBatch_generic-add" {% if data.vaccineBatch_generic == 'addBatch' %}checked{% endif %}>
+                <label class="nhsuk-label nhsuk-radios__label" for="vaccineBatch_generic-add">Add a batch</label>
+              </div>
+
+              <div class="nhsuk-radios__conditional" id="conditional-vaccineBatch_generic-add">
+                {{ input({
+                  "label": {
+                    "text": "Batch number",
+                    "classes": "nhsuk-label--s"
+                  },
+                  "hint": { "text": "For example, XX123456" },
+                  "id": "vaccineBatch_generic-new-batch-number",
+                  "name": "vaccineBatch_generic_newBatchNumber",
+                  "classes": "nhsuk-input--width-20",
+                  "value": data.vaccineBatch_generic_newBatchNumber
+                }) }}
+
+                {{ dateInput({
+                  "id": "vaccineBatch_generic-batch-expiry-date",
+                  "namePrefix": "vaccineBatch_generic_newBatchExpiryDate",
+                  "fieldset": {
+                    "legend": {
+                      "text": "Expiry date",
+                      "classes": "nhsuk-label--s"
+                    }
+                  },
+                  "values": data.vaccineBatch_generic_newBatchExpiryDate
+                }) }}
+              </div>
+            {% endif %}
+          </div>
+        </fieldset>
+
+      {% else %}
+        <h1 class="nhsuk-heading-l">Confirm batches for Week 4 vaccines</h1>
+
+        {% if 'mmrVisitFour' in v4 %}
+          {{ vaccineBatchBlock('mmr', 'MMR (1st dose)', data.mmrProduct) }}
+        {% endif %}
+        {% if 'hibmencVisitFour' in v4 %}
+          {{ vaccineBatchBlock('hibmenc', 'Hib/Men C (1st dose)', data.hibMenCProduct) }}
+        {% endif %}
+        {% if 'menbVisitFour' in v4 %}
+          {{ vaccineBatchBlock('menb', 'Men B (3rd dose)', data.menBProduct) }}
+        {% endif %}
+        {% if 'pcvVisitFour' in v4 %}
+          {{ vaccineBatchBlock('pcv', 'PCV (2nd dose)', data.pcvProduct) }}
+        {% endif %}
+
+      {% endif %}
+
+      <input type="hidden" name="label_v4_mmr_full" value="{{ data.label_v4_mmr or data.mmrLabel or data.label_mmr or 'MMR (1st dose)' }}{% if data.mmrProduct %} ({{ data.mmrProduct }}){% endif %}">
+      <input type="hidden" name="label_v4_hibmenc_full" value="{{ data.label_v4_hibmenc or data.hibmencLabel or data.label_hibmenc or 'Hib/Men C (1st dose)' }}{% if data.hibMenCProduct %} ({{ data.hibMenCProduct }}){% endif %}">
+      <input type="hidden" name="label_v4_menb_full" value="{{ data.label_v4_menb or data.menbLabel or data.label_menb or 'Men B (3rd dose)' }}{% if data.menBProduct %} ({{ data.menBProduct }}){% endif %}">
+      <input type="hidden" name="label_v4_pcv_full" value="{{ data.label_v4_pcv or data.pcvLabel or data.label_pcv or 'PCV (2nd dose)' }}{% if data.pcvProduct %} ({{ data.pcvProduct }}){% endif %}">
+
+      {{ button({ text: 'Continue' }) }}
+    </form>
+
+    {% if organisationSetting.permissionLevel == 'Recorder' %}
+      {{ details({
+        summaryText: 'If the batch is not listed',
+        html: 'An administrator needs to add the batch.'
+      }) }}
+    {% endif %}
+
+  </div>
+</div>
+
+<script>
+  (function () {
+    // If NHS.UK Frontend is present, just use it.
+    if (window.NHSUKFrontend && typeof window.NHSUKFrontend.initAll === 'function') {
+      window.NHSUKFrontend.initAll();
+      return;
+    }
+
+    // Fallback: lightweight conditional radios
+    function toggleGroup(groupName) {
+      var radios = document.querySelectorAll('input[type="radio"][name="' + groupName + '"]');
+      radios.forEach(function (r) {
+        var targetId = r.getAttribute('data-aria-controls');
+        var target = targetId && document.getElementById(targetId);
+        var isAdd = !!target;
+        var on = r.checked && isAdd;
+
+        if (target) {
+          target.style.display = on ? '' : 'none';
+          r.setAttribute('aria-expanded', on ? 'true' : 'false');
+        }
+      });
+    }
+
+    // Setup all radios that control conditionals
+    var controllers = document.querySelectorAll('input.nhsuk-radios__input[data-aria-controls]');
+    controllers.forEach(function (input) {
+      var name = input.name;
+      // Initial state
+      toggleGroup(name);
+      // When any radio in the group changes, re-evaluate the whole group
+      var group = document.querySelectorAll('input[type="radio"][name="' + name + '"]');
+      group.forEach(function (r) {
+        r.addEventListener('change', function () { toggleGroup(name); });
+      });
+    });
+  })();
+</script>
+{% endblock %}

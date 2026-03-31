@@ -1,0 +1,228 @@
+<!-- Use this page as the index for your project -->
+
+<!-- ADDING CUSTOM CSS - Add your custom CSS or Sass in /app/assets/sass/main.scss -->
+
+<!-- Extends the layout from /views/layout.html -->
+{% extends 'e2e-layout3.html' %}
+<!--
+  In /views/layout.html you can:
+    - change the header and footer
+    - add custom CSS and JavaScript
+-->
+
+<!-- Set the page title -->
+{% set pageName = "NHS Record a vaccination prototypes" %}
+
+<!-- For adding a breadcrumb or back link -->
+{% block beforeContent %}
+{% endblock %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <div class="nhsuk-grid-row">
+
+    <h1 class="nhsuk-heading-l">
+      Chart examples
+    </h1>
+
+    {# Last week #}
+    <div class="nhsuk-grid-column-one-half">
+      <figure class="nhsuk-u-margin-top-6">
+        <figcaption class="nhsuk-u-font-size-24 nhsuk-u-font-weight-bold">
+          Past
+        </figcaption>
+
+        <div class="nhsuk-u-margin-top-3" style="min-height: 320px;">
+          <canvas id="chart-stacked-last"
+            data-chart="bar"
+            data-source="#table-stacked-last"
+            data-x-title=""
+            data-y-title="People"
+            data-stacked="true"
+            aria-describedby="caption-stacked-last"
+            data-legend-position="bottom"
+            data-legend-wrap="true">
+          </canvas>
+        </div>
+
+        <figcaption id="caption-stacked-last" class="nhsuk-u-visually-hidden">
+          Table of last weeks appointments
+        </figcaption>
+        <table class="nhsuk-table nhsuk-u-margin-top-4" id="table-stacked-last">
+          <thead>
+            <tr>
+              <th scope="col">Outcome</th>
+              <th scope="col" class="numeric">Uptake</th>
+              <th scope="col" class="numeric">DNA</th>
+              <th scope="col" class="numeric">Eligible</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Last week</th>
+              <td class="numeric">180</td>
+              <td class="numeric">110</td>
+              <td class="numeric">50</td>
+            </tr>
+            <tr>
+              <th scope="row">This week</th>
+              <td class="numeric">120</td>
+              <td class="numeric">70</td>
+              <td class="numeric">50</td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+    </div>
+
+    {# Next week #}
+    <div class="nhsuk-grid-column-one-half">
+      <figure class="nhsuk-u-margin-top-6">
+        <figcaption class="nhsuk-u-font-size-24 nhsuk-u-font-weight-bold">
+          Future
+        </figcaption>
+
+        <div class="nhsuk-u-margin-top-3" style="min-height: 320px;">
+          <canvas id="chart-stacked-next"
+            data-chart="bar"
+            data-source="#table-stacked-next"
+            data-x-title=""
+            data-y-title="People"
+            data-stacked="true"
+            aria-describedby="caption-stacked-next"
+            data-legend-position="bottom"
+            data-legend-wrap="true">
+          </canvas>
+        </div>
+
+        <figcaption id="caption-stacked-next" class="nhsuk-u-visually-hidden">
+          Table of next weeks appointments
+        </figcaption>
+        <table class="nhsuk-table nhsuk-u-margin-top-4" id="table-stacked-next">
+          <thead>
+            <tr>
+              <th scope="col">Outcome</th>
+              <th scope="col" class="numeric">Uptake</th>
+              <th scope="col" class="numeric">DNA</th>
+              <th scope="col" class="numeric">Eligible</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Last week</th>
+              <td class="numeric">50</td>
+              <td class="numeric">180</td>
+              <td class="numeric">110</td>
+            </tr>
+            <tr>
+              <th scope="row">This week</th>
+              <td class="numeric">70</td>
+              <td class="numeric">50</td>
+              <td class="numeric">120</td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+    </div>
+
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-one-half">
+
+      <figure class="nhsuk-u-margin-top-6">
+        <figcaption class="nhsuk-u-font-size-24 nhsuk-u-font-weight-bold">
+          Monthly appointments by ICB 1
+        </figcaption>
+
+        <!-- Chart area -->
+        <div class="nhsuk-u-margin-top-3" style="min-height: 260px;">
+          <canvas
+            id="chart-line-multi"
+            data-chart="line"
+            data-source="#table-line-multi-site-one"
+            data-x-title="Month"
+            data-y-title="Appointments"
+            aria-describedby="caption-line-multi-site-one">
+          </canvas>
+        </div>
+
+        <!-- Accessible table (authoritative source) -->
+        <figcaption id="caption-line-multi-site-one" class="nhsuk-u-visually-hidden">
+          Table of monthly appointments by site
+        </figcaption>
+        <table class="nhsuk-table nhsuk-u-margin-top-4" id="table-line-multi-site-one">
+          <thead>
+            <tr>
+              <th scope="col">Month</th>
+              <th scope="col">Site A</th>
+              <th scope="col">Site B</th>
+              <th scope="col">Site C</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">January</th><td>120</td><td>95</td><td>80</td></tr>
+            <tr><th scope="row">February</th><td>150</td><td>110</td><td>90</td></tr>
+            <tr><th scope="row">March</th><td>180</td><td>130</td><td>100</td></tr>
+            <tr><th scope="row">April</th><td>160</td><td>125</td><td>95</td></tr>
+            <tr><th scope="row">May</th><td>210</td><td>140</td><td>120</td></tr>
+          </tbody>
+        </table>
+      </figure>
+
+    </div>
+
+    <div class="nhsuk-grid-column-one-half">
+
+      <figure class="nhsuk-u-margin-top-6">
+        <figcaption class="nhsuk-u-font-size-24 nhsuk-u-font-weight-bold">
+          Monthly appointments by ICB 2
+        </figcaption>
+
+        <!-- Chart area -->
+        <div class="nhsuk-u-margin-top-3" style="min-height: 260px;">
+          <canvas
+            id="chart-line-multi"
+            data-chart="line"
+            data-source="#table-line-multi-site-two"
+            data-x-title="Month"
+            data-y-title="Appointments"
+            aria-describedby="caption-line-multi-site-two">
+          </canvas>
+        </div>
+
+        <!-- Accessible table (authoritative source) -->
+        <figcaption id="caption-line-multi-site-two" class="nhsuk-u-visually-hidden">
+          Table of monthly appointments by site
+        </figcaption>
+        <table class="nhsuk-table nhsuk-u-margin-top-4" id="table-line-multi-site-two">
+          <thead>
+            <tr>
+              <th scope="col">Month</th>
+              <th scope="col">Site D</th>
+              <th scope="col">Site E</th>
+              <th scope="col">Site F</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">January</th><td>120</td><td>95</td><td>80</td></tr>
+            <tr><th scope="row">February</th><td>150</td><td>110</td><td>90</td></tr>
+            <tr><th scope="row">March</th><td>180</td><td>130</td><td>100</td></tr>
+            <tr><th scope="row">April</th><td>160</td><td>125</td><td>95</td></tr>
+            <tr><th scope="row">May</th><td>210</td><td>140</td><td>120</td></tr>
+          </tbody>
+        </table>
+      </figure>
+
+    </div>
+  </div>
+
+{% endblock %}

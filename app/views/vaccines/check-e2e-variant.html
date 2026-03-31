@@ -1,0 +1,120 @@
+{# extends 'layout.html' #}
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Check and confirm" %}
+
+{# set currentSection = "vaccines" #}
+{% set currentSection = "organise" %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% set organisation = {name: data.nhsTrusts[data.organisationCode]} %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <span class="nhsuk-caption-l">Birmingham Women's Hospital</span>
+      <h1 class="nhsuk-heading-l">Monday 1 July, session 09:00 - 17:00</h1>
+
+      <h2 class="nhsuk-heading-m">Check and confirm</h2>
+
+      {{ summaryList({
+        classes: "nhsuk-u-margin-bottom-2",
+        rows: [
+          {
+            key: {
+              text: "Site name"
+            },
+            value: {
+              text: "Birmingham Women's Hospital"
+            }
+          },
+          {
+            key: {
+              text: "ODS Code"
+            },
+            value: {
+              html: "RQ3"
+            }
+          },
+          {
+            key: {
+              text: "Address"
+            },
+            value: {
+              html: "Mindelsohn Way, Edgbaston, Birmingham, West Midlands, B15 2TG"
+            }
+          }
+        ]
+      }) }}
+
+      {#<p class="nhsuk-u-margin-top-0"><a class="nhsuk-link nhsuk-link--no-visited-state" href="/vaccines/choose-site">Change site</a></p>#}
+
+      {{ summaryList({
+        classes: "nhsuk-u-margin-bottom-2 nhsuk-u-margin-top-6",
+        rows: [
+          {
+            key: {
+              text: "Vaccine"
+            },
+            value: {
+              html: data["vaccine"]
+            }
+          },
+          {
+            key: {
+              text: "Product"
+            },
+            value: {
+              html: data["vaccineProduct"]
+            }
+          },
+          {
+            key: {
+              text: "Pack size"
+            },
+            value: {
+              html: data.packType
+            }
+          } if data.packType
+        ]
+      }) }}
+
+      <p class="nhsuk-u-margin-top-0"><a class="nhsuk-link nhsuk-link--no-visited-state" href="/vaccines/choose-vaccine">Change vaccine</a></p>
+
+      {{ summaryList({
+        classes: "nhsuk-u-margin-bottom-2 nhsuk-u-margin-top-6",
+        rows: [
+          {
+            key: {
+              text: "Batch number"
+            },
+            value: {
+              html: data["batchNumber"]
+            }
+          },
+          {
+            key: {
+              text: "Expiry date"
+            },
+            value: {
+              html: (data.batchExpiryDate | isoDateFromDateInput | govukDate )
+            }
+          }
+        ]
+      }) }}
+
+      <p class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-8"><a class="nhsuk-link nhsuk-link--no-visited-state" href="/vaccines/add-batch">Edit batch</a></p>
+
+      <form action="/mya/week" method="post">
+        {{ button({
+          "text": "Confirm"
+        }) }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{# extends 'layout.html' #}
+{% extends 'e2e-layout.html' %}
+
+{% set pageName = "Site" %}
+
+{# set currentSection = "vaccines" #}
+{% set currentSection = "organise" %}
+
+{% block header %}
+  {% include "includes/e2e-header-logged-in.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/vaccines/index",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-two-thirds">
+
+          <h1 class="nhsuk-heading-xl">Site</h1>
+
+          <p>Vaccines and batch information are added to sites within your Trust.</p>
+
+          <p>You can <a href="https://digital.nhs.uk/services/organisation-data-service/request-a-new-code-or-update-organisation-details#site-request" target="_new">request a new site (opens in new tab)</a>.</p>
+
+          <form action="/vaccines/choose-vaccine" method="post">
+
+          <div class="nhsuk-form-group">
+            <h1 class="nhsuk-label-wrapper">
+              <label class="nhsuk-label nhsuk-label--m nhsuk-u-margin-bottom-1" for="organisationCode">
+            Select site
+              </label>
+            </h1>
+            <div class="nhsuk-hint" id="organisationName-hint">
+              Search by name or ODS code
+            </div>
+            <!--
+            <select class="nhsuk-select" id="selectICB" name="selectICB" data-module="nhsuk-autocomplete" value="{{data['selectICB']}}">
+            -->
+            <!--
+            <select class="nhsuk-select" id="siteId" name="siteId" data-module="autocomplete" data-autoselect="" data-display-menu="" data-min-length="" data-show-all-values="" data-show-no-options-found="">-->
+            <select class="nhsuk-select" id="siteId" name="siteId" data-module="nhsuk-autocomplete" data-autoselect="" data-display-menu="" data-min-length="" data-show-all-values="" data-show-no-options-found="">
+              <option selected value=""></option>
+              {% for site in currentOrganisation.sites %}
+                <option value="{{ site.id }}">{{ site.name }} ({{site.id }})</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          {{ button({
+            "text": "Continue"
+          }) }}
+
+        </form>
+
+
+        </div>
+      </div>
+
+
+
+
+    </div>
+  </div>
+{% endblock %}
+

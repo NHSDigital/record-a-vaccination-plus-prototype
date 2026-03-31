@@ -1,0 +1,37 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Vaccine product age warning" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% block beforeContent %}
+  {{ backLink({href: "javascript:history.back()"}) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% set panelHtml %}
+        <p>{{ data.vaccineProduct }} is usually recommended for people aged 2 years and over.</p><p>{{ data.firstName }} {{ data.lastName }} is 6 months old.</p>
+        <div class="nhsuk-button-group">
+          {{ button({
+            text: "Continue anyway",
+            classes: "nhsuk-button--reverse",
+            href: "/ravs-infants/dosage"
+          }) }}
+          <a href="#" onclick="history.back(); return false;">Change vaccine product</a>
+        </div>
+      {% endset %}
+
+      {{ panel({
+        titleText: data.firstName + " " + data.lastName + " may be too young for this vaccine product",
+        titleSize: "l",
+        classes: "nhsuk-panel--interruption",
+        html: panelHtml
+      }) }}
+ 
+    </div>
+  </div>
+
+{% endblock %}

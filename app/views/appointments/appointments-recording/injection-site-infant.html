@@ -1,0 +1,113 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Which batch are you using?" %}
+{% set currentSection = "run" %}
+{% set organisationSetting = currentUser.organisations | findById(data.currentOrganisationId) %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if (errors | length) > 0 %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: errors
+        }) }}
+      {% endif %}
+
+      {# ------------------- Macro (unchanged options) ------------------- #}
+      {% macro injectionSiteBlock(key, label) -%}
+        {% set idPrefix = 'injectionSite_' ~ key %}
+
+        {# Per-vaccine conditional radios for 'Somewhere else' #}
+        {% set somewhereElseHtml %}
+          {{ radios({
+            idPrefix: 'other-injection-site-' ~ key,
+            name: 'otherInjectionSite_' ~ key,
+            fieldset: {
+              legend: { text: 'Injection site', classes: 'nhsuk-fieldset__legend--s' }
+            },
+            items: [
+              { value: 'Left buttock',  text: 'Left buttock',  checked: (data['otherInjectionSite_' ~ key] == 'Left buttock') },
+              { value: 'Right buttock', text: 'Right buttock', checked: (data['otherInjectionSite_' ~ key] == 'Right buttock') },
+              { value: 'Left thigh',    text: 'Left thigh',    checked: (data['otherInjectionSite_' ~ key] == 'Left thigh') },
+              { value: 'Right thigh',   text: 'Right thigh',   checked: (data['otherInjectionSite_' ~ key] == 'Right thigh') }
+            ]
+          }) }}
+        {% endset %}
+
+        {{ radios({
+          idPrefix: idPrefix,
+          name: idPrefix,
+          fieldset: {
+            legend: { text: label, classes: 'nhsuk-fieldset__legend--m' }
+          },
+          items: [
+            { value: 'Left arm',  text: 'Left arm',  checked: (data[idPrefix] == 'Left arm') },
+            { value: 'Right arm', text: 'Right arm', checked: (data[idPrefix] == 'Right arm') },
+            { divider: 'or' },
+            { value: 'other', text: 'Somewhere else', checked: (data[idPrefix] == 'other'), conditional: { html: somewhereElseHtml } }
+          ]
+        }) }}
+      {%- endmacro %}
+
+      <form action="check-infant" method="post" novalidate>
+
+        <h1 class="nhsuk-heading-l">Where did you give the injection?</h1>
+
+        {# ---------------- Add product to the legend labels ---------------- #}
+        {% set v4 = data.vaccinesVisitFour %}
+
+        {% set label_mmr =
+             data.label_v4_mmr_full
+          or ((data.label_v4_mmr or data.mmrLabel or data.label_mmr or 'MMR (1st dose)')
+              ~ (data.mmrProduct and (' (' ~ data.mmrProduct ~ ')') or '')) %}
+
+        {% set label_hibmenc =
+             data.label_v4_hibmenc_full
+          or ((data.label_v4_hibmenc or data.hibmencLabel or data.label_hibmenc or 'Hib/Men C (1st dose)')
+              ~ (data.hibMenCProduct and (' (' ~ data.hibMenCProduct ~ ')') or '')) %}
+
+        {% set label_menb =
+             data.label_v4_menb_full
+          or ((data.label_v4_menb or data.menbLabel or data.label_menb or 'Men B (3rd dose)')
+              ~ (data.menBProduct and (' (' ~ data.menBProduct ~ ')') or '')) %}
+
+        {% set label_pcv =
+             data.label_v4_pcv_full
+          or ((data.label_v4_pcv or data.pcvLabel or data.label_pcv or 'PCV (2nd dose)')
+              ~ (data.pcvProduct and (' (' ~ data.pcvProduct ~ ')') or '')) %}
+
+        {% set label_mmr = 'MMR (1st dose)' ~ ' (' ~ data.mmrProduct ~ ')' %}
+        {% set label_hibmenc = 'Hib/Men C (1st dose)' ~ ' (' ~ data.hibMenCProduct ~ ')' %}
+        {% set label_menb = 'Men B (3rd dose)' ~ ' (' ~ data.menBProduct ~ ')' %}
+        {% set label_pcv = 'PCV (2nd dose)' ~ ' (' ~ data.pcvProduct ~ ')' %}
+
+        {# ---------------- Mirror the vaccines selected at visit four ---------------- #}
+        {% if v4 and ('mmrVisitFour' in v4) %}
+          {{ injectionSiteBlock('mmr', label_mmr) }}
+        {% endif %}
+
+        {% if v4 and ('hibmencVisitFour' in v4) %}
+          {{ injectionSiteBlock('hibmenc', label_hibmenc) }}
+        {% endif %}
+
+        {% if v4 and ('menbVisitFour' in v4) %}
+          {{ injectionSiteBlock('menb', label_menb) }}
+        {% endif %}
+
+        {% if v4 and ('pcvVisitFour' in v4) %}
+          {{ injectionSiteBlock('pcv', label_pcv) }}
+        {% endif %}
+
+        {{ button({ text: "Continue" })}}
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

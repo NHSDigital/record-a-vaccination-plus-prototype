@@ -1,0 +1,132 @@
+{% extends 'e2e-layout3.html' %}
+
+{% block pageTitle %}
+  Manage users and permissions
+{% endblock %}
+
+{% set currentSection = "prepare" %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-prepare">Prepare</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Manage access</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <h1 class="nhsuk-heading-l">Manage access</h1>
+      <p class="nhs-body">Add and remove users, change access rights for users.</p>
+
+      {{ button({
+        "text": "Add user",
+        "href": "/user-admin/add-user"
+      }) }}
+
+
+      <div class="app-filters nhsuk-u-margin-top-5">
+        <form action="/user-admin" method="get" novalidate>
+          <div class="nhsuk-form-group nhsuk-u-margin-bottom-0">
+            <label class="nhsuk-label" for="q">
+              Search deactivated users by name or email
+            </label>
+            <input class="nhsuk-input nhsuk-input--width-20" id="q" name="q" type="search" value="{{ q }}">
+
+            {{ button({
+              text: "Search",
+              classes: "nhsuk-button nhsuk-button--secondary-custom nhsuk-u-margin-left-2 app-button--small nhsuk-u-margin-bottom-0"
+            })}}
+          </div>
+        </form>
+      </div>
+      <br>
+
+      <p>For security, we deactivate users who have not logged in for 90 days. <a href="/user-admin/reactivate-all">Reactivate users (3)</a></p>
+
+<br>
+
+
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+
+      <nav class="x-govuk-secondary-navigation" aria-label="Secondary menu">
+        <ul class="x-govuk-secondary-navigation__list">
+            <li class="x-govuk-secondary-navigation__list-item ">
+            <a class="x-govuk-secondary-navigation__link" href="/user-admin" aria-current=page>
+              {% if data['addedUser'] == 'true' %}
+                Active (5)
+              {% else %}
+                <!--Active ({{ totalUsers }})-->Active (4)
+              {% endif %}
+            </a>
+          </li>
+          <li class="x-govuk-secondary-navigation__list-item x-govuk-secondary-navigation__list-item--current">
+            <a class="x-govuk-secondary-navigation__link" href="/user-admin/deactivated">
+              Deactivated (3)
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+
+          <table class="nhsuk-table-responsive" role="table">
+
+            <br>
+            <caption class="nhsuk-table__caption nhsuk-table__caption--m">3 Deactivated users</caption>
+
+            <thead class="nhsuk-table__head" role="rowgroup">
+              <thead role="rowgroup" class="nhsuk-table__head">
+                <tr role="row">
+                  <th role="columnheader" class="" scope="col">Name</th>
+                  <th role="columnheader" class="" scope="col">Email</th>
+                  <th role="columnheader" class="" scope="col">Clinician</th>
+                  <!--<th role="columnheader" class="" scope="col">Permission</th>-->
+                  <th role="columnheader" class="" scope="col">Reason deactivated</th>
+                  <th role="columnheader" class="" scope="col"></th>
+                </tr>
+            </thead>
+
+            <tbody class="nhsuk-table__body">
+            <tr class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">Doe, Jane</td>
+              <td class="nhsuk-table__cell ">jane.doe@nhs.net</td>
+              <td class="nhsuk-table__cell ">Yes</td>
+              <!--<td class="nhsuk-table__cell ">{{ userOrganisationSettings.permissionLevel }}</td>-->
+              <td class="nhsuk-table__cell ">By John Smith</td>
+              <td class="nhsuk-table__cell app-table__cell--right-aligned">
+                <a href="/user-admin/reactivate?userName=Daisy Rice&userEmail=daisy.rice@nhs.net&userLastLogin=Today&userVaccinator=yes" class="nhsuk-link">Reactivate</a>
+              </td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">West, Wallace</td>
+              <td class="nhsuk-table__cell ">wallaceh.west@nhs.net</td>
+              <td class="nhsuk-table__cell ">Yes</td>
+              <!--<td class="nhsuk-table__cell ">{{ userOrganisationSettings.permissionLevel }}</td>-->
+              <td class="nhsuk-table__cell ">90 days since log in</td>
+              <td class="nhsuk-table__cell app-table__cell--right-aligned">
+                <a href="/user-admin/reactivate?userName=Jane Smith&userEmail=jane.smith@nhs.net&userLastLogin=Today&userVaccinator=yes" class="nhsuk-link">Reactivate</a>
+              </td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">Phillips, Zack</td>
+              <td class="nhsuk-table__cell ">zack.phillips@nhs.net</td>
+              <td class="nhsuk-table__cell ">Yes</td>
+              <!--<td class="nhsuk-table__cell ">{{ userOrganisationSettings.permissionLevel }}</td>-->
+              <td class="nhsuk-table__cell ">90 days since log in</td>
+              <td class="nhsuk-table__cell app-table__cell--right-aligned">
+                <a href="/user-admin/reactivate?userName=Samantha Walker&userEmail=samantha.walker@nhs.net&userLastLogin=28 June 2025&userVaccinator=yes" class="nhsuk-link">Reactivate</a>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <br>
+
+{% endblock %}

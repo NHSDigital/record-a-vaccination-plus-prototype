@@ -1,0 +1,105 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Success, all messages have been successfully sent - Send invites
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/send-invites/choose-task?taskChoice">Send invites</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Upload patient list and send invites</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+  {#<a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>#}
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <div class="nhsuk-panel">
+      <h1 class="nhsuk-panel__title">
+        Success
+      </h1>
+      <div class="nhsuk-panel__body">
+        All messages have been successfully sent
+      </div>
+    </div>
+
+    <!--
+    <h1 class="nhsuk-heading-l">
+      <span class="nhsuk-caption-l">Engage patients</span>
+      Confirm and send
+    </h1>
+    -->
+
+    <!--
+    <p class="nhsuk-body">
+      Review communications summary before sending.
+    </p>
+    -->
+
+    <table class="nhsuk-table nhsuk-u-margin-bottom-6">
+      <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">Communication tracks</caption>
+      <thead class="nhsuk-table__head">
+        <tr>
+          <th scope="col" class="nhsuk-table__header">Communications focus</th>
+          <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Patient count</th>
+        </tr>
+      </thead>
+      <tbody class="nhsuk-table__body">
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Pertussis focus</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" style="text-align: right">97</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">RSV focus</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" style="text-align: right">106</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Seasonal focus</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" style="text-align: right">0</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Mop up - last chance</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" style="text-align: right">52</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Routine</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" style="text-align: right">131</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!--<p class="nhsuk-body nhsuk-u-margin-bottom-5">
+      <a href="#" class="nhsuk-link">View names and contact details of recipients</a>.
+    </p>-->
+
+    <!--
+    <form class="form" action="" method="post" class="submit">
+      <button class="nhsuk-button" data-module="nhsuk-button" type="submit">
+        View clinic lists... although this feels to be a link rather than a button [end of a transactional service]
+      </button>
+    </form>
+    -->
+    
+    <!--<h2 class="nhsuk-heading-m">
+      [Next steps / related tasks heading]
+    </h2>-->
+    <p class="nhsuk-body">
+      Return to <a href="choose-task?taskChoice" class="nhsuk-link">send invites</a>.
+    </p>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Choose vaccines" %}
+
+{% set currentSection = "monitor" %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      
+      {% if data['e2eCurrentUserType'] == "infant" %}
+
+        <form action="/reports/choose-age-groups" method="post">
+
+          {{ checkboxes({
+            idPrefix: "reportChosenVaccines",
+            name: "reportChosenVaccines",
+            errorMessage: {
+              text: error.text
+            } if error,
+            fieldset: {
+              legend: {
+                text: "Choose vaccines",
+                isPageHeading: true,
+                classes: "nhsuk-fieldset__legend--l"
+              }
+            },
+            items: [
+              {
+                value: "Rotavirus",
+                text: "Rotavirus"
+              },
+              {
+                value: "6-in-1",
+                text: "6-in-1"
+              },
+              {
+                value: "Men-B",
+                text: "Men B"
+              },
+              {
+                value: "PCV",
+                text: "PCV"
+              },
+              {
+                value: "MMR",
+                text: "MMR"
+              },
+              {
+                value: "MMRV",
+                text: "MMRV"
+              },
+              {
+                value: "4-in-1",
+                text: "4-in-1"
+              },
+              {
+                value: "Flu",
+                text: "Flu"
+              }
+            ]
+          }) }}
+
+          {{ button({
+            text: "Continue",
+            classes: "nhsuk-u-margin-top-4"
+          }) }}
+
+        </form>
+
+      {% else %}
+
+        <form action="/reports/choose-site" method="post">
+
+          {{ checkboxes({
+            idPrefix: "reportChosenVaccines",
+            name: "reportChosenVaccines",
+            errorMessage: {
+              text: error.text
+            } if error,
+            fieldset: {
+              legend: {
+                text: "Choose vaccines",
+                isPageHeading: true,
+                classes: "nhsuk-fieldset__legend--l"
+              }
+            },
+            items: [
+              {
+                value: "Flu",
+                text: "Flu"
+              },
+              {
+                value: "Pertussis",
+                text: "Pertussis"
+              },
+              {
+                value: "Respiratory syncytial virus (RSV)",
+                text: "Respiratory syncytial virus (RSV)"
+              }
+            ]
+          }) }}
+
+          {{ button({
+            text: "Continue",
+            classes: "nhsuk-u-margin-top-4"
+          }) }}
+
+        </form>
+
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}

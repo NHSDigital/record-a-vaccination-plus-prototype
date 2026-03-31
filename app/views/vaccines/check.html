@@ -1,0 +1,168 @@
+{# extends 'layout.html' #}
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Check and confirm" %}
+
+{# set currentSection = "vaccines" #}
+{% set currentSection = "organise" %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% set organisation = {name: data.nhsTrusts[data.organisationCode]} %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <span class="nhsuk-caption-l">Birmingham Women's Hospital</span>
+      {% if data['sessionDate'] == '' %}
+        <h1 class="nhsuk-heading-l">Thursday 1 August, session 09:00 - 17:00</h1>
+      {% else %}
+        <h1 class="nhsuk-heading-l">{{data['sessionDate']}}, session 09:00 - 17:00</h1>
+      {% endif %}
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h2 class="nhsuk-heading-m">Check and confirm</h2>
+
+      {{ summaryList({
+        classes: "nhsuk-u-margin-bottom-2",
+        rows: [
+          {
+            key: {
+              text: "Site name"
+            },
+            value: {
+              text: "Birmingham Women's Hospital"
+            }
+          },
+          {
+            key: {
+              text: "ODS Code"
+            },
+            value: {
+              html: "RQ3"
+            }
+          },
+          {
+            key: {
+              text: "Address"
+            },
+            value: {
+              html: "Mindelsohn Way, Edgbaston, Birmingham, West Midlands, B15 2TG"
+            }
+          }
+        ]
+      }) }}
+
+      {#<p class="nhsuk-u-margin-top-0"><a class="nhsuk-link nhsuk-link--no-visited-state" href="/vaccines/choose-site">Change site</a></p>#}
+
+      <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-2 nhsuk-u-margin-top-6">
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Vaccine
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            {% if data['sessionVaccine'] == '' %}
+              RSV adult (incl pregnancy)
+            {% else %}
+              {{ data['sessionVaccine'] }}
+            {% endif %}
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Product
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            {% if data['sessionProduct'] == '' %}
+              Abrysvo
+            {% else %}
+              {{ data['sessionProduct'] }}
+            {% endif %}
+          </dd>
+        </div>
+      </dl>
+
+      <!--{{ summaryList({
+        classes: "nhsuk-u-margin-bottom-2 nhsuk-u-margin-top-6",
+        rows: [
+          {
+            key: {
+              text: "Vaccine"
+            },
+            value: {
+              html: data["sessionVaccine"]
+            }
+          },
+          {
+            key: {
+              text: "Product"
+            },
+            value: {
+              html: data["sessionProduct"]
+            }
+          },
+          {
+            key: {
+              text: "Pack size"
+            },
+            value: {
+              html: data.packType
+            }
+          } if data.packType
+        ]
+      }) }}-->
+
+      <p class="nhsuk-u-margin-top-0"><a class="nhsuk-link nhsuk-link--no-visited-state" href="/vaccines/choose-vaccine">Change vaccine</a></p>
+
+      {{ summaryList({
+        classes: "nhsuk-u-margin-bottom-2 nhsuk-u-margin-top-6",
+        rows: [
+          {
+            key: {
+              text: "Batch number"
+            },
+            value: {
+              html: data["batchNumber"]
+            }
+          },
+          {
+            key: {
+              text: "Expiry date"
+            },
+            value: {
+              html: (data.batchExpiryDate | isoDateFromDateInput | govukDate )
+            }
+          }
+        ]
+      }) }}
+
+      <p class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-8"><a class="nhsuk-link nhsuk-link--no-visited-state" href="/vaccines/add-batch">Edit batch</a></p>
+
+      <!--<form action="/vaccines/add" method="post">-->
+      {% if data['week'] == 'one' %}
+        <form action="/mya/week?addedBatch=true" method="post">
+      {% elif data['week'] == 'two' %}
+        <form action="/mya/week-september-8-14?addedBatch=true" method="post">
+      {% elif data['week'] == 'three' %}
+        <form action="/mya/week-september-15-21?addedBatch=true" method="post">
+      {% elif data['week'] == 'four' %}
+        <form action="/mya/week-september-22-28?addedBatch=true" method="post">
+      {% elif data['week'] == 'five' %}
+        <form action="/mya/week-september-29-october-5?addedBatch=true" method="post">
+      {% endif %}
+        {{ button({
+          "text": "Confirm"
+        }) }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

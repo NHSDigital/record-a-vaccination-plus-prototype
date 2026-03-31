@@ -1,0 +1,182 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Complete RSV invite message
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      Complete {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} invite message
+    </h1>
+
+    <p class="nhsuk-body">
+      This is the message the patients on your send list will receive.
+    </p>
+
+    <div class="nhsuk-card nhsuk-u-margin-bottom-4" id="card-rsv-focus">
+      <div class="nhsuk-card__content nhsuk-u-padding-bottom-2">
+        <!-- Editable region START -->
+        <div id="rsv-editable" aria-label="RSV message content" aria-live="polite">
+
+          <h3 class="nhsuk-heading-m">{% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} [SMS]</h3>
+         
+          <p class="nhsuk-body">Hello [First name],</p>
+
+          <p class="nhsuk-body">
+            You are invited to book an appointment for a {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} vaccination as you are eligible. Follow
+            <a href="#/" class="nhsuk-link">this link for further information on the {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} vaccine</a>.
+          </p>
+
+          <p class="nhsuk-body">
+            If you would like to make an appointment, please book
+            <a href="#/" class="nhsuk-link">using our online tool</a> or call us on {% if data['e2eCurrentUserType'] == 'OH' %}01209{% else %}121{% endif %} 472 1377.
+          </p>
+          <p class="nhsuk-body">
+            If you have already contacted us, please accept our apologies and ignore this reminder.
+          </p>
+          <p class="nhsuk-body">
+            {% if data['e2eCurrentUserType'] == 'OH' %}
+              Kind regards,<br />Royal Cornwall Hospitals Occupational Health team
+            {% else %}
+              Kind regards,<br />Birmingham Women's Hospital maternity team
+            {% endif %}
+          </p>
+        </div>
+        <!-- Editable region END -->
+
+        <div class="nhsuk-u-margin-top-3" id="rsv-actions">
+          <button id="btn-edit" class="nhsuk-button app-button--small nhsuk-button--secondary-custom" type="button">
+            Edit content
+          </button>
+          <button id="btn-finish" class="nhsuk-button app-button--small nhsuk-button--secondary nhsuk-u-margin-right-2" type="button">
+            Finished editing
+          </button>
+          <button id="btn-cancel" class="nhsuk-button app-button--small nhsuk-button--warning" type="button">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <form class="form" action="review-and-send" method="post" class="submit">
+      <div class="govuk-button-group">
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-right-3" data-module="nhsuk-button">
+          Next: Review and send {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} invite
+        </button>
+        {#<p class="nhsuk-body"><a class="nhsuk-link" href="/send-invites/choose-task?taskChoice">Cancel</a></p>#}
+      </div>
+    </form>
+
+    <!--<p class="nhsuk-body">
+      Back to <a href="choose-upload" class="nhsuk-link">send invites</a>.
+    </p>-->
+
+  </div>
+</div>
+
+<style>
+  .app-editing-outline {
+    outline: 2px dashed #1d70b8;
+    outline-offset: 4px;
+    padding: .25rem;
+  }
+  #rsv-editable:focus {
+    box-shadow: 0 0 0 3px rgba(29,112,184,.3);
+  }
+
+  /* Button visibility controlled by .is-editing */
+  #card-rsv-focus #btn-finish,
+  #card-rsv-focus #btn-cancel {
+    display: none;
+  }
+  #card-rsv-focus.is-editing #btn-edit {
+    display: none;
+  }
+  #card-rsv-focus.is-editing #btn-finish,
+  #card-rsv-focus.is-editing #btn-cancel {
+    display: inline-flex;
+  }
+</style>
+
+<script>
+  (() => {
+    const card = document.getElementById('card-rsv-focus');
+    const editable = document.getElementById('rsv-editable');
+    const btnEdit = document.getElementById('btn-edit');
+    const btnFinish = document.getElementById('btn-finish');
+    const btnCancel = document.getElementById('btn-cancel');
+
+    let originalHTML = '';
+    let inEditMode = false;
+
+    function setEditing(on) {
+      card.classList.toggle('is-editing', on);
+      inEditMode = on;
+
+      if (on) {
+        originalHTML = editable.innerHTML;
+        editable.setAttribute('contenteditable', 'true');
+        editable.classList.add('app-editing-outline');
+        editable.focus({ preventScroll: false });
+      } else {
+        editable.removeAttribute('contenteditable');
+        editable.classList.remove('app-editing-outline');
+        // 🔹 removed btnEdit.focus() so it won't auto-focus
+      }
+    }
+
+    function enterEditMode() {
+      if (!inEditMode) setEditing(true);
+    }
+    function finishEditing() {
+      if (inEditMode) {
+        originalHTML = editable.innerHTML;
+        setEditing(false);
+      }
+    }
+    function cancelEditing() {
+      if (inEditMode) {
+        editable.innerHTML = originalHTML;
+        setEditing(false);
+      }
+    }
+
+    // Prevent link navigation while editing
+    editable.addEventListener('click', (e) => {
+      if (inEditMode && e.target.closest('a')) e.preventDefault();
+    });
+
+    // Keyboard shortcuts
+    editable.addEventListener('keydown', (e) => {
+      if (!inEditMode) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        cancelEditing();
+      } else if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        finishEditing();
+      }
+    });
+
+    // Button handlers
+    btnEdit.addEventListener('click', enterEditMode);
+    btnFinish.addEventListener('click', finishEditing);
+    btnCancel.addEventListener('click', cancelEditing);
+
+    // Ensure initial state
+    setEditing(false);
+  })();
+</script>
+
+{% endblock %}

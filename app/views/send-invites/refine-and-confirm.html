@@ -1,0 +1,683 @@
+{% extends 'e2e-layout3.html' %}
+{% set currentSection = "organise" %}
+{% block pageTitle %}Refine and confirm your RSV invite send list{% endblock %}
+
+{% block beforeContent %}
+  <a class="nhsuk-back-link" href="#" id="backLink">Go back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    <h1 class="nhsuk-heading-l">
+      Refine and confirm your
+      {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %}
+      invite send list
+    </h1>
+
+    <nav aria-label="Secondary menu" class="x-govuk-secondary-navigation">
+      <ul class="x-govuk-secondary-navigation__list">
+        <li class="x-govuk-secondary-navigation__list-item x-govuk-secondary-navigation__list-item--current" id="liFiltered">
+          <a aria-current="page" href="#" id="linkFiltered">Send list (0)</a>
+        </li>
+        <li class="x-govuk-secondary-navigation__list-item" id="liSuppressed">
+          <a href="#" id="linkSuppressed">Excluded from send list (0)</a>
+        </li>
+      </ul>
+    </nav>
+
+    <p class="nhsuk-hint nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-4">
+      Scroll horizontally to explore full patient dataset
+    </p>
+
+    <!-- SEND LIST PANEL -->
+    <div id="panelFiltered">
+      <div aria-label="Send list table" class="ons-like-scroll" role="region" tabindex="0">
+        <table class="nhsuk-table">
+          <thead>
+            <tr id="table-head-row"></tr>
+          </thead>
+          <tbody id="removable-table-body"></tbody>
+        </table>
+      </div>
+      <div class="nhsuk-u-margin-top-4" id="filtered-pagination"></div>
+    </div>
+
+    <!-- SUPPRESSED PANEL -->
+    <div class="hiddenPanel" id="panelSuppressed">
+      <div aria-label="Excluded table" class="ons-like-scroll" role="region" tabindex="0">
+        <table class="nhsuk-table">
+          <thead>
+            <tr id="suppressed-head-row"></tr>
+          </thead>
+          <tbody id="suppressed-table-body"></tbody>
+        </table>
+      </div>
+      <div class="nhsuk-u-margin-top-4" id="suppressed-pagination"></div>
+    </div>
+
+    <!-- COUNTER -->
+    <div class="nhsuk-u-margin-top-4">
+      <div class="row-counter-line" style="display:flex;align-items:center;gap:12px;">
+        <input aria-label="Patients selected" class="nhsuk-input nhsuk-input--width-5" id="row-count" readonly type="text" value="0">
+        <span class="nhsuk-body">
+          patients chosen to be invited for
+          {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %}
+        </span>
+      </div>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="nhsuk-u-margin-top-5">
+      <a class="nhsuk-button" data-module="nhsuk-button" href="invite-templates">
+        Next: Complete invite message
+      </a>
+      <p class="nhsuk-body">
+        <a class="nhsuk-link" id="backToInvite" href="#">Back to invite selection screen</a>
+      </p>
+    </div>
+
+    <div aria-live="polite" class="nhsuk-u-visually-hidden" id="table-live"></div>
+  </div>
+</div>
+
+<style>
+/* Horizontal scroll wrapper */
+.ons-like-scroll {
+  overflow-x: auto;
+  background: #f0f4f5;
+  border: 1px solid #d8dde0;
+  border-left: 0;
+  border-right: 0;
+}
+
+/* Tables */
+.nhsuk-table {
+  margin-bottom: 0;
+  min-width: 640px;
+  width: 100%;
+  border-collapse: collapse;
+}
+.nhsuk-table thead th {
+  position: sticky;
+  top: 0;
+  background: #f0f4f5;
+}
+.nhsuk-table__header,
+.nhsuk-table__cell {
+  white-space: nowrap;
+}
+
+/* Sticky action column */
+.table-col-action a {
+  white-space: nowrap;
+  display: inline-block;
+}
+.is-sticky-col {
+  position: sticky;
+  left: 0;
+  background: #f0f4f5;
+  z-index: 3;
+  box-shadow: inset -1px 0 0 #d8dde0;
+}
+
+/* Panels */
+.hiddenPanel { display: none; }
+.hidden-row  { display: none; }
+
+/* Hide first column (ID) if needed */
+#panelFiltered table.nhsuk-table th:first-child,
+#panelFiltered table.nhsuk-table td:first-child,
+#panelSuppressed table.nhsuk-table th:first-child,
+#panelSuppressed table.nhsuk-table td:first-child {
+  display: none !important;
+}
+
+/* === Pagination – single, consistent baseline === */
+#filtered-pagination,
+#suppressed-pagination {
+  position: relative;
+  z-index: 1;
+  clear: both;
+}
+
+#filtered-pagination nav.nhsuk-pagination,
+#suppressed-pagination nav.nhsuk-pagination {
+  display: flex !important;
+  align-items: baseline !important;
+  flex-wrap: nowrap;
+  column-gap: 1.5rem;
+}
+
+#filtered-pagination nav.nhsuk-pagination > *,
+#suppressed-pagination nav.nhsuk-pagination > * {
+  display: flex !important;
+  align-items: baseline !important;
+}
+
+#filtered-pagination nav.nhsuk-pagination ul.nhsuk-pagination__list,
+#suppressed-pagination nav.nhsuk-pagination ul.nhsuk-pagination__list {
+  display: flex !important;
+  align-items: baseline !important;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  column-gap: 0.75rem;
+}
+
+#filtered-pagination nav.nhsuk-pagination ul.nhsuk-pagination__list li,
+#suppressed-pagination nav.nhsuk-pagination ul.nhsuk-pagination__list li {
+  display: flex !important;
+  align-items: baseline !important;
+  list-style: none;
+}
+
+#filtered-pagination nav.nhsuk-pagination a,
+#suppressed-pagination nav.nhsuk-pagination a,
+#filtered-pagination nav.nhsuk-pagination span[aria-hidden],
+#suppressed-pagination nav.nhsuk-pagination span[aria-hidden] {
+  display: inline-flex !important;
+  align-items: baseline !important;
+  line-height: 1 !important;
+  padding: 0.4rem 0.3rem;
+}
+
+/* Blue current page chip */
+#filtered-pagination nav.nhsuk-pagination a[aria-current="page"],
+#suppressed-pagination nav.nhsuk-pagination a[aria-current="page"] {
+  background-color: #005eb8;
+  color: #ffffff;
+  padding: 0.4rem 1.0rem; /* wider horizontally */
+  text-decoration: none;
+}
+#filtered-pagination nav.nhsuk-pagination a[aria-current="page"]:hover,
+#filtered-pagination nav.nhsuk-pagination a[aria-current="page"]:focus,
+#suppressed-pagination nav.nhsuk-pagination a[aria-current="page"]:hover,
+#suppressed-pagination nav.nhsuk-pagination a[aria-current="page"]:focus {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* Remove NHS numbered pagination arrow overlay so clicks hit the actual links */
+.nhsuk-pagination--numbered .nhsuk-pagination__link::after,
+.nhsuk-pagination--numbered .nhsuk-pagination__link::before {
+  content: none !important;
+  pointer-events: none !important;
+}
+
+/* Make disabled Previous/Next look visually identical in size/weight to links */
+.nhsuk-pagination--numbered__prev span[aria-disabled],
+.nhsuk-pagination--numbered__next span[aria-disabled] {
+  font-size: 1.1875rem;   /* matches nhsuk-link default */
+  line-height: 1.3;
+  font-weight: 400;
+  color: #425563;         /* standard NHS secondary text */
+  text-decoration: none !important;
+  padding: 0.4rem 0.3rem;
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.nhsuk-pagination--numbered__prev,
+.nhsuk-pagination--numbered__next {
+  display: flex;
+  align-items: baseline;
+}
+
+</style>
+
+<script src="/js/send-invite-data/patient-data-v2.js"></script>
+<script>
+(function(){
+
+  // === Back links preserve query ===
+  (function () {
+    var qs   = window.location.search || '';
+    var base = window.location.pathname.replace(/[^\/]+$/, '');
+    var back = document.getElementById('backLink');
+    if (back) back.href = base + 'choose-rsv-invite-recipients' + qs;
+
+    var back2 = document.getElementById('backToInvite');
+    if (back2) back2.href = base + 'choose-rsv-invite-recipients' + qs;
+  })();
+
+  // === Read selected filters from URL ===
+  const params = new URLSearchParams(window.location.search);
+  function sel(key){ return params.getAll(key).includes('1'); }
+
+  const selected = {
+    f28w       : sel('f28w'),
+    fContacted : sel('fContacted'),
+    fPhone     : sel('fPhone'),
+    fExpl      : sel('fExpl'),
+    fNo9m      : sel('fNo9m'),
+    fNoBook    : sel('fNoBook'),
+    fNo14      : sel('fNo14'),
+    fNoOther   : sel('fNoOther')
+  };
+
+  // === Elements ===
+  const theadRow       = document.getElementById('table-head-row');
+  const tbody          = document.getElementById('removable-table-body');
+  const suppressedHead = document.getElementById('suppressed-head-row');
+  const suppressedTbody= document.getElementById('suppressed-table-body');
+  const rowCount       = document.getElementById('row-count');
+  const linkFiltered   = document.getElementById('linkFiltered');
+  const linkSuppressed = document.getElementById('linkSuppressed');
+  const panelFiltered  = document.getElementById('panelFiltered');
+  const panelSuppressed= document.getElementById('panelSuppressed');
+  const live           = document.getElementById('table-live');
+
+  function announce(msg){ if (live) live.textContent = msg; }
+
+  function norm(s){
+    return String(s || '').toLowerCase().trim().replace(/\s+/g,' ');
+  }
+
+  function parseDate(str){
+    if (!str) return NaN;
+    const s = String(str).trim();
+    if (!s) return NaN;
+    const t = Date.parse(s);
+    if (!isNaN(t)) return new Date(t);
+    return NaN;
+  }
+
+  function getData(){
+    return window.PATIENT_DATA || window.patientDataV2 || window.patientData || window.patient_list_data;
+  }
+
+  // Columns to hide completely
+  const HIDDEN_COLUMNS = [
+    'Pertussis eligible (16 weeks)',
+    'RSV eligible (28 weeks)',
+    'COVID-19 & Flu eligible',
+    'Pertussis explained and offered',
+    'Pertussis side effects discussed',
+    'RSV explained and offered',
+    'RSV side effects discussed',
+    'Flu explained and offered',
+    'Flu side effects discussed',
+    'Date of last Pertussis vaccination',
+    'Date of last RSV vaccination',
+    'Date of last Flu vaccination',
+    'Date of last COVID vaccination',
+    'Date of Pertussis vaccination booking',
+    'Date of RSV vaccination booking',
+    'Date of Flu vaccination booking',
+    'Date of COVID vaccination booking',
+    'Date of last Pertussis invite',
+    'Date of last RSV invite',
+    'Date of last Flu invite',
+    'Date of last COVID invite'
+  ];
+
+  // === Build headers with sticky Action col ===
+  function buildHeader(columns){
+    theadRow.innerHTML = '';
+    suppressedHead.innerHTML = '';
+
+    // Sticky Action column
+    const thA = document.createElement('th');
+    thA.className = 'nhsuk-table__header is-sticky-col table-col-action';
+    thA.textContent = 'Action';
+    theadRow.appendChild(thA);
+    suppressedHead.appendChild(thA.cloneNode(true));
+
+    // Rest of columns
+    columns.forEach(col => {
+      if (HIDDEN_COLUMNS.includes(col)) return;
+      const th = document.createElement('th');
+      th.className = 'nhsuk-table__header';
+      th.textContent = col;
+      theadRow.appendChild(th);
+      suppressedHead.appendChild(th.cloneNode(true));
+    });
+  }
+
+  // === Build a row ===
+  function buildRow(values, toSuppressed){
+    const tr  = document.createElement('tr');
+    const tdA = document.createElement('td');
+    tdA.className = 'nhsuk-table__cell is-sticky-col table-col-action';
+
+    const a = document.createElement('a');
+    a.href = '#';
+    a.className = 'nhsuk-link nhsuk-link--no-visited-state';
+    if (toSuppressed){
+      a.setAttribute('data-add','');
+      a.textContent = 'Add back';
+    } else {
+      a.setAttribute('data-remove','');
+      a.textContent = 'Remove';
+    }
+    tdA.appendChild(a);
+    tr.appendChild(tdA);
+
+    const cols = getData().columns;
+    values.forEach((val, idx) => {
+      if (HIDDEN_COLUMNS.includes(cols[idx])) return;
+      const td = document.createElement('td');
+      td.className = 'nhsuk-table__cell';
+      td.textContent = (val == null ? '' : String(val));
+      tr.appendChild(td);
+    });
+
+    return tr;
+  }
+
+  // === Filter predicate ===
+  function passesFilters(values, cols){
+    const today    = new Date(); today.setHours(0,0,0,0);
+    const cutoff9  = new Date(today.getTime()); cutoff9.setMonth(cutoff9.getMonth() - 9);
+    const cutoff14 = new Date(today.getTime() - 14*24*60*60*1000);
+
+    const idx = header => cols.findIndex(c => norm(c) === norm(header));
+    const get = header => {
+      const i = idx(header);
+      return i >= 0 ? values[i] : '';
+    };
+
+    let vis = true;
+
+    if (selected.fContacted && get('Contactable') !== 'Yes') vis = false;
+    if (selected.fPhone && get('Phone number') === '') vis = false;
+
+    if (selected.f28w){
+      const e = parseDate(get('RSV eligible (28 weeks)'));
+      if (isNaN(e) || (today <= e)) vis = false;
+    }
+
+    if (selected.fExpl && get('RSV side effects discussed') !== 'Yes') vis = false;
+
+    if (selected.fNo9m){
+      const l = parseDate(get('Date of last RSV vaccination'));
+      if (!isNaN(l) && l >= cutoff9) vis = false;
+    }
+
+    if (selected.fNoBook){
+      const b = parseDate(get('Date of RSV vaccination booking'));
+      if (!isNaN(b) && b > today) vis = false;
+    }
+
+    if (selected.fNo14){
+      const inv = parseDate(get('Date of last RSV invite'));
+      if (!isNaN(inv) && inv >= cutoff14) vis = false;
+    }
+
+    if (selected.fNoOther){
+      const p = parseDate(get('Date of last Pertussis invite'));
+      const f = parseDate(get('Date of last Flu invite'));
+      const c = parseDate(get('Date of last COVID invite'));
+      if ((!isNaN(p) && p > today) || (!isNaN(f) && f > today) || (!isNaN(c) && c > today)) vis = false;
+    }
+
+    return vis;
+  }
+
+  // === Counts + labels ===
+  function updateCounts(){
+    const sendCount      = tbody.querySelectorAll('tr').length;
+    const excludedCount  = suppressedTbody.querySelectorAll('tr').length;
+
+    rowCount.value = sendCount;
+    linkFiltered.textContent   = 'Send list (' + sendCount + ')';
+    linkSuppressed.textContent = 'Excluded from send list (' + excludedCount + ')';
+
+    // refresh pagination whenever rows change
+    if (pagers.filtered)   pagers.filtered.refresh();
+    if (pagers.suppressed) pagers.suppressed.refresh();
+  }
+
+  // === INIT TABLE ===
+  function init(){
+    const data = getData();
+    if (!data){ console.error('No data'); return; }
+
+    const columns = data.columns;
+    const rows    = data.rows;
+
+    buildHeader(columns);
+
+    const anyFilters = Object.values(selected).some(Boolean);
+    tbody.innerHTML = '';
+
+    if (anyFilters){
+      const frag = document.createDocumentFragment();
+      rows.forEach(rowVals => {
+        if (passesFilters(rowVals, columns)){
+          frag.appendChild(buildRow(rowVals, false));
+        }
+      });
+      tbody.appendChild(frag);
+    }
+
+    updateCounts();
+    announce('Send list ready');
+
+    // set up pagination after rows exist
+    setupPagination('filtered', tbody, document.getElementById('filtered-pagination'));
+    setupPagination('suppressed', suppressedTbody, document.getElementById('suppressed-pagination'));
+  }
+
+  // === Remove / Add back ===
+  tbody.addEventListener('click', function(e){
+    const a = e.target.closest('[data-remove]');
+    if (!a) return;
+    e.preventDefault();
+
+    const tr   = a.closest('tr');
+    const vals = Array.from(tr.querySelectorAll('td')).slice(1).map(td => td.textContent);
+
+    suppressedTbody.appendChild(buildRow(vals, true));
+    tr.remove();
+    updateCounts();
+  });
+
+  suppressedTbody.addEventListener('click', function(e){
+    const a = e.target.closest('[data-add]');
+    if (!a) return;
+    e.preventDefault();
+
+    const tr   = a.closest('tr');
+    const vals = Array.from(tr.querySelectorAll('td')).slice(1).map(td => td.textContent);
+
+    tbody.appendChild(buildRow(vals, false));
+    tr.remove();
+    updateCounts();
+  });
+
+  // === Tabs ===
+  linkFiltered.addEventListener('click', function(e){
+    e.preventDefault();
+    panelFiltered.classList.remove('hiddenPanel');
+    panelSuppressed.classList.add('hiddenPanel');
+    linkFiltered.setAttribute('aria-current','page');
+    linkSuppressed.removeAttribute('aria-current');
+  });
+
+  linkSuppressed.addEventListener('click', function(e){
+    e.preventDefault();
+    panelSuppressed.classList.remove('hiddenPanel');
+    panelFiltered.classList.add('hiddenPanel');
+    linkSuppressed.setAttribute('aria-current','page');
+    linkFiltered.removeAttribute('aria-current');
+  });
+
+  // === Pagination – per-link handlers to avoid weird delegation ===
+  const PAGE_SIZE = 25;
+  const pagers = {}; // { filtered: {...}, suppressed: {...} }
+
+  function setupPagination(ctx, tbodyEl, containerEl){
+    if (!tbodyEl || !containerEl) return;
+
+    const state = { current: 1 };
+
+    function getRows(){
+      return Array.from(tbodyEl.querySelectorAll('tr'));
+    }
+
+    function totalPages(){
+      const rows = getRows();
+      return Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+    }
+
+    function goTo(page){
+      const rows = getRows();
+      const total = totalPages();
+      if (total === 0){
+        containerEl.innerHTML = '';
+        return;
+      }
+
+      if (page < 1) page = 1;
+      if (page > total) page = total;
+      state.current = page;
+
+      const start = (page - 1) * PAGE_SIZE;
+      const end   = start + PAGE_SIZE;
+
+      rows.forEach((row, i) => {
+        row.style.display = (i >= start && i < end) ? '' : 'none';
+      });
+
+      renderNav();
+    }
+
+    function buildPageList(total, current){
+      const pages = [];
+      if (total <= 7){
+        for (let i=1;i<=total;i++) pages.push(i);
+        return pages;
+      }
+      const windowSize = 5;
+      let start = Math.max(2, current - Math.floor(windowSize/2));
+      let end   = Math.min(total - 1, start + windowSize - 1);
+      start = Math.max(2, Math.min(start, total - windowSize));
+
+      pages.push(1);
+      if (start > 2) pages.push('dots');
+      for (let i=start;i<=end;i++) pages.push(i);
+      if (end < total - 1) pages.push('dots');
+      pages.push(total);
+      return pages;
+    }
+
+    function renderNav(){
+      const total   = totalPages();
+      const current = state.current;
+      containerEl.innerHTML = '';
+
+      const nav = document.createElement('nav');
+      nav.className = 'nhsuk-pagination nhsuk-pagination--numbered';
+      nav.setAttribute('role','navigation');
+      nav.setAttribute('aria-label','Pagination');
+
+      // Previous
+      const prevWrap = document.createElement('div');
+      prevWrap.className = 'nhsuk-pagination--numbered__prev';
+
+      if (current > 1){
+        const a = document.createElement('a');
+        a.className = 'nhsuk-pagination--numbered__link nhsuk-pagination__link';
+        a.href = '#';
+        a.textContent = 'Previous';
+        a.dataset.page = String(current - 1);
+        prevWrap.appendChild(a);
+      } else {
+        const span = document.createElement('span');
+        span.className = 'nhsuk-pagination--numbered__link';
+        span.setAttribute('aria-disabled','true');
+        span.textContent = 'Previous';
+        prevWrap.appendChild(span);
+      }
+      nav.appendChild(prevWrap);
+
+      // Numbered pages
+      const ul = document.createElement('ul');
+      ul.className = 'nhsuk-pagination__list nhsuk-pagination__list--numbered';
+
+      const items = buildPageList(total, current);
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'nhsuk-pagination--numbered__item';
+
+        if (item === 'dots'){
+          const span = document.createElement('span');
+          span.setAttribute('aria-hidden','true');
+          span.textContent = '…';
+          li.appendChild(span);
+        } else {
+          const pageNum = item;
+          const a = document.createElement('a');
+          a.className = 'nhsuk-pagination--numbered__link nhsuk-pagination__link';
+          a.href = '#';
+          a.textContent = pageNum;
+          a.dataset.page = String(pageNum);
+          if (pageNum === current){
+            a.setAttribute('aria-current','page');
+          }
+          li.appendChild(a);
+        }
+
+        ul.appendChild(li);
+      });
+
+      nav.appendChild(ul);
+
+      // Next
+      const nextWrap = document.createElement('div');
+      nextWrap.className = 'nhsuk-pagination--numbered__next';
+
+      if (current < total){
+        const a = document.createElement('a');
+        a.className = 'nhsuk-pagination--numbered__link nhsuk-pagination__link';
+        a.href = '#';
+        a.textContent = 'Next';
+        a.dataset.page = String(current + 1);
+        nextWrap.appendChild(a);
+      } else {
+        const span = document.createElement('span');
+        span.className = 'nhsuk-pagination--numbered__link';
+        span.setAttribute('aria-disabled','true');
+        span.textContent = 'Next';
+        nextWrap.appendChild(span);
+      }
+      nav.appendChild(nextWrap);
+
+      // Attach per-link click handlers (no delegated nav handler)
+      nav.querySelectorAll('a[data-page]').forEach(function(link){
+        link.addEventListener('click', function(e){
+          e.preventDefault();
+          const page = parseInt(this.dataset.page, 10);
+          if (Number.isNaN(page)) return;
+          goTo(page);
+        });
+      });
+
+      containerEl.appendChild(nav);
+    }
+
+    // Expose refresh for when rows move between tables
+    pagers[ctx] = {
+      refresh: function(){
+        const total = totalPages();
+        if (total === 0){
+          containerEl.innerHTML = '';
+          return;
+        }
+        const current = Math.min(state.current || 1, total);
+        goTo(current);
+      }
+    };
+
+    // Initial page
+    pagers[ctx].refresh();
+  }
+
+  // Run init when page loads
+  window.addEventListener('load', init);
+})();
+</script>
+{% endblock %}

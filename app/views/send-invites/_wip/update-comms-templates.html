@@ -1,0 +1,164 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Invite templates - Send invites
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="choose-task?taskChoice">Send invites</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Invites templates</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+
+  {#<a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>#}
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      <!--<span class="nhsuk-caption-l">Engage patients</span>-->
+      Invite templates
+    </h1>
+
+    <p class="nhsuk-body">
+      This screen shows the message that gets sent to a patient when they are assigned to receive a particular message.
+    </p>
+    
+    <p class="nhsuk-body">
+      Any updates you make persist to future communications.
+    </p>
+
+    <div class="nhsuk-card nhsuk-u-margin-bottom-4" id="card-pertussis-focus">
+      <div class="nhsuk-card__content nhsuk-u-padding-bottom-2">
+        <h3 class="nhsuk-heading-m">Pertussis [SMS]</h3>
+        <p class="nhsuk-body">
+          Dear [Name],
+        </p>
+        <p class="nhsuk-body">
+          Content content content.
+        </p>
+        <p class="nhsuk-body">
+          <a href="#/" class="nhsuk-link">Follow this link</a>.
+        </p>
+        <button class="nhsuk-button app-button--small nhsuk-button--secondary-custom nhsuk-u-margin-right-2" data-module="nhsuk-button" type="submit">
+          Edit content
+        </button>
+        <button class="nhsuk-button app-button--small nhsuk-button--secondary" data-module="nhsuk-button" type="submit">
+          Confirm content
+        </button>
+      </div>
+    </div>
+
+    <div class="nhsuk-card nhsuk-u-margin-bottom-4" id="card-rsv-focus">
+      <div class="nhsuk-card__content nhsuk-u-padding-bottom-2">
+        <h3 class="nhsuk-heading-m">RSV [SMS]</h3>
+        <p class="nhsuk-body">
+          Dear [Name],
+        </p>
+        <p class="nhsuk-body">
+          Content content content.
+        </p>
+        <p class="nhsuk-body">
+          <a href="#/" class="nhsuk-link">Follow this link</a>.
+        </p>
+        <button class="nhsuk-button app-button--small nhsuk-button--secondary-custom nhsuk-u-margin-right-2" data-module="nhsuk-button" type="submit">
+          Edit content
+        </button>
+        <button class="nhsuk-button app-button--small nhsuk-button--secondary" data-module="nhsuk-button" type="submit">
+          Confirm content
+        </button>
+      </div>
+    </div>
+
+    <div class="nhsuk-card nhsuk-u-margin-bottom-4" id="card-seasonal-focus">
+      <div class="nhsuk-card__content nhsuk-u-padding-bottom-2">
+        <h3 class="nhsuk-heading-m">Seasonal [SMS]</h3>
+        <p class="nhsuk-body">
+          Dear [Name],
+        </p>
+        <p class="nhsuk-body">
+          Content content content.
+        </p>
+        <p class="nhsuk-body">
+          <a href="#/" class="nhsuk-link">Follow this link</a>.
+        </p>
+        <button class="nhsuk-button app-button--small nhsuk-button--secondary-custom nhsuk-u-margin-right-2" data-module="nhsuk-button" type="submit">
+          Edit content
+        </button>
+        <button class="nhsuk-button app-button--small nhsuk-button--secondary" data-module="nhsuk-button" type="submit">
+          Confirm content
+        </button>
+      </div>
+    </div>
+
+    <div class="nhsuk-card nhsuk-u-margin-bottom-4" id="card-mop-up-last-chance">
+      <div class="nhsuk-card__content nhsuk-u-padding-bottom-2">
+        <h3 class="nhsuk-heading-m">Mop up - last chance [SMS]</h3>
+        <p class="nhsuk-body">
+          Dear [Name],
+        </p>
+        <p class="nhsuk-body">
+          Content content content.
+        </p>
+        <p class="nhsuk-body">
+          <a href="#/" class="nhsuk-link">Follow this link</a>.
+        </p>
+        <button class="nhsuk-button nhsuk-button--secondary-custom app-button--small nhsuk-u-margin-right-2" data-module="nhsuk-button" type="submit">
+          Edit content
+        </button>
+        <button class="nhsuk-button nhsuk-button--secondary app-button--small " data-module="nhsuk-button" type="submit">
+          Confirm content
+        </button>
+      </div>
+    </div>
+
+    <div class="nhsuk-card" id="card-routine">
+      <div class="nhsuk-card__content nhsuk-u-padding-bottom-2">
+        <h3 class="nhsuk-heading-m">Routine [SMS]</h3>
+        <p class="nhsuk-body">
+          Dear [Name],
+        </p>
+        <p class="nhsuk-body">
+          Content content content.
+        </p>
+        <p class="nhsuk-body">
+          <a href="#/" class="nhsuk-link">Follow this link</a>.
+        </p>
+        <button class="nhsuk-button app-button--small nhsuk-button--secondary-custom nhsuk-u-margin-right-2" data-module="nhsuk-button" type="submit">
+          Edit content
+        </button>
+        <button class="nhsuk-button app-button--small nhsuk-button--secondary" data-module="nhsuk-button" type="submit">
+          Confirm content
+        </button>
+      </div>
+    </div>
+
+    <form class="form" action="comms-templates-updated" method="post" class="submit">
+      <div class="govuk-button-group">
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-right-3" data-module="nhsuk-button">
+          Confirm
+        </button>
+        <p class="nhsuk-body"><a class="nhsuk-link" href="/send-invites/choose-task?taskChoice">Cancel</a></p>
+      </div>
+    </form>
+
+    <!--<p class="nhsuk-body">
+      Back to <a href="choose-upload" class="nhsuk-link">send invites</a>.
+    </p>-->
+
+  </div>
+</div>
+{% endblock %}

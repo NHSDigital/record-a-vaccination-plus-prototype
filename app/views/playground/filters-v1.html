@@ -1,0 +1,182 @@
+{% extends "e2e-layout3-index-only.html" %}
+
+{% set pageName = "Eligibility checks – RSV vaccination" %}
+
+{% block pageTitle %}{{ pageName }} – NHS.UK{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <!--<h1 class="nhsuk-heading-l">{{ pageName }}</h1>-->
+    <!--<p class="nhsuk-body">Tick all that apply. If the patient is pregnant, you can keep the default (28 weeks) or enter a different number of weeks.</p>-->
+
+    <form action="#" method="post" novalidate>
+      <fieldset class="nhsuk-fieldset" aria-describedby="eligibility-hint">
+        <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--m">Filter and sort RSV invites v1</legend>
+        <!--<div id="eligibility-hint" class="nhsuk-hint">Use this checklist before sending an RSV vaccination invitation.</div>-->
+
+        <div class="nhsuk-checkboxes" data-module="nhsuk-checkboxes">
+
+          {# 1) Patient is at least 28 weeks pregnant — checkbox reveals radios; one radio reveals input #}
+          <div class="nhsuk-checkboxes__item">
+            <input class="nhsuk-checkboxes__input"
+                   id="pregnant-28"
+                   name="pregnantAtLeast28"
+                   type="checkbox"
+                   value="yes"
+                   data-aria-controls="conditional-pregnant-28"
+                   aria-controls="conditional-pregnant-28"
+                   aria-expanded="false">
+            <label class="nhsuk-label nhsuk-checkboxes__label" for="pregnant-28">
+              Patient is at least 28 weeks pregnant
+            </label>
+          </div>
+
+          <div class="nhsuk-checkboxes__conditional nhsuk-checkboxes__conditional--hidden" id="conditional-pregnant-28" hidden>
+            {#<div class="nhsuk-inset-text nhsuk-u-margin-bottom-3" id="weeks-summary" aria-live="polite">
+              Weeks set to <strong>28</strong> by default. You can override this if needed.
+            </div>#}
+
+            <fieldset class="nhsuk-fieldset nhsuk-u-margin-bottom-4">
+              <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--s">How do you want to set the weeks?</legend>
+
+              <div class="nhsuk-radios" data-module="nhsuk-radios">
+                <div class="nhsuk-radios__item">
+                  <input class="nhsuk-radios__input"
+                         id="weeks-default-28"
+                         name="weeksOption"
+                         type="radio"
+                         value="default-28">
+                  <label class="nhsuk-label nhsuk-radios__label" for="weeks-default-28">
+                    Yes, use default 28 weeks
+                  </label>
+                </div>
+
+                <div class="nhsuk-radios__item">
+                  <input class="nhsuk-radios__input"
+                         id="weeks-enter"
+                         name="weeksOption"
+                         type="radio"
+                         value="enter"
+                         data-aria-controls="conditional-weeks-enter"
+                         aria-controls="conditional-weeks-enter"
+                         aria-expanded="false">
+                  <label class="nhsuk-label nhsuk-radios__label" for="weeks-enter">
+                    No, use a different number of weeks
+                  </label>
+                </div>
+
+                <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-weeks-enter" hidden>
+                  <div class="nhsuk-form-group">
+                    <label class="nhsuk-label" for="weeks-pregnant">Weeks pregnant</label>
+                    <div id="weeks-hint" class="nhsuk-hint">Enter a number between 0 and 45</div>
+                    <input class="nhsuk-input nhsuk-input--width-5"
+                           id="weeks-pregnant"
+                           name="weeksPregnant"
+                           type="number"
+                           inputmode="numeric"
+                           pattern="[0-9]*"
+                           min="0" max="45" step="1"
+                           aria-describedby="weeks-hint"
+                           value="28"
+                           disabled>
+                    <p class="nhsuk-hint nhsuk-u-margin-top-2" id="weeks-feedback" aria-live="polite"></p>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+
+      </fieldset>
+
+      <div class="nhsuk-button-group nhsuk-u-margin-top-6">
+        <button class="nhsuk-button" type="submit" data-module="nhsuk-button">Continue</button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  try {
+    if (window.NHSUKFrontend && typeof window.NHSUKFrontend.initAll === 'function') {
+      window.NHSUKFrontend.initAll();
+    } else if (window.NHSUK && window.NHSUK.frontend && typeof window.NHSUK.frontend.initAll === 'function') {
+      window.NHSUK.frontend.initAll();
+    }
+  } catch (e) {}
+
+  function wireConditional(controlId, type) {
+    var control = document.getElementById(controlId);
+    if (!control) return;
+    var targetId = control.getAttribute('data-aria-controls') || control.getAttribute('aria-controls');
+    var target = document.getElementById(targetId);
+    if (!target) return;
+
+    function sync() {
+      var show = !!control.checked;
+      control.setAttribute('aria-expanded', show ? 'true' : 'false');
+      target.hidden = !show;
+      if (type === 'checkbox') {
+        target.classList.toggle('nhsuk-checkboxes__conditional--hidden', !show);
+      } else {
+        target.classList.toggle('nhsuk-radios__conditional--hidden', !show);
+      }
+    }
+    control.addEventListener('change', sync);
+    sync();
+  }
+
+  wireConditional('pregnant-28', 'checkbox');
+  wireConditional('weeks-enter', 'radio');
+
+  var defaultRadio = document.getElementById('weeks-default-28');
+  var enterRadio = document.getElementById('weeks-enter');
+  var weeksInput = document.getElementById('weeks-pregnant');
+  var weeksSummary = document.getElementById('weeks-summary');
+  var feedback = document.getElementById('weeks-feedback');
+
+  function setSummary(html) { if (weeksSummary) weeksSummary.innerHTML = html; }
+  //function updateFeedback() {
+  //  if (!weeksInput || !feedback) return;
+  //  var v = parseInt(weeksInput.value, 10);
+  //  if (isNaN(v)) { feedback.textContent = ''; return; }
+  //  if (v >= 28 && v <= 45) {
+  //    feedback.textContent = '✓ Meets 28 weeks or more.';
+  //  } else if (v >= 0) {
+  //    feedback.textContent = '⚠ Under 28 weeks – check eligibility rules.';
+  //  } else {
+  //    feedback.textContent = '';
+  //  }
+  //}
+  function applyDefault() {
+    if (!weeksInput) return;
+    weeksInput.value = 28;
+    weeksInput.disabled = true;
+    setSummary('Weeks set to <strong>28</strong> by default. You can override this if needed.');
+    updateFeedback();
+  }
+  function enableOverride() {
+    if (!weeksInput) return;
+    weeksInput.disabled = false;
+    if (!weeksInput.value) weeksInput.value = 28;
+    weeksInput.focus();
+    setSummary('Enter the exact weeks of pregnancy below.');
+    updateFeedback();
+  }
+
+  applyDefault();
+  if (defaultRadio) defaultRadio.checked = true;
+
+  if (defaultRadio) defaultRadio.addEventListener('change', function () {
+    if (defaultRadio.checked) applyDefault();
+  });
+  if (enterRadio) enterRadio.addEventListener('change', function () {
+    if (enterRadio.checked) enableOverride();
+  });
+  if (weeksInput) weeksInput.addEventListener('input', updateFeedback);
+});
+</script>
+{% endblock %}

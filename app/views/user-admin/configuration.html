@@ -1,0 +1,358 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Add user" %}
+
+{% set currentSection = "prepare" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/user-admin/",
+    text: "Go back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if errorGeographicalArea or errorICB or errorLSOA or errorTownCityPostode %}
+
+        <div class="nhsuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1">
+          <h2 class="nhsuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+          <div class="nhsuk-error-summary__body">
+            <ul class="nhsuk-list nhsuk-error-summary__list">
+              {% if errorGeographicalArea %}<li><a href="#error-geographical-area">Select a geographical area</a></li>{% endif %}
+              {% if errorICB %}<li><a href="#errorICB">ICB missing</a></li>{% endif %}
+              {% if errorLSOA %}<li><a href="#errorLSOA">LSOA missing</a></li>{% endif %}
+              {% if errorTownCityPostode %}<li><a href="#errorTownCityPostode">Town, city, or postcode missing</a></li>{% endif %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
+      <form class="form" method="post">
+
+        <h1 class="nhsuk-heading-xl">
+          Configure new view
+        </h1>
+
+        <div class="nhsuk-form-group nhsuk-u-margin-bottom-8">
+
+          <h2 class="nhsuk-heading-l">
+            Population
+          </h2>
+
+          <div class="nhsuk-form-group {% if errorGeographicalArea %}nhsuk-form-group--error{% endif %}">
+
+            <fieldset class="nhsuk-fieldset nhsuk-u-margin-bottom-6" aria-describedby="location-hint">
+              <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--m">
+                <h3 id="error-geographical-area" class="nhsuk-fieldset__heading">
+                  Geographical area
+                </h3>
+              </legend>
+
+              <div class="nhsuk-hint" id="location-hint">
+                Select relevant option.
+              </div>
+
+              {% if errorGeographicalArea %}
+                <p class="nhsuk-error-message">
+                  <span class="nhsuk-u-visually-hidden">Error:</span> Select a geographical area
+                </p>
+              {% endif %}
+
+              <div class="nhsuk-radios nhsuk-radios--conditional">
+              
+                <div id="errorICB" class="nhsuk-radios__item">
+                  <input class="nhsuk-radios__input" id="location-1" name="location" type="radio" value="entered-icb" aria-controls="conditional-location-1" aria-expanded="false" {{ checked("location", "entered-icb") }}>
+                  <label class="nhsuk-label nhsuk-radios__label" for="location-1">
+                    ICB (Integrated Care Board)
+                  </label>
+                </div>
+                <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-location-1">
+                  <div class="nhsuk-form-group {% if errorICB %}nhsuk-form-group--error{% endif %}">
+                    <label class="nhsuk-label" for="selectICB">
+                      Choose an ICB name or reference
+                    </label>
+                    {% if errorICB %}
+                      <p id="ICB-error" class="nhsuk-error-message">
+                        <span class="nhsuk-u-visually-hidden">Error:</span> Select an ICB
+                      </p>
+                    {% endif %}
+                    <select class="nhsuk-select" id="selectICB" name="selectICB" data-module="nhsuk-autocomplete" value="{{data['selectICB']}}">
+                    </select>
+                  </div>
+                </div>
+
+                <div id="errorLSOA" class="nhsuk-radios__item">
+                  <input class="nhsuk-radios__input" id="location-2" name="location" type="radio" value="entered-lsoa" aria-controls="conditional-location-2" aria-expanded="false" {{ checked("location", "entered-lsoa") }}>
+                  <label class="nhsuk-label nhsuk-radios__label" for="location-2">
+                    LSOA (Lower Layer Super Output Area)
+                  </label>
+                </div>
+                <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-location-2">
+                  <div class="nhsuk-form-group {% if errorLSOA %}nhsuk-form-group--error{% endif %}">
+                    <label class="nhsuk-label" for="selectLSOA">
+                      Choose an LSOA name or reference
+                    </label>
+                    {% if errorLSOA %}
+                      <p id="LSOA-error" class="nhsuk-error-message">
+                        <span class="nhsuk-u-visually-hidden">Error:</span> Select an LSOA
+                      </p>
+                    {% endif %}
+                    <select class="nhsuk-select" id="selectLSOA" name="selectLSOA" data-module="nhsuk-autocomplete" value="{{data['selectLSOA']}}">
+                    </select>
+                  </div>
+                </div>
+
+                <div id="errorTownCityPostode" class="nhsuk-radios__item">
+                  <input class="nhsuk-radios__input" id="location-3" name="location" type="radio" value="entered-location" aria-controls="conditional-location-3" aria-expanded="false" {{ checked("location", "entered-location") }}>
+                  <label class="nhsuk-label nhsuk-radios__label" for="location-3">
+                    Location
+                  </label>
+                </div>
+                <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-location-3">
+                  <div class="nhsuk-form-group {% if errorTownCityPostode %}nhsuk-form-group--error{% endif %}">
+                    <label class="nhsuk-label" for="selectTownCityPostcode">
+                      Choose a town, city or postcode in England
+                    </label>
+                    {% if errorTownCityPostode %}
+                      <p id="TownCityPostode-error" class="nhsuk-error-message">
+                        <span class="nhsuk-u-visually-hidden">Error:</span> Select an town, city or postcode
+                      </p>
+                    {% endif %}
+                    <select class="nhsuk-select" id="selectTownCityPostcode" name="selectTownCityPostcode" data-module="nhsuk-autocomplete" value="{{data['selectTownCityPostcode']}}">
+                    </select>
+                  </div>
+                </div>
+
+              </div>
+
+              <details class="nhsuk-details nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-0">
+                <summary class="nhsuk-details__summary">
+                  <span class="nhsuk-details__summary-text">
+                    Help with these options
+                  </span>
+                </summary>
+                <div class="nhsuk-details__text">
+                  <p class="nhsuk-body nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">
+                    ICB (Integrated Care Board)
+                  </p>
+                  <p class="nhsuk-body">
+                    Integrated Care Boards (ICBs) are NHS organisations that oversee local health services by planning care, managing budgets, 
+                    and working with partners to support community health needs.
+                  </p>
+
+                  <p class="nhsuk-body nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">
+                    LSOA (Lower Layer Super Output Area)
+                  </p>
+                  <p class="nhsuk-body">
+                    Lower Layer Super Output Areas (LSOAs) are small geographic units made up of 4 or 5 Output Areas (OAs), typically containing 400 to 1,200 
+                    households and 1,000 to 3,000 residents.
+                  </p>
+
+                  <p class="nhsuk-body nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">
+                    Location
+                  </p>
+                  <p class="nhsuk-body">
+                    Location is where you live, work, or physical geographical location.
+                  </p>
+                </div>
+              </details>
+
+            </fieldset>
+
+          </div>
+
+          {{ radios({
+            name: "pregnantWomen",
+            data: "pregnantWomen",
+            id: "pregnantWomen",
+            value: data['pregnantWomen'],
+            fieldset: {
+              legend: {
+                text: "Pregnant women who aren't yet eligible",
+                classes: "nhsuk-fieldset__legend--m",
+                isPageHeading: false
+              }
+            },
+            hint: {
+              text: "Choose whether to not to include women who are pregnant but do not currently meet the criteria for vaccinations."
+            },
+            items: [
+              {
+                value: "Including those not yet eligible",
+                text: "Including those not yet eligible"
+              },
+              {
+                value: "Not including those not yet eligible",
+                text: "Not including those not yet eligible"
+              }
+            ]
+          }) }}
+
+          <details class="nhsuk-details  nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-0">
+            <summary class="nhsuk-details__summary">
+              <span class="nhsuk-details__summary-text">
+                Help with these options
+              </span>
+            </summary>
+            <div class="nhsuk-details__text">
+              <p class="nhsuk-body">
+                The population for analysis includes women aren't yet 28 weeks pregnant.
+              </p>
+              <p class="nhsuk-body">
+                Depending upon what you want to understand, decide whether to include these women.
+              </p>
+            </div>
+          </details>
+
+        </div>
+
+        <div class="nhsuk-form-group nhsuk-u-margin-bottom-8">
+
+          <h2 class="nhsuk-heading-l">
+            Set visualisation for analysis
+          </h2>
+
+          {# DATA TYPES #}
+          {{ radios({
+            name: "dataTypes",
+            data: "dataTypes",
+            id: "dataTypes",
+            value: data['dataTypes'],
+            fieldset: {
+              classes: "nhsuk-u-margin-bottom-6",
+              legend: {
+                text: "Data types",
+                classes: "nhsuk-fieldset__legend--m",
+                isPageHeading: false
+              }
+            },
+            hint: {
+              text: "Choose whether or not you wish patient identifiable data to be included within the visualisations and exports within your view."
+            },
+            items: [
+              {
+                value: "Anonymised data and aggregated trends",
+                text: "Anonymised data and aggregated trends"
+              },
+              {
+                value: "Patient identifiable data",
+                text: "Patient identifiable data"
+              }
+            ]
+          }) }}
+
+          {# THEMES #}
+          <fieldset class="nhsuk-fieldset nhsuk-u-margin-bottom-6" aria-describedby="theme-hint">
+            <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--m">
+              <h3 class="nhsuk-fieldset__heading">
+                Visualisation theme
+              </h3>
+            </legend>
+
+            <div class="nhsuk-hint" id="theme-hint">
+              Choose a variable to cross reference uptake rates with in the visualisations.
+            </div>
+
+            <div class="nhsuk-radios nhsuk-radios--conditional">
+
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="theme-1" name="theme" type="radio" value="entered-ethnicity" aria-controls="conditional-theme-1" aria-expanded="false" {{ checked("theme", "entered-ethnicity") }}>
+                <label class="nhsuk-label nhsuk-radios__label" for="theme-1">
+                  Ethnicity
+                </label>
+              </div>
+              <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-theme-1">
+                <div class="nhsuk-form-group">
+                  <label class="nhsuk-label" for="selectEthnicity">
+                    Choose ethnicity
+                  </label>
+                  <select class="nhsuk-select" id="selectEthnicity" name="selectEthnicity" data-module="nhsuk-autocomplete" value="{{ data['selectEthnicity'] }}">
+                    {% include "includes/ethnicity.html" %}
+                  </select>
+                </div>
+              </div>
+
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="theme-2" name="theme" type="radio" value="entered-language" aria-controls="conditional-theme-2" aria-expanded="false" {{ checked("theme", "entered-language") }}>
+                <label class="nhsuk-label nhsuk-radios__label" for="theme-2">
+                  Language
+                </label>
+              </div>
+              <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-theme-2">
+                <label class="nhsuk-label" for="selectLanguage">
+                  Choose language
+                </label>
+                <select class="nhsuk-select" id="selectLanguage" name="selectLanguage" data-module="nhsuk-autocomplete" value="{{ data['selectLanguage'] }}">
+                  {% include "includes/language.html" %}
+                </select>
+              </div>
+
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="theme-3" name="theme" type="radio" value="entered-deprivation" aria-controls="conditional-theme-3" aria-expanded="false" {{ checked("theme", "entered-deprivation") }}>
+                <label class="nhsuk-label nhsuk-radios__label" for="theme-3">
+                  Deprivation score
+                </label>
+              </div>
+              <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-theme-3">
+                <label class="nhsuk-label" for="selectDeprivation">
+                  Choose deprivation score
+                </label>
+                <select class="nhsuk-select" id="selectDeprivation" name="selectDeprivation" value="{{ data['selectDeprivation'] }}">
+                </select>
+              </div>
+
+            </div>
+
+          </fieldset>
+
+          {#<fieldset class="nhsuk-fieldset nhsuk-u-margin-bottom-6" aria-describedby="zoom-hint">
+            <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--m">
+              <h3 class="nhsuk-fieldset__heading">
+                Zoom level
+              </h3>
+            </legend>
+
+            <div class="nhsuk-hint" id="zoom-hint">
+              What does this mean etc etc why is it relevant etc etc
+            </div>
+
+            <div class="nhsuk-radios">
+
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="zoom-1" name="theme" type="radio" value="zoom-icb">
+                <label class="nhsuk-label nhsuk-radios__label" for="zoom-1">
+                  ICB
+                </label>
+              </div>
+
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="zoom-2" name="theme" type="radio" value="zoom-lsoa">
+                <label class="nhsuk-label nhsuk-radios__label" for="zoom-2">
+                  LSOA
+                </label>
+              </div>
+
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="zoom-3" name="theme" type="radio" value="zoom-location">
+                <label class="nhsuk-label nhsuk-radios__label" for="zoom-3">
+                  Location
+                </label>
+              </div>
+
+            </div>
+          </fieldset>#}
+
+        </div>
+
+        <button class="nhsuk-button" data-module="nhsuk-button">
+          Continue
+        </button>
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

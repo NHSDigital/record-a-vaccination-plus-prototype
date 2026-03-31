@@ -1,0 +1,215 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Provide your patient list
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Provide your patient list</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {# PATIENT UPLOAD NOTIFICATION BANNER #}
+      {% if data['uploadedList'] == 'true' %}
+        <div class="nhsuk-notification-banner nhsuk-notification-banner--success" role="alert" aria-labelledby="nhsuk-notification-banner-title" data-module="nhsuk-notification-banner">
+          <div class="nhsuk-notification-banner__header">
+            <h2 class="nhsuk-notification-banner__title" id="nhsuk-notification-banner-title">
+              Success
+            </h2>
+          </div>
+          <div class="nhsuk-notification-banner__content">
+            <h3 class="nhsuk-notification-banner__heading">
+              Current patient list updated
+            </h3>
+            <p>
+              The patient list <strong>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv</strong> (13.7MB) was successfully uploaded on {{ date({day: 'numeric', month: 'long', year: 'numeric'}) }} by Chloe Liu.
+            </p>
+          </div>
+        </div>
+      {% endif %}
+
+      {# MANAGE PATIENT LISTS #}
+      <h1 class="nhsuk-heading-l">
+        Provide your patient list
+      </h1>
+
+      <p class="nhsuk-body">
+        Use this tool to upload an up to date patient list to RAVS.
+      </p>
+      <p class="nhsuk-body">
+        This will ensure patient information displayed in RAVS is accurate.
+      </p>
+      <p class="nhsuk-body">
+        For more information on how to do this, read our 'Getting started with patient lists' article
+      </p>
+
+      {#<p class="nhsuk-body">
+        Use this function to upload new and updated patient lists to RAVS. It is important to upload all patients currently in the care of your department. You can remove patients from this list.
+      </p>
+      <p class="nhsuk-body">
+        It is important to make sure that you are handling data in line with your organisation's Information Governance rules.
+      </p>#}
+
+      {#<details class="nhsuk-details nhsuk-expander">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">
+            Guidance on how to structure inputted data
+          </span>
+        </summary>
+        <div class="nhsuk-details__text">
+          <p>Structure of input data:</p>
+          <ul>
+            <li>All patients where: pregnancy status = yes AND week 10+ into pregnancy</li>
+            <li>Name</li>
+            <li>NHS number</li>
+            <li>Pregnancy status = yes</li>
+            <li>Due date</li>
+            <li>Email address/ phone number</li>
+            <li>Contact preferences</li>
+          </ul>
+        </div>
+      </details>#}
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content nhsuk-u-padding-bottom-0">
+              <form class="form" action="uploading?uploadedList=true" method="post" class="submit">
+                <div class="nhsuk-form-group">
+                  <label class="nhsuk-label nhsuk-u-visually-hidden" for="file-upload-1">
+                    Upload patient list
+                  </label>
+                  <input class="govuk-file-upload" id="file-upload-1" name="fileUpload1" type="file">
+                </div>
+                <button type="submit" class="nhsuk-button nhsuk-u-margin-right-3" data-module="nhsuk-button">
+                  Upload file
+                </button>
+              </form>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <details class="nhsuk-details">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">
+            Current patient list information
+          </span>
+        </summary>
+        <div class="nhsuk-details__text">
+          <p>
+            {% if data['uploadedList'] == 'true' %}
+              Current patient list being used is <strong>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv</strong> (13.7MB), and was uploaded {{ date({day: 'numeric', month: 'long', year: 'numeric'}) }} by Chloe Liu
+            {% else %}
+              Current patient list being used is <strong>dataset-2025-08-22.csv</strong> (12.1MB), and was uploaded 22 August 2025 by Alex Smith
+            {% endif %}
+          </p>
+          {#<p>Use <a href="patient-upload?uploadedList" class="nhsuk-link">Manage patient lists</a> to update patient list data.</p>#}
+          
+        </div>
+      </details>
+
+    </div>
+  </div>
+
+  {# PREVIOUS PATIENT LISTS UPLOADS #}
+  {#<div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h2 class="nhsuk-heading-m">
+        Previous patient list uploads
+      </h2>
+
+      <dl class="nhsuk-summary-list">
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Filename
+          </dt>
+          <dt class="nhsuk-summary-list__key">
+            Uploaded
+          </dt>
+          <dt class="nhsuk-summary-list__key">
+            Status
+          </dt>
+        </div>
+
+        <!-- DYNAMIC ENTRY -->
+
+        {% if data['uploadedList'] == 'true' %}
+          <div class="nhsuk-summary-list__row">
+            <dd class="nhsuk-summary-list__value">
+              <a href="view-patient-list"><span class="nhsuk-u-visually-hidden">View </span>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv</a>&nbsp;(13.7MB)
+            </dt>
+            <dd class="nhsuk-summary-list__value">
+              {{ date({day: 'numeric', month: 'long', year: 'numeric'}) }}<br>Chloe Liu
+            </dd>
+            <dd class="nhsuk-summary-list__value">
+              <strong class="nhsuk-tag nhsuk-tag--aqua-green">Current list</strong>
+            </dd>
+          </div>
+        {% endif %}
+
+        <div class="nhsuk-summary-list__row">
+          <dd class="nhsuk-summary-list__value">
+            {% if data['uploadedList'] != 'true' %}
+              <a href="view-patient-list"><span class="nhsuk-u-visually-hidden">View </span>dataset-2025-08-22.csv</a>&nbsp;(12.1MB)
+            {% else %}
+              dataset-2025-08-22.csv&nbsp;(12.1MB)
+            {% endif %}
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            22 August 2025<br>Alex Smith
+          </dd>
+          <dd class="nhsuk-summary-list__value">
+            {% if data['uploadedList'] == 'true' %}
+              <strong class="nhsuk-tag">Processed</strong>
+            {% else %}
+              <strong class="nhsuk-tag nhsuk-tag--aqua-green">Current list</strong>
+            {% endif %}
+          </dd>
+        </div>
+
+        <div class="nhsuk-summary-list__row">
+          <dd class="nhsuk-summary-list__value">
+            dataset-2025-08-01.csv&nbsp;(9.6MB)
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            1 August 2025<br>Katie Elliot
+          </dd>
+          <dd class="nhsuk-summary-list__value">
+            <strong class="nhsuk-tag nhsuk-tag--red">Failed</strong>
+          </dd>
+        </div>
+
+        <div class="nhsuk-summary-list__row">
+          <dd class="nhsuk-summary-list__value">
+            dataset-2025-07-28.csv&nbsp;(14.8MB)
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            28 July 2025<br>Nadiya Thomas
+          </dd>
+          <dd class="nhsuk-summary-list__value">
+            <strong class="nhsuk-tag">Processed</strong>
+          </dd>
+        </div>
+
+      </dl>
+
+    </div>
+  </div>#}
+
+{% endblock %}

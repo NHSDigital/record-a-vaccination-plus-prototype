@@ -1,0 +1,171 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% set uploadLabels = {
+  "infantUpload": "infant",
+  "maternityUpload": "maternity",
+  "ohUpload": "occupational health"
+} %}
+
+{% block pageTitle %}
+  Import {{ uploadLabels[data['upload-type']] }} patient list
+{% endblock %}
+
+{% block beforeContent %}
+  {#<nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Patient list view</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>#}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">
+        Import {{ uploadLabels[data['upload-type']]|title }} patient list
+      </h1>
+
+      <p class="nhsuk-body">
+        Choose the {{ uploadLabels[data['upload-type']]|title }} patient list file to upload.
+      </p>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <details class="nhsuk-details">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">
+            {{ uploadLabels[data['upload-type']]|title }} patient list CSV file information
+          </span>
+        </summary>
+        <div class="nhsuk-details__text">
+
+          <table class="nhsuk-table">
+            <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">
+              {{ uploadLabels[data['upload-type']]|title }} patient list CSV file information
+            </caption>
+            <thead class="nhsuk-table__head">
+              <tr>
+                <th scope="col" class="nhsuk-table__header">
+                  Column name
+                </th>
+                <th scope="col" class="nhsuk-table__header">
+                  Required or optional
+                </th>
+                <th scope="col" class="nhsuk-table__header">
+                  Notes
+                </th>
+              </tr>
+            </thead>
+            <tbody class="nhsuk-table__body">
+              <tr class="nhsuk-table__row">
+                <td class="nhsuk-table__cell nhsuk-u-font-monospace">
+                  PATIENT_NAME
+                </td>
+                <td class="nhsuk-table__cell">
+                  <strong>Required</strong>
+                </td>
+                <td class="nhsuk-table__cell">
+                  Patient's full name as recorded in their healthcare record
+                </td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <td class="nhsuk-table__cell nhsuk-u-font-monospace">
+                  NHS_NUMBER
+                </td>
+                <td class="nhsuk-table__cell">
+                  <strong>Required</strong>
+                </td>
+                <td class="nhsuk-table__cell">
+                  10-digit NHS number with no spaces or special characters
+                </td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <td class="nhsuk-table__cell nhsuk-u-font-monospace">
+                  PREGNANCY_STATUS
+                </td>
+                <td class="nhsuk-table__cell">
+                  <strong>Required</strong>
+                </td>
+                <td class="nhsuk-table__cell">
+                  Indicates whether the patient is currently pregnant as <strong>Pregnant</strong> or <strong>Not pregnant</strong>
+                </td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <td class="nhsuk-table__cell nhsuk-u-font-monospace">
+                  DUE_DATE
+                </td>
+                <td class="nhsuk-table__cell">
+                  <strong>Required</strong>
+                </td>
+                <td class="nhsuk-table__cell">
+                  Expected due date of pregnancy as <strong>DD/MM/YYYY</strong>
+                </td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <td class="nhsuk-table__cell nhsuk-u-font-monospace">
+                  EMAIL_ADDRESS
+                </td>
+                <td class="nhsuk-table__cell">
+                  Optional
+                </td>
+                <td class="nhsuk-table__cell">
+                  Patient's email address, if available
+                </td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <td class="nhsuk-table__cell nhsuk-u-font-monospace">
+                  CONTACT_NUMBER
+                </td>
+                <td class="nhsuk-table__cell">
+                  Optional
+                </td>
+                <td class="nhsuk-table__cell">
+                  Patient's phone number, if available. Preferably mobile but must include area code if landline
+                </td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <td class="nhsuk-table__cell nhsuk-u-font-monospace">
+                  CONTACT_PREFERENCES
+                </td>
+                <td class="nhsuk-table__cell">
+                  <strong>Required</strong>
+                </td>
+                <td class="nhsuk-table__cell">
+                  Indicates if the patient has given consent to be contacted with either a <strong>Yes</strong> or a <strong>No</strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </details>
+
+      <form class="form" action="uploading?uploadedList=true" method="post" class="submit">
+        <div class="nhsuk-form-group">
+          <label class="nhsuk-label nhsuk-u-visually-hidden" for="file-upload-1">
+            Upload patient list
+          </label>
+          <input class="govuk-file-upload" id="file-upload-1" name="fileUpload1" type="file">
+        </div>
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-right-3" data-module="nhsuk-button">
+          Upload file
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

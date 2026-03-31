@@ -1,0 +1,338 @@
+<!-- Extends the layout from /views/layout.html -->
+{# extends 'current/layouts/layout-top-nav-regions.html' #}
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block head %}
+<!-- Include the accessible-autocomplete CSS from CDN -->
+{{ super() }}  {# keeps whatever was in base.njk head #}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/accessible-autocomplete@2.0.4/dist/accessible-autocomplete.min.css">
+{% endblock %}
+
+<!-- Set the page title -->
+{% block pageTitle %}
+  View site
+{% endblock %}
+
+<!-- For adding a breadcrumb -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/breadcrumbs -->
+{% block beforeContent %}
+{#
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Manage clinics</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+#}
+
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+
+{% endblock %}
+
+<!-- For adding a back link -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/back-link -->
+{% block outerContent %}
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+<div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-xl">Arrange Jodie Brown's appointment</h1>
+
+      <!-- SEARCH -->
+
+      <div class="app-filters nhsuk-u-margin-top-5">
+        <form method="post" action="" novalidate="">
+          <div class="nhsuk-form-group nhsuk-u-margin-bottom-0">
+            <label class="nhsuk-label" for="q">
+              Search clinics by name or ODS code
+            </label>
+            <input class="nhsuk-input nhsuk-input--width-20" id="q" name="q" type="search" value="">
+            
+            <button class="nhsuk-button nhsuk-button--secondary-custom nhsuk-u-margin-left-2 app-button--small nhsuk-u-margin-bottom-0" 
+                    data-module="nhsuk-button" 
+                    type="submit"
+                    id="search-button">
+              Search
+            </button>
+            
+            <!-- Added clear button directly in HTML -->
+            <button class="nhsuk-button nhsuk-button--secondary-custom nhsuk-u-margin-left-2 app-button--small nhsuk-u-margin-bottom-0" 
+                    data-module="nhsuk-button" 
+                    type="button"
+                    id="clear-button">
+              Clear
+            </button>
+          </div>
+        </form>
+      </div>
+
+
+      <!-- END SEARCH -->
+
+    
+      <table class="nhsuk-table">
+        <caption class="nhsuk-table__caption">All sites in Birmingham Women's and Children's NHS Foundation Trust</caption>
+        <thead class="nhsuk-table__head">
+          <tr>
+            <th scope="col" class="nhsuk-table__header">Hospitals</th>
+            <!--<th scope="col" class="nhsuk-table__header">ICB</th>-->
+            <th scope="col" class="nhsuk-table__header">ODS</th>
+            <th scope="col" class="nhsuk-table__header"><span>Action</span></th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Birmingham Children's Hospital</td>
+            <td class="nhsuk-table__cell">7CHP3</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Birmingham Women's Hospital</td>
+            <td class="nhsuk-table__cell">RQ3</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Good Hope Hospital Clinics</td>
+            <td class="nhsuk-table__cell">7HWC8</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Birmingham Road (Forward Thinking Birmingham)</td>
+            <td class="nhsuk-table__cell">FA1234</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Blakesley Centre (Forward Thinking Birmingham)</td>
+            <td class="nhsuk-table__cell">2STP5</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Children's Hearing Assessment Centre</td>
+            <td class="nhsuk-table__cell">7CHP3</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">East Community Clinical Psych - Coventry Road</td>
+            <td class="nhsuk-table__cell">2DLP8</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Finch Road (Forward Thinking Birmingham)</td>
+            <td class="nhsuk-table__cell">7HWC8</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Hob Community Clinical Psychology - Carnegie Centre</td>
+            <td class="nhsuk-table__cell">FA1234</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Hob Community Clinical Psychology - City Hospital</td>
+            <td class="nhsuk-table__cell">2STP5</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Leach Heath Medical Centre</td>
+            <td class="nhsuk-table__cell">7CHP3</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Oaklands Centre (Forward Thinking Birmingham)</td>
+            <td class="nhsuk-table__cell">2DLP8</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Park House Child &amp; Family Centre</td>
+            <td class="nhsuk-table__cell">7HWC8</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Park View Clinic</td>
+            <td class="nhsuk-table__cell">FA1234</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Percy Road Health Centre</td>
+            <td class="nhsuk-table__cell">2STP5</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>          
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">The Child &amp; Family Centre (Maas Road)</td>
+            <td class="nhsuk-table__cell">FA1234</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">The Old Priory Surgery</td>
+            <td class="nhsuk-table__cell">2STP5</td>
+            <td class="nhsuk-table__cell"><a href="choose-vaccine">Select</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <nav class="nhsuk-pagination nhsuk-pagination--numbered" role="navigation" aria-label="Pagination">
+          <div class="nhsuk-pagination--numbered__prev">
+          <a class="nhsuk-pagination--numbered__link" href="#/" rel="prev">
+            <svg class="nhsuk-icon nhsuk-icon--arrow-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+              <path d="M10.7 6.3c.4.4.4 1 0 1.4L7.4 11H19a1 1 0 0 1 0 2H7.4l3.3 3.3c.4.4.4 1 0 1.4a1 1 0 0 1-1.4 0l-5-5A1 1 0 0 1 4 12c0-.3.1-.5.3-.7l5-5a1 1 0 0 1 1.4 0Z"/>
+            </svg>
+            Previous<span class="nhsuk-u-visually-hidden"> page</span>
+          </a>
+        </div>
+        <ul class="nhsuk-pagination__list--numbered">
+          <li class="nhsuk-pagination--numbered__item">
+          <a class="nhsuk-pagination--numbered__link" href="#/" aria-label="Page 1">
+            1
+          </a>
+        </li>
+        </ul>
+        <div class="nhsuk-pagination--numbered__next">
+          <a class="nhsuk-pagination--numbered__link" href="#/" rel="next">Next<span class="nhsuk-u-visually-hidden"> page</span>
+            <svg class="nhsuk-icon nhsuk-icon--arrow-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+              <path d="m14.7 6.3 5 5c.2.2.3.4.3.7 0 .3-.1.5-.3.7l-5 5a1 1 0 0 1-1.4-1.4l3.3-3.3H5a1 1 0 0 1 0-2h11.6l-3.3-3.3a1 1 0 1 1 1.4-1.4Z"/>
+            </svg>
+          </a>
+        </div>
+      </nav>
+      
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/accessible-autocomplete@2.0.4/dist/accessible-autocomplete.min.js"></script>
+<script type="text/javascript" src="/public/javascripts/autocomplete.js"></script>
+<script type="text/javascript">
+  accessibleAutocomplete.enhanceSelectElement({
+    defaultValue: '',
+    selectElement: document.querySelector('#site-picker')
+  })
+</script>
+
+<!-- Add this script for the search filtering -->
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get the search input and button elements
+    const searchInput = document.getElementById('q');
+    const searchButton = document.getElementById('search-button');
+    const clearButton = document.getElementById('clear-button');
+    
+    // Exit if we can't find the required elements
+    if (!searchInput || !searchButton || !clearButton) return;
+    
+    // Get all table rows
+    const tableRows = Array.from(document.querySelectorAll('.nhsuk-table__body .nhsuk-table__row')).filter(
+      row => !row.classList.contains('no-results-row')
+    );
+    if (!tableRows.length) return;
+    
+    // Get the no results row
+    const noResultsRow = document.querySelector('.no-results-row');
+    if (!noResultsRow) return;
+    
+    // Get the table caption to update with search results info
+    const tableCaption = document.querySelector('.nhsuk-table__caption');
+    const originalCaptionText = tableCaption ? tableCaption.textContent : '';
+    
+    // Get the form element to prevent default submission
+    const searchForm = searchInput.closest('form');
+    if (searchForm) {
+      // Keep the method as post but prevent the actual submission
+      searchForm.addEventListener('submit', function(e) {
+        // Prevent the form from submitting and refreshing the page
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Trigger the search filter
+        filterTable();
+        
+        return false;
+      });
+    }
+    
+    // Function to filter the table rows based on search input
+    function filterTable() {
+      const searchText = searchInput.value.trim();
+      
+      // Get just the first 3 letters from the search text (if there are at least 3)
+      const searchValue = searchText.length >= 3 ? 
+                          searchText.substring(0, 3).toLowerCase() : 
+                          searchText.toLowerCase();
+      
+      // If search is empty, show all rows
+      if (searchValue === '') {
+        tableRows.forEach(row => row.style.display = '');
+        if (tableCaption) tableCaption.textContent = originalCaptionText;
+        noResultsRow.style.display = 'none';
+        return;
+      }
+      
+      // Only proceed with filtering if we have at least 1 character to match against
+      let matchCount = 0;
+      
+      tableRows.forEach(row => {
+        // Get the text content from all cells we want to search
+        const name = row.cells[0].textContent.toLowerCase();
+        const icb = row.cells[1].textContent.toLowerCase();
+        const ods = row.cells[2].textContent.toLowerCase();
+        
+        // Check if the search value matches the first 3 letters of any field
+        const nameMatch = name.startsWith(searchValue);
+        const icbMatch = icb.startsWith(searchValue);
+        const odsMatch = ods.startsWith(searchValue);
+        
+        // Show or hide the row based on the match
+        const isMatch = nameMatch || icbMatch || odsMatch;
+        row.style.display = isMatch ? '' : 'none';
+        
+        if (isMatch) {
+          matchCount++;
+        }
+      });
+      
+      // Update the table caption
+      if (tableCaption) {
+        if (searchValue) {
+          const displayText = searchText.length > 3 ? 
+                            `"${searchText.substring(0, 3)}" (first 3 letters of "${searchText}")` : 
+                            `"${searchText}"`;
+          tableCaption.textContent = `Found ${matchCount} site${matchCount !== 1 ? 's' : ''} matching ${displayText}`;
+        } else {
+          tableCaption.textContent = originalCaptionText;
+        }
+      }
+      
+      // Show or hide the no results row
+      noResultsRow.style.display = (matchCount === 0) ? '' : 'none';
+    }
+    
+    // Add click event listener to the search button
+    searchButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      filterTable();
+    });
+    
+    // Clear search when clear button is clicked
+    clearButton.addEventListener('click', function() {
+      searchInput.value = '';
+      // Reset all table rows to be visible
+      tableRows.forEach(row => row.style.display = '');
+      // Reset caption
+      if (tableCaption) tableCaption.textContent = originalCaptionText;
+      // Hide the no results row
+      noResultsRow.style.display = 'none';
+      
+      searchInput.focus();
+    });
+  });
+</script>
+{% endblock %}

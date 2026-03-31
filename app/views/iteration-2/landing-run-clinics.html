@@ -1,0 +1,224 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Run clinics" %}
+
+{% set currentSection = "run" %}
+
+{% block pageTitle %}
+  Run clinics
+{% endblock %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Run clinics</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-4">
+        Run clinics
+      </h1>
+
+      <p class="nhsuk-body">Record vaccinations</p>
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">    
+
+      {# PREPARE #}
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        {#<li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/mya/choose-run-clinics-site">Record vaccinations</a> </h3>
+              <p class="nhsuk-card__description"></p>
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+            </div>
+          </div>
+        </li>#}
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/e2e-record-vaccinations/">Record vaccinations</a> </h3>
+              <p class="nhsuk-card__description">Record new vaccines</p>
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              {#<h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/vaccinations-tracker/index?nhsNumberKnown&nhsNumber">Patient tracker</a> </h3>#}
+              <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/patient-tracker/index?nhsNumberKnown&nhsNumber">Patient tracker</a></h3>
+              <p class="nhsuk-card__description">Check a patient's status and history, book and manage appointments and record their vaccinations<br><span class="nhsuk-body-s nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-0">Last updated 7 August 2025</span></p>
+              </p>
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+            </div>
+          </div>
+        </li>
+        <!--<li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Record wastage</a> </h3>
+              <p class="nhsuk-card__description"></p>
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+            </div>
+          </div>
+        </li>-->
+
+        <!--
+        {# CREATE AVAILABILITY #}
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m"><a class="nhsuk-card__link" href="/mya/manage-sites">CREATE AVAILABILITY (MYA)</a></h2>
+              <p class="nhsuk-card__description">Public Beta/Live start point<br><br></p>
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+            </div>
+          </div>
+        </li>
+
+        {# ASSIGN BATCHES TO CLINICS #}
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m"><a class="nhsuk-card__link" href="/vaccines">ASSIGN BATCHES TO CLINICS (RAVS)</a></h2>
+              <p class="nhsuk-card__description"></p>
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+            </div>
+          </div>
+        </li>
+        -->
+
+      </ul>
+
+    </div>
+
+  </div>
+
+  <!--
+  {# CONTACT #}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+
+      <h2 class="nhsuk-heading-m">Contact</h2>
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Extra support</a> </h2>
+              <p class="nhsuk-card__description">Additional information</p>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Providing feedback</a> </h2>
+              <p class="nhsuk-card__description">Additional information</p>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Taking part in research</a> </h2>
+              <p class="nhsuk-card__description">Additional information</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  -->
+
+  <!--
+  {# GUIDANCE #}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+
+      <h2 class="nhsuk-heading-m">Updates</h2>
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">New guidance on recording vaccine sentiment</a> </h2>
+              <p class="nhsuk-card__description">
+                Richer reporting to support better patient outcomes<br>
+                <ul class="nhsuk-u-font-size-14" style="list-style: none; padding: 0; display: flex; justify-content: left">
+                  <li><a href="#/">Communications</a></li>
+                  <li style="margin: 0 3px;">|</li>
+                  <li><a href="#/">Policy</a></li>
+                </ul>
+              </p>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">How to assign stock to sessions</a> </h2>
+              <p class="nhsuk-card__description">
+                Making sure your batches are assigned for your purposes<br>
+                <ul class="nhsuk-u-font-size-14" style="list-style: none; padding: 0; display: flex; justify-content: left">
+                  <li><a href="#/">Training</a></li>
+                  <li style="margin: 0 3px;">|</li>
+                  <li><a href="#/">Organise clinics</a></li>
+                </ul>
+              </p>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Stock wastage and how best to reduce it</a> </h2>
+              <p class="nhsuk-card__description">
+                Recording stock usage to aid accurate ordering<br>
+                <ul class="nhsuk-u-font-size-14" style="list-style: none; padding: 0; display: flex; justify-content: left">
+                  <li><a href="#/">Communications</a></li>
+                  <li style="margin: 0 3px;">|</li>
+                  <li><a href="#/">Reporting</a></li>
+                </ul>
+              </p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  -->
+
+{% endblock %}

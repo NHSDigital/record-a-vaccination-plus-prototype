@@ -1,0 +1,103 @@
+<!-- Use this page as the index for your project -->
+
+<!-- ADDING CUSTOM CSS - Add your custom CSS or Sass in /app/assets/sass/main.scss -->
+
+<!-- Extends the layout from /views/layout.html -->
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+<!-- Set the page title -->
+{% block pageTitle %}
+Book vaccinations prototype
+{% endblock %}
+
+<!-- For adding a breadcrumb -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/breadcrumbs -->
+{% block beforeContent %}
+{#
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Manage clinics</li>
+      <li class="nhsuk-breadcrumb__list-item">BREADCRUMB TBC</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+#}
+
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+  
+{% endblock %}
+
+<!-- For adding a back link -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/back-link -->
+{% block outerContent %}
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <!-- Change the page title here -->
+      <h1 class="nhsuk-heading-l">Arrange Jodie Brown's appointment</h1>
+
+      <!-- Add your content here -->
+      <!-- Styles and components can be found at https://service-manual.nhs.uk/design-system -->
+
+        <form action="booking-complete" method="get" class="form">
+
+        <fieldset class="nhsuk-fieldset">
+          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--m">
+            <h2 class="nhsuk-fieldset__heading">
+              Enter a landline
+            </h2>
+          </legend>
+
+          <div class="nhsuk-warning-callout nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-4">
+            <h3 class="nhsuk-warning-callout__label">
+              <span role="text">
+                <span class="nhsuk-u-visually-hidden">Important: </span>
+                Important
+              </span>
+            </h3>
+            <p>If Jodie only leaves a landline, we cannot send confirmation or reminder messages.  If the site needs to cancel Jodie's appointment, they may use this number to call.</p>
+          </div>
+
+          <div class="nhsuk-form-group">
+            <label class="nhsuk-label" for="email">
+              Landline including area code
+            </label>
+            <div class="nhsuk-hint" id="example-with-hint-text-hint">
+              For example, 0113 496 0845
+            </div>
+            <input class="nhsuk-input" id="email" name="email" type="text">
+          </div> 
+          
+          <div class="nhsuk-form-group">
+            <label class="nhsuk-label" for="confirm-email">
+              Confirm landline including area code
+            </label>
+            <input class="nhsuk-input" id="confirm-email" name="confirm-email" type="text">
+          </div> 
+        </fieldset>
+        
+        <button class="nhsuk-button nhsuk-u-margin-top-2" data-module="nhsuk-button" type="submit">
+          Continue
+        </button>
+    </form>
+
+
+
+      
+      </div>
+      <!-- End of content -->
+
+    </div>
+  </div>
+{% endblock %}

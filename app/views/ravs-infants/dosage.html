@@ -1,0 +1,109 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Dosage" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "vaccine" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+{# Remove or comment out the following... #}
+{#<p>whichVaccine = {{ data.whichVaccine }}</p>#}
+
+      {% if (errors | length) > 0 %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: errors
+        }) }}
+      {% endif %}
+
+      <form action="dosage" method="post" novalidate>
+
+        {% if data.whichVaccine == "6-in-1" %}
+          {% set doseOptions = [
+            "1st dose",
+            "2nd dose",
+            "3rd dose",
+            "4th dose"
+          ] %}
+        {% elif data.whichVaccine == "Flu" %}
+          {% set doseOptions = [
+            "1st dose",
+            "2nd dose"
+          ] %}
+        {% elif data.whichVaccine == "MenB" %}
+          {% set doseOptions = [
+            "1st dose",
+            "2nd dose",
+            "Booster"
+          ] %}
+        {% elif data.whichVaccine == "MMRV" %}
+          {% set doseOptions = [
+            "1st dose",
+            "2nd dose",
+            "3rd dose"
+          ] %}
+        {% elif data.whichVaccine == "Pneumococcal" %}
+          {% set doseOptions = [
+            "1st dose",
+            "2nd dose",
+            "Booster"
+          ] %}
+        {% else %}
+          {% set doseOptions = [] %}
+        {% endif %}
+
+        {% set items = [] %}
+        {% for option in doseOptions %}
+          {% set items = (items.push({
+            text: option,
+            value: option,
+            checked: (data.dosage == option)
+            }), items) %}
+        {% endfor %}
+
+        {{ radios({
+          idPrefix: "dosage",
+          name: "dosage",
+          errorMessage: {
+            text: (errors | first).text
+          } if (errors | length) > 0,
+          fieldset: {
+            legend: {
+              text: "Which dose of " + data.whichVaccine + " are you giving them?",
+              classes: "nhsuk-fieldset__legend--l",
+              isPageHeading: true
+            }
+          },
+          items: items
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        })}}
+      </form>
+
+    </div>
+
+    <div class="nhsuk-grid-column-one-third">
+      {% set contentHTML %}
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Name</span><br>{{ data.firstName }} {{ data.lastName }}</p>
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Date of birth</span><br>{{ data.dobFormatted }}<br>({{ data.ageLabel }})</p>
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">NHS number</span><br>{{ data.nhsNumberFormatted }}</p>
+      {% endset %}
+
+      {{ card({
+        heading: "Patient",
+        feature: true,
+        descriptionHtml: contentHTML
+      }) }}
+    </div>
+
+  </div>
+
+{% endblock %}

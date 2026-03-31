@@ -1,0 +1,173 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Which vaccine are you giving?" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% set organisationSetting = currentUser.organisations | findById(data.currentOrganisationId) %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "/index-infant" }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <!--<div class="nhsuk-grid-column-two-thirds">-->
+    <div class="nhsuk-grid-column-full">
+
+      {% if (errors | length) > 0 %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: errors
+        }) }}
+      {% endif %}
+
+      <h1 class="nhsuk-heading-l nhsuk-u-padding-bottom-4">Which vaccine, or vaccines, are you giving?</h1>
+      
+      {% set contentAllVaccines %}
+      {% endset -%}
+
+      {% set contentZeroToFiveYears %}
+        <h2 class="nhsuk-heading-s">Choose all <span class="nhsuk-u-visually-hidden">0 to 5 years vaccines </span>that apply</h2>
+        <form method="post" novalidate>
+          {{ checkboxes({
+            idPrefix: "ZeroToFiveYearsSeasonal",
+            name: "ZeroToFiveYearsSeasonal",
+            fieldset: {
+              legend: {
+                text: "Seasonal",
+                size: "m"
+              }
+            },
+            items: [
+              {
+                value: "ZeroToFiveYearsCovid",
+                text: "COVID-19"
+              },
+              {
+                value: "ZeroToFiveYearsFlu",
+                text: "Flu"
+              }
+            ]
+          }) }}
+
+          {{ checkboxes({
+            idPrefix: "ZeroToFiveYearsNonseasonal",
+            name: "ZeroToFiveYearsNonseasonal",
+            fieldset: {
+              legend: {
+                text: "Non-seasonal",
+                size: "m"
+              }
+            },
+            items: [
+              {
+                value: "ZeroToFiveYearsDTaP/IPV/Hib/HepB (6-in-1)",
+                text: "DTaP/IPV/Hib/HepB (6-in-1)"
+              },
+              {
+                value: "ZeroToFiveYearsDTaP/IPV (4-in-1)",
+                text: "DTaP/IPV (4-in-1)"
+              },
+              {
+                value: "ZeroToFiveYearsMenB",
+                text: "MenB"
+              },
+              {
+                value: "ZeroToFiveYearsMMR",
+                text: "MMR"
+              },
+              {
+                value: "ZeroToFiveYearsMMRV",
+                text: "MMRV"
+              },
+              {
+                value: "ZeroToFiveYearsPneumococcal",
+                text: "Pneumococcal"
+              },
+              {
+                value: "ZeroToFiveYearsRotavirus",
+                text: "Rotavirus"
+              }
+            ]
+          }) }}
+
+          {{ button({
+            text: "Continue"
+          })}}
+        </form>
+      {% endset -%}
+
+      {% set contentSixToTwentyFourYears %}
+      {% endset -%}
+
+      {% set contentAdult %}
+      {% endset -%}
+
+      {% set contentMaternity %}
+      {% endset -%}
+
+      {{ tabs({
+        items: [
+        {
+          label: "All vaccines",
+          id: "all-vaccines",
+          panel: {
+            html: contentAllVaccines
+            }
+          },
+          {
+            label: "0 to 5 years",
+            id: "zero-to-five-years",
+            panel: {
+              html: contentZeroToFiveYears
+            }
+          },
+          {
+            label: "6 to 24 years",
+            id: "six-to-twenty-four-years",
+            panel: {
+              html: contentSixToTwentyFourYears
+            }
+          },
+          {
+            label: "Adult",
+            id: "adult",
+            panel: {
+              html: contentAdult
+            }
+          },
+          {
+            label: "Maternity",
+            id: "maternity",
+            panel: {
+              html: contentMaternity
+            }
+          }
+        ]
+      }) }}
+
+      {{ details({
+        summaryText: "If your vaccine is not listed",
+        html: "Go to <a href=\"#/\">Vaccines</a> to add it."
+      }) }}
+
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      if (window.location.hash) {
+        window.addEventListener('load', function () {
+          window.scrollTo(0, 0)
+        })
+      }
+    })()
+    
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual'
+    }
+  </script>
+
+{% endblock %}

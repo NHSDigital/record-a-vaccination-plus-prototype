@@ -1,0 +1,73 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Prepare" %}
+
+{% set currentSection = "prepare" %}
+
+{% block pageTitle %}
+  Prepare
+{% endblock %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Prepare</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-4">
+        Prepare
+      </h1>
+
+      <p class="nhsuk-body">Set up your digital service</p>
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">    
+
+      {# PREPARE #}
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/user-admin/">Manage access</a> </h3>
+              <p class="nhsuk-card__description">Add and remove users, change access rights for users</p>
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+            </div>
+          </div>
+        </li>
+        {#<li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/iteration-2/guidance">Guidance</a> </h3>
+              <p class="nhsuk-card__description">Training content and clinical directives</p>
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+            </div>
+          </div>
+        </li>#}
+      </ul>
+
+    </div>
+
+  </div>
+
+{% endblock %}

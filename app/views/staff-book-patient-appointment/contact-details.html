@@ -1,0 +1,157 @@
+<!-- Use this page as the index for your project -->
+
+<!-- ADDING CUSTOM CSS - Add your custom CSS or Sass in /app/assets/sass/main.scss -->
+
+<!-- Extends the layout from /views/layout.html -->
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+<!-- Set the page title -->
+{% block pageTitle %}
+Book vaccinations prototype
+{% endblock %}
+
+<!-- For adding a breadcrumb -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/breadcrumbs -->
+{% block beforeContent %}
+{#
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Manage clinics</li>
+      <li class="nhsuk-breadcrumb__list-item">BREADCRUMB TBC</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+#}
+
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+  
+{% endblock %}
+
+<!-- For adding a back link -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/back-link -->
+{% block outerContent %}
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <!-- Change the page title here -->
+      <h1 class="nhsuk-heading-l">Arrange Jodie Brown's appointment</h1>
+
+      <!-- Add your content here -->
+      <!-- Styles and components can be found at https://service-manual.nhs.uk/design-system -->
+
+        <form class="form">
+
+
+
+    <fieldset class="nhsuk-fieldset" aria-describedby="contact-hint">
+      <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--m">
+        <h2 class="nhsuk-fieldset__heading nhsuk-u-margin-bottom-2">
+          How would Jodie prefer to be notified?
+        </h2>
+      </legend>
+      <div class="nhsuk-hint" id="contact-hint">
+        Enter Jodie's contact details.<br><br>Select all options that are relevant to Jodie.
+      </div>
+        <div class="nhsuk-form-group">
+          <div class="nhsuk-checkboxes nhsuk-checkboxes--conditional" data-module="nhsuk-checkboxes">
+
+        <div class="nhsuk-checkboxes__item">
+          <input class="nhsuk-checkboxes__input" id="checkboxOption-1" name="checkboxOption" type="checkbox" value="email" aria-controls="conditional-contact-1" aria-expanded="false" data-checkbox-exclusive-group="checkboxOption">
+          <label class="nhsuk-label nhsuk-checkboxes__label" for="contact-email">
+            Email
+          </label>
+        </div>
+        <div class="nhsuk-checkboxes__conditional nhsuk-checkboxes__conditional--hidden" id="conditional-contact-1">
+          <div class="nhsuk-form-group">
+            <label class="nhsuk-label" for="email">
+              Email address
+            </label>
+            <div class="nhsuk-hint" id="contact-hint">
+        We'll use this to send email reminders
+      </div>
+            <input class="nhsuk-input nhsuk-u-width-two-thirds" id="email" name="email" type="text">
+          </div>
+        </div>
+
+
+        <div class="nhsuk-checkboxes__item">
+          <input class="nhsuk-checkboxes__input" id="checkboxOption-2" name="checkboxOption" type="checkbox" value="text" aria-controls="conditional-contact-2" aria-expanded="false" data-checkbox-exclusive-group="checkboxOption">
+          <label class="nhsuk-label nhsuk-checkboxes__label" for="contact-text">
+            Mobile
+          </label>
+        </div>
+        <div class="nhsuk-checkboxes__conditional nhsuk-checkboxes__conditional--hidden" id="conditional-contact-2">
+          <div class="nhsuk-form-group">
+            <label class="nhsuk-label" for="mobile">
+              Mobile phone number
+            </label> 
+            <div class="nhsuk-hint" id="contact-hint">
+        We'll use this to send text reminders
+      </div>
+      <input class="nhsuk-input nhsuk-u-width-two-thirds" id="mobile" name="mobile" type="text">
+          </div>
+      </div>
+
+
+        <div class="nhsuk-checkboxes__divider">or</div>
+
+
+        <div class="nhsuk-checkboxes__item">
+          <input class="nhsuk-checkboxes__input" id="checkboxOption-3" name="checkboxOption" type="checkbox" value="landline" data-checkbox-exclusive data-checkbox-exclusive-group="checkboxOption">
+          <label class="nhsuk-label nhsuk-checkboxes__label" for="contact-phone">
+            Jodie does not have an email or mobile
+          </label>
+        </div>
+
+  </div>
+
+      </div>
+    </fieldset>
+
+
+<button class="nhsuk-button nhsuk-u-margin-top-2" type="submit" onclick="handleContactFormSubmission(event)">
+  Continue
+</button>
+    </form>
+
+      
+      </div>
+      <!-- End of content -->
+
+    </div>
+  </div>
+
+  <script>
+  function handleContactFormSubmission(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const emailCheckbox = document.getElementById('checkboxOption-1');
+    const textCheckbox = document.getElementById('checkboxOption-2');
+    const landlineCheckbox = document.getElementById('checkboxOption-3');
+
+    const selectedEmail = emailCheckbox.checked;
+    const selectedText = textCheckbox.checked;
+    const selectedLandline = landlineCheckbox.checked;
+
+    // Logic to determine the redirection
+    if ((selectedEmail || selectedText) && !selectedLandline) {
+      window.location.href = 'cya-contact'; // Redirect to cya page
+    } else if (selectedLandline && !selectedEmail && !selectedText) {
+      window.location.href = 'landline'; // Redirect to landline page
+    } else {
+      alert("Please select a valid combination of contact methods.");
+    }
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Who is the vaccinator?" %}
+
+{% set currentSection = "run" %}
+
+{% set organisationSetting = currentUser.organisations | findById(data.currentOrganisationId) %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if vaccinatorError %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: vaccinatorError,
+              href: "#vaccinator-1"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <form action="vaccine" method="post" novalidate>
+
+        {% set items = [] %}
+
+        {% if data['e2eCurrentUserType'] == 'infant' %}
+          {% if organisationSetting.clinician %}
+            {% set items = (items.push({
+              value: data.currentUserId,
+              text: "Me (Samantha Walker)"
+            }), items) %}
+          {% endif %}
+        {% else %}
+          {% if organisationSetting.clinician %}
+            {% set items = (items.push({
+              value: data.currentUserId,
+              text: "Me (" + currentUser.firstName + " " + currentUser.lastName + ")"
+            }), items) %}
+          {% endif %}
+        {% endif %}
+
+        {% for user in otherVaccinators %}
+          {% set items = (items.push({
+            value: user.id,
+            text: user.firstName + " " + user.lastName + " (" + user.email + ")"
+          }), items) %}
+        {% endfor %}
+
+        {{ radios({
+          idPrefix: "vaccinator",
+          name: "vaccinatorId",
+          fieldset: {
+            legend: {
+              text: ("Who is the vaccinator?" if data.vaccinationToday == 'yes' else "Who was the vaccinator?"),
+              classes: "nhsuk-fieldset__legend--l",
+              isPageHeading: "true"
+            }
+          },
+          xhint: {
+            text: "Only users with clinician status are listed"
+          },
+          errorMessage: {
+            text: vaccinatorError
+          } if vaccinatorError,
+          items: items,
+          value: data.vaccinatorId
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        })}}
+      </form>
+
+      {% if organisationSetting.permissionLevel == "Lead administrator" %}
+        {{ details({
+          summaryText: "If the vaccinator is not listed",
+          html: "Make sure they are added in <a href=\"/user-admin\">Manage users</a> as a clinician."
+        }) }}
+      {% else %}
+        {{ details({
+          summaryText: "If the vaccinator is not listed",
+          html: "If the vaccinator is not listed, ask a lead administrator to make sure they are added as a clinician."
+        }) }}
+
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endblock %}

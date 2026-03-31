@@ -1,0 +1,226 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Check and confirm" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "/ravs-infants/previous-vaccine" }) }}
+{% endblock %}
+
+{% set consentHtml %}
+  {% if data.consent == "patient" %}
+    Patient
+  {% elseif data.consent == "Clinician acting in the patient's best interests" %}
+    {{ data.consentClinicianName }}
+    <br>Clinician
+  {% elseif data.consent == "Person with lasting power of attorney for health and welfare" %}
+    {{ data.consentAttorneyName }}
+    <br>{{ data.consentAttorneyRelationship }}
+    <br>Power of attorney
+  {% elseif data.consent == "Parent or guardian" %}
+    {{ data.consentParentName }}
+    <br>Parent or guardian
+  {% elseif data.consent == "Independent mental capacity advocate" %}
+    {{ data.consentAdvocateName }}
+    <br>Independent mental capacity advocate
+  {% elseif data.consent == "Court appointed deputy" %}
+    {{ data.consentDeputyName }}
+    <br>{{ data.consentDeputyRelationship }}
+    <br>Court appointed deputy
+  {% endif %}
+{% endset %}
+
+{% set batchHtml %}
+  {% if data.vaccineBatch == "add-new" %}
+    {{ data.newBatchNumber }}
+    <br>Expires {{ (data.newBatchExpiryDate | isoDateFromDateInput | govukDate)  }}
+  {% else %}
+    {{ data.vaccineBatch }}
+    <br>Expires 4 June 2026
+  {% endif %}
+{% endset %}
+
+{% set locationHtml %}
+  {% if data.locationType == "Care home" %}
+    {{ careHome.name }}<br>
+    {{ careHome.address }}
+  {% else %}
+    {{ data.locationType }}
+  {% endif %}
+{% endset %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">Check and confirm</h1>
+
+      <h2 class="nhsuk-heading-m">Patient</h2>
+      {{ summaryList({
+        rows: [
+          {
+            key: {
+              text: "Name"
+            },
+            value: {
+              text: "Nadia Hillaker"
+            },
+            actions: {
+              items: [
+                {
+                  href: "/record-vaccinations/create-a-record",
+                  text: "Change",
+                  visuallyHiddenText: "name"
+                } if not data.nhsNumber
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Date of birth"
+            },
+            value: {
+              html: date({ day: 'numeric', month: 'long', year: 'numeric' }, { month: -6 }) + '<br>(6 months old today)'},
+            actions: {
+              items: [
+                {
+                  href: "/record-vaccinations/create-a-record",
+                  text: "Change",
+                  visuallyHiddenText: "date of birth"
+                } if not data.nhsNumber
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Address"
+            },
+            value: {
+              html: "73 Roman Rd<br>Leeds<br>LS2 5ZN"
+            },
+            actions: {
+              items: [
+              ]
+            }
+          } if data.nhsNumber,
+          {
+            key: {
+              text: "NHS number"
+            },
+            value: {
+              text: "944 930 6001"
+            },
+            actions: {
+              items: [
+              ]
+            }
+          } if data.nhsNumber
+        ]
+      }) }}
+
+      <h2 class="nhsuk-heading-m">Vaccinations</h2>
+
+      {% for vax in data.sessionVaccinations %}
+        {% set vaxIndex = loop.index0 %}
+        
+        <h3 class="nhsuk-heading-s nhsuk-u-margin-bottom-1">
+          {{ vax.vaccine }}
+        </h3>
+
+        {% if vax.skipped %}
+
+          {{ summaryList({
+            rows: [
+              {
+                key: { text: "Status" },
+                value: { text: "Not recorded" },
+                actions: {
+                  items: [
+                    {
+                      href: "/ravs-infants/change-vaccine?index=" + vaxIndex,
+                      text: "Change",
+                      visuallyHiddenText: vax.vaccine
+                    }
+                  ]
+                }
+              }
+            ]
+          }) }}
+
+        {% else %}
+
+          {% set injectionSiteText = "" %}
+          {% if vax.injectionSite == "Other" and vax.injectionSiteOther %}
+            {% set injectionSiteText = vax.injectionSiteOther %}
+          {% else %}
+            {% set injectionSiteText = vax.injectionSite %}
+          {% endif %}
+
+          {{ summaryList({
+            rows: [
+              {
+                key: { text: "Product" },
+                value: { text: vax.product },
+                actions: {
+                  items: [
+                    {
+                      href: "/ravs-infants/change-vaccine?index=" + vaxIndex,
+                      text: "Change",
+                      visuallyHiddenText: vax.vaccine
+                    }
+                  ]
+                }
+              } if vax.product,
+              {
+                key: { text: "Dose" },
+                value: { text: vax.dose }
+              } if vax.dose,
+              {
+                key: { text: "Batch" },
+                value: { text: vax.batch }
+              } if vax.batch,
+              {
+                key: { text: "Eligibility" },
+                value: { text: vax.eligibility }
+              } if vax.eligibility,
+              {
+                key: { text: "Consent given by" },
+                value: { html: vax.consentHtml | safe }
+              } if vax.consentHtml,
+              {
+                key: { text: "Injection site" },
+                value: { text: injectionSiteText }
+              } if injectionSiteText
+            ]
+          }) }}
+
+        {% endif %}
+
+      {% endfor %}
+
+      <form action="concept-check" method="post" novalidate>
+
+        {{ textarea({
+          name: "notes",
+          id: "notes",
+          label: {
+            text: "Optional note"
+          },
+          hint: {
+            text: "This will not be sent to the patient's GP. Only your organisation will see it."
+          },
+          rows: 3,
+          classes: "nhsuk-u-margin-bottom-7"
+        }) }}
+
+
+        {{ button({
+          text: "Confirm and save"
+        })}}
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+/* ===============================
+   NHS.UK Autocomplete + Add/Remove Overrides
+   =============================== */
+
+/* Square conditional reveals */
+.nhsuk-checkboxes__conditional,
+.nhsuk-radios__conditional {
+  border-radius: 0 !important;
+}
+
+/* Stable layout for site input rows */
+.site-input-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.site-input-col {
+  flex: 0 0 66.666%;
+  max-width: 66.666%;
+}
+
+.site-input-col .nhsuk-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Accessible Autocomplete: full width, square corners, NHS white background */
+.autocomplete-mount,
+.autocomplete__wrapper {
+  width: 100%;
+}
+
+.autocomplete__wrapper input {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0 !important;
+  background-color: #ffffff; /* NHS white background */
+  color: #0b0c0c;            /* NHS black text */
+}
+
+/* Buttons styled as NHS.UK links (16px, NHS blue) */
+.add-site-link,
+.remove-site-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 16px; /* NHS standard body/link size */
+  line-height: 1.5;
+  color: #005eb8;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.add-site-link:hover,
+.remove-site-link:hover {
+  color: #7c2855; /* NHS link hover colour */
+  text-decoration: none;
+}
+
+.add-site-link:focus,
+.remove-site-link:focus {
+  outline: 3px solid #ffb81c;
+  outline-offset: 1px;
+  color: #0b0c0c;
+  background-color: #ffb81c;
+  text-decoration: none;
+}
+
+/* Inline menu spacing */
+.autocomplete__menu {
+  margin-top: 4px;
+}

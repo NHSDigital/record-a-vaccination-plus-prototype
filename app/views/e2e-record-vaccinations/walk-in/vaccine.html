@@ -1,0 +1,488 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Which vaccine are you giving?" %}
+
+{% set currentSection = "run" %}
+{% set organisationSetting = currentUser.organisations | findById(data.currentOrganisationId) %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+
+  {% if data['e2eCurrentUserType'] == 'infant' %}
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+
+        <h1 class="nhsuk-heading-l">Which vaccine did you give?</h1>
+
+        {# MOJ Navigation START #}
+        <nav class="moj-sub-navigation nhsuk-u-padding-bottom-2" aria-label="Sub navigation">
+          <ul class="moj-sub-navigation__list">
+            <li class="moj-sub-navigation__item">
+              <a id="linkBySchedule" class="moj-sub-navigation__link" aria-current="page" href="javascript:void(0)" onclick="switchToBySchedule()">By schedule</a>
+            </li>
+            <li class="moj-sub-navigation__item">
+              <a id="linkByVaccine" class="moj-sub-navigation__link" href="javascript:void(0)" onclick="switchToByVaccine()">By vaccine</a>
+            </li>
+          </ul>
+        </nav>
+        {# MOJ Navigation END #}
+  
+      </div>
+    </div>
+
+    {# BY SCHEDULE PANEL #}
+    <div id="panelBySchedule">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-two-thirds">
+    
+          <form action="batch-infant" method="post" novalidate>
+
+            {%- set mmrProductsHtml -%}
+              {{ radios({
+                idPrefix: "mmrProduct",
+                name: "mmrProduct",
+                fieldset: { legend: { html: "<span class='nhsuk-u-visually-hidden'>MMR (1st dose) </span>Vaccine product" } },
+                items: [
+                  { value: "MMRvaxPro", text: "MMRvaxPro" },
+                  { value: "Priorix", text: "Priorix" }
+                ]
+              }) }}
+            {%- endset -%}
+
+            {%- set hibMenCProductsHtml -%}
+              {{ radios({
+                idPrefix: "hibMenCProduct",
+                name: "hibMenCProduct",
+                fieldset: { legend: { html: "<span class='nhsuk-u-visually-hidden'>Hib/Men C (1st dose) </span>Vaccine product" } },
+                items: [
+                  { value: "Mentorix", text: "Mentorix" }
+                ]
+              }) }}
+            {%- endset -%}
+
+            {%- set menBProductsHtml -%}
+              {{ radios({
+                idPrefix: "menBProduct",
+                name: "menBProduct",
+                fieldset: { legend: { html: "<span class='nhsuk-u-visually-hidden'>Men B (3rd dose) </span>Vaccine product" } },
+                items: [
+                  { value: "Bexsero", text: "Bexsero" }
+                ]
+              }) }}
+            {%- endset -%}
+
+            {%- set pcvProductsHtml -%}
+              {{ radios({
+                idPrefix: "pcvProduct",
+                name: "pcvProduct",
+                fieldset: { legend: { html: "<span class='nhsuk-u-visually-hidden'>PCV (2nd dose) </span>Vaccine product" } },
+                items: [
+                  { value: "Prevenar 13", text: "Prevenar 13" }              ]
+              }) }}
+            {%- endset -%}
+
+            <div id="visitOne">
+              <details class="nhsuk-details nhsuk-expander">
+                <summary class="nhsuk-details__summary">
+                  <span class="nhsuk-details__summary-text">
+                    Visit 1 from 8 weeks
+                  </span>
+                </summary>
+                <div class="nhsuk-details__text">
+
+                  <div class="nhsuk-form-group">
+
+                    <fieldset class="nhsuk-fieldset">
+                      <legend class="nhsuk-fieldset__legend">
+                        Select all options that are relevant to you
+                      </legend>
+                      <div class="nhsuk-checkboxes" data-module="nhsuk-checkboxes">
+
+                        <div class="nhsuk-checkboxes__item">
+                          <input class="nhsuk-checkboxes__input" id="vaccinesVisitOne" name="vaccinesVisitOne" type="checkbox" value="rotavirusVisitOne" data-checkbox-exclusive-group="vaccinesVisitOne-list">
+                          <label class="nhsuk-label nhsuk-checkboxes__label" for="vaccinesDoseOne">
+                            Rotavirus (1st dose)
+                          </label>
+                        </div>
+
+                        <div class="nhsuk-checkboxes__item">
+                          <input class="nhsuk-checkboxes__input" id="vaccinesVisitOne-2" name="vaccinesVisitOne" type="checkbox" value="sixinoneVisitOne" data-checkbox-exclusive-group="vaccinesVisitOne-list">
+                          <label class="nhsuk-label nhsuk-checkboxes__label" for="vaccinesDoseOne-2">
+                            6-in-1 (1st dose)
+                          </label>
+                        </div>
+
+                        <div class="nhsuk-checkboxes__item">
+                          <input class="nhsuk-checkboxes__input" id="vaccinesVisitOne-3" name="vaccinesVisitOne" type="checkbox" value="menbVisitOne" data-checkbox-exclusive-group="vaccinesVisitOne-list">
+                          <label class="nhsuk-label nhsuk-checkboxes__label" for="vaccinesDoseOne-3">
+                            Men B (1st dose)
+                          </label>
+                        </div>
+
+                        <div class="nhsuk-checkboxes__divider">or</div>
+                        
+                        <div class="nhsuk-checkboxes__item">
+                          <input class="nhsuk-checkboxes__input" id="vaccinesVisitOne-4" name="vaccinesVisitOne" type="checkbox" value="allVisitOne" data-checkbox-exclusive data-checkbox-exclusive-group="vaccinesVisitOne-list">
+                          <label class="nhsuk-label nhsuk-checkboxes__label" for="vaccinesDoseOne-4">
+                            Select all visit 1 vaccines
+                          </label>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+
+                </div>
+              </details>
+            </div>
+
+            <div id="visitTwo">
+              <details class="nhsuk-details nhsuk-expander">
+                <summary class="nhsuk-details__summary">
+                  <span class="nhsuk-details__summary-text">
+                    Visit 2 from 12 weeks
+                  </span>
+                </summary>
+                <div class="nhsuk-details__text">
+                </div>
+              </details>
+            </div>
+
+            <div id="visitThree">
+              <details class="nhsuk-details nhsuk-expander">
+                <summary class="nhsuk-details__summary">
+                  <span class="nhsuk-details__summary-text">
+                    Visit 3 from 16 weeks
+                  </span>
+                </summary>
+                <div class="nhsuk-details__text">
+                </div>
+              </details>
+            </div>
+
+            <div id="visitFour">
+              <details class="nhsuk-details nhsuk-expander">
+                <summary class="nhsuk-details__summary">
+                  <span class="nhsuk-details__summary-text">
+                    Visit 4 from 12 months
+                  </span>
+                </summary>
+                <div class="nhsuk-details__text">
+
+                  <div class="nhsuk-form-group">
+                    <fieldset class="nhsuk-fieldset" aria-describedby="visit4-hint">
+                      <span class="nhsuk-hint" id="visit4-hint">Select all options that are relevant to you</span>
+
+                      {{ checkboxes({
+                        idPrefix: "vaccinesVisitFour",
+                        name: "vaccinesVisitFour",
+                        items: [
+                          {
+                            value: "mmrVisitFour",
+                            text: "MMR (1st dose)",
+                            conditional: { html: mmrProductsHtml }
+                          },
+                          {
+                            value: "hibmencVisitFour",
+                            text: "Hib/Men C (1st dose)",
+                            conditional: { html: hibMenCProductsHtml }
+                          },
+                          {
+                            value: "menbVisitFour",
+                            text: "Men B (3rd dose)",
+                            conditional: { html: menBProductsHtml }
+                          },
+                          {
+                            value: "pcvVisitFour",
+                            text: "PCV (2nd dose)",
+                            conditional: { html: pcvProductsHtml }
+                          }
+                        ]
+                      }) }}
+
+                    </fieldset>
+                  </div>
+
+                </div>
+              </details>
+            </div>
+
+            <div id="visitFive">
+              <details class="nhsuk-details nhsuk-expander">
+                <summary class="nhsuk-details__summary">
+                  <span class="nhsuk-details__summary-text">
+                    Visit 5 from 18 months
+                  </span>
+                </summary>
+                <div class="nhsuk-details__text">
+                </div>
+              </details>
+            </div>
+
+            <div id="visitSix">
+              <details class="nhsuk-details nhsuk-expander">
+                <summary class="nhsuk-details__summary">
+                  <span class="nhsuk-details__summary-text">
+                    Visit 6 from 3 years 4 months
+                  </span>
+                </summary>
+                <div class="nhsuk-details__text">
+                </div>
+              </details>
+            </div>
+
+            <button class="nhsuk-button nhsuk-u-margin-top-4" data-module="nhsuk-button" type="submit">
+              Continue
+            </button>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+    {# BY VACCINE PANEL #}
+    <div id="panelByVaccine" class="moj-nav-hidden">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-two-thirds">
+
+
+          <form action="batch-infant" method="post" novalidate>
+
+            {%- set mmrProductsHtmlbyVaccine -%}
+              {{ radios({
+                idPrefix: "mmrProductbyVaccine",
+                name: "mmrProductbyVaccine",
+                fieldset: { legend: { html: "<span class='nhsuk-u-visually-hidden'>MMR (1st dose) </span>Vaccine product" } },
+                items: [
+                  { value: "MMRvaxPro", text: "MMRvaxPro" },
+                  { value: "Priorix", text: "Priorix" }
+                ]
+              }) }}
+            {%- endset -%}
+
+            {%- set hibMenCProductsHtmlbyVaccine -%}
+              {{ radios({
+                idPrefix: "hibMenCProductbyVaccine",
+                name: "hibMenCProductbyVaccine",
+                fieldset: { legend: { html: "<span class='nhsuk-u-visually-hidden'>Hib/Men C (1st dose) </span>Vaccine product" } },
+                items: [
+                  { value: "Mentorix", text: "Mentorix" }
+                ]
+              }) }}
+            {%- endset -%}
+
+            {%- set menBProductsHtmlbyVaccine -%}
+              {{ radios({
+                idPrefix: "menBProductbyVaccine",
+                name: "menBProductbyVaccine",
+                fieldset: { legend: { html: "<span class='nhsuk-u-visually-hidden'>Men B (3rd dose) </span>Vaccine product" } },
+                items: [
+                  { value: "Bexsero", text: "Bexsero" }
+                ]
+              }) }}
+            {%- endset -%}
+
+            {%- set pcvProductsHtmlbyVaccine -%}
+              {{ radios({
+                idPrefix: "pcvProductbyVaccine",
+                name: "pcvProductbyVaccine",
+                fieldset: { legend: { html: "<span class='nhsuk-u-visually-hidden'>PCV (2nd dose) </span>Vaccine product" } },
+                items: [
+                  { value: "Prevenar 13", text: "Prevenar 13" }              ]
+              }) }}
+            {%- endset -%}
+          
+            <div class="nhsuk-form-group">
+              <fieldset class="nhsuk-fieldset" aria-describedby="byVaccine-hint">
+                <span class="nhsuk-hint" id="byVaccine-hint">Select all options that are relevant to you</span>
+
+                {{ checkboxes({
+                  idPrefix: "mmrVisitFour",
+                  name: "mmrVisitFour",
+                  items: [
+                    {
+                      value: "mmrVisitFour",
+                      text: "MMR (1st dose)",
+                      conditional: { html: mmrProductsHtmlbyVaccine }
+                    },
+                    {
+                      value: "hibmencVisitFour",
+                      text: "Hib/Men C (1st dose)",
+                      conditional: { html: hibMenCProductsHtmlbyVaccine }
+                    },
+                    {
+                      value: "menbVisitFour",
+                      text: "Men B (3rd dose)",
+                      conditional: { html: menBProductsHtmlbyVaccine }
+                    },
+                    {
+                      value: "pcvVisitFour",
+                      text: "PCV (2nd dose)",
+                      conditional: { html: pcvProductsHtmlbyVaccine }
+                    }
+                  ]
+                }) }}
+
+              </fieldset>
+            </div>
+
+            <button class="nhsuk-button nhsuk-u-margin-top-4" data-module="nhsuk-button" type="submit">
+              Continue
+            </button>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+  {% else %}
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+
+      <form action="batch" method="post" novalidate>
+
+      {% if data.repeatPatient == 'yes' and data.patientName %}
+        {% set question = ("Which vaccine are you giving " + data.patientName + "?" if data.vaccinationToday == 'yes' else "Which vaccine did you give " + data.patientName + "?") %}
+      {% else %}
+        {% set question = ("Which vaccine are you giving?" if data.vaccinationToday == 'yes' else "Which vaccine did you give?") %}
+      {% endif %}
+
+      {% set pertussisHtml %}
+        {{ radios({
+          idPrefix: "pertussis",
+          name: "pertussis",
+          fieldset: {
+            legend: {
+              text: "Vaccine product"
+            }
+          },
+          items: [
+            {
+              value: "pertussis1",
+              text: "Adacel vaccine suspension"
+            },
+            {
+              value: "pertussis2",
+              text: "Boostrix-IPV suspension"
+            },
+            {
+              value: "pertussis3",
+              text: "epevax vaccine suspension"
+            }
+          ]
+        }) }}
+      {% endset -%}
+
+      {% set rsvHtml %}
+        {{ radios({
+          idPrefix: "rsv",
+          name: "rsv",
+          fieldset: {
+            legend: {
+              text: "Vaccine product"
+            }
+          },
+          items: [
+            {
+              value: "rsv1",
+              text: "Abrysvo"
+            }
+          ]
+        }) }}
+      {% endset -%}
+
+      {{ radios({
+        "idPrefix": "vaccine",
+        "name": "vaccine",
+        "fieldset": {
+          "legend": {
+            "text": question,
+            "classes": "nhsuk-fieldset__legend--l",
+            "isPageHeading": true
+          }
+        },
+          items: [
+            {
+              value: "RSV",
+              text: "RSV",
+              conditional: {
+                html: rsvHtml
+              }
+            },
+            {
+              value: "Pertussis",
+              text: "Pertussis",
+              conditional: {
+                html: pertussisHtml
+              }
+            }
+          ]
+      }) }}
+
+
+        {{ button({
+          text: "Continue"
+        })}}
+
+        {% if organisationSetting.permissionLevel == "Recorder" %}
+          {{ details({
+            summaryText: "If the vaccine is not listed",
+            html: "An administrator needs to add it."
+          }) }}
+        {% else %}
+          {{ details({
+            summaryText: "If the vaccine is not listed",
+            html: "You need to go to <a href=\"/vaccines\">Vaccines</a> to add it."
+          }) }}
+        {% endif %}
+
+      </form>
+
+    </div>
+  </div>
+
+  {% endif %}
+
+  <script>
+    function switchToBySchedule() {
+      var theBySchedulePanel = document.getElementById("panelBySchedule");
+      var theByVaccinePanel = document.getElementById("panelByVaccine");
+
+      var theScheduleLink = document.getElementById("linkBySchedule");
+      var theVaccineLink = document.getElementById("linkByVaccine");
+
+      // set the EXPORTS LINK to be the current sub-navigation tab
+      theScheduleLink.setAttribute("aria-current","page");
+      theVaccineLink.removeAttribute("aria-current");
+
+      // display the BY SCHEDULE PANEL and hide by vaccine
+      theBySchedulePanel.classList.remove("moj-nav-hidden");
+      theByVaccinePanel.classList.add("moj-nav-hidden");
+    }
+
+
+    function switchToByVaccine() {
+      var theBySchedulePanel = document.getElementById("panelBySchedule");
+      var theByVaccinePanel = document.getElementById("panelByVaccine");
+
+      var theScheduleLink = document.getElementById("linkBySchedule");
+      var theVaccineLink = document.getElementById("linkByVaccine");
+
+      // set the EXPORTS LINK to be the current sub-navigation tab
+      theScheduleLink.removeAttribute("aria-current");
+      theVaccineLink.setAttribute("aria-current","page");
+
+      // display the EXPORTS PANEL and hide map and exports
+      theBySchedulePanel.classList.add("moj-nav-hidden");
+      theByVaccinePanel.classList.remove("moj-nav-hidden");
+    }
+
+  </script>
+
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "6-in-1 vaccine interval warning" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% block beforeContent %}
+  {{ backLink({href: "javascript:history.back()"}) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+    {% if data.nhsNumber == "9165325681" %} {# THOMAS #}
+
+      {% set panelHtml %}
+        <p>You have selected {{ data.dosage }}.</p>
+        <p>Based on their vaccination records, {{ data.firstName }} {{ data.lastName }} has already had the {{ data.dosage }} of {{ data.whichVaccine }}.</p>
+        <div class="nhsuk-button-group">
+          {{ button({
+            text: "Continue anyway",
+            classes: "nhsuk-button--reverse",
+            href: "/ravs-infants/eligibility"
+          }) }}
+          <a href="#" onclick="history.back(); return false;">Change dose</a>
+        </div>
+      {% endset %}
+
+      {% set doseNumber = "" %}
+      {% if data.dosage %}
+        {% if data.dosage == "Booster" %}
+          {% set doseNumber = "booster" %}
+        {% else %}
+          {% set doseNumber = data.dosage[0] %}
+        {% endif %}
+      {% endif %}
+
+      {{ panel({
+        titleText: "Are you sure you've selected the right dose of " + data.whichVaccine + "?",
+        titleSize: "l",
+        classes: "nhsuk-panel--interruption",
+        html: panelHtml
+      }) }}
+
+    {% else %} {# NADIA #}
+
+      {% set panelHtml %}
+        <p>You have selected {{ data.dosage }}.</p>
+        <p>Based on their vaccination records, {{ data.firstName }} {{ data.lastName }} has not yet had the 1st dose of {{ data.whichVaccine }}.</p>
+        <div class="nhsuk-button-group">
+          {{ button({
+            text: "Continue anyway",
+            classes: "nhsuk-button--reverse",
+            href: "/ravs-infants/eligibility"
+          }) }}
+          <a href="#" onclick="history.back(); return false;">Change dose</a>
+        </div>
+      {% endset %}
+
+      {% set doseNumber = "" %}
+      {% if data.dosage %}
+        {% if data.dosage == "Booster" %}
+          {% set doseNumber = "booster" %}
+        {% else %}
+          {% set doseNumber = data.dosage[0] %}
+        {% endif %}
+      {% endif %}
+
+      {{ panel({
+        titleText: "Are you sure you've selected the right dose of " + data.whichVaccine + "?",
+        titleSize: "l",
+        classes: "nhsuk-panel--interruption",
+        html: panelHtml
+      }) }}
+
+    {% endif %}
+
+    </div>
+  </div>
+
+{% endblock %}

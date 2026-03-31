@@ -1,0 +1,320 @@
+{% extends "e2e-layout3-index-only.html" %}
+
+{% block pageTitle %}RSV filter example{% endblock %}
+
+{% block content %}
+<style>
+  /* details: remove native markers and NHS marker */
+  details summary::-webkit-details-marker { display: none; }
+  details summary::marker { content: ""; }
+  .nhsuk-details__summary { list-style: none; }
+  .nhsuk-details__summary::before { content: none !important; }
+
+  /* outer details */
+  .nhsuk-details.app-filter { margin: 0 !important; }
+
+  /* “Filter and sort” link */
+  .app-filter__summary {
+    margin: 0 0 12px 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #1d70b8;
+    font-weight: 700;
+    border: 0;
+    background: transparent;
+  }
+  .nhsuk-details.app-filter .nhsuk-details__summary .nhsuk-details__summary-text { text-decoration: none !important; }
+  .app-filter__summary:hover .nhsuk-details__summary-text,
+  .app-filter__summary:focus .nhsuk-details__summary-text { text-decoration: underline !important; }
+
+  /* chevrons */
+  .app-caret,
+  .app-caret--inner {
+    width: 10px; height: 10px; margin-top: 2px;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+    transition: transform .15s ease;
+    display: inline-block;
+  }
+  .app-caret { transform: rotate(-135deg); }
+  .app-filter:not([open]) .app-caret { transform: rotate(45deg); }
+  .app-caret--inner { transform: rotate(45deg); }
+  .app-section[open] .app-caret--inner { transform: rotate(-135deg); }
+
+  /* panel */
+  .app-filter__panel,
+  .app-filter .nhsuk-details__text { background: #D8DDE0 !important; }
+  .app-filter__panel {
+    border: 1px solid #b1b4b6;
+    padding: 16px;
+  }
+  .app-filter .nhsuk-details__text { border: 0 !important; padding-top: 0; }
+
+  /* sections */
+  .nhsuk-details.app-section { margin-bottom: 0 !important; }
+  .app-section { padding: 16px 0; background: #D8DDE0; }
+  .app-section + .app-section { border-top: 1px solid #b1b4b6; }
+
+  .app-section__summary {
+    margin: 0 0 8px 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: #0b0c0c;
+    background: transparent;
+    border: 0;
+  }
+  .nhsuk-details.app-section .nhsuk-details__summary .nhsuk-details__summary-text { text-decoration: none !important; }
+  .app-section__summary:hover .nhsuk-details__summary-text,
+  .app-section__summary:focus .nhsuk-details__summary-text { text-decoration: underline !important; }
+
+  .app-section__body { margin: 0; padding: 0; background: #D8DDE0 !important; }
+
+  /* NHS field spacing */
+  .nhsuk-radios__item, .nhsuk-checkboxes__item { margin-bottom: 8px; }
+
+  /* actions */
+  .app-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #b1b4b6;
+    background: #D8DDE0;
+    width: 100%;
+  }
+
+  @media (max-width: 40.0625em) {
+    .app-filter__panel { padding: 12px; }
+    .app-actions { flex-wrap: wrap; gap: 12px; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var filter = document.querySelector('.app-filter');
+    if (filter) {
+      filter.addEventListener('toggle', function () {
+        if (filter.open) {
+          var first = filter.querySelector('select, input, button, a[href]');
+          if (first) first.focus({ preventScroll: true });
+        }
+      });
+    }
+  });
+</script>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      Filter and sort RSV invites v4
+    </h1>
+
+    <details class="nhsuk-details app-filter" data-module="app-filter">
+      <summary class="nhsuk-details__summary app-filter__summary">
+        <span class="app-caret" aria-hidden="true"></span>
+        <span class="nhsuk-details__summary-text">Filter and sort</span>
+      </summary>
+
+      <div class="nhsuk-details__text app-filter__panel">
+        <form action="#/" method="post" novalidate>
+
+          <details class="nhsuk-details app-section">
+            <summary class="nhsuk-details__summary app-section__summary">
+              <span class="app-caret--inner" aria-hidden="true"></span>
+              <span class="nhsuk-details__summary-text">Patient details</span>
+            </summary>
+            <div class="nhsuk-details__text app-section__body">
+              {% set gestationConditionalHtml %}
+                {{ input({
+                  id: "gestation-weeks",
+                  name: "gestationWeeks",
+                  label: { text: "How many weeks?" },
+                  classes: "nhsuk-input--width-3",
+                  inputmode: "numeric",
+                  spellcheck: false
+                }) }}
+              {% endset %}
+              {{ radios({
+                idPrefix: "gestation-timescale",
+                name: "gestationTimescale",
+                fieldset: { legend: { text: "Gestation timescale", classes: "nhsuk-fieldset__legend" } },
+                items: [
+                  { value: "yes", text: "Yes", conditional: { html: gestationConditionalHtml } },
+                  { value: "no", text: "No" }
+                ]
+              }) }}
+              {{ radios({
+                idPrefix: "contact-by-phone",
+                name: "contactByPhone",
+                fieldset: { legend: { text: "Can be contacted by phone", classes: "nhsuk-fieldset__legend" } },
+                items: [
+                  { value: "yes", text: "Yes" },
+                  { value: "no", text: "No" }
+                ]
+              }) }}
+            </div>
+          </details>
+
+          <details class="nhsuk-details app-section">
+            <summary class="nhsuk-details__summary app-section__summary">
+              <span class="app-caret--inner" aria-hidden="true"></span>
+              <span class="nhsuk-details__summary-text">Vaccine invitations and bookings</span>
+            </summary>
+            <div class="nhsuk-details__text app-section__body">
+              {{ radios({
+                idPrefix: "vaccine-discussed",
+                name: "vaccineDiscussed",
+                fieldset: { legend: { text: "Vaccine and side effects were discussed", classes: "nhsuk-fieldset__legend" } },
+                items: [
+                  { value: "yes", text: "Yes" },
+                  { value: "no", text: "No" }
+                ]
+              }) }}
+              {% set prevRsvConditionalHtml %}
+                {{ input({
+                  id: "prev-rsv-weeks",
+                  name: "prevRsvWeeks",
+                  label: { text: "How many weeks ago?" },
+                  classes: "nhsuk-input--width-3",
+                  inputmode: "numeric",
+                  spellcheck: false
+                }) }}
+              {% endset %}
+              {{ radios({
+                idPrefix: "previous-rsv",
+                name: "previousRsv",
+                fieldset: { legend: { text: "Previously received RSV vaccination", classes: "nhsuk-fieldset__legend" } },
+                items: [
+                  { value: "yes", text: "Yes", conditional: { html: prevRsvConditionalHtml } },
+                  { value: "no", text: "No" }
+                ]
+              }) }}
+              {{ radios({
+                idPrefix: "existing-booking",
+                name: "existingBooking",
+                fieldset: { legend: { text: "Has an existing booking for an RSV vaccination", classes: "nhsuk-fieldset__legend" } },
+                items: [
+                  { value: "yes", text: "Yes" },
+                  { value: "no", text: "No" }
+                ]
+              }) }}
+              {% set rsvInviteConditionalHtml %}
+                {{ input({
+                  id: "rsv-invite-weeks",
+                  name: "rsvInviteWeeks",
+                  label: { text: "How many weeks ago?" },
+                  classes: "nhsuk-input--width-3",
+                  inputmode: "numeric",
+                  spellcheck: false
+                }) }}
+              {% endset %}
+              {{ radios({
+                idPrefix: "rsv-invite",
+                name: "rsvInvite",
+                fieldset: { legend: { text: "Received an invitation for an RSV vaccination", classes: "nhsuk-fieldset__legend" } },
+                items: [
+                  { value: "yes", text: "Yes", conditional: { html: rsvInviteConditionalHtml } },
+                  { value: "no", text: "No" }
+                ]
+              }) }}
+              {% set otherInviteConditionalHtml %}
+                {{ input({
+                  id: "other-invite-weeks",
+                  name: "otherInviteWeeks",
+                  label: { text: "How many weeks ago?" },
+                  classes: "nhsuk-input--width-3",
+                  inputmode: "numeric",
+                  spellcheck: false
+                }) }}
+              {% endset %}
+              {{ radios({
+                idPrefix: "other-invite",
+                name: "otherInvite",
+                fieldset: { legend: { text: "Received an invitation for another vaccination", classes: "nhsuk-fieldset__legend" } },
+                items: [
+                  { value: "yes", text: "Yes", conditional: { html: otherInviteConditionalHtml } },
+                  { value: "no", text: "No" }
+                ]
+              }) }}
+            </div>
+          </details>
+
+          <div class="app-actions" style="display: flex; align-items: center; gap: 1rem; margin-top: 0; margin-bottom: 0;">
+            <button type="submit" class="nhsuk-button" data-module="nhsuk-button">
+              Apply
+            </button>
+            <p class="nhsuk-body"><a class="nhsuk-link" href="#/">Clear all</a></p>
+          </div>
+
+        </form>
+      </div>
+    </details>
+
+    {# I AM A TABLE OF THINGS #}
+    <table class="nhsuk-table nhsuk-u-margin-top-4" data-module="moj-sortable-table">
+      <caption class="nhsuk-table__caption">Patient list table</caption>
+      <thead class="nhsuk-table__head">
+        <tr class="nhsuk-table__row">
+          <th scope="col" class="nhsuk-table__header" aria-sort="ascending">Name</th>
+          <th scope="col" class="nhsuk-table__header" aria-sort="none">Elevation</th>
+          <th scope="col" class="nhsuk-table__header" aria-sort="none">Continent</th>
+          <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">First summit</th>
+        </tr>
+      </thead>
+      <tbody class="nhsuk-table__body">
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Aconcagua</td>
+          <td class="nhsuk-table__cell" data-sort-value="6961">6,961 meters</td>
+          <td class="nhsuk-table__cell">South America</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1897">1897</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Denali</td>
+          <td class="nhsuk-table__cell" data-sort-value="6194">6,194 meters</td>
+          <td class="nhsuk-table__cell">North America</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1913">1913</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Elbrus</td>
+          <td class="nhsuk-table__cell" data-sort-value="5642">5,642 meters</td>
+          <td class="nhsuk-table__cell">Europe</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1874">1874</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Everest</td>
+          <td class="nhsuk-table__cell" data-sort-value="8850">8,850 meters</td>
+          <td class="nhsuk-table__cell">Asia</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1953">1953</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Kilimanjaro</td>
+          <td class="nhsuk-table__cell" data-sort-value="5895">5,895 meters</td>
+          <td class="nhsuk-table__cell">Africa</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1889">1889</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Puncak Jaya</td>
+          <td class="nhsuk-table__cell" data-sort-value="4884">4,884 meters</td>
+          <td class="nhsuk-table__cell">Australia</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1962">1962</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Vinson</td>
+          <td class="nhsuk-table__cell" data-sort-value="4897">4,897 meters</td>
+          <td class="nhsuk-table__cell">Antarctica</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1966">1966</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+  </div>
+</div>
+{% endblock %}

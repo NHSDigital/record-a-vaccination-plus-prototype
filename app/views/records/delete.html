@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+
+{% set pageName = "Are you sure you want to delete this record? – Records" %}
+
+{% set currentSection = "records" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/records/records/" + vaccination.id,
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+
+      <h1 class="nhsuk-heading-l">Are you sure you want to delete {{ vaccination.patient.name }}’s {{vaccination.vaccine}} record?</h1>
+
+
+      <p>Once deleted, a record cannot be restored. But deleted records will show in reports.</p>
+
+      <form action="/records/records/{{ vaccination.id }}/confirm-delete" method="post">
+        {{ button({
+          text: "Yes, delete this record"
+        }) }}
+      </form>
+
+
+    </div>
+  </div>
+
+
+{% endblock %}

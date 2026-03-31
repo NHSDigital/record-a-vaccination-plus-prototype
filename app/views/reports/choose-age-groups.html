@@ -1,0 +1,64 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Choose age groups" %}
+
+{% set currentSection = "monitor" %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      
+      <form action="/reports/choose-qof-indicator" method="post">
+
+        {{ checkboxes({
+          idPrefix: "reportChosenAgeGroups",
+          name: "reportChosenAgeGroups",
+          fieldset: {
+            legend: {
+              text: "Choose age groups (optional)",
+              isPageHeading: true,
+              classes: "nhsuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+              value: "0 to 5 months",
+              text: "0 to 5 months"
+            },
+            {
+              value: "6 to 12 months",
+              text: "6 to 12 months"
+            },
+            {
+              value: "13 to 17 months",
+              text: "13 to 17 months"
+            },
+            {
+              value: "18 to 23 months",
+              text: "18 to 23 months"
+            },
+            {
+              value: "2 to 5 years",
+              text: "2 to 5 years"
+            }
+          ]
+        }) }}
+
+        {{ button({
+          text: "Continue",
+          classes: "nhsuk-u-margin-top-4"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,347 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Send invites
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="choose-task?taskChoice">Send invites</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Invites templates</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+
+  {#<a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>#}
+{% endblock %}
+
+{% block head %}
+  <style>
+    :root { --tile-min-height: 190px; }
+
+    /* Ensure all grid rows stretch children to equal height */
+    .nhsuk-grid-row { align-items: stretch; }
+    .nhsuk-grid-row > [class^="nhsuk-grid-column-"] { display: flex; flex-direction: column; }
+
+    .tile { position: relative; margin-bottom: 24px; display: flex; flex: 1 1 auto; }
+    .tile--lg { width: 100%; }
+
+    .tile__label { cursor: pointer; display: flex; flex-direction: column; height: 100%; width: 100%; }
+    .tile__label .nhsuk-card {
+      position: relative;
+      display: flex; flex-direction: column; justify-content: space-between;
+      flex: 1 1 auto; /* allow cards to grow to equal height */
+      min-height: var(--tile-min-height);
+      transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      overflow: visible;
+    }
+
+    /* Ensure text wraps and never overlaps the badge */
+    .tile__label .nhsuk-card__content { padding: 24px; padding-right: 76px; }
+    .tile__label .nhsuk-card__content > :last-child { margin-bottom: 0; }
+
+    .tile__input { position: absolute; opacity: 0; pointer-events: none; }
+    .tile__input:focus-visible + .tile__label .nhsuk-card { outline: 4px solid #ffdd00; box-shadow: 0 0 0 4px #ffdd00; }
+
+    /* Checked state (NHS blue background) */
+    .tile__input:checked + .tile__label .nhsuk-card { background-color: #005eb8; color: #ffffff; border-color: #005eb8; }
+    .tile__input:checked + .tile__label .nhsuk-card .nhsuk-card__heading,
+    .tile__input:checked + .tile__label .nhsuk-card .nhsuk-card__description,
+    .tile__input:checked + .tile__label .nhsuk-card .nhsuk-card__heading a { color: #ffffff; }
+
+    /* Explicitly enforce radio group equal heights as well */
+    fieldset[aria-describedby="choices-hint-radio"] .nhsuk-grid-row > [class^="nhsuk-grid-column-"] .tile__label .nhsuk-card { min-height: var(--tile-min-height); }
+
+    /* --- Corner badge using an inline SVG --- */
+    .tile__badge {
+      position: absolute; right: 12px; bottom: 12px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background-color: #d8dde0;
+      border: 2px solid #d8dde0;
+      display: flex; align-items: center; justify-content: center;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
+      pointer-events: none; z-index: 2;
+    }
+    .tile__badge svg { width: 22px; height: 22px; stroke: #005eb8; stroke-width: 2.75; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transition: opacity 0.15s ease; vector-effect: non-scaling-stroke; }
+
+    /* When checked: white circle and show the tick */
+    .tile__input:checked + .tile__label .tile__badge { background-color: #ffffff; border-color: #ffffff; }
+    .tile__input:checked + .tile__label .tile__badge svg { opacity: 1; }
+
+    .tile__label .nhsuk-card:hover { box-shadow: 0 2px 0 rgba(0,0,0,0.2); }
+
+    @media (max-width: 640px) {
+      :root { --tile-min-height: 190px; }
+      .tile__label .nhsuk-card__content { padding: 20px; padding-right: 64px; }
+      .tile__badge { right: 10px; bottom: 10px; width: 32px; height: 32px; }
+      .tile__badge svg { width: 20px; height: 20px; }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    <h1 class="nhsuk-heading-l">
+      Send invites
+    </h1>
+
+    <form method="post" action="#/">
+
+      {# CHOOSE INVITE TYPES #}
+
+      <fieldset class="nhsuk-fieldset">
+      {#<fieldset class="nhsuk-fieldset" aria-describedby="invite-type-hint">#}
+        <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--m">
+          <h2 class="nhsuk-fieldset__heading">Choose invite type</h2>
+        </legend>
+        {#<div id="invite-type-hint" class="nhsuk-hint">Choose invite type</div>#}
+
+        <div class="nhsuk-grid-row">
+          
+          <div class="nhsuk-grid-column-one-third">
+            <div class="tile tile--lg">
+              <input class="tile__input" type="checkbox" id="tile-pertussisInvite" name="inviteType" value="pertussisInvite" />
+              <label class="tile__label" for="tile-pertussisInvite">
+                <div class="nhsuk-card nhsuk-card--clickable">
+                  <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-s">Pertussis invite</h2>
+                    {#<p class="nhsuk-card__description"></p>#}
+                  </div>
+                  <!-- SVG tick badge -->
+                  <span class="tile__badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="nhsuk-grid-column-one-third">
+            <div class="tile tile--lg">
+              <input class="tile__input" type="checkbox" id="tile-rsvInvite" name="inviteType" value="rsvInvite" />
+              <label class="tile__label" for="tile-rsvInvite">
+                <div class="nhsuk-card nhsuk-card--clickable">
+                  <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-s">RSV invite</h2>
+                    {#<p class="nhsuk-card__description"></p>#}
+                  </div>
+                  <!-- SVG tick badge -->
+                  <span class="tile__badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="nhsuk-grid-column-one-third">
+            <div class="tile tile--lg">
+              <input class="tile__input" type="checkbox" id="tile-seasonalCovidInvite" name="inviteType" value="seasonalCovidInvite" />
+              <label class="tile__label" for="tile-seasonalCovidInvite">
+                <div class="nhsuk-card nhsuk-card--clickable">
+                  <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-s">Seasonal COVID/ flu invite</h2>
+                    {#<p class="nhsuk-card__description"></p>#}
+                  </div>
+                  <!-- SVG tick badge -->
+                  <span class="tile__badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="nhsuk-grid-column-one-third">
+            <div class="tile tile--lg">
+              <input class="tile__input" type="checkbox" id="tile-lastChance" name="inviteType" value="lastChance" />
+              <label class="tile__label" for="tile-lastChance">
+                <div class="nhsuk-card nhsuk-card--clickable">
+                  <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-s">Last chance</h2>
+                    {#<p class="nhsuk-card__description"></p>#}
+                  </div>
+                  <!-- SVG tick badge -->
+                  <span class="tile__badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="nhsuk-grid-column-one-third">
+            <div class="tile tile--lg">
+              <input class="tile__input" type="checkbox" id="tile-generalVaccinesInvite" name="inviteType" value="generalVaccinesInvite" />
+              <label class="tile__label" for="tile-generalVaccinesInvite">
+                <div class="nhsuk-card nhsuk-card--clickable">
+                  <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-s">General vaccines invite</h2>
+                    {#<p class="nhsuk-card__description"></p>#}
+                  </div>
+                  <!-- SVG tick badge -->
+                  <span class="tile__badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+        </div>
+      </fieldset>
+
+      {# TAILOR MESSAGE #}
+
+      <fieldset class="nhsuk-fieldset">
+      {#<fieldset class="nhsuk-fieldset" aria-describedby="invite-type-hint">#}
+        <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--m">
+          <h2 class="nhsuk-fieldset__heading">Tailor message according to</h2>
+        </legend>
+        {#<div id="invite-type-hint" class="nhsuk-hint">Choose invite type</div>#}
+
+        <div class="nhsuk-grid-row">
+          
+          <div class="nhsuk-grid-column-one-third">
+            <div class="tile tile--lg">
+              <input class="tile__input" type="checkbox" id="tile-patientsGPpractice" name="tailorMessage" value="patientsGPpractice" />
+              <label class="tile__label" for="tile-patientsGPpractice">
+                <div class="nhsuk-card nhsuk-card--clickable">
+                  <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-s">Patient's GP practice</h2>
+                    {#<p class="nhsuk-card__description"></p>#}
+                  </div>
+                  <!-- SVG tick badge -->
+                  <span class="tile__badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="nhsuk-grid-column-one-third">
+            <div class="tile tile--lg">
+              <input class="tile__input" type="checkbox" id="tile-languagePreferences" name="tailorMessage" value="languagePreferences" />
+              <label class="tile__label" for="tile-languagePreferences">
+                <div class="nhsuk-card nhsuk-card--clickable">
+                  <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-s">Language preferences</h2>
+                    {#<p class="nhsuk-card__description"></p>#}
+                  </div>
+                  <!-- SVG tick badge -->
+                  <span class="tile__badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+        </div>
+      </fieldset>
+
+      {# RADIO EXAMPLES TOO #}
+
+
+        <fieldset class="nhsuk-fieldset" aria-describedby="choices-hint-radio">
+          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+            <h1 class="nhsuk-fieldset__heading">Choose one service (Radio version)</h1>
+          </legend>
+          <div id="choices-hint-radio" class="nhsuk-hint">Select one option only. Each card is a big radio tile.</div>
+
+          <div class="nhsuk-grid-row">
+            <div class="nhsuk-grid-column-one-third">
+              <div class="tile tile--lg">
+                <input class="tile__input" type="radio" id="radio-gp" name="service-radio" value="gp" />
+                <label class="tile__label" for="radio-gp">
+                  <div class="nhsuk-card nhsuk-card--clickable">
+                    <div class="nhsuk-card__content">
+                      <h2 class="nhsuk-card__heading nhsuk-heading-s">GP appointment</h2>
+                      <p class="nhsuk-card__description">Book or manage a GP appointment at your local practice.</p>
+                    </div>
+                    <span class="tile__badge" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="nhsuk-grid-column-one-third">
+              <div class="tile tile--lg">
+                <input class="tile__input" type="radio" id="radio-prescriptions" name="service-radio" value="prescriptions" />
+                <label class="tile__label" for="radio-prescriptions">
+                  <div class="nhsuk-card nhsuk-card--clickable">
+                    <div class="nhsuk-card__content">
+                      <h2 class="nhsuk-card__heading nhsuk-heading-s">Repeat prescriptions</h2>
+                      <p class="nhsuk-card__description">Order your repeat prescription requests.</p>
+                    </div>
+                    <span class="tile__badge" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="nhsuk-grid-column-one-third">
+              <div class="tile tile--lg">
+                <input class="tile__input" type="radio" id="radio-results" name="service-radio" value="test-results" />
+                <label class="tile__label" for="radio-results">
+                  <div class="nhsuk-card nhsuk-card--clickable">
+                    <div class="nhsuk-card__content">
+                      <h2 class="nhsuk-card__heading nhsuk-heading-s">Test results</h2>
+                      <p class="nhsuk-card__description">View your recent test results securely online.</p>
+                    </div>
+                    <span class="tile__badge" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+      {# END OF RADIOS #}
+
+      <fieldset class="nhsuk-fieldset">
+        <div class="nhsuk-button-group">
+          <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Confirm</button>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,437 @@
+<head><style>
+/* Hide the first (Patient ID) column only within the two result tables */
+#panelFiltered table.nhsuk-table th:first-child,
+#panelFiltered table.nhsuk-table td:first-child,
+#panelSuppressed table.nhsuk-table th:first-child,
+#panelSuppressed table.nhsuk-table td:first-child {
+    display: none !important;
+}
+
+  /* flex container for label + buttons */
+  #filterByButtons {
+    display: flex;
+    align-items: center;   /* vertically center label + buttons */
+    flex-wrap: wrap;       /* wrap nicely on small screens */
+    gap: 0.75rem;          /* space between items */
+  }
+
+  /* remove bottom spacing from the label */
+  #filterByButtons p {
+    margin: 0;
+  }
+
+  /* override NHSUK button full-width behavior */
+  #filterByButtons .nhsuk-button {
+    display: inline-flex !important;
+    width: auto !important;
+    margin: 0 !important;
+    white-space: nowrap;
+  }
+
+</style></head>{% extends 'e2e-layout3.html' %}
+{% set currentSection = "organise" %}
+{% block pageTitle %}Risk priorities focus{% endblock %}
+
+{% block beforeContent %}
+  <a class="nhsuk-back-link" href="#" id="backLink">Go back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+<div class="nhsuk-grid-column-full">
+
+  <h1 class="nhsuk-heading-l">Risk priorities focus</h1>
+
+  <div id="filterByButtons" class="nhsuk-u-margin-top-5">
+    <p class="nhsuk-body">Order by:</p>
+    <a class="nhsuk-button nhsuk-button--secondary app-button--small" data-module="nhsuk-button" href="#/">Name</a>
+    <a class="nhsuk-button nhsuk-button--secondary app-button--small" data-module="nhsuk-button" href="#/">NHS number</a>
+    <a class="nhsuk-button nhsuk-button--secondary app-button--small" data-module="nhsuk-button" href="#/">Due date</a>
+  </div>
+
+  <nav aria-label="Secondary menu" class="x-govuk-secondary-navigation">
+    <ul class="x-govuk-secondary-navigation__list">
+      <li class="x-govuk-secondary-navigation__list-item x-govuk-secondary-navigation__list-item--current" id="liFiltered">
+        <a aria-current="page" href="#" id="linkFiltered">Considering</a>
+      </li>
+      <li class="x-govuk-secondary-navigation__list-item" id="liUnvaccinated">
+        <a href="#" id="linkUnvaccinated">Unvaccinated</a>
+      </li>
+      <li class="x-govuk-secondary-navigation__list-item" id="liCloseToDueDate">
+        <a href="#" id="linkCloseToDueDate">Close to due date</a>
+      </li>
+      <li class="x-govuk-secondary-navigation__list-item" id="liImmunosuppressed">
+        <a href="#" id="linkImmunosuppressed">Immunosuppressed</a>
+      </li>
+      <li class="x-govuk-secondary-navigation__list-item" id="liSuppressed">
+        <a href="#" id="linkSuppressed"><strong>Removed</strong></a>
+      </li>
+    </ul>
+  </nav>
+
+{#<p class="nhsuk-hint nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-4">Scroll horizontally to explore full patient dataset</p>#}
+<div id="currentTabDetails">
+  <p class="nhsuk-body nhsuk-u-margin-top-4">54 of 763 are currently considering at least one vaccination.</p>
+  <p class="nhsuk-body">Patients who have expressed uncertainty about their uptake intentions.</p>
+</div>
+
+<div id="panelFiltered">
+  <div aria-label="Send list table" class="ons-like-scroll" role="region" tabindex="0">
+    <table class="nhsuk-table">
+      <thead><tr id="table-head-row"></tr></thead>
+      <tbody id="removable-table-body"></tbody>
+    </table>
+</div>
+<div class="nhsuk-u-margin-top-4" id="filtered-pagination"></div>
+</div>
+<div class="hiddenPanel" id="panelSuppressed">
+  <div aria-label="Excluded table" class="ons-like-scroll" role="region" tabindex="0">
+    <table class="nhsuk-table">
+      <thead><tr id="suppressed-head-row"></tr></thead>
+      <tbody id="suppressed-table-body"></tbody>
+    </table>
+  </div>
+</div>
+<div class="nhsuk-u-margin-top-4">
+  <div class="row-counter-line" style="display:flex;align-items:center;gap:12px;">
+    <input aria-label="Patients selected" class="nhsuk-input nhsuk-input--width-5" style="display: none" id="row-count" readonly="" type="text" value="0"/>
+      {#<span class="nhsuk-body">patients chosen to be invited for {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %}</span>#}
+    </div>
+  </div>
+  <div class="nhsuk-u-margin-top-5">
+    {#<a class="nhsuk-button" data-module="nhsuk-button" href="invite-templates">Pass list to send invites function</a>#}
+    <a class="nhsuk-button" data-module="nhsuk-button" href="#/">Pass list to send invites function</a>
+    <a class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-left-2" data-module="nhsuk-button" href="#/">Export this list to CSV</a>
+    <p class="nhsuk-body"><a class="nhsuk-link" id="backToInvite" href="#/">Back to <strong>Understand my cohort</strong></a></p>
+  </div>
+  <div aria-live="polite" class="nhsuk-u-visually-hidden" id="table-live"></div>
+</div>
+</div>
+<style>
+.ons-like-scroll{overflow-x:auto;background:#f0f4f5;border:1px solid #d8dde0;border-left:0;border-right:0;}
+.nhsuk-table{margin-bottom:0;min-width:640px;width:100%;border-collapse:collapse;}
+.nhsuk-table thead th{position:sticky;top:0;background:#f0f4f5;}
+.nhsuk-table__header,.nhsuk-table__cell{white-space:nowrap;}
+.table-col-action a{white-space:nowrap;display:inline-block;}
+.is-sticky-col{position:sticky;left:0;background:#f0f4f5;z-index:3;box-shadow:inset -1px 0 0 #d8dde0;}
+.hiddenPanel{display:none;}
+.hidden-row{display:none;}
+.nhsuk-pagination--numbered__item span[aria-hidden]{padding:0 .4rem;display:inline-block;}
+</style>
+<script src="/js/send-invite-data/patient-data-v2.js"></script>
+<script>
+(function () {
+  // back links
+  (function(){var qs=location.search||'';var base=location.pathname.replace(/[^\/]+$/,'');var n=document.getElementById('backLink');if(n) n.href=base+'understand-cohort-mvp-1'+qs;})();
+  (function(){var qs=location.search||'';var base=location.pathname.replace(/[^\/]+$/,'');var n=document.getElementById('backToInvite');if(n) n.href=base+'understand-cohort-mvp-1'+qs;})();
+
+  // state from URL (Considering filters)
+  var params=new URLSearchParams(location.search);
+  function sel(k){ return params.getAll(k).includes('1'); }
+  var selected={
+    f28w:sel('f28w'), fContacted:sel('fContacted'), fPhone:sel('fPhone'),
+    fExpl:sel('fExpl'), fNo9m:sel('fNo9m'), fNoBook:sel('fNoBook'),
+    fNo14:sel('fNo14'), fNoOther:sel('fNoOther')
+  };
+
+  // els
+  var theadRow=document.getElementById('table-head-row');
+  var tbody=document.getElementById('removable-table-body');
+  var suppressedHead=document.getElementById('suppressed-head-row');
+  var suppressedTbody=document.getElementById('suppressed-table-body');
+  var rowCount=document.getElementById('row-count');
+
+  var linkFiltered=document.getElementById('linkFiltered');
+  var linkUnvaccinated=document.getElementById('linkUnvaccinated');
+  var linkCloseToDueDate=document.getElementById('linkCloseToDueDate');
+  var linkImmunosuppressed=document.getElementById('linkImmunosuppressed');
+  var linkSuppressed=document.getElementById('linkSuppressed');
+
+  var liFiltered=document.getElementById('liFiltered');
+  var liUnvaccinated=document.getElementById('liUnvaccinated');
+  var liCloseToDueDate=document.getElementById('liCloseToDueDate');
+  var liImmunosuppressed=document.getElementById('liImmunosuppressed');
+  var liSuppressed=document.getElementById('liSuppressed');
+
+  var panelFiltered=document.getElementById('panelFiltered');
+  var panelSuppressed=document.getElementById('panelSuppressed');
+  var currentTabDetails=document.getElementById('currentTabDetails');
+
+  // utils
+  function norm(s){ return String(s||'').toLowerCase().trim().replace(/\s+/g,' '); }
+  function parseDate(str){
+    if(!str) return NaN; var s=String(str).trim(); if(!s) return NaN;
+    var m=/^([0-3]?\d)[\/-]([0-1]?\d)[\/-](\d{4})$/.exec(s); // d-m-y
+    if(m){ var d=+m[1],mo=+m[2]-1,y=+m[3]; var dt=new Date(y,mo,d); if(dt&&dt.getFullYear()===y&&dt.getMonth()===mo&&dt.getDate()===d) return dt; }
+    var t=Date.parse(s); if(!isNaN(t)) return new Date(t); return NaN;
+  }
+  function getData(){ return window.PATIENT_DATA||window.patientDataV2||window.patientData||window.patient_list_data; }
+
+  // config
+  var HIDDEN_COLUMNS=[
+    'Pertussis eligible (16 weeks)','RSV eligible (28 weeks)','COVID-19 & Flu eligible',
+    'Pertussis explained and offered','Pertussis side effects discussed',
+    'RSV explained and offered','RSV side effects discussed',
+    'Flu explained and offered','Flu side effects discussed',
+    'Date of last Pertussis vaccination','Date of last RSV vaccination','Date of last Flu vaccination','Date of last COVID vaccination',
+    'Date of Pertussis vaccination booking','Date of RSV vaccination booking','Date of Flu vaccination booking','Date of COVID vaccination booking',
+    'Date of last Pertussis invite','Date of last RSV invite','Date of last Flu invite','Date of last COVID invite'
+  ];
+
+  function buildHeader(columns){
+    theadRow.innerHTML=''; suppressedHead.innerHTML='';
+    var thA=document.createElement('th'); thA.className='nhsuk-table__header is-sticky-col table-col-action'; thA.textContent='Action';
+    theadRow.appendChild(thA); suppressedHead.appendChild(thA.cloneNode(true));
+    columns.forEach(function(c){
+      if(HIDDEN_COLUMNS.includes(c)) return;
+      var th=document.createElement('th'); th.className='nhsuk-table__header'; th.textContent=c;
+      theadRow.appendChild(th); suppressedHead.appendChild(th.cloneNode(true));
+    });
+  }
+
+  function buildRow(values,toSuppressed){
+    var tr=document.createElement('tr');
+    var tdA=document.createElement('td'); tdA.className='nhsuk-table__cell is-sticky-col table-col-action';
+    var a=document.createElement('a'); a.href='#'; a.className='nhsuk-link nhsuk-link--no-visited-state';
+    if(toSuppressed){ a.setAttribute('data-add',''); a.textContent='Add back'; }
+    else { a.setAttribute('data-remove',''); a.textContent='Remove'; }
+    tdA.appendChild(a); tr.appendChild(tdA);
+    var cols=getData().columns;
+    values.forEach(function(v,i){
+      if(HIDDEN_COLUMNS.includes(cols[i])) return;
+      var td=document.createElement('td'); td.className='nhsuk-table__cell'; td.textContent=(v==null?'':String(v));
+      tr.appendChild(td);
+    });
+    return tr;
+  }
+
+  // Considering filters
+  function passesFilters(values,cols){
+    var today=new Date(); today.setHours(0,0,0,0);
+    var cutoff9=new Date(today); cutoff9.setMonth(cutoff9.getMonth()-9);
+    var cutoff14=new Date(today.getTime()-14*24*60*60*1000);
+    var idx=function(h){ return cols.findIndex(function(c){ return norm(c)===norm(h); }); };
+    var get=function(h){ var i=idx(h); return i>=0?values[i]:''; };
+    var vis=true;
+    if(selected.fContacted && get('Contactable')!=='Yes') vis=false;
+    if(selected.fPhone && get('Phone number')==='') vis=false;
+    if(selected.f28w){ var e=parseDate(get('RSV eligible (28 weeks)')); if(isNaN(e)||(today<=e)) vis=false; }
+    if(selected.fExpl && get('RSV side effects discussed')!=='Yes') vis=false;
+    if(selected.fNo9m){ var l=parseDate(get('Date of last RSV vaccination')); if(!isNaN(l)&&l>=cutoff9) vis=false; }
+    if(selected.fNoBook){ var b=parseDate(get('Date of RSV vaccination booking')); if(!isNaN(b)&&b>today) vis=false; }
+    if(selected.fNo14){ var inv=parseDate(get('Date of last RSV invite')); if(!isNaN(inv)&&inv>=cutoff14) vis=false; }
+    if(selected.fNoOther){
+      var p=parseDate(get('Date of last Pertussis invite'));
+      var f=parseDate(get('Date of last Flu invite'));
+      var c=parseDate(get('Date of last COVID invite'));
+      if((!isNaN(p)&&p>today)||(!isNaN(f)&&f>today)||(!isNaN(c)&&c>today)) vis=false;
+    }
+    return vis;
+  }
+
+  // deterministic buckets (demo)
+  function djb2(str){ var h=5381; for(var i=0;i<str.length;i++){ h=((h<<5)+h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
+  function keyFor(values){ return String(values&&values.length?values[0]:JSON.stringify(values||[])); }
+  function bucketFor(values){ return djb2(keyFor(values))%10; }
+  function isUnvaccinated(v){ var b=bucketFor(v); return b===0||b===1||b===2; }
+  function isCloseToDue(v){ var b=bucketFor(v); return b===3||b===4; }
+  function isImmuno(v){ var b=bucketFor(v); return b===5; }
+
+  // views
+  var VIEW={ CONSIDERING:'considering', UNVAX:'unvax', CLOSE:'close', IMMUNO:'immuno', REMOVED:'removed' };
+  var currentView=VIEW.CONSIDERING;
+
+  // initial counts
+  var BASE_TOTAL=763;
+  var BASE_COUNTS=(function(o){ o[VIEW.CONSIDERING]=54; o[VIEW.UNVAX]=375; o[VIEW.CLOSE]=207; o[VIEW.IMMUNO]=18; return o; })({});
+  var REMOVED_TOTAL=736;
+
+  var useLiveCounts=false;
+  var removedKeys=new Set();
+
+  function removedCount(){ return suppressedTbody.querySelectorAll('tr').length; }
+
+  function getCountsLive(){
+    var data=getData(); if(!data) return {considering:0,unvax:0,close:0,immuno:0,total:0};
+    var cols=data.columns, rows=data.rows||data;
+    var anySel=Object.values(selected).some(Boolean);
+    var cCon=0,cUn=0,cCl=0,cIm=0;
+    rows.forEach(function(vals){
+      var k=keyFor(vals); if(removedKeys.has(k)) return;
+      if(anySel && passesFilters(vals,cols)) cCon++;
+      if(isUnvaccinated(vals)) cUn++;
+      if(isCloseToDue(vals)) cCl++;
+      if(isImmuno(vals)) cIm++;
+    });
+    return {considering:cCon,unvax:cUn,close:cCl,immuno:cIm,total:rows.length};
+    }
+
+  function labelCounts(){
+    return useLiveCounts ? getCountsLive()
+      : {considering:BASE_COUNTS[VIEW.CONSIDERING],unvax:BASE_COUNTS[VIEW.UNVAX],close:BASE_COUNTS[VIEW.CLOSE],immuno:BASE_COUNTS[VIEW.IMMUNO],total:BASE_TOTAL};
+  }
+
+  function setNavLabels(){
+    var c=labelCounts();
+    if(linkFiltered) linkFiltered.textContent='Considering ('+(c.considering||0)+')';
+    if(linkUnvaccinated) linkUnvaccinated.textContent='Unvaccinated ('+(c.unvax||0)+')';
+    if(linkCloseToDueDate) linkCloseToDueDate.textContent='Close to due date ('+(c.close||0)+')';
+    if(linkImmunosuppressed) linkImmunosuppressed.textContent='Immunosuppressed ('+(c.immuno||0)+')';
+    if(linkSuppressed) linkSuppressed.textContent='Removed ('+removedCount()+')';
+  }
+
+  // DETAILS AREA: per-tab copy preserved
+  function detailsHtml(view,count,total){
+    if(view===VIEW.CONSIDERING){
+      return '<p class="nhsuk-body nhsuk-u-margin-top-4">'+count+' of '+total+' are currently considering at least one vaccination.</p><p class="nhsuk-body">Patients who have expressed uncertainty about their uptake intentions.</p>';
+    }
+    if(view===VIEW.UNVAX){
+      return '<p class="nhsuk-body nhsuk-u-margin-top-4">'+count+' of '+total+' haven&#39;t had any vaccinations.</p><p class="nhsuk-body">Patients who have been eligible for more than two weeks but aren&#39;t vaccinated.</p>';
+    }
+    if(view===VIEW.CLOSE){
+      return '<p class="nhsuk-body nhsuk-u-margin-top-4">'+count+' of '+total+' are within four weeks of their due date.</p><p class="nhsuk-body">Patients close to their due date with outstanding vaccines.</p>';
+    }
+    if(view===VIEW.IMMUNO){
+      return '<p class="nhsuk-body nhsuk-u-margin-top-4">'+count+' of '+total+' are categorised as immunosuppressed.</p><p class="nhsuk-body">Patients categorised as immunosuppressed with outstanding vaccinations.</p>';
+    }
+    return '';
+  }
+
+  function renderRemovedParagraph(){
+    if(!currentTabDetails) return;
+    var n=removedCount();
+    // Repaint only the Removed copy
+    currentTabDetails.innerHTML='';
+    var p1=document.createElement('p'); p1.className='nhsuk-body nhsuk-u-margin-top-4';
+    p1.appendChild(document.createTextNode(n+' of '+REMOVED_TOTAL+' have been removed from these lists.'));
+    var p2=document.createElement('p'); p2.className='nhsuk-body';
+    p2.textContent='Patients you have manually removed from the list.';
+    currentTabDetails.appendChild(p1); currentTabDetails.appendChild(p2);
+  }
+
+  function setDetailsFor(view){
+    if(!currentTabDetails) return;
+    if(view===VIEW.REMOVED){ renderRemovedParagraph(); return; } // Only Removed uses DOM builder
+    var c=labelCounts();
+    var count=(view===VIEW.CONSIDERING)?c.considering:(view===VIEW.UNVAX)?c.unvax:(view===VIEW.CLOSE)?c.close:c.immuno;
+    var total=c.total||BASE_TOTAL;
+    currentTabDetails.innerHTML=detailsHtml(view,count,total);
+  }
+
+  // nav
+  function setActiveNav(target){
+    [liFiltered,liUnvaccinated,liCloseToDueDate,liImmunosuppressed,liSuppressed].forEach(function(li){
+      if(!li) return;
+      li.classList.toggle('x-govuk-secondary-navigation__list-item--current', li===target);
+    });
+    [linkFiltered,linkUnvaccinated,linkCloseToDueDate,linkImmunosuppressed,linkSuppressed].forEach(function(a){
+      if(!a) return; a.removeAttribute('aria-current');
+    });
+    var a=target&&target.querySelector('a'); if(a) a.setAttribute('aria-current','page');
+  }
+
+  // include rules per view
+  function includeInView(view, values, cols){
+    var k=keyFor(values); if(removedKeys.has(k)) return false;
+    if(view===VIEW.UNVAX) return isUnvaccinated(values);
+    if(view===VIEW.CLOSE) return isCloseToDue(values);
+    if(view===VIEW.IMMUNO) return isImmuno(values);
+    if(view===VIEW.CONSIDERING){
+      var anySel=Object.values(selected).some(Boolean);
+      return anySel ? passesFilters(values, cols) : false;
+    }
+    return false;
+  }
+
+  function renderView(view){
+    var data=getData(); if(!data) return;
+    var cols=data.columns, rows=data.rows||data;
+
+    panelFiltered.classList.remove('hiddenPanel');
+    panelSuppressed.classList.add('hiddenPanel');
+
+    buildHeader(cols);
+    tbody.innerHTML='';
+    var frag=document.createDocumentFragment();
+    rows.forEach(function(vals){ if(includeInView(view, vals, cols)) frag.appendChild(buildRow(vals,false)); });
+    tbody.appendChild(frag);
+
+    var sendCount=tbody.querySelectorAll('tr').length;
+    if(rowCount) rowCount.value=sendCount;
+
+    setNavLabels();
+    setDetailsFor(view);
+  }
+
+  // pagination (kept as-is; omitted for brevity if not used)
+
+  // remove / add back
+  tbody.addEventListener('click',function(e){
+    var t=e.target.closest('[data-remove]'); if(!t) return; e.preventDefault();
+    var tr=t.closest('tr'); var cells=[].slice.call(tr.querySelectorAll('td'));
+    var firstData=cells[1]?cells[1].textContent:'';
+    removedKeys.add(String(firstData));
+    suppressedTbody.appendChild(buildRow(cells.slice(1).map(function(td){return td.textContent;}),true));
+    tr.remove();
+    useLiveCounts=true;
+    setNavLabels();
+    setDetailsFor(currentView); // preserves per-tab copy
+  });
+
+  suppressedTbody.addEventListener('click',function(e){
+    var t=e.target.closest('[data-add]'); if(!t) return; e.preventDefault();
+    var tr=t.closest('tr'); var cells=[].slice.call(tr.querySelectorAll('td'));
+    var firstData=cells[1]?cells[1].textContent:'';
+    removedKeys.delete(String(firstData));
+    var data=getData(), cols=data.columns;
+    var values=cells.slice(1).map(function(td){return td.textContent;});
+    if(includeInView(currentView, values, cols)){ tbody.appendChild(buildRow(values,false)); }
+    tr.remove();
+    useLiveCounts=true;
+    setNavLabels();
+    setDetailsFor(currentView); // preserves per-tab copy
+  });
+
+  // tabs
+  function wireTabs(){
+    linkFiltered.addEventListener('click',function(e){
+      e.preventDefault(); currentView=VIEW.CONSIDERING; setActiveNav(liFiltered); renderView(currentView);
+    });
+    linkUnvaccinated.addEventListener('click',function(e){
+      e.preventDefault(); currentView=VIEW.UNVAX; setActiveNav(liUnvaccinated); renderView(currentView);
+    });
+    linkCloseToDueDate.addEventListener('click',function(e){
+      e.preventDefault(); currentView=VIEW.CLOSE; setActiveNav(liCloseToDueDate); renderView(currentView);
+    });
+    linkImmunosuppressed.addEventListener('click',function(e){
+      e.preventDefault(); currentView=VIEW.IMMUNO; setActiveNav(liImmunosuppressed); renderView(currentView);
+    });
+    linkSuppressed.addEventListener('click',function(e){
+      e.preventDefault();
+      currentView=VIEW.REMOVED; setActiveNav(liSuppressed);
+      panelSuppressed.classList.remove('hiddenPanel'); panelFiltered.classList.add('hiddenPanel');
+      setNavLabels();
+      renderRemovedParagraph(); // draw Removed paragraph now
+    });
+  }
+
+  // MutationObserver — updates ONLY the Removed label & paragraph (when on that tab)
+  var mo = new MutationObserver(function(){
+    if(linkSuppressed) linkSuppressed.textContent='Removed ('+removedCount()+')';
+    if(currentView===VIEW.REMOVED) renderRemovedParagraph();
+  });
+  mo.observe(suppressedTbody, {childList:true});
+
+  // init
+  function init(){
+    if(!getData()){ console.error('No data'); return; }
+    wireTabs();
+    setNavLabels();
+    currentView=VIEW.CONSIDERING;
+    setActiveNav(liFiltered);
+    renderView(currentView); // shows "54 of 763" copy
+  }
+  window.addEventListener('load',init);
+})();
+</script>
+{% endblock %}

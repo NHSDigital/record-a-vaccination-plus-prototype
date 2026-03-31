@@ -1,0 +1,517 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "BCG" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% set organisationSetting = currentUser.organisations | findById(data.currentOrganisationId) %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "/ravs-infants/previous-vaccine" }) }}
+{% endblock %}
+
+{% block content %}
+
+  {% set errors = (errors or data.errors or []) %}
+
+  {% set htmlBCGVaccineAJV %}
+    {{ radios({
+      idPrefix: "vaccineBCGVaccineAJVBatch",
+      name: "vaccineBCGVaccineAJVBatch",
+      fieldset: {
+        legend: {
+          text: "Batch",
+          classes: "nhsuk-fieldset__legend--s"
+        }
+      },
+      items: [
+        {
+          value: "PFUEMD-DL",
+          text: "PFUEMD-DL",
+          hint: {
+            html: "Expires 3 " + date({month: 'long', year: 'numeric'}, {'month': +5})
+          }
+        }
+      ]
+    }) }}
+  {% endset -%}
+
+  {% set htmlVaxelis %}
+    {{ radios({
+      idPrefix: "vaccineVaxelisBatch",
+      name: "vaccineVaxelisBatch",
+      fieldset: {
+        legend: {
+          text: "Batch",
+          classes: "nhsuk-fieldset__legend--s"
+        }
+      },
+      items: [
+        {
+          value: "321-980",
+          text: "321-980",
+          hint: {
+            html: "Expires 21 " + date({month: 'long', year: 'numeric'}, {'month': +1})
+          }
+        },
+        {
+          divider: "or"
+        },
+        {
+          value: "addBatch",
+          text: "Add a batch"
+        }
+      ]
+    }) }}
+  {% endset -%}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      {% if (errors | length) > 0 %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: errors
+        }) }}
+      {% endif %}
+      
+      <span class="nhsuk-caption-l">0 to 5 years</span>
+      <h1 class="nhsuk-heading-l nhsuk-u-padding-bottom-4">BCG</h1>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+
+    <div class="nhsuk-grid-column-two-thirds">
+      
+      <form method="post" action="/ravs-infants/next-vaccine" novalidate>
+      
+        <input type="hidden" name="whichVaccine" value="BCG">
+
+        {# ELIGIBILITY #}
+
+        {% set htmlBCGeligibility %}
+          {{ radios({
+            idPrefix: "BCGEligibilityReason",
+            name: "BCGEligibilityReason",
+            fieldset: {
+              legend: {
+                text: "Eligibility reason",
+                classes: "nhsuk-fieldset__legend--s"
+              }
+            },
+            items: [
+              {
+                value: "Based on age eligibility (0 to 5 years)",
+                text: "Based on age eligibility (0 to 5 years)",
+                checked: data['BCGEligibility'] == "Based on age eligibility (0 to 5 years)"
+              },
+              {
+                value: "Resident in a care home",
+                text: "Resident in a care home",
+                checked: data['BCGEligibilityReason'] == "Resident in a care home"
+              },
+              {
+                value: "Aged 75 and over, not in a care home",
+                text: "Aged 75 and over, not in a care home",
+                checked: data['BCGEligibilityReason'] == "Aged 75 and over, not in a care home"
+              },
+              {
+                value: "Immunosuppressed",
+                text: "Immunosuppressed",
+                checked: data['BCGEligibilityReason'] == "Immunosuppressed"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {{ radios({
+          idPrefix: "BCGEligibility",
+          name: "BCGEligibility",
+          fieldset: {
+            legend: {
+              text: "Why are you giving them the vaccine?",
+              classes: "nhsuk-fieldset__legend--m"
+            }
+          },
+          classes: "nhsuk-u-padding-bottom-2",
+          items: [
+            {
+              value: "In a clinical risk group",
+              text: "In a clinical risk group",
+              checked: data['BCGEligibility'] == "In a clinical risk group"
+            },
+            {
+              value: "For another reason",
+              text: "For another reason",
+              checked: data['BCGEligibility'] == "For another reason",
+              conditional: {
+                html: htmlBCGeligibility
+              }
+            }
+          ]
+        }) }}
+
+        {# PRODUCT #}
+
+        {{ radios({
+          idPrefix: "whichBCGproduct",
+          name: "whichBCGproduct",
+          fieldset: {
+            legend: {
+              text: "Which product are you using?",
+              classes: "nhsuk-fieldset__legend--m"
+            }
+          },
+          classes: "nhsuk-u-padding-bottom-2",
+          items: [
+            {
+              value: "BCG Vaccine AJV",
+              text: "BCG Vaccine AJV",
+              checked: data.whichBCGproduct == "BCG Vaccine AJV",
+              conditional: {
+                html: htmlBCGVaccineAJV
+              }
+            }
+          ]
+        }) }}
+
+        {# INJECTION SITE #}
+
+        {% set BCGInjectionSitesomewhereElseHtml %}
+          {{ radios({
+            idPrefix: "BCGInjectionSitesomewhereElse",
+            name: "BCGInjectionSitesomewhereElse",
+            fieldset: {
+              legend: {
+                text: "Injection site",
+                classes: "nhsuk-fieldset__legend--s"
+              }
+            },
+            errorMessage: {
+              text: otherBCGInjectionSitesomewhereElseError.text
+            } if BCGInjectionSitesomewhereElse,
+            items: [
+              {
+                value: "Left arm",
+                text: "Left arm",
+                checked: (data.BCGInjectionSite == 'Left arm')
+              },
+              {
+                value: "Right arm",
+                text: "Right arm",
+                checked: (data.BCGInjectionSite == 'Right arm')
+              },
+              {
+                value: "Left buttock",
+                text: "Left buttock",
+                checked: (data.BCGInjectionSite == "Left buttock")
+              },
+              {
+                value: "Right buttock",
+                text: "Right buttock",
+                checked: (data.BCGInjectionSite == "Right buttock")
+              }
+            ]
+          }) }}
+        {% endset %}
+
+        {{ radios({
+          idPrefix: "injection-site",
+          name: "injectionSite",
+          fieldset: {
+            legend: {
+              text: "Where did you give the injection?",
+              classes: "nhsuk-fieldset__legend--m"
+            }
+          },
+          classes: "nhsuk-u-padding-bottom-2",
+          items: [
+            {
+              value: "Left thigh",
+              text: "Left thigh",
+              checked: (data.injectionSite == "Left thigh")
+            },
+            {
+              value: "Right thigh",
+              text: "Right thigh",
+              checked: (data.injectionSite == "Right thigh")
+            },
+            {
+              divider: "or"
+            },
+            {
+              value: "other",
+              text: "Somewhere else",
+              checked: (data.injectionSite == "other"),
+              conditional: {
+                html: BCGInjectionSitesomewhereElseHtml
+              }
+            }
+          ]
+        }) }}
+
+        {# CONSENT #}
+        {% set bcgConsentClinicianHtml %}
+          {{ input({
+            label: {
+              text: "Name"
+            },
+            errorMessage: {
+              text: bcgConsentClinicianError.text
+            } if bcgConsentClinicianError,
+            id: "bcgConsent-clinician-name",
+            name: "bcgConsentClinicianName",
+            value: data.bcgConsentClinicianName
+          }) }}
+        {% endset %}
+
+        {% set bcgConsentAttorneyHtml %}
+          {{ input({
+            label: {
+              text: "Name"
+            },
+            errorMessage: {
+              text: bcgConsentAttorneyError.text
+            } if bcgConsentAttorneyError,
+            id: "bcgConsent-attorney-name",
+            name: "bcgConsentAttorneyName",
+            value: data.bcgConsentAttorneyName
+          }) }}
+
+          {{ input({
+            label: {
+              text: "Relationship to the patient"
+            },
+            errorMessage: {
+              text: bcgConsentAttorneyRelationshipError.text
+            } if bcgConsentAttorneyRelationshipError,
+            id: "bcgConsent-attorney-relationship",
+            name: "bcgConsentAttorneyRelationship",
+            value: data.bcgConsentAttorneyRelationship
+          }) }}
+        {% endset %}
+
+        {% set bcgConsentParentHtml %}
+          {{ input({
+            label: {
+              text: "Consenting parent or guardians first and last name"
+            },
+            errorMessage: {
+              text: bcgConsentParentError.text
+            } if bcgConsentParentError,
+            id: "bcgConsent-parent-name",
+            name: "bcgConsentParentName",
+            value:
+              data.bcgConsentParentName
+              or data.sessionConsent?.name
+          }) }}
+        {% endset %}
+
+        {% set bcgConsentAdvocateHtml %}
+          {{ input({
+            label: {
+              text: "Name"
+            },
+            errorMessage: {
+              text: bcgConsentAdvocateError.text
+            } if bcgConsentAdvocateError,
+            id: "bcgConsent-advocate-name",
+            name: "bcgConsentAdvocateName",
+            value: data.bcgConsentAdvocateName
+          }) }}
+        {% endset %}
+
+        {% set bcgConsentDeputyHtml %}
+          {{ input({
+            label: {
+              text: "Name"
+            },
+            errorMessage: {
+              text: bcgConsentDeputyError.text
+            } if bcgConsentDeputyError,
+            id: "bcgConsent-deputy-name",
+            name: "bcgConsentDeputyName",
+            value: data.bcgConsentDeputyName
+          }) }}
+
+          {{ input({
+            label: {
+              text: "Relationship to the patient"
+            },
+            errorMessage: {
+              text: bcgConsentDeputyRelationshipError.text
+            } if bcgConsentDeputyRelationshipError,
+            id: "bcgConsent-deputy-relationship",
+            name: "bcgConsentDeputyRelationship",
+            value: data.bcgConsentDeputyRelationship
+          }) }}
+        {% endset %}
+
+        {% set bcgConsentSomeoneElseHtml %}
+          {{ radios({
+            idPrefix: "bcgConsent-someone-else",
+            name: "bcgConsentSomeoneElseType",
+            fieldset: {
+              legend: {
+                text: "Consent given by",
+                classes: "nhsuk-fieldset__legend--s"
+              }
+            },
+            items: [
+              {
+                value: "Clinician acting in the patient's best interests",
+                text: "Clinician acting in the patient's best interests",
+                conditional: {
+                  html: bcgConsentClinicianHtml
+                }
+              },
+              {
+                value: "Person with lasting power of attorney for health and welfare",
+                text: "Person with lasting power of attorney for health and welfare",
+                conditional: {
+                  html: bcgConsentAttorneyHtml
+                }
+              },
+              {
+                value: "Independent mental capacity advocate",
+                text: "Independent mental capacity advocate",
+                conditional: {
+                  html: bcgConsentAdvocateHtml
+                }
+              },
+              {
+                value: "Court appointed deputy",
+                text: "Court appointed deputy",
+                conditional: {
+                  html: bcgConsentDeputyHtml
+                }
+              }
+            ]
+          }) }}
+        {% endset %}
+
+        {{ radios({
+          idPrefix: "bcgConsent",
+          name: "bcgConsent",
+          fieldset: {
+            legend: {
+              text: ("Who is giving consent?" if data.vaccinationToday == 'yes' else "Who gave consent?"),
+              classes: "nhsuk-fieldset__legend--m"
+            }
+          },
+          classes: "nhsuk-u-padding-bottom-2",
+          errorMessage: {
+            text: bcgConsentError.text
+          } if bcgConsentError,
+          items: [
+            {
+              value: "Parent or guardian",
+              text: "Parent or guardian",
+              checked:
+                data.bcgConsent === "Parent or guardian"
+                or data.sessionConsent?.type === "Parent or guardian",
+              conditional: {
+                html: bcgConsentParentHtml
+              }
+            },
+            {
+              divider: "or"
+            },
+            {
+              value: "someone-else",
+              text: "Someone else",
+              checked: (data.bcgConsent === "someone-else"),
+              conditional: {
+                html: bcgConsentSomeoneElseHtml
+              }
+            }
+          ]
+        }) }}
+
+        <div class="nhsuk-button-group">
+          {{ button({
+            text: "Continue"
+          }) }}
+          <a href="/ravs-infants/not-recorded?index={{ data.currentVaccineIndex }}" class="nhsuk-link">Do not record this vaccination</a>
+        </div>
+
+      </form>
+
+    </div>
+
+    <div class="nhsuk-grid-column-one-third">
+
+      {% set selectedVaccines = [] %}
+
+      {% for group in [
+        data.AllVaccinationsSeasonal,
+        data.AllVaccinationsNonseasonal,
+        data.ZeroToFiveYearsSeasonal,
+        data.ZeroToFiveYearsNonseasonal,
+        data.SixToTenYearsSeasonal,
+        data.SixToTenYearsNonseasonal,
+        data.ElevenToTwentyFourYearsSeasonal,
+        data.ElevenToTwentyFourYearsNonseasonal,
+        data.AdultSeasonal,
+        data.AdultNonseasonal,
+        data.MaternitySeasonal,
+        data.MaternityNonseasonal
+      ] %}
+        {% if group %}
+          {% for vaccine in group %}
+            {% set _ = selectedVaccines.push(vaccine) %}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+
+      {% set contentHTML %}
+        <p class="nhsuk-body">
+          <span class="nhsuk-u-font-weight-bold">Name</span><br>
+          Nadia Hillaker
+        </p>
+
+        <p class="nhsuk-body">
+          <span class="nhsuk-u-font-weight-bold">Date of birth</span><br>
+          {{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { months: -6 }) }}<br>
+          (6 months old today)
+        </p>
+
+        <p class="nhsuk-body">
+          <span class="nhsuk-u-font-weight-bold">NHS number</span><br>
+          944 930 6001
+        </p>
+
+        {% if selectedVaccines.length > 0 %}
+          <p class="nhsuk-body nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">
+            Recording vaccinations
+          </p>
+
+          <ol class="nhsuk-list nhsuk-list--number nhsuk-u-margin-bottom-0">
+            {% for vaccine in selectedVaccines %}
+              <li>
+                {{ vaccine
+                  | replace('Covid', 'COVID-19')
+                  | replace('AllVaccinations', '')
+                  | replace('ZeroToFiveYears', '')
+                  | replace('SixToTenYears', '')
+                  | replace('ElevenToTwentyFourYears', '')
+                  | replace('Adult', '')
+                  | replace('Maternity', '')
+                }}
+              </li>
+            {% endfor %}
+          </ol>
+        {% endif %}
+      {% endset %}
+
+      {{ card({
+        heading: "Patient",
+        feature: true,
+        descriptionHtml: contentHTML
+      }) }}
+    </div>
+
+  </div>
+
+{% endblock %}

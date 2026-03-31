@@ -1,0 +1,84 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% set uploadLabels = {
+  "infantUpload": "infant",
+  "maternityUpload": "maternity",
+  "ohUpload": "occupational health"
+} %}
+
+{% block pageTitle %}
+  Provide your patient list
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Provide your patient list</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {# PATIENT UPLOAD NOTIFICATION BANNER #}
+      {% if data['uploadedList'] == 'true' %}
+        <div class="nhsuk-notification-banner nhsuk-notification-banner--success" role="alert" aria-labelledby="nhsuk-notification-banner-title" data-module="nhsuk-notification-banner">
+          <div class="nhsuk-notification-banner__header">
+            <h2 class="nhsuk-notification-banner__title" id="nhsuk-notification-banner-title">
+              Success
+            </h2>
+          </div>
+          <div class="nhsuk-notification-banner__content">
+            <h3 class="nhsuk-notification-banner__heading">
+              {{ uploadLabels[data['upload-type']]|title }} patient list updated
+            </h3>
+            <p>
+              The {{ uploadLabels[data['upload-type']]|title }} patient list <strong>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv</strong> (13.7MB) was successfully uploaded on {{ date({day: 'numeric', month: 'long', year: 'numeric'}) }} by Chloe Liu.
+            </p>
+          </div>
+        </div>
+      {% endif %}
+
+      {# MANAGE PATIENT LISTS #}
+      <h1 class="nhsuk-heading-l">
+        Provide your patient list
+      </h1>
+
+      <p class="nhsuk-body">
+        Use this tool to understand the vaccination status for each of your maternity patients.
+      </p>
+
+      <details class="nhsuk-details">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">
+            How it works
+          </span>
+        </summary>
+        <div class="nhsuk-details__text">
+          <ul class="nhsuk-list nhsuk-list--bullet">
+            <li>Download a list of all your maternity patients from your EPR, upload this file to RAVS using this tool</li>
+            <li>RAVS works out when each patient becomes eligible for RSV and Pertussis</li>
+            <li>RAVS checks whether each patient has had each vaccine - including records generated in Community Pharmacies and General Practice</li>
+            <li>You can view, sort and export the patient list to understand uptake and help you take targeted actions</li>
+            <li>Routinely upload the list your patient list to ensure that the patients listed in RAVS reflects the patients in your EPR</li>
+          </ul>
+        </div>
+      </details>
+
+      <a class="nhsuk-button" data-module="nhsuk-button" href="choose-upload-category">
+        Continue
+      </a>
+
+    </div>
+  </div>
+
+{% endblock %}

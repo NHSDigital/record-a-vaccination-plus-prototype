@@ -1,0 +1,146 @@
+{% extends 'e2e-layout3.html' %}
+{% set currentSection = "organise" %}
+{% block pageTitle %}Choose your RSV invite send list{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+    <form id="filter-form" method="get" action="./refine-and-confirm">
+      <fieldset class="nhsuk-fieldset" aria-describedby="rsv-filters-hint">
+        <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+          <h1 class="nhsuk-fieldset__heading">Choose your {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} invite send list</h1>
+        </legend>
+
+        <p class="nhsuk-body-l"><span id="total-count">0</span> patients uploaded</p>
+
+        <div class="nhsuk-hint" id="rsv-filters-hint">Use the filters to choose your send list</div>
+
+        <div class="nhsuk-checkboxes" data-module="nhsuk-checkboxes">
+          <div class="nhsuk-checkboxes__item">
+            <input class="nhsuk-checkboxes__input" id="check-28-weeks-pregnant" name="f28w" type="checkbox" value="1">
+            <label class="nhsuk-label nhsuk-checkboxes__label" for="check-28-weeks-pregnant">At least 28 weeks pregnant</label>
+          </div>
+          <div class="nhsuk-checkboxes__item">
+            <input class="nhsuk-checkboxes__input" id="check-happy-to-be-contacted" name="fContacted" type="checkbox" value="1">
+            <label class="nhsuk-label nhsuk-checkboxes__label" for="check-happy-to-be-contacted">No communications opt out</label>
+          </div>
+          <div class="nhsuk-checkboxes__item">
+            <input class="nhsuk-checkboxes__input" id="check-provided-mobile-number" name="fPhone" type="checkbox" value="1">
+            <label class="nhsuk-label nhsuk-checkboxes__label" for="check-provided-mobile-number">Mobile number is available</label>
+          </div>
+          <div class="nhsuk-checkboxes__item">
+            <input class="nhsuk-checkboxes__input" id="check-rsv-explained" name="fExpl" type="checkbox" value="1">
+            <label class="nhsuk-label nhsuk-checkboxes__label" for="check-rsv-explained">Vaccine explained and side effects discussed</label>
+          </div>
+          <div class="nhsuk-checkboxes__item">
+            <input class="nhsuk-checkboxes__input" id="check-not-received-rsv-in-last-year" name="fNo9m" type="checkbox" value="1">
+            <label class="nhsuk-label nhsuk-checkboxes__label" for="check-not-received-rsv-in-last-year">
+              {% if data['e2eCurrentUserType'] == 'OH' %}
+                Negative (Td/IPV) blood test
+              {% else %}
+                No RSV vaccination in last 9 months
+              {% endif %}
+            </label>
+          </div>
+          <div class="nhsuk-checkboxes__item">
+            <input class="nhsuk-checkboxes__input" id="check-no-existing-booking-rsv" name="fNoBook" type="checkbox" value="1">
+            <label class="nhsuk-label nhsuk-checkboxes__label" for="check-no-existing-booking-rsv">No existing {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} booking</label>
+          </div>
+          <div class="nhsuk-checkboxes__item">
+            <input class="nhsuk-checkboxes__input" id="check-not-invited-rsv-last-fortnight" name="fNo14" type="checkbox" value="1">
+            <label class="nhsuk-label nhsuk-checkboxes__label" for="check-not-invited-rsv-last-fortnight">No {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} invite in last fortnight</label>
+          </div>
+          <div class="nhsuk-checkboxes__item">
+            <input class="nhsuk-checkboxes__input" id="check-not-received-another-vacc-invite-last-fortnight" name="fNoOther" type="checkbox" value="1">
+            <label class="nhsuk-label nhsuk-checkboxes__label" for="check-not-received-another-vacc-invite-last-fortnight">No other communications in last fortnight</label>
+          </div>
+        </div>
+
+        <div id="match-count" class="nhsuk-body nhsuk-u-font-size-19 nhsuk-u-padding-top-4 nhsuk-u-padding-bottom-0"></div>
+
+        <div class="nhsuk-u-margin-top-6">
+          <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Next: Refine and confirm the patient list</button>
+          <p class="nhsuk-body"><a class="nhsuk-link" href="send-invites?invitesSent=">Back to invite selection screen</a></p>
+        </div>
+
+      </fieldset>
+    </form>
+  </div>
+</div>
+
+<script src="/js/send-invite-data/patient-data-v2.js"></script>
+<script>
+(function(){
+  const totalEl=document.getElementById('total-count');
+  const matchEl=document.getElementById('match-count');
+  const ids={f28w:'check-28-weeks-pregnant',fContacted:'check-happy-to-be-contacted',fPhone:'check-provided-mobile-number',
+    fExpl:'check-rsv-explained',fNo9m:'check-not-received-rsv-in-last-year',fNoBook:'check-no-existing-booking-rsv',
+    fNo14:'check-not-invited-rsv-last-fortnight',fNoOther:'check-not-received-another-vacc-invite-last-fortnight'};
+
+  // Restore selections ONLY from querystring
+  const params=new URLSearchParams(window.location.search);
+  // First, explicitly clear all checkboxes to avoid any auto-init side effects
+  Object.values(ids).forEach(id=>{ const el=document.getElementById(id); if(el){ el.checked=false; }});
+  // Then tick only those present in the query
+  Object.entries(ids).forEach(([key,id])=>{ const el=document.getElementById(id); if(el) el.checked=params.has(key); });
+
+  function norm(s){return String(s||'').toLowerCase().trim().replace(/\s+/g,' ');}
+  function parseDate(str){if(!str)return NaN;const s=String(str).trim();if(!s)return NaN;
+    const dmy=s.replace(/\//g,'-');let m=/^([0-3]?\d)-([0-1]?\d)-(\d{4})$/.exec(dmy);
+    if(m){const d=+m[1],mo=+m[2]-1,y=+m[3];const dt=new Date(y,mo,d);if(dt&&dt.getFullYear()===y&&dt.getMonth()===mo&&dt.getDate()===d)return dt;}
+    const ymd=s.replace(/\//g,'-');let m2=/^(\d{4})-([0-1]?\d)-([0-3]?\d)$/.exec(ymd);
+    if(m2){const y=+m2[1],mo=+m2[2]-1,d=+m2[3];const dt=new Date(y,mo,d);if(dt&&dt.getFullYear()===y&&dt.getMonth()===mo&&dt.getDate()===d)return dt;}
+    const t=Date.parse(s);if(!isNaN(t))return new Date(t);return NaN;}
+
+  function countMatches(){
+    const data=window.PATIENT_DATA||window.patientDataV2||window.patientData||window.patient_list_data;
+    if(!data){ totalEl.textContent='0'; matchEl.textContent=''; return; }
+    const cols=data.columns,rows=data.rows;
+    totalEl.textContent=rows.length;
+    const sel={};Object.entries(ids).forEach(([k,id])=>{sel[k]=document.getElementById(id).checked;});
+    const any=Object.values(sel).some(Boolean);
+    const today=new Date();today.setHours(0,0,0,0);
+    const cutoff9=new Date(today.getTime());cutoff9.setMonth(cutoff9.getMonth()-9);
+    const cutoff14=new Date(today.getTime()-14*24*60*60*1000);
+    function val(row,h){const idx=cols.findIndex(c=>norm(c)===norm(h));return idx>=0?row[idx]:'';}
+    let count=0;
+    if(any){
+      rows.forEach(row=>{
+        let vis=true;
+        if(sel.fContacted&&val(row,'Contactable')!=='Yes')vis=false;
+        if(sel.fPhone&&val(row,'Phone number')==='')vis=false;
+        if(sel.f28w){const e=parseDate(val(row,'RSV eligible (28 weeks)'));if(isNaN(e)||(today<=e))vis=false;}
+        if(sel.fExpl&&val(row,'RSV side effects discussed')!=='Yes')vis=false;
+        if(sel.fNo9m){const l=parseDate(val(row,'Date of last RSV vaccination'));if(!isNaN(l)&&l>=cutoff9)vis=false;}
+        if(sel.fNoBook){const b=parseDate(val(row,'Date of RSV vaccination booking'));if(!isNaN(b)&&b>today)vis=false;}
+        if(sel.fNo14){const inv=parseDate(val(row,'Date of last RSV invite'));if(!isNaN(inv)&&inv>=cutoff14)vis=false;}
+        if(sel.fNoOther){const p=parseDate(val(row,'Date of last Pertussis invite')),f=parseDate(val(row,'Date of last Flu invite')),c=parseDate(val(row,'Date of last COVID invite'));
+          if((!isNaN(p)&&p>today)||(!isNaN(f)&&f>today)||(!isNaN(c)&&c>today))vis=false;}
+        if(vis)count++;
+      });
+    }
+    {% if data['e2eCurrentUserType'] == 'OH' %}
+      matchEl.textContent = any ? (count+' patients chosen to be invited for Td/IPV') : '';
+    {% else %}
+      matchEl.textContent = any ? (count+' patients chosen to be invited for RSV') : '';
+    {% endif %}
+  }
+
+  document.querySelectorAll('.nhsuk-checkboxes__input').forEach(cb=>cb.addEventListener('change',countMatches));
+const form=document.getElementById('filter-form');
+form.addEventListener('submit', function(e){
+  // Build a clean querystring with only checked boxes as key=1
+  e.preventDefault();
+  const qp=new URLSearchParams();
+  Object.entries(ids).forEach(([k,id])=>{ const el=document.getElementById(id); if(el && el.checked) qp.append(k,'1'); });
+  const url = form.getAttribute('action') + (qp.toString()?('?'+qp.toString()):'');
+  window.location.assign(url);
+});
+window.addEventListener('load',countMatches);
+})();
+</script>
+{% endblock %}

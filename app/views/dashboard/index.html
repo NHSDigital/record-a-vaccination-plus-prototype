@@ -1,0 +1,1138 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "monitor" %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-monitor">Monitor</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Clinic managers dashboard</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      {% if data['e2eCurrentUserType'] == "OH" %}
+        <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-6">Royal Cornwall Hospitals NHS Trust</h1>
+      {% elif data['e2eCurrentUserType'] == "infant" %}
+        <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-6">Bright Beginnings Health Team</h1>
+      {% else %}
+        <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-6">Birmingham Women's and Children's NHS Foundation Trust</h1>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      {# Busiest clinic times #}
+      {% if data['e2eCurrentUserType'] == "OH" %}
+        <h2 class="nhsuk-heading-m">Busiest clinic times</h2>
+
+        <!-- MOJ sub-navigation -->
+        <nav class="moj-sub-navigation" aria-label="Days of the week">
+          <ul id="days-subnav" class="moj-sub-navigation__list">
+            <!-- JS will populate li > a links here -->
+          </ul>
+        </nav>
+
+        <div class="nhsuk-card">
+          <div class="nhsuk-card__content">
+            <p id="selected-day-caption" class="nhsuk-body-s nhsuk-u-secondary-text-color nhsuk-u-margin-bottom-2"></p>
+            <div style="position:relative;height:260px">
+              <canvas id="popularTimesChart" aria-label="Popular times chart" role="img"></canvas>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {# TOTAL VACCINATIONS #}
+      <h2 class="nhsuk-heading-m">Total vaccinations</h2>
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">6 <span class="nhsuk-u-visually-hidden">Today</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">Today</span>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">46 <span class="nhsuk-u-visually-hidden">Past 7 days</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">Past 7 days</span>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">123 <span class="nhsuk-u-visually-hidden">{{ date({month: 'long'}) }} to date</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">{{ date({month: 'long'}) }} to date</span>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <p class="nhsuk-heading-xl nhsuk-u-font-size- nhsuk-u-margin-bottom-1">895 <span class="nhsuk-u-visually-hidden">{{ date({year: 'numeric'}) }} total to date</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">{{ date({year: 'numeric'}) }} total to date</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-6">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">
+            See detailed breakdown
+          </span>
+        </summary>
+        <div class="nhsuk-details__text">
+
+          <table class="nhsuk-table">
+            <caption class="nhsuk-table__caption nhsuk-table__caption--m">Past 7 days by vaccine</caption>
+            <thead role="rowgroup" class="nhsuk-table__head">
+              <tr role="row">
+                {% if data['e2eCurrentUserType'] == "OH" %}
+                  <th scope="col" class="nhsuk-table__header">Date</th>
+                  <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">COVID</th>
+                  <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Flu</th>
+                  <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Hep B</th>
+                  <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">MMR</th>
+                  <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Total</th>
+                {% elif data['e2eCurrentUserType'] == "infant" %}
+                  <th scope="col" class="nhsuk-table__header">Date</th>
+                  <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">4-in1</th>
+                  <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Flu</th>
+                  <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">MMR (2nd dose)</th>
+                  <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">MMR (1st dose)</th>
+                  <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Total</th>
+                {% else %}
+                  <th scope="col" class="nhsuk-table__header">Date</th>
+                  <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">COVID</th>
+                  <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Flu</th>
+                  <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Pertuissis</th>
+                  <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">RSV</th>
+                  <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Total</th>
+                {% endif %}
+              </tr>
+            </thead>
+            <tbody class="nhsuk-table__body">
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">Today</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">4</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">2</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">6</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': -1}) }} 2025 (yesterday)</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">5</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">2</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">7</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': -2}) }} 2025</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">4</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">3</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">7</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': -3}) }} 2025</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">1</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">1</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': -4}) }} 2025</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': -5}) }} 2025</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">10</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">1</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">11</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': -6}) }} 2025</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">7</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">5</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">12</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': -7}) }} 2025</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">5</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">4</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">9</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </details>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+
+      {# MISSED APPOINTMENTS IN LAST WEEK #}
+      <h2 class="nhsuk-heading-m">Missed appointments in last week</h2>
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              {% if data['e2eCurrentUserType'] == "infant" %}
+                <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">4 <span class="nhsuk-u-visually-hidden">4-in-1</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">4-in-1</span>
+              {% else %}
+                <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">4 <span class="nhsuk-u-visually-hidden">COVID</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">COVID</span>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">2 <span class="nhsuk-u-visually-hidden">Flu</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">Flu</span>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              {% if data['e2eCurrentUserType'] == "OH" %}
+                <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">21 <span class="nhsuk-u-visually-hidden">Hep B</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">Hep B</span>
+              {% elif data['e2eCurrentUserType'] == "infant" %}
+                <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">21 <span class="nhsuk-u-visually-hidden">MMR (2nd dose)</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">MMR (2nd dose)</span>
+              {% else %}
+                <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">21 <span class="nhsuk-u-visually-hidden">Pertussis</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">Pertussis</span>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              {% if data['e2eCurrentUserType'] == "OH" %}
+                <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">32 <span class="nhsuk-u-visually-hidden">MMR</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">MMR</span>
+              {% elif data['e2eCurrentUserType'] == "infant" %}
+                <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">32 <span class="nhsuk-u-visually-hidden">MMR (1st dose)</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">MMR (1st dose)</span>
+              {% else %}
+                <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">32 <span class="nhsuk-u-visually-hidden">RSV</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">RSV</span>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-6">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">
+            See <span class="nhsuk-u-visually-hidden">missed appointments in last week </span>patient information
+          </span>
+        </summary>
+        <div class="nhsuk-details__text">
+          <table class="nhsuk-table-responsive" role="table">
+            <caption class="nhsuk-table__caption nhsuk-table__caption--m">Patient information</caption>
+            <thead role="rowgroup" class="nhsuk-table__head">
+              <tr role="row">                
+                <th role="columnheader" class="" scope="col">Name</th>
+                <th role="columnheader" class="" scope="col">Appointment date</th>
+                <th role="columnheader" class="" scope="col">Clinic</th>
+                <th role="columnheader" class="" scope="col">Type</th>
+                <th role="columnheader" class="" scope="col">Due date</th>
+                <th role="columnheader" class="" scope="col"><span class="nhsuk-u-visually-hidden">Actions</span></th>
+              </tr>
+            </thead>
+
+            <tbody class="nhsuk-table__body">
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">Aarrons, Sam</td>
+                <td class="nhsuk-table__cell">1 August 2025</td>
+                <td class="nhsuk-table__cell">Birmingham Women's Hospital</td>
+                <td class="nhsuk-table__cell">Pertussis</td>
+                <td class="nhsuk-table__cell">30 December 2025</td>
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">See </span>Patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">Brighouse, Lia</td>
+                <td class="nhsuk-table__cell">13 August 2025</td>
+                <td class="nhsuk-table__cell">Birmingham Road (Forward Thinking Birmingham)</td>
+                <td class="nhsuk-table__cell">RSV</td>
+                <td class="nhsuk-table__cell">14 November 2025</td>
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">See </span>Patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">Brown, Jodie{#Cooke, Teresa#}</td>
+                <td class="nhsuk-table__cell">1 August 2025</td>
+                <td class="nhsuk-table__cell">East Community Clinical Psych - Coventry Road</td>
+                <td class="nhsuk-table__cell">Pertussis</td>
+                <td class="nhsuk-table__cell">3 October 2025</td>
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="/patient-tracker/profile?addHistory="><span class="nhsuk-u-visually-hidden">See </span>Patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">Davies, Norma</td>
+                <td class="nhsuk-table__cell">1 August 2025</td>
+                <td class="nhsuk-table__cell">Heartlands Hospital</td>
+                <td class="nhsuk-table__cell">Pertussis</td>
+                <td class="nhsuk-table__cell">31 January 2026</td>
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/">See patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">Duckworth, Vera</td>
+                <td class="nhsuk-table__cell">4 August 2025</td>
+                <td class="nhsuk-table__cell">East Community Clinical Psych - Coventry Road</td>
+                <td class="nhsuk-table__cell">RSV</td>
+                <td class="nhsuk-table__cell">10 October 2025</td>
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/">See patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">Elliot, Katie</td>
+                <td class="nhsuk-table__cell">5 August 2025</td>
+                <td class="nhsuk-table__cell">Birmingham Women's Hospital</td>
+                <td class="nhsuk-table__cell">Pertussis</td>
+                <td class="nhsuk-table__cell">30 December 2025</td>
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/">See patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">Ellison, Jane</td>
+                <td class="nhsuk-table__cell">4 August 2025</td>
+                <td class="nhsuk-table__cell">Birmingham Women's Hospital</td>
+                <td class="nhsuk-table__cell">RSV</td>
+                <td class="nhsuk-table__cell">7 November 2025</td>
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/">See patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">Kostas, Leila</td>
+                <td class="nhsuk-table__cell">8 August 2025</td>
+                <td class="nhsuk-table__cell">Heartlands Hospital</td>
+                <td class="nhsuk-table__cell">RSV</td>
+                <td class="nhsuk-table__cell">17 September 2025</td>
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/">See patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">Liu, Chloe</td>
+                <td class="nhsuk-table__cell">5 August 2025</td>
+                <td class="nhsuk-table__cell">East Community Clinical Psych - Coventry Road</td>
+                <td class="nhsuk-table__cell">RSV</td>
+                <td class="nhsuk-table__cell">18 September 2025</td>
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/">See patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">Thomas, Nadiya</td>
+                <td class="nhsuk-table__cell">12 August 2025</td>
+                <td class="nhsuk-table__cell">East Community Clinical Psych - Coventry Road</td>
+                <td class="nhsuk-table__cell">Pertussis</td>
+                <td class="nhsuk-table__cell">18 January 2026</td>
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/">See patient details</a></td> 
+              </tr>
+            </tbody>
+          </table>
+          <p class="nhsuk-body">
+            View <a href="#/" class="nhsuk-link">full patient information</a> list.
+          </p>
+        </div>
+      </details>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+
+      {% if data['e2eCurrentUserType'] == "OH" %}
+        {# IF OCCUPATIONAL HEALTH USER #}
+        <h2 class="nhsuk-heading-m"><span class="nhsuk-u-visually-hidden">Royal Cornwall Hospitals NHS Trust vaccine uptake</span></h2>
+
+        <table class="nhsuk-table">
+          <caption class="nhsuk-table__caption nhsuk-table__caption--m">Royal Cornwall Hospitals NHS Trust vaccine uptake</caption>
+          <thead class="nhsuk-table__head">
+            <tr>
+              <th scope="col" class="nhsuk-table__header">
+                <span class="nhsuk-u-visually-hidden">Sentiment and intention</span>
+              </th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">COVID</th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Flu</th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Hep B</th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">MMR</th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr class="nhsuk-table__row">
+              <th scope="col" class="nhsuk-table__header" colspan="5">Royal Cornwall Hospital (Truro)</th>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Estates and Facilities</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">31</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">43</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Neurology</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">19</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">24</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Oncology</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">42</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">25</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Pathology</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">5</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">11</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Urgent Care</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">298</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">187</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-padding-left-4" scope="row">TOTAL</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">395</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">290</td>
+            </tr>
+
+            <tr class="nhsuk-table__row">
+              <th scope="col" class="nhsuk-table__header nhsuk-u-padding-top-6" colspan="5">West Cornwall Hospital (Penzance)</th>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Estates and Facilities</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">31</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">43</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Neurology</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">19</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">24</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Oncology</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">42</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">25</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Pathology</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">5</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">11</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Urgent Care</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">298</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">187</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-padding-left-4" scope="row">TOTAL</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">395</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">290</td>
+            </tr>
+
+            <tr class="nhsuk-table__row">
+              <th scope="col" class="nhsuk-table__header nhsuk-u-padding-top-6" colspan="5">St Michael's Hospital (Hayle)</th>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Estates and Facilities</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">31</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">43</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Neurology</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">19</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">24</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Oncology</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">42</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">25</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Pathology</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">5</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">11</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Urgent Care</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">298</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">187</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-padding-left-4" scope="row">TOTAL</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">395</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">290</td>
+            </tr>
+
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-padding-top-6" scope="row">VACCINATED TOTAL</th>
+              <td class="nhsuk-table__cell nhsuk-u-padding-top-6 nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-u-padding-top-6 nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-u-padding-top-6 nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">1,185</td>
+              <td class="nhsuk-table__cell nhsuk-u-padding-top-6 nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">870</td>
+            </tr>
+          </tbody>
+        </table>
+      {% else %}
+        {# ANYTHING OTHER THAN AN OCCUPATIONAL HEALTH USER #}
+        {# SENTIMENT AND INTENTION #}
+        <h2 class="nhsuk-heading-m"><span class="nhsuk-u-visually-hidden">Sentiment and intention</span></h2>
+
+        <table class="nhsuk-table">
+          <caption class="nhsuk-table__caption nhsuk-table__caption--m">Sentiment and intention</caption>
+          <thead class="nhsuk-table__head">
+            <tr>
+              <th scope="col" class="nhsuk-table__header">
+                <span class="nhsuk-u-visually-hidden">Sentiment and intention</span>
+              </th>
+              {% if data['e2eCurrentUserType'] == "infant" %}
+                <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">4-in-1</th>
+                <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Flu</th>
+                <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">MMR (2nd dose)</th>
+                <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">MMR (1st dose)</th>
+              {% else %}
+                <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Pertussis</th>
+                <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">RSV</th>
+                <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Flu</th>
+                <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">COVID</th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr class="nhsuk-table__row">
+              <th scope="col" class="nhsuk-table__header" colspan="5">Eligible and unvaccinated</th>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Accepting</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">31</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">43</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Considering</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">19</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">24</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Did Not Attend (DNA)</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">42</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">25</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">Declined</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">5</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">11</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-left-4" scope="row">No intent data</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">298</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">187</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header" scope="row">Eligible and unvaccinated total</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">395</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">290</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">0</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-padding-top-6" scope="row">Vaccinated total</th>
+              <td class="nhsuk-table__cell nhsuk-u-padding-top-6 nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">214</td>
+              <td class="nhsuk-table__cell nhsuk-u-padding-top-6 nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">152</td>
+              <td class="nhsuk-table__cell nhsuk-u-padding-top-6 nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">0</td>
+              <td class="nhsuk-table__cell nhsuk-u-padding-top-6 nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">0</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header" scope="row">Not yet eligible total</th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">154</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">321</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">763</td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric nhsuk-u-font-weight-bold right-align-override">763</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-padding-top-6" scope="row">TOTAL</th>
+              <td class="nhsuk-table__cell nhsuk-u-padding-top-6 nhsuk-u-font-weight-bold nhsuk-table__cell--numeric right-align-override">763</td>
+              <td class="nhsuk-table__cell nhsuk-u-padding-top-6 nhsuk-u-font-weight-bold nhsuk-table__cell--numeric right-align-override">763</td>
+              <td class="nhsuk-table__cell nhsuk-u-padding-top-6 nhsuk-u-font-weight-bold nhsuk-table__cell--numeric right-align-override">763</td>
+              <td class="nhsuk-table__cell nhsuk-u-padding-top-6 nhsuk-u-font-weight-bold nhsuk-table__cell--numeric right-align-override">763</td>
+            </tr>
+          </tbody>
+        </table>
+      {% endif %}
+
+      {#<table class="nhsuk-table">
+        <caption class="nhsuk-table__caption nhsuk-table__caption--m">Sentiment and intention</caption>
+        <thead role="rowgroup" class="nhsuk-table__head">
+          <tr role="row">
+            <th scope="col" class="nhsuk-table__header"><span class="nhsuk-u-visually-hidden">Sentiment and intention</span></th>
+            <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Pertussis</th>
+            <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">RSV</th>
+            <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Flu</th>
+            <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">COVID</th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          <tr class="nhsuk-table__row">
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">Not yet eligible</th>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">154</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">321</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">763</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">763</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">Vaccinated</th>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">214</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">152</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">Eligible, no sentiment data</th>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">298</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">187</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal nhsuk-u-padding-bottom-6" scope="row">Unknown</th>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">42</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">25</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <th class="nhsuk-table__header" scope="row">Accepting</th>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">31</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">43</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <th class="nhsuk-table__header" scope="row">Considering</th>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">19</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">24</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <th class="nhsuk-table__header" scope="row">Declined</th>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">5</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">11</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <th class="nhsuk-table__header" scope="row">Total</th>
+            <td class="nhsuk-table__cell nhsuk-u-font-weight-bold nhsuk-table__cell--numeric right-align-override">763</td>
+            <td class="nhsuk-table__cell nhsuk-u-font-weight-bold nhsuk-table__cell--numeric right-align-override">763</td>
+            <td class="nhsuk-table__cell nhsuk-u-font-weight-bold nhsuk-table__cell--numeric right-align-override">763</td>
+            <td class="nhsuk-table__cell nhsuk-u-font-weight-bold nhsuk-table__cell--numeric right-align-override">763</td>
+          </tr>
+        </tbody>
+      </table>#}
+
+      <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-6">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">
+            See <span class="nhsuk-u-visually-hidden">sentiment and intention </span>patient information
+          </span>
+        </summary>
+        <div class="nhsuk-details__text">
+          <table class="nhsuk-table-responsive" role="table">
+            <caption class="nhsuk-table__caption nhsuk-table__caption--m">Patient information</caption>
+            <thead role="rowgroup" class="nhsuk-table__head">
+              <tr role="row">
+                <th role="columnheader" class="" scope="col">Vaccine type</th>
+                <th role="columnheader" class="" scope="col">Status</th>
+                <th role="columnheader" class="" scope="col">Patient name</th>
+                {% if data['e2eCurrentUserType'] == "OH" %}
+                  <th role="columnheader" class="" scope="col">Payroll number</th>
+                {% else %}
+                  <th role="columnheader" class="" scope="col">NHS number</th>
+                {% endif %}
+                <th role="columnheader" class="" scope="col">Date of birth</th>
+                {% if data['e2eCurrentUserType'] != "OH" %}
+                  <th role="columnheader" class="" scope="col">Due date</th>
+                {% endif %}
+                <th role="columnheader" class="" scope="col"><span class="nhsuk-u-visually-hidden">Actions</span></th>
+              </tr>
+            </thead>
+
+            <tbody class="nhsuk-table__body">
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">{% if data['e2eCurrentUserType'] == "OH" %}Hep B{% else %}Pertuissis{% endif %}</td>
+                <td class="nhsuk-table__cell">Declined</td>
+                <td class="nhsuk-table__cell">Aarrons, Sam</td>
+                <td class="nhsuk-table__cell">123456789</td>
+                <td class="nhsuk-table__cell">12 July 1999</td>
+                {% if data['e2eCurrentUserType'] != "OH" %}
+                  <td class="nhsuk-table__cell">30 December 2025</td>
+                {% endif %}
+                {#<td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View patient </span>Sentiment record</a></td>#}
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View </span>Patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">{% if data['e2eCurrentUserType'] == "OH" %}MMR{% else %}RSV{% endif %}</td>
+                <td class="nhsuk-table__cell">Vaccinated</td>
+                <td class="nhsuk-table__cell">Brighouse, Lia</td>
+                <td class="nhsuk-table__cell">123456789</td>
+                <td class="nhsuk-table__cell">16 May 2006</td>
+                {% if data['e2eCurrentUserType'] != "OH" %}
+                  <td class="nhsuk-table__cell">14 November 2025</td>
+                {% endif %}
+                {#<td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View patient </span>Sentiment record</a></td>#}
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View </span>Patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">{% if data['e2eCurrentUserType'] == "OH" %}Hep B{% else %}Pertuissis{% endif %}</td>
+                <td class="nhsuk-table__cell">Declined</td>
+                <td class="nhsuk-table__cell">Brown, Jodie{#Cooke, Teresa#}</td>
+                <td class="nhsuk-table__cell">123456789</td>
+                <td class="nhsuk-table__cell">1 April 2000</td>
+                {% if data['e2eCurrentUserType'] != "OH" %}
+                  <td class="nhsuk-table__cell">3 October 2025</td>
+                {% endif %}
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="/patient-tracker/profile?addHistory="><span class="nhsuk-u-visually-hidden">View </span>Patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">{% if data['e2eCurrentUserType'] == "OH" %}Hep B{% else %}Pertuissis{% endif %}</td>
+                <td class="nhsuk-table__cell">Considering</td>
+                <td class="nhsuk-table__cell">Davies, Norma</td>
+                <td class="nhsuk-table__cell">123456789</td>
+                <td class="nhsuk-table__cell">12 July 1992</td>
+                {% if data['e2eCurrentUserType'] != "OH" %}
+                  <td class="nhsuk-table__cell">31 January 2026</td>
+                {% endif %}
+                {#<td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View patient </span>Sentiment record</a></td>#}
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View </span>Patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">COVID</td>
+                <td class="nhsuk-table__cell">Unknown</td>
+                <td class="nhsuk-table__cell">Duckworth, Vera</td>
+                <td class="nhsuk-table__cell">123456789</td>
+                <td class="nhsuk-table__cell">30 March 1999</td>
+                {% if data['e2eCurrentUserType'] != "OH" %}
+                  <td class="nhsuk-table__cell">10 October 2025</td>
+                {% endif %}
+                {#<td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View patient </span>Sentiment record</a></td>#}
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View </span>Patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">Flu</td>
+                <td class="nhsuk-table__cell">Not yet eligible</td>
+                <td class="nhsuk-table__cell">Elliot, Katie</td>
+                <td class="nhsuk-table__cell">123456789</td>
+                <td class="nhsuk-table__cell">14 November 1994</td>
+                {% if data['e2eCurrentUserType'] != "OH" %}
+                  <td class="nhsuk-table__cell">30 December 2025</td>
+                {% endif %}
+                {#<td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View patient </span>Sentiment record</a></td>#}
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View </span>Patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">{% if data['e2eCurrentUserType'] == "OH" %}Hep B{% else %}Pertuissis{% endif %}</td>
+                <td class="nhsuk-table__cell">Vaccinated</td>
+                <td class="nhsuk-table__cell">Ellison, Jane</td>
+                <td class="nhsuk-table__cell">123456789</td>
+                <td class="nhsuk-table__cell">3 March 2002</td>
+                {% if data['e2eCurrentUserType'] != "OH" %}
+                  <td class="nhsuk-table__cell">7 November 2025</td>
+                {% endif %}
+                {#<td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View patient </span>Sentiment record</a></td>#}
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View </span>Patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">{% if data['e2eCurrentUserType'] == "OH" %}MMR{% else %}RSV{% endif %}</td>
+                <td class="nhsuk-table__cell">Accepting</td>
+                <td class="nhsuk-table__cell">Kostas, Leila</td>
+                <td class="nhsuk-table__cell">123456789</td>
+                <td class="nhsuk-table__cell">10 January 1990</td>
+                {% if data['e2eCurrentUserType'] != "OH" %}
+                  <td class="nhsuk-table__cell">17 September 2025</td>
+                {% endif %}
+                {#<td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View patient </span>Sentiment record</a></td>#}
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View </span>Patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">{% if data['e2eCurrentUserType'] == "OH" %}MMR{% else %}RSV{% endif %}</td>
+                <td class="nhsuk-table__cell">Unknown</td>
+                <td class="nhsuk-table__cell">Liu, Chloe</td>
+                <td class="nhsuk-table__cell">123456789</td>
+                <td class="nhsuk-table__cell">14 September 2004</td>
+                {% if data['e2eCurrentUserType'] != "OH" %}
+                  <td class="nhsuk-table__cell">18 September 2025</td>
+                {% endif %}
+                {#<td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View patient </span>Sentiment record</a></td>#}
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View </span>Patient details</a></td> 
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">{% if data['e2eCurrentUserType'] == "OH" %}MMR{% else %}RSV{% endif %}</td>
+                <td class="nhsuk-table__cell">Accepting</td>
+                <td class="nhsuk-table__cell">Thomas, Nadiya</td>
+                <td class="nhsuk-table__cell">123456789</td>
+                <td class="nhsuk-table__cell">10 December 1991</td>
+                {% if data['e2eCurrentUserType'] != "OH" %}
+                  <td class="nhsuk-table__cell">18 January 2026</td>
+                {% endif %}
+                {#<td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View patient </span>Sentiment record</a></td>#}
+                <td class="nhsuk-table__cell"><a class="nhsuk-link" href="#/"><span class="nhsuk-u-visually-hidden">View </span>Patient details</a></td> 
+              </tr>
+            </tbody>
+          </table>
+          <p class="nhsuk-body">
+            View <a href="#/" class="nhsuk-link">full patient information</a> list.
+          </p>
+        </div>
+      </details>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+
+      {# CAPACITY #}
+      <h2 class="nhsuk-heading-m">Capacity</h2>
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">157 <span class="nhsuk-u-visually-hidden">Available appointments</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">Available appointments</span>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">459 <span class="nhsuk-u-visually-hidden">Invitations sent</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">Invitations sent</span>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">97 <span class="nhsuk-u-visually-hidden">Bookings made</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19">Bookings made</span>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <p class="nhsuk-heading-xl nhsuk-u-font-size-36 nhsuk-u-margin-bottom-1">Available vaccine</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-6">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">
+            See more detail
+          </span>
+        </summary>
+        <div class="nhsuk-details__text">
+
+          <table class="nhsuk-table">
+            <caption class="nhsuk-table__caption nhsuk-table__caption--m">157 Available appointments</caption>
+            <thead role="rowgroup" class="nhsuk-table__head">
+              <tr role="row">
+                <th scope="col" class="nhsuk-table__header">Location</th>
+                <th scope="col" class="nhsuk-table__header">Date</th>
+                <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Booked</th>
+                <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Available</th>
+              </tr>
+            </thead>
+            <tbody class="nhsuk-table__body">
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">Birmingham Women's Hospital</th>
+                <th class="nhsuk-table__cell nhsuk-u-font-weight-normal">Today, 9am to 5pm</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">Birmingham Women's Hospital</th>
+                <th class="nhsuk-table__cell nhsuk-u-font-weight-normal">{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': -1}) }} 2025 (yesterday), 9am to 5pm</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">Birmingham Road (Forward Thinking Birmingham)</th>
+                <th class="nhsuk-table__cell nhsuk-u-font-weight-normal">{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': -2}) }} 2025, 9am to 5pm</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">Park House Child &amp; Family Centre</th>
+                <th class="nhsuk-table__cell nhsuk-u-font-weight-normal">{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': -3}) }} 2025, 9am to 5pm</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">1</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">Heartlands Hospital</th>
+                <th class="nhsuk-table__cell nhsuk-u-font-weight-normal">{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': -4}) }} 2025, 9am to 5pm</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              </tr>
+              <tr role="row" class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">Park House Child &amp; Family Centre</th>
+                <th class="nhsuk-table__cell nhsuk-u-font-weight-normal">{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': -5}) }} 2025, 9am to 5pm</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">Birmingham Women's Hospital</th>               
+                <th class="nhsuk-table__cell nhsuk-u-font-weight-normal">{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': -6}) }} 2025, 9am to 5pm</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">Heartlands Hospital</th>
+                <th class="nhsuk-table__cell nhsuk-u-font-weight-normal">{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': -7}) }} 2025, 9am to 5pm</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <hr class="nhsuk-section-break nhsuk-section-break--l">
+
+          <table class="nhsuk-table">
+            <caption class="nhsuk-table__caption nhsuk-table__caption--m">459 Invitations sent</caption>
+            <thead role="rowgroup" class="nhsuk-table__head">
+              <tr role="row">
+                <th scope="col" class="nhsuk-table__header">Communication focus</th>
+                <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Patient count</th>
+              </tr>
+            </thead>
+            <tbody class="nhsuk-table__body">
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">{% if data['e2eCurrentUserType'] == "OH" %}Hep B{% else %}Pertuissis{% endif %} focus</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">97</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">{% if data['e2eCurrentUserType'] == "OH" %}MMR{% else %}RSV{% endif %} focus</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">106</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">Seasonal focus</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">0</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">Mop up - last chance</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">52</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">Routine</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">79</td>
+              </tr>
+              <tr class="nhsuk-table__row">
+                <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">No communication</th>
+                <td class="nhsuk-table__cell nhsuk-table__cell--numeric right-align-override">52</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <hr class="nhsuk-section-break nhsuk-section-break--l">
+
+          <h2 class="nhsuk-heading-m">
+            Available vaccine
+          </h2>
+          <p class="nhsuk-body">
+            There is enough vaccine available (as per the batches that have been allocated to sessions) to fulfil existing commitments (bookings and availability).
+          </p>
+
+        </div>
+      </details>
+
+      <p class="nhsuk-body">
+        Return to <a href="/iteration-2/landing-monitor" class="nhsuk-link">Monitor</a>.
+      </p>
+
+    </div>
+  </div>
+
+  <!-- Chart.js (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+
+  <script>
+  (function () {
+    // ===== Helpers =====
+    const pad = (n) => String(n).padStart(2,'0');
+    const toISO = (d) => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    const dayAbbrev = (d) => ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()];
+    const longLabel = (d) => d.toLocaleDateString(undefined,{weekday:'long', day:'numeric', month:'long', year:'numeric'});
+    const hourLabel = (i) => {
+      const h = i + 9; // 9..17
+      const displayH = (h % 12) === 0 ? 12 : (h % 12);
+      const ampm = h < 12 ? 'am':'pm';
+      return `${displayH}${ampm}`;
+    };
+
+    // ===== Build last 7 days ending yesterday =====
+    const today = new Date();
+    const days = [];
+    for (let i = 7; i >= 1; i--) { const d = new Date(today); d.setDate(today.getDate() - i); days.push(d); }
+    const yesterdayIndex = 6;
+
+    // ===== Embedded data (different per day, 9 values 9am–6pm) =====
+    const embeddedDaySeries = [
+      [12,18,8,26,34,42,18,38,10],  // Day -7
+      [8,24,16,45,36,28,38,22,12],  // Day -6
+      [10,26,18,34,46,26,44,28,16], // Day -5
+      [20,12,38,28,52,54,40,32,34], // Day -4
+      [14,30,22,54,40,30,56,36,20], // Day -3
+      [16,32,22,42,40,24,50,22,38], // Day -2
+      [18,28,36,32,62,54,39,40,24]  // Day -1 (yesterday)
+    ];
+    const weekData = {};
+    days.forEach((d, i) => { weekData[toISO(d)] = embeddedDaySeries[i]; });
+
+    // ===== Sub-nav render (MOJ) =====
+    const subnav = document.getElementById('days-subnav');
+    days.forEach((d, i) => {
+      const li = document.createElement('li');
+      li.className = 'moj-sub-navigation__item';
+
+      const a = document.createElement('a');
+      a.href = '#';
+      a.className = 'moj-sub-navigation__link';
+      a.dataset.index = i;
+
+      // Use long weekday names
+      let label = d.toLocaleDateString(undefined, { weekday: 'long' });
+
+      // If this is yesterday’s date, append "(yesterday)"
+      if (i === yesterdayIndex) {
+        label += ' (yesterday)';
+      }
+
+      a.textContent = label;
+      a.setAttribute('aria-label', longLabel(d));
+      li.appendChild(a);
+      subnav.appendChild(li);
+    });
+
+    function setActive(index){
+      [...subnav.querySelectorAll('a')].forEach((link,i)=>{
+        if(i===index){ link.classList.add('moj-sub-navigation__link--active'); link.setAttribute('aria-current','page'); }
+        else { link.classList.remove('moj-sub-navigation__link--active'); link.removeAttribute('aria-current'); }
+      });
+    }
+
+    // ===== Chart =====
+    const ctx = document.getElementById('popularTimesChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type:'bar',
+      data:{
+        labels: Array.from({length:9},(_,i)=>hourLabel(i)),
+        datasets:[{
+          data: embeddedDaySeries[yesterdayIndex],
+          borderWidth:0,
+          backgroundColor:'rgba(0,94,184,0.85)',
+          hoverBackgroundColor:'rgba(0,94,184,1)',
+          borderRadius:6,
+          barPercentage:0.7,
+          categoryPercentage:0.9
+        }]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{
+          legend:{display:false},
+          tooltip:{callbacks:{title:(items)=>items[0].label}}
+        },
+        scales:{
+          y:{ beginAtZero:true, grid:{display:false}, ticks:{display:false} },
+          x:{ grid:{display:false} }
+        },
+        animation:{ duration:400 }
+      }
+    });
+
+    const caption = document.getElementById('selected-day-caption');
+
+    function loadDay(index){
+      const d = days[index], key = toISO(d);
+      const series = weekData[key] || embeddedDaySeries[index];
+      chart.data.datasets[0].data = series;
+      chart.update();
+
+      let captionText = `Showing: ${longLabel(d)}`;
+      if (index === yesterdayIndex) {
+        captionText += ' (yesterday)';
+      }
+      caption.textContent = captionText;
+
+      setActive(index);
+    }
+
+    subnav.addEventListener('click',(e)=>{
+      if(e.target.tagName==='A'){
+        e.preventDefault();
+        loadDay(Number(e.target.dataset.index));
+      }
+    });
+
+    // Initialise with yesterday selected
+    loadDay(yesterdayIndex);
+  })();
+  </script>
+
+{% endblock %}

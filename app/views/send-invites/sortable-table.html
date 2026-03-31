@@ -1,0 +1,144 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Sortable table
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">Sortable table</h1>
+
+      <table class="nhsuk-table moj-sortable-table" data-module="moj-sortable-table">
+        <caption class="nhsuk-table__caption">Mountains of the world</caption>
+        <thead class="nhsuk-table__head">
+          <tr class="nhsuk-table__row">
+            <!-- MOJ requires a button inside each sortable header cell -->
+            <th scope="col" class="nhsuk-table__header" aria-sort="ascending">
+              <button type="button" class="govuk-link" data-index="0">Name</button>
+            </th>
+            <th scope="col" class="nhsuk-table__header" aria-sort="none">
+              <button type="button" class="govuk-link" data-index="1">Elevation</button>
+            </th>
+            <th scope="col" class="nhsuk-table__header" aria-sort="none">
+              <button type="button" class="govuk-link" data-index="2">Continent</button>
+            </th>
+            <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+              <button type="button" class="govuk-link" data-index="3">First summit</button>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Aconcagua</td>
+            <td class="nhsuk-table__cell" data-sort-value="6961">6,961 meters</td>
+            <td class="nhsuk-table__cell">South America</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1897">1897</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Denali</td>
+            <td class="nhsuk-table__cell" data-sort-value="6194">6,194 meters</td>
+            <td class="nhsuk-table__cell">North America</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1913">1913</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Elbrus</td>
+            <td class="nhsuk-table__cell" data-sort-value="5642">5,642 meters</td>
+            <td class="nhsuk-table__cell">Europe</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1874">1874</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Everest</td>
+            <td class="nhsuk-table__cell" data-sort-value="8850">8,850 meters</td>
+            <td class="nhsuk-table__cell">Asia</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1953">1953</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Kilimanjaro</td>
+            <td class="nhsuk-table__cell" data-sort-value="5895">5,895 meters</td>
+            <td class="nhsuk-table__cell">Africa</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1889">1889</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Puncak Jaya</td>
+            <td class="nhsuk-table__cell" data-sort-value="4884">4,884 meters</td>
+            <td class="nhsuk-table__cell">Australia</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1962">1962</td>
+          </tr>
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">Vinson</td>
+            <td class="nhsuk-table__cell" data-sort-value="4897">4,897 meters</td>
+            <td class="nhsuk-table__cell">Antarctica</td>
+            <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1966">1966</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <nav class="nhsuk-pagination nhsuk-pagination--numbered" role="navigation" aria-label="Pagination">
+        <a href="#" class="nhsuk-pagination__previous" rel="prev">
+          <svg class="nhsuk-icon nhsuk-icon--arrow-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+            <path d="M10.7 6.3c.4.4.4 1 0 1.4L7.4 11H19a1 1 0 0 1 0 2H7.4l3.3 3.3c.4.4.4 1 0 1.4a1 1 0 0 1-1.4 0l-5-5A1 1 0 0 1 4 12c0-.3.1-.5.3-.7l5-5a1 1 0 0 1 1.4 0Z" />
+          </svg>
+          <span class="nhsuk-pagination__title">
+            Previous<span class="nhsuk-u-visually-hidden"> page</span>
+          </span>
+        </a>
+        <ul class="nhsuk-pagination__list">
+          <li class="nhsuk-pagination__item">
+            <a class="nhsuk-pagination__link" href="#" aria-label="Page 1">
+              1
+            </a>
+          </li>
+          <li class="nhsuk-pagination__item nhsuk-pagination__item--ellipsis">
+            &ctdot;
+          </li>
+          <li class="nhsuk-pagination__item">
+            <a class="nhsuk-pagination__link" href="#" aria-label="Page 8">
+              8
+            </a>
+          </li>
+          <li class="nhsuk-pagination__item">
+            <a class="nhsuk-pagination__link" href="#" aria-label="Page 9">
+              9
+            </a>
+          </li>
+          <li class="nhsuk-pagination__item nhsuk-pagination__item--current">
+            <a class="nhsuk-pagination__link" href="#" aria-label="Page 10" aria-current="page">
+              10
+            </a>
+          </li>
+          <li class="nhsuk-pagination__item">
+            <a class="nhsuk-pagination__link" href="#" aria-label="Page 11">
+              11
+            </a>
+          </li>
+          <li class="nhsuk-pagination__item">
+            <a class="nhsuk-pagination__link" href="#" aria-label="Page 12">
+              12
+            </a>
+          </li>
+          <li class="nhsuk-pagination__item nhsuk-pagination__item--ellipsis">
+            &ctdot;
+          </li>
+          <li class="nhsuk-pagination__item">
+            <a class="nhsuk-pagination__link" href="#" aria-label="Page 42">
+              42
+            </a>
+          </li>
+        </ul>
+        <a href="#" class="nhsuk-pagination__next" rel="next">
+          <span class="nhsuk-pagination__title">
+            Next<span class="nhsuk-u-visually-hidden"> page</span>
+          </span>
+          <svg class="nhsuk-icon nhsuk-icon--arrow-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+            <path d="m14.7 6.3 5 5c.2.2.3.4.3.7 0 .3-.1.5-.3.7l-5 5a1 1 0 0 1-1.4-1.4l3.3-3.3H5a1 1 0 0 1 0-2h11.6l-3.3-3.3a1 1 0 1 1 1.4-1.4Z" />
+          </svg>
+        </a>
+      </nav>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Send invites
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Send invites</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      Send invites
+    </h1>
+
+    <details class="nhsuk-details">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">
+          Current patient list information
+        </span>
+      </summary>
+      <div class="nhsuk-details__text">
+        <p>
+          {% if data['uploadedList'] == 'true' %}
+            Current patient list being used is <strong>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv</strong> (13.7MB), and was uploaded {{ date({day: 'numeric', month: 'long', year: 'numeric'}) }} by Chloe Liu
+          {% else %}
+            Current patient list being used is <strong>dataset-2025-08-22.csv</strong> (12.1MB), and was uploaded 22 August 2025 by Alex Smith
+          {% endif %}
+        </p>
+        <p>Use <a href="patient-upload?uploadedList" class="nhsuk-link">Manage patient lists</a> to update patient list data.</p>
+        
+      </div>
+    </details>
+
+    {#<div class="nhsuk-inset-text nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-6">
+      <p class="nhsuk-body nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-4">
+        Current patient list<span class="nhsuk-u-visually-hidden">:</span>
+      </p>
+      <p class="nhsuk-body">
+        {% if data['uploadedList'] == 'true' %}
+          Current patient list being used is <strong>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv</strong> (13.7MB), and was uploaded {{ date({day: 'numeric', month: 'long', year: 'numeric'}) }} by Chloe Liu
+        {% else %}
+          Current patient list being used is <strong>dataset-2025-08-22.csv</strong> (12.1MB), and was uploaded 22 August 2025 by Alex Smith
+        {% endif %}
+        <p class="nhsuk-u-margin-bottom-0">Use <a href="patient-upload?uploadedList" class="nhsuk-link">Manage patient lists</a> to update patient list data.</p>
+      </p>
+    </div>#}
+
+    <!--<div class="nhsuk-warning-callout nhsuk-u-margin-bottom-6">
+      <h3 class="nhsuk-warning-callout__label">Current patient list</h3>
+      <p>
+        {% if data['uploadedList'] == 'true' %}
+          Current patient list being used is <strong>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv</strong> (13.7MB), and was uploaded {{ date({day: 'numeric', month: 'long', year: 'numeric'}) }} by Chloe Liu
+        {% else %}
+          Current patient list being used is <strong>dataset-2025-08-22.csv</strong> (12.1MB), and was uploaded 22 August 2025 by Alex Smith
+        {% endif %}
+        <p class="nhsuk-u-margin-bottom-0">Use <a href="patient-upload?uploadedList" class="nhsuk-link">Manage patient lists</a> to update patient list data.</p>
+      </p>
+    </div>-->
+
+    <form method="post" action="#/">
+
+      {# CHOOSE INVITE TYPES #}
+      <fieldset class="nhsuk-fieldset">
+        <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--m">
+          <h2 class="nhsuk-fieldset__heading">
+            Choose invite type
+          </h2>
+        </legend>
+        <div class="nhsuk-radios nhsuk-u-margin-bottom-6" data-module="nhsuk-radios">
+          <div class="nhsuk-radios__item">
+            <input class="nhsuk-radios__input" id="invite-pertussis" name="invite-type" type="radio" value="invite-pertussis">
+            <label class="nhsuk-label nhsuk-radios__label" for="invite-pertussis">
+              Pertussis invite
+            </label>
+          </div>
+          <div class="nhsuk-radios__item">
+            <input class="nhsuk-radios__input" id="invite-rsv" name="invite-type" type="radio" value="invite-rsv">
+            <label class="nhsuk-label nhsuk-radios__label" for="invite-rsv">
+              RSV invite
+            </label>
+          </div>
+
+          <div class="nhsuk-radios__item">
+            <input class="nhsuk-radios__input" id="invite-covid-flu" name="invite-type" type="radio" value="invite-covid-flu">
+            <label class="nhsuk-label nhsuk-radios__label" for="invite-covid-flu">
+              Seasonal COVID/ flu invite
+            </label>
+          </div>
+          {% if data['e2eCurrentUserType'] == 'OH' %}
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="invite-td-ipv" name="invite-type" type="radio" value="invite-tv-ipv">
+              <label class="nhsuk-label nhsuk-radios__label" for="invite-td-ipv">
+                Td/IPV invite
+              </label>
+            </div>
+          {% endif %}
+          <div class="nhsuk-radios__item">
+            <input class="nhsuk-radios__input" id="invite-clast-chance" name="invite-type" type="radio" value="invite-last-chance">
+            <label class="nhsuk-label nhsuk-radios__label" for="invite-last-chance">
+              Last chance
+            </label>
+          </div>
+          <div class="nhsuk-radios__item">
+            <input class="nhsuk-radios__input" id="invite-general" name="invite-type" type="radio" value="invite-general">
+            <label class="nhsuk-label nhsuk-radios__label" for="invite-general">
+              General vaccines invite
+            </label>
+          </div>
+        </div>
+
+        <div class="nhsuk-button-group">
+          <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Confirm</button>
+        </div>
+      </fieldset>
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}

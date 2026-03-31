@@ -1,0 +1,97 @@
+{# extends 'layout.html' #}
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Add batch" %}
+
+{# set currentSection = "vaccines" #}
+{% set currentSection = "organise" %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      
+      <span class="nhsuk-caption-l">Birmingham Women's Hospital</span>
+
+      {% if data['sessionDate'] == '' %}
+        <h1 class="nhsuk-heading-l">Thursday 1 August, session 09:00 - 17:00</h1>
+      {% else %}
+        <h1 class="nhsuk-heading-l">{{data['sessionDate']}}, session 09:00 - 17:00</h1>
+      {% endif %}
+
+      <h2 class="nhsuk-heading-m">Add batch</h2>
+
+      <form action="/vaccines/check" method="post" novalidate="true">
+
+        {{ input({
+          "label": {
+            "text": "Batch number",
+            classes: "nhsuk-label--s"
+          },
+          hint: {
+            text: "For example, XX123456"
+          },
+          "id": "batch-number",
+          "name": "batchNumber",
+          classes: "nhsuk-input--width-20",
+          value: data.batchNumber
+        }) }}
+
+
+        {{ dateInput({
+          "id": "batchExpiryDate",
+          "namePrefix": "batchExpiryDate",
+          "fieldset": {
+            "legend": {
+              "text": "Expiry date",
+              "classes": "nhsuk-label--s"
+            }
+          },
+          values: data.batchExpiryDate
+        }) }}
+
+        {% if data.vaccineProduct == "Spikevax JN.1" %}
+
+          {{ radios({
+            "idPrefix": "pack-type",
+            "name": "packType",
+            "fieldset": {
+              "legend": {
+                "text": "Pack size",
+                classes: "nhsuk-fieldset__legend--s"
+              }
+            },
+            "items": [
+              {
+                "value": "Single vial",
+                "text": "Single vial",
+                checked: (data.packType == "Single vial")
+              },
+              {
+                "value": "10 vials",
+                "text": "10 vials",
+                checked: (data.packType == "10 vials")
+              }
+            ]
+          }) }}
+
+        {% endif %}
+
+          {{ button({
+            "text": "Continue"
+          }) }}
+      </form>
+
+
+    </div>
+  </div>
+
+
+{% endblock %}

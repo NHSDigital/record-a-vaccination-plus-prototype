@@ -1,0 +1,258 @@
+<!-- Use this page as the index for your project -->
+
+<!-- ADDING CUSTOM CSS - Add your custom CSS or Sass in /app/assets/sass/main.scss -->
+
+<!-- Extends the layout from /views/layout.html -->
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+<!-- Set the page title -->
+{% block pageTitle %}
+Book vaccinations prototype
+{% endblock %}
+
+<!-- For adding a breadcrumb -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/breadcrumbs -->
+{% block beforeContent %}
+{#
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Manage clinics</li>
+      <li class="nhsuk-breadcrumb__list-item">BREADCRUMB TBC</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+#}
+
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+  
+{% endblock %}
+
+<!-- For adding a back link -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/back-link -->
+{% block outerContent %}
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+  <div class="nhsuk-grid-row">
+    {#<div class="nhsuk-grid-column-two-thirds">#}
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <!-- Change the page title here -->
+      <h1 class="nhsuk-heading-l">Arrange Jodie Brown's appointment</h1>
+
+      <form action="cya" method="get" class="form">
+
+        <div class="nhsuk-form-group">
+
+          <fieldset class="nhsuk-fieldset" aria-describedby="date-hint">
+            <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--m">
+              <h2 class="nhsuk-heading-m">Choose an appointment time</h2>
+            </legend>
+            <div class="nhsuk-hint" id="date-hint">
+              Available time ranges for <span class="nhsuk-u-font-weight-bold"> {{data['chosenDate']}}</span>
+            </div>
+
+            <p class="nhsuk-body nhsuk-u-margin-bottom-2"><strong>AM</strong></p>
+
+            <div class="nhsuk-radios nhsuk-radios--conditional">
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="date-1" name="date" type="radio" value="slotOne" aria-controls="conditional-date-1" aria-expanded="false">
+                <label class="nhsuk-label nhsuk-radios__label" for="date-1">
+                  8am to 9am
+                </label>
+              </div>
+              <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-date-1">
+                <div class="nhsuk-form-group">
+                  <label class="nhsuk-label" for="chosenAppointmentTime1">
+                    Choose an appointment time from 8am to 9am
+                  </label> <select class="nhsuk-select" id="chosenAppointmentTime1" name="chosenAppointmentTime1">
+                    <option value="choose" selected>Choose appointment time</option>
+                    <option value="8am">8am</option>
+                    <option value="8:10am">8:10am</option>
+                    <option value="8:20am">8:20am</option>
+                    <option value="8:30am">8:30am</option>
+                    <option value="8:40am">8:40am</option>
+                    <option value="8:50am">8:50am</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="date-2" name="date" type="radio" value="slotTwo" aria-controls="conditional-date-2" aria-expanded="false">
+                <label class="nhsuk-label nhsuk-radios__label" for="date-2">
+                  9am to 10am
+                </label>
+              </div>
+              <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-date-2">
+                <div class="nhsuk-form-group">
+                  <label class="nhsuk-label" for="chosenAppointmentTime2">
+                    Choose an appointment time from 9am to 10am
+                  </label> <select class="nhsuk-select" id="chosenAppointmentTime2" name="chosenAppointmentTime2">
+                    <option value="choose" selected>Choose appointment time</option>
+                    <option value="9am">9am</option>
+                    <option value="9:10am">9:10am</option>
+                    <option value="9:20am">9:20am</option>
+                    <option value="9:30am">9:30am</option>
+                    <option value="9:40am">9:40am</option>
+                    <option value="9:50am">9:50am</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="date-3" name="date" type="radio" value="slotThree" aria-controls="conditional-date-3" aria-expanded="false">
+                <label class="nhsuk-label nhsuk-radios__label" for="date-3">
+                  10am to 11am
+                </label>
+              </div>
+              <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-date-3">
+                <div class="nhsuk-form-group">
+                  <label class="nhsuk-label" for="chosenAppointmentTime3">
+                    Choose an appointment time from 10am to 11am
+                  </label> <select class="nhsuk-select" id="chosenAppointmentTime3" name="chosenAppointmentTime3">
+                    <option value="choose" selected>Choose appointment time</option>
+                    <option value="10am">10am</option>
+                    <option value="10:10am">10:10am</option>
+                    <option value="10:20am">10:20am</option>
+                    <option value="10:30am">10:30am</option>
+                    <option value="10:40am">10:40am</option>
+                    <option value="10:50am">10:50am</option>
+                  </select>
+                </div>
+              </div>
+
+              <p class="nhsuk-body nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-2"><strong>PM</strong></p>
+
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="date-4" name="date" type="radio" value="slotFour" aria-controls="conditional-date-4" aria-expanded="false">
+                <label class="nhsuk-label nhsuk-radios__label" for="date-4">
+                  2pm to 3pm
+                </label>
+              </div>
+              <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-date-4">
+                <div class="nhsuk-form-group">
+                  <label class="nhsuk-label" for="chosenAppointmentTime4">
+                    Choose an appointment time from 2pm to 3pm
+                  </label> <select class="nhsuk-select" id="chosenAppointmentTime4" name="chosenAppointmentTime4">
+                    <option value="choose" selected>Choose appointment time</option>
+                    <option value="2pm">2pm</option>
+                    <option value="2:10pm">2:10pm</option>
+                    <option value="2:20pm">2:20pm</option>
+                    <option value="2:30pm">2:30pm</option>
+                    <option value="2:40pm">2:40pm</option>
+                    <option value="2:50pm">2:50pm</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="date-5" name="date" type="radio" value="slotFive" aria-controls="conditional-date-5" aria-expanded="false">
+                <label class="nhsuk-label nhsuk-radios__label" for="date-5">
+                  6pm to 7pm
+                </label>
+              </div>
+              <div class="nhsuk-radios__conditional nhsuk-radios__conditional--hidden" id="conditional-date-5">
+                <div class="nhsuk-form-group">
+                  <label class="nhsuk-label" for="chosenAppointmentTime5">
+                    Choose an appointment time from 6pm to 7pm
+                  </label> <select class="nhsuk-select" id="chosenAppointmentTime5" name="chosenAppointmentTime5">
+                    <option value="choose" selected>Choose appointment time</option>
+                    <option value="6pm">6pm</option>
+                    <option value="6:10pm">6:10pm</option>
+                    <option value="6:20pm">6:20pm</option>
+                    <option value="6:30pm">6:30pm</option>
+                    <option value="6:40pm">6:40pm</option>
+                    <option value="6:50pm">6:50pm</option>
+                  </select>
+                </div>
+              </div>
+
+            </div>
+          </fieldset>
+        </div>
+
+        <!--
+        <fieldset class="nhsuk-fieldset">
+          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+            <span class="nhsuk-caption-l">Birmingham Women's Hospital</span>
+            <h1 class="nhsuk-fieldset__heading">
+              Choose a time range
+            </h1>
+          </legend>
+
+    
+          <p>{{data['pharmacy']}}</p>
+
+          {#<p class="nhsuk-body-l">Available time ranges for <span class="nhsuk-u-font-weight-bold"> {{data['date']}}</span></p>#}
+          <p class="nhsuk-body-l">Available time ranges for <span class="nhsuk-u-font-weight-bold"> {{data['chosenDate']}}</span></p>
+
+
+        <div class="nhsuk-form-group">
+            
+          <div class="nhsuk-radios">
+        <p class="nhsuk-u-font-weight-bold">AM</p>
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="time-range-radio" name="hour" type="radio" value="8">
+              <label class="nhsuk-label nhsuk-radios__label" for="appt-days">
+                8am to 9am
+              </label>
+            </div>
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="time-range-radio" name="hour" type="radio" value="9">
+              <label class="nhsuk-label nhsuk-radios__label" for="appt-days">
+                9am to 10am
+              </label>
+            </div>
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="time-range-radio" name="hour" type="radio" value="10">
+              <label class="nhsuk-label nhsuk-radios__label" for="appt-days">
+                10am to 11am
+              </label>
+            </div>
+
+            <br>
+            <p class="nhsuk-u-font-weight-bold">PM</p>
+
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="time-range-radio" name="hour" type="radio" value="2">
+              <label class="nhsuk-label nhsuk-radios__label" for="appt-days-radio">
+                2pm to 3pm
+              </label>
+            </div>
+
+            <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="time-range-radio" name="hour" type="radio" value="6">
+                <label class="nhsuk-label nhsuk-radios__label" for="appt-days-radio">
+                  6pm to 7pm
+                </label>
+              </div>
+      
+          </div>
+          </div>
+        </fieldset>-->
+
+        <button class="nhsuk-button" data-module="nhsuk-button" type="submit">
+          Continue<!-- to appointment time-->
+        </button>
+    </form>
+
+<p class="nhsuk-body">
+  <a class="nhsuk-link" href="book-patient-sites">
+    Choose a different clinic
+  </a>
+</p>
+      
+      </div>
+      <!-- End of content -->
+
+    </div>
+  </div>
+{% endblock %}

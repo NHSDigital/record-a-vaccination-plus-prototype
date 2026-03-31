@@ -1,0 +1,174 @@
+{% extends "e2e-layout3-index-only.html" %}
+
+{% block pageTitle %}RSV filter example{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      Filter and sort RSV invites v2
+    </h1>
+
+    <details class="nhsuk-details nhsuk-expander">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">Filter and sort</span>
+      </summary>
+      <div class="nhsuk-details__text">
+
+        <form action="/rsv-screening" method="post" novalidate>
+
+          {# ----------------------------------------------
+             Gestation timescale (conditional weeks input)
+             ---------------------------------------------- #}
+          {% set gestationConditionalHtml %}
+            {{ input({
+              id: "gestation-weeks",
+              name: "gestationWeeks",
+              label: { text: "Gestation timescale" },
+              classes: "nhsuk-input--width-3",
+              inputmode: "numeric",
+              suffix: "weeks",
+              spellcheck: false
+            }) }}
+          {% endset %}
+
+          {{ radios({
+            idPrefix: "gestation-timescale",
+            name: "gestationTimescale",
+            fieldset: { legend: { text: "Gestation timescale", classes: "nhsuk-fieldset__legend" } },
+            items: [
+              { value: "yes", text: "Yes", conditional: { html: gestationConditionalHtml } },
+              { value: "no", text: "No" }
+            ]
+          }) }}
+
+          {# ----------------------------------------------
+             Can be contacted by phone
+             ---------------------------------------------- #}
+          {{ radios({
+            idPrefix: "contact-by-phone",
+            name: "contactByPhone",
+            fieldset: { legend: { text: "Can be contacted by phone", classes: "nhsuk-fieldset__legend" } },
+            items: [
+              { value: "yes", text: "Yes" },
+              { value: "no", text: "No" }
+            ]
+          }) }}
+
+          {# ----------------------------------------------
+             Vaccine and side effects were discussed
+             ---------------------------------------------- #}
+          {{ radios({
+            idPrefix: "vaccine-discussed",
+            name: "vaccineDiscussed",
+            fieldset: { legend: { text: "Vaccine and side effects were discussed", classes: "nhsuk-fieldset__legend" } },
+            items: [
+              { value: "yes", text: "Yes" },
+              { value: "no", text: "No" }
+            ]
+          }) }}
+
+          {# ----------------------------------------------
+             Previously received RSV vaccination (conditional weeks input)
+             ---------------------------------------------- #}
+          {% set prevRsvConditionalHtml %}
+            {{ input({
+              id: "prev-rsv-weeks",
+              name: "prevRsvWeeks",
+              label: { text: "How long ago did patient receive vaccination" },
+              classes: "nhsuk-input--width-3",
+              inputmode: "numeric",
+              suffix: "weeks",
+              spellcheck: false
+            }) }}
+          {% endset %}
+
+          {{ radios({
+            idPrefix: "previous-rsv",
+            name: "previousRsv",
+            fieldset: { legend: { text: "Previously received RSV vaccination", classes: "nhsuk-fieldset__legend" } },
+            items: [
+              { value: "yes", text: "Yes", conditional: { html: prevRsvConditionalHtml } },
+              { value: "no", text: "No" }
+            ]
+          }) }}
+
+          {# ----------------------------------------------
+             Has an existing booking for an RSV vaccination
+             ---------------------------------------------- #}
+          {{ radios({
+            idPrefix: "existing-booking",
+            name: "existingBooking",
+            fieldset: { legend: { text: "Has an existing booking for an RSV vaccination", classes: "nhsuk-fieldset__legend" } },
+            items: [
+              { value: "yes", text: "Yes" },
+              { value: "no", text: "No" }
+            ]
+          }) }}
+
+          {# ----------------------------------------------
+             Received an invitation for an RSV vaccination (conditional weeks input)
+             ---------------------------------------------- #}
+          {% set rsvInviteConditionalHtml %}
+            {{ input({
+              id: "rsv-invite-weeks",
+              name: "rsvInviteWeeks",
+              label: { text: "How long ago did patient receive invitation" },
+              classes: "nhsuk-input--width-3",
+              inputmode: "numeric",
+              suffix: "weeks",
+              spellcheck: false
+            }) }}
+          {% endset %}
+
+          {{ radios({
+            idPrefix: "rsv-invite",
+            name: "rsvInvite",
+            fieldset: { legend: { text: "Received an invitation for an RSV vaccination", classes: "nhsuk-fieldset__legend" } },
+            items: [
+              { value: "yes", text: "Yes", conditional: { html: rsvInviteConditionalHtml } },
+              { value: "no", text: "No" }
+            ]
+          }) }}
+
+          {# ----------------------------------------------
+             Received an invitation for another vaccination (conditional weeks input)
+             ---------------------------------------------- #}
+          {% set otherInviteConditionalHtml %}
+            {{ input({
+              id: "other-invite-weeks",
+              name: "otherInviteWeeks",
+              label: { text: "How long ago did patient receive invitation" },
+              classes: "nhsuk-input--width-3",
+              inputmode: "numeric",
+              suffix: "weeks",
+              spellcheck: false
+            }) }}
+          {% endset %}
+
+          {{ radios({
+            idPrefix: "other-invite",
+            name: "otherInvite",
+            fieldset: { legend: { text: "Received an invitation for another vaccination", classes: "nhsuk-fieldset__legend" } },
+            items: [
+              { value: "yes", text: "Yes", conditional: { html: otherInviteConditionalHtml } },
+              { value: "no", text: "No" }
+            ]
+          }) }}
+
+          <div style="display: flex; align-items: center; gap: 1rem; margin-top: 2rem; margin-bottom: 0;">
+            <button type="submit" class="nhsuk-button" data-module="nhsuk-button">
+              Continue
+            </button>
+            <p class="nhsuk-body"><a class="nhsuk-link" href="#/">Clear all</a></p>
+          </div>
+
+        </form>
+
+      </div>
+    </details>
+
+  </div>
+</div>
+{% endblock %}

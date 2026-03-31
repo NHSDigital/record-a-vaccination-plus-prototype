@@ -1,0 +1,74 @@
+<!--
+  This is the main layout where you can:
+    - change the header and footer
+    - add custom CSS and JavaScript
+-->
+
+<!-- Extends the layout from /docs/views/template.html -->
+{% extends "template.html" %}
+
+<!-- Add your custom CSS or Sass in /app/assets/sass/main.scss -->
+{% block headCSS %}
+  <link href="/css/main.css" rel="stylesheet">
+
+{% endblock %}
+
+<!-- Set the page title -->
+{% block pageTitle %}
+  {% if pageName %}{{ pageName }} – {% endif %}NHS {{ serviceName }}
+{% endblock %}
+
+{% block header %}
+  {% include "includes/header-logged-in-organisation.html" %}
+{% endblock %}
+
+<!-- Edit the footer -->
+<!-- Footer code examples can be found at https://service-manual.nhs.uk/design-system/components/footer -->
+{% block footer %}
+  {{ footer({
+    links: [
+      {
+        URL: "/accessibility-statement",
+        label: "Accessibility statement"
+      },
+      {
+        URL: "/contact-us",
+        label: "Contact us"
+      },
+      {
+        URL: "/cookies",
+        label: "Cookies"
+      },
+      {
+        URL: "https://guide.ravs.england.nhs.uk/guide/",
+        label: "User guide (opens in new tab)"
+      },
+      {
+        URL: "/terms-of-use1",
+        label: "Terms of use"
+      },
+      {
+        URL: "/updates",
+        label: "What's new"
+      },
+      {
+        URL: "/prototype-admin/reset-data",
+        label: "Reset prototype test data"
+      }
+    ]
+  })}}
+{% endblock %}
+
+{% block bodyEnd %}
+  {% block scripts %}
+    <!-- Custom JavaScript files can be added to this file -->
+    {% include "includes/scripts.html" %}
+
+    <script src="/js/x-govuk.js"></script>
+    <script>
+      window.GOVUKPrototypeComponents.initAll()
+    </script>
+    <!-- For adding page specific JavsScript -->
+    {% block pageScripts %}{% endblock %}
+  {% endblock %}
+{% endblock %}

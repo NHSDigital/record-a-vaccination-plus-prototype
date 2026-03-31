@@ -1,0 +1,40 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Vaccination saved" %}
+
+{% set patientName = data.patientName if data.patientName else "Jodie Smith" %}
+
+{% set currentSection = "run" %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if (errors | length) > 0 %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: errors
+        }) }}
+      {% endif %}
+
+      {% set panelHtml %}
+        <a href="#" class="nhsuk-link--reverse">Michael James's COVID-19 record</a> will be sent to their GP.
+      {% endset %}
+
+      {{ panel({
+        titleText: "Vaccination saved",
+        html: panelHtml
+      }) }}
+
+      <h2 class="nhsuk-heading-m nhsuk-u-padding-top-5">
+        What would you like to do next?
+      </h2>
+      <ul class="nhsuk-list">
+        <li><a href="vaccine">Record a second vaccination for Michael James's</a></li>
+        <li><a href="/e2e-record-vaccinations/site-overview">Return to clinic details</a></li>
+      </ul>
+
+    </div>
+  </div>
+
+{% endblock %}

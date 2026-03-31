@@ -1,0 +1,381 @@
+<head><style>
+/* Hide the first (Patient ID) column only within the two result tables */
+#panelFiltered table.nhsuk-table th:first-child,
+#panelFiltered table.nhsuk-table td:first-child,
+#panelSuppressed table.nhsuk-table th:first-child,
+#panelSuppressed table.nhsuk-table td:first-child {
+    display: none !important;
+}
+</style></head>{% extends 'e2e-layout3.html' %}
+{% set currentSection = "organise" %}
+{% block pageTitle %}Refine and confirm your RSV invite send list{% endblock %}
+
+{% block beforeContent %}
+  <a class="nhsuk-back-link" href="#" id="backLink">Go back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+<div class="nhsuk-grid-column-full">
+
+  <h1 class="nhsuk-heading-l">Refine and confirm your {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} invite send list</h1>
+
+<nav aria-label="Secondary menu" class="x-govuk-secondary-navigation">
+<ul class="x-govuk-secondary-navigation__list">
+<li class="x-govuk-secondary-navigation__list-item x-govuk-secondary-navigation__list-item--current" id="liFiltered">
+<a aria-current="page" href="#" id="linkFiltered">Send list (0)</a>
+</li>
+<li class="x-govuk-secondary-navigation__list-item" id="liSuppressed">
+<a href="#" id="linkSuppressed">Excluded from send list (0)</a>
+</li>
+</ul>
+</nav>
+<p class="nhsuk-hint nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-4">Scroll horizontally to explore full patient dataset</p>
+<div id="panelFiltered">
+<div aria-label="Send list table" class="ons-like-scroll" role="region" tabindex="0">
+<table class="nhsuk-table">
+<thead><tr id="table-head-row"></tr></thead>
+<tbody id="removable-table-body"></tbody>
+</table>
+</div>
+<div class="nhsuk-u-margin-top-4" id="filtered-pagination"></div>
+</div>
+<div class="hiddenPanel" id="panelSuppressed">
+<div aria-label="Excluded table" class="ons-like-scroll" role="region" tabindex="0">
+<table class="nhsuk-table">
+<thead><tr id="suppressed-head-row"></tr></thead>
+<tbody id="suppressed-table-body"></tbody>
+</table>
+</div>
+</div>
+<div class="nhsuk-u-margin-top-4">
+<div class="row-counter-line" style="display:flex;align-items:center;gap:12px;">
+<input aria-label="Patients selected" class="nhsuk-input nhsuk-input--width-5" id="row-count" readonly="" type="text" value="0"/>
+
+  <span class="nhsuk-body">patients chosen to be invited for {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %}</span>
+
+</div>
+</div>
+<div class="nhsuk-u-margin-top-5">
+  <a class="nhsuk-button" data-module="nhsuk-button" href="invite-templates">Next: Complete invite message</a>
+  <p class="nhsuk-body"><a class="nhsuk-link" id="backToInvite" href="#">Back to invite selection screen</a></p>
+</div>
+<div aria-live="polite" class="nhsuk-u-visually-hidden" id="table-live"></div>
+</div>
+</div>
+<style>
+.ons-like-scroll{overflow-x:auto;background:#f0f4f5;border:1px solid #d8dde0;border-left:0;border-right:0;}
+.nhsuk-table{margin-bottom:0;min-width:640px;width:100%;border-collapse:collapse;}
+.nhsuk-table thead th{position:sticky;top:0;background:#f0f4f5;}
+.nhsuk-table__header,.nhsuk-table__cell{white-space:nowrap;}
+.table-col-action a{white-space:nowrap;display:inline-block;}
+.is-sticky-col{position:sticky;left:0;background:#f0f4f5;z-index:3;box-shadow:inset -1px 0 0 #d8dde0;}
+.hiddenPanel{display:none;}
+.hidden-row{display:none;}
+.nhsuk-pagination--numbered__item span[aria-hidden]{padding:0 .4rem;display:inline-block;}
+</style>
+<script src="/js/send-invite-data/patient-data-v2.js"></script>
+<script>
+(function(){
+// Back link includes the same query so selections persist on return
+(function(){var qs=window.location.search||'';var base=window.location.pathname.replace(/[^\/]+$/, '');var back=document.getElementById('backLink');if(back) back.href=base+'choose-rsv-invite-recipients'+qs;})();
+(function(){var qs=window.location.search||'';var base=window.location.pathname.replace(/[^\/]+$/, '');var back=document.getElementById('backToInvite');if(back) back.href=base+'choose-rsv-invite-recipients'+qs;})();
+
+// Read selected filters ONLY from URL
+const params=new URLSearchParams(window.location.search);
+function sel(key){ return params.getAll(key).includes('1'); }
+const selected={f28w:sel('f28w'),fContacted:sel('fContacted'),fPhone:sel('fPhone'),
+ fExpl:sel('fExpl'),fNo9m:sel('fNo9m'),fNoBook:sel('fNoBook'),fNo14:sel('fNo14'),fNoOther:sel('fNoOther')};
+console.log('Selected filters (URL, normalized)', Object.entries(selected).filter(([k,v])=>v).map(([k])=>k));
+
+// Elements
+const theadRow=document.getElementById('table-head-row');
+const tbody=document.getElementById('removable-table-body');
+const suppressedHead=document.getElementById('suppressed-head-row');
+const suppressedTbody=document.getElementById('suppressed-table-body');
+const rowCount=document.getElementById('row-count');
+const linkFiltered=document.getElementById('linkFiltered');
+const linkSuppressed=document.getElementById('linkSuppressed');
+const panelFiltered=document.getElementById('panelFiltered');
+const panelSuppressed=document.getElementById('panelSuppressed');
+const live=document.getElementById('table-live');
+
+function announce(msg){ if(live) live.textContent=msg; }
+function norm(s){return String(s||'').toLowerCase().trim().replace(/\s+/g,' ');}
+function parseDate(str){if(!str)return NaN;const s=String(str).trim();if(!s)return NaN;
+ const dmy=s.replace(/\//g,'-');let m=/^([0-3]?\d)-([0-1]?\d)-(\d{4})$/.exec(dmy);
+ if(m){const d=+m[1],mo=+m[2]-1,y=+m[3];const dt=new Date(y,mo,d);if(dt&&dt.getFullYear()===y&&dt.getMonth()===mo&&dt.getDate()===d)return dt;}
+ const ymd=s.replace(/\//g,'-');let m2=/^(\d{4})-([0-1]?\d)-([0-3]?\d)$/.exec(ymd);
+ if(m2){const y=+m2[1],mo=+m2[2]-1,d=+m2[3];const dt=new Date(y,mo,d);if(dt&&dt.getFullYear()===y&&dt.getMonth()===mo&&dt.getDate()===d)return dt;}
+ const t=Date.parse(s);if(!isNaN(t))return new Date(t);return NaN;}
+
+function getData(){return window.PATIENT_DATA||window.patientDataV2||window.patientData||window.patient_list_data;}
+
+// Columns to completely hide
+const HIDDEN_COLUMNS = [
+  //'Patient ID',
+  //'Address Line 1',
+  //'Town',
+  //'Postcode',
+  'Pertussis eligible (16 weeks)',
+  'RSV eligible (28 weeks)',
+  'COVID-19 & Flu eligible',
+  'Pertussis explained and offered',
+  'Pertussis side effects discussed',
+  'RSV explained and offered',
+  'RSV side effects discussed',
+  'Flu explained and offered',
+  'Flu side effects discussed',
+  'Date of last Pertussis vaccination',
+  'Date of last RSV vaccination',
+  'Date of last Flu vaccination',
+  'Date of last COVID vaccination',
+  'Date of Pertussis vaccination booking',
+  'Date of RSV vaccination booking',
+  'Date of Flu vaccination booking',
+  'Date of COVID vaccination booking',
+  'Date of last Pertussis invite',
+  'Date of last RSV invite',
+  'Date of last Flu invite',
+  'Date of last COVID invite'
+];
+
+// Build headers with sticky Action col
+function buildHeader(columns){
+  theadRow.innerHTML=''; 
+  suppressedHead.innerHTML='';
+
+  // Sticky Action column
+  const thA=document.createElement('th');
+  thA.className='nhsuk-table__header is-sticky-col table-col-action';
+  thA.textContent='Action';
+  theadRow.appendChild(thA);
+
+  const thA2=thA.cloneNode(true);
+  suppressedHead.appendChild(thA2);
+
+  // Add headers, skipping hidden ones
+  columns.forEach(c=>{
+    if (HIDDEN_COLUMNS.includes(c)) return; // skip hidden cols
+    const th=document.createElement('th');
+    th.className='nhsuk-table__header';
+    th.textContent=c;
+    theadRow.appendChild(th);
+
+    const th2=th.cloneNode(true);
+    suppressedHead.appendChild(th2);
+  });
+}
+
+// Row builders
+function buildRow(values,toSuppressed){
+  const tr=document.createElement('tr');
+
+  // Sticky Action cell
+  const tdA=document.createElement('td');
+  tdA.className='nhsuk-table__cell is-sticky-col table-col-action';
+  const a=document.createElement('a');
+  a.href='#';
+  a.className='nhsuk-link nhsuk-link--no-visited-state';
+  if(toSuppressed){ 
+    a.setAttribute('data-add',''); 
+    a.textContent='Add back'; 
+  } else { 
+    a.setAttribute('data-remove',''); 
+    a.textContent='Remove'; 
+  }
+  tdA.appendChild(a);
+  tr.appendChild(tdA);
+
+  // Build data cells, skipping hidden columns
+  const cols = getData().columns;
+  values.forEach((v, idx) => {
+    if (HIDDEN_COLUMNS.includes(cols[idx])) return; // skip hidden
+    const td=document.createElement('td');
+    td.className='nhsuk-table__cell';
+    td.textContent=(v==null?'':String(v));
+    tr.appendChild(td);
+  });
+
+  return tr;
+}
+
+// Filter predicate working on raw values
+function passesFilters(values,cols){
+  const today=new Date();today.setHours(0,0,0,0);
+  const cutoff9=new Date(today.getTime());cutoff9.setMonth(cutoff9.getMonth()-9);
+  const cutoff14=new Date(today.getTime()-14*24*60*60*1000);
+  const idx=(h)=>cols.findIndex(c=>norm(c)===norm(h));
+  const get=(h)=>{ const i=idx(h); return i>=0?values[i]:''; };
+  let vis=true;
+  // AND logic across selected flags
+  if(selected.fContacted && get('Contactable')!=='Yes') vis=false;
+  if(selected.fPhone && get('Phone number')==='') vis=false;
+  if(selected.f28w){ const e=parseDate(get('RSV eligible (28 weeks)')); if(isNaN(e) || (today<=e)) vis=false; }
+  if(selected.fExpl && get('RSV side effects discussed')!=='Yes') vis=false;
+  if(selected.fNo9m){ const l=parseDate(get('Date of last RSV vaccination')); if(!isNaN(l) && l>=cutoff9) vis=false; }
+  if(selected.fNoBook){ const b=parseDate(get('Date of RSV vaccination booking')); if(!isNaN(b) && b>today) vis=false; }
+  if(selected.fNo14){ const inv=parseDate(get('Date of last RSV invite')); if(!isNaN(inv) && inv>=cutoff14) vis=false; }
+  if(selected.fNoOther){ const p=parseDate(get('Date of last Pertussis invite')), f=parseDate(get('Date of last Flu invite')), c=parseDate(get('Date of last COVID invite'));
+    if((!isNaN(p)&&p>today)||(!isNaN(f)&&f>today)||(!isNaN(c)&&c>today)) vis=false; }
+  return vis;
+}
+
+function updateCounts(){
+  const sendCount=tbody.querySelectorAll('tr').length;
+  const excludedCount=suppressedTbody.querySelectorAll('tr').length;
+  rowCount.value=sendCount;
+  linkFiltered.textContent='Send list ('+sendCount+')';
+  linkSuppressed.textContent='Excluded from send list ('+excludedCount+')';
+}
+
+function init(){
+  const data=getData(); if(!data){ console.error('No data'); return; }
+  const {columns,rows}=data;
+  buildHeader(columns);
+  const any = Object.values(selected).some(Boolean);
+  console.log('Any filters?', any);
+  tbody.innerHTML='';
+  if(any){
+    const frag=document.createDocumentFragment();
+    rows.forEach(vals=>{ if(passesFilters(vals,columns)) frag.appendChild(buildRow(vals,false)); });
+    tbody.appendChild(frag);
+  }
+  updateCounts();
+  console.log('Rendered rows:', tbody.querySelectorAll('tr').length);
+  announce('Send list ready');
+}
+
+// Actions: Remove/Add back
+tbody.addEventListener('click',function(e){
+  const a=e.target.closest('[data-remove]'); if(!a) return;
+  e.preventDefault();
+  const tr=a.closest('tr'); const vals=[...tr.querySelectorAll('td')].slice(1).map(td=>td.textContent);
+  suppressedTbody.appendChild(buildRow(vals,true)); tr.remove(); updateCounts();
+});
+suppressedTbody.addEventListener('click',function(e){
+  const a=e.target.closest('[data-add]'); if(!a) return;
+  e.preventDefault();
+  const tr=a.closest('tr'); const vals=[...tr.querySelectorAll('td')].slice(1).map(td=>td.textContent);
+  tbody.appendChild(buildRow(vals,false)); tr.remove(); updateCounts();
+});
+
+// Tabs
+linkFiltered.addEventListener('click',function(e){e.preventDefault();panelFiltered.classList.remove('hiddenPanel');panelSuppressed.classList.add('hiddenPanel');linkFiltered.setAttribute('aria-current','page');linkSuppressed.removeAttribute('aria-current');});
+linkSuppressed.addEventListener('click',function(e){e.preventDefault();panelSuppressed.classList.remove('hiddenPanel');panelFiltered.classList.add('hiddenPanel');linkSuppressed.setAttribute('aria-current','page');linkFiltered.removeAttribute('aria-current');});
+
+
+// --- Pagination (numbered) below tables ---
+const PAGE_SIZE = 25;
+const filteredPager = document.getElementById('filtered-pagination');
+const suppressedPager = document.getElementById('suppressed-pagination');
+const state = { filteredPage: 1, suppPage: 1 };
+
+function getRows(tb){ return Array.from(tb.querySelectorAll('tr')); }
+function totalPages(tb){ return Math.max(1, Math.ceil(getRows(tb).length / PAGE_SIZE)); }
+function clamp(tb, p){ const t = totalPages(tb); return Math.min(Math.max(1, p), t); }
+function showPage(tb, p){
+  const rows = getRows(tb);
+  const start = (p-1)*PAGE_SIZE, end = start + PAGE_SIZE;
+  rows.forEach((r, i)=>{ r.style.display = (i >= start && i < end) ? '' : 'none'; });
+}
+
+function buildNumberedList(total, current, ctx){
+  const ul = document.createElement('ul'); ul.className='nhsuk-pagination__list--numbered';
+  function addPage(n){
+    const li=document.createElement('li'); li.className='nhsuk-pagination--numbered__item';
+    const a=document.createElement('a'); a.className='nhsuk-pagination--numbered__link'; a.href='#/'; a.setAttribute('aria-label','Page '+n);
+    a.dataset.page=n; a.dataset.pager=ctx; a.textContent=n; if(n===current) a.setAttribute('aria-current','page');
+    li.appendChild(a); ul.appendChild(li);
+  }
+  function addDots(){
+    const li=document.createElement('li'); li.className='nhsuk-pagination--numbered__item';
+    const s=document.createElement('span'); s.setAttribute('aria-hidden','true'); s.textContent='…';
+    li.appendChild(s); ul.appendChild(li);
+  }
+  const windowSize = 5;
+  let start = Math.max(1, current - Math.floor(windowSize/2));
+  let end = Math.min(total, start + windowSize - 1);
+  start = Math.max(1, Math.min(start, total-windowSize+1));
+  if(start>1){ addPage(1); if(start>2) addDots(); }
+  for(let i=start;i<=end;i++) addPage(i);
+  if(end<total){ if(end<total-1) addDots(); addPage(total); }
+  return ul;
+}
+function buildPager(total, current, ctx){
+  const nav=document.createElement('nav');
+  nav.className='nhsuk-pagination nhsuk-pagination--numbered';
+  nav.setAttribute('role','navigation');
+  nav.setAttribute('aria-label','Pagination');
+
+  const prevWrap=document.createElement('div'); prevWrap.className='nhsuk-pagination--numbered__prev';
+  if(current>1){
+    const prev=document.createElement('a'); prev.className='nhsuk-pagination--numbered__link'; prev.href='#/'; prev.rel='prev';
+    prev.dataset.page=current-1; prev.dataset.pager=ctx;
+    prev.innerHTML = '<svg class="nhsuk-icon nhsuk-icon--arrow-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true"><path d="M10.7 6.3c.4.4.4 1 0 1.4L7.4 11H19a1 1 0 0 1 0 2H7.4l3.3 3.3c.4.4.4 1 0 1.4a1 1 0 0 1-1.4 0l-5-5A1 1 0 0 1 4 12c0-.3.1-.5.3-.7l5-5a1 1 0 0 1 1.4 0Z"/></svg> Previous<span class="nhsuk-u-visually-hidden"> page</span>';
+    prevWrap.appendChild(prev);
+  } else {
+    const prevSpan=document.createElement('span'); prevSpan.className='nhsuk-pagination--numbered__link'; prevSpan.setAttribute('aria-disabled','true');
+    prevSpan.innerHTML = '<svg class="nhsuk-icon nhsuk-icon--arrow-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true"><path d="M10.7 6.3c.4.4.4 1 0 1.4L7.4 11H19a1 1 0 0 1 0 2H7.4l3.3 3.3c.4.4.4 1 0 1.4a1 1 0 0 1-1.4 0l-5-5A1 1 0 0 1 4 12c0-.3.1-.5.3-.7l5-5a1 1 0 0 1 1.4 0Z"/></svg> Previous<span class="nhsuk-u-visually-hidden"> page</span>';
+    prevWrap.appendChild(prevSpan);
+  }
+  nav.appendChild(prevWrap);
+
+  nav.appendChild(buildNumberedList(total, current, ctx));
+
+  const nextWrap=document.createElement('div'); nextWrap.className='nhsuk-pagination--numbered__next';
+  if(current<total){
+    const next=document.createElement('a'); next.className='nhsuk-pagination--numbered__link'; next.href='#/'; next.rel='next';
+    next.dataset.page=current+1; next.dataset.pager=ctx;
+    next.innerHTML = 'Next<span class="nhsuk-u-visually-hidden"> page</span><svg class="nhsuk-icon nhsuk-icon--arrow-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true"><path d="m14.7 6.3 5 5c.2.2.3.4.3.7 0 .3-.1.5-.3.7l-5 5a1 1 0 0 1-1.4-1.4l3.3-3.3H5a1 1 0 0 1 0-2h11.6l-3.3-3.3a1 1 0 1 1 1.4-1.4Z"/></svg>';
+    nextWrap.appendChild(next);
+  } else {
+    const nextSpan=document.createElement('span'); nextSpan.className='nhsuk-pagination--numbered__link'; nextSpan.setAttribute('aria-disabled','true');
+    nextSpan.innerHTML = 'Next<span class="nhsuk-u-visually-hidden"> page</span><svg class="nhsuk-icon nhsuk-icon--arrow-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true"><path d="m14.7 6.3 5 5c.2.2.3.4.3.7 0 .3-.1.5-.3.7l-5 5a1 1 0 0 1-1.4-1.4l3.3-3.3H5a1 1 0 0 1 0-2h11.6l-3.3-3.3a1 1 0 1 1 1.4-1.4Z"/></svg>';
+    nextWrap.appendChild(nextSpan);
+  }
+  nav.appendChild(nextWrap);
+
+  return nav;
+}
+function renderSection(tb, pagerEl, pageRef, ctx){
+  const current = clamp(tb, state[pageRef]);
+  state[pageRef] = current;
+  showPage(tb, current);
+  pagerEl.innerHTML = '';
+  pagerEl.appendChild(buildPager(totalPages(tb), current, ctx));
+}
+function renderFiltered(){ renderSection(tbody, filteredPager, 'filteredPage', 'filtered'); }
+function renderSupp(){ renderSection(suppressedTbody, suppressedPager, 'suppPage', 'suppressed'); }
+
+// Pagination click handler
+document.addEventListener('click', function(e){
+  const link = e.target.closest('.nhsuk-pagination--numbered__link');
+  if (!link) return;
+  e.preventDefault();
+  const page = parseInt(link.dataset.page, 10);
+  const ctx = link.dataset.pager;
+  if (!page || !ctx) return;
+  if (ctx === 'filtered'){ state.filteredPage = page; renderFiltered(); }
+  else { state.suppPage = page; renderSupp(); }
+});
+
+// Patch init & updateCounts so pagination re-renders
+const _origInit = init;
+init = function(){
+  _origInit();
+  state.filteredPage = 1;
+  state.suppPage = 1;
+  renderFiltered();
+  renderSupp();
+};
+const _updateCounts = updateCounts;
+updateCounts = function(){
+  _updateCounts();
+  renderFiltered();
+  renderSupp();
+};
+
+window.addEventListener('load',init);
+})();</script>
+{% endblock %}

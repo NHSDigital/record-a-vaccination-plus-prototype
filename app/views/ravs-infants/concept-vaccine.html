@@ -1,0 +1,599 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Which vaccines are you recording?" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% set organisationSetting = currentUser.organisations | findById(data.currentOrganisationId) %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "/index-infant" }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      {% if (errors | length) > 0 %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: errors
+        }) }}
+      {% endif %}
+      <h1 class="nhsuk-heading-l">Which vaccinations are you recording?</h1>
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      {% set contentAllVaccinations %}
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-two-thirds">
+            <h2 class="nhsuk-heading-s">Choose all <span class="nhsuk-u-visually-hidden">0 to 5 years vaccines </span>that apply</h2>
+            <form method="post" novalidate>
+              {{ checkboxes({
+                idPrefix: "AllVaccinationsSeasonal",
+                name: "AllVaccinationsSeasonal",
+                fieldset: {
+                  legend: {
+                    text: "Seasonal",
+                    size: "m"
+                  }
+                },
+                items: [
+                  {
+                    value: "AllVaccinationsCovid",
+                    text: "COVID-19"
+                  },
+                  {
+                    value: "AllVaccinationsFlu",
+                    text: "Flu"
+                  }
+                ]
+              }) }}
+
+              {{ checkboxes({
+                idPrefix: "AllVaccinationsNonseasonal",
+                name: "AllVaccinationsNonseasonal",
+                fieldset: {
+                  legend: {
+                    text: "Non-seasonal",
+                    size: "m"
+                  }
+                },
+                items: [
+                  {
+                    value: "AllVaccinations3-in-1 teenage booster",
+                    text: "3-in-1 teenage booster"
+                  },
+                  {
+                    value: "AllVaccinations4-in-1 pre-school booster",
+                    text: "4-in-1 pre-school booster"
+                  },
+                  {
+                    value: "AllVaccinations6-in-1",
+                    text: "6-in-1"
+                  },
+                  {
+                    value: "AllVaccinationsBCG",
+                    text: "BCG"
+                  },
+                  {
+                    value: "AllVaccinationsHepatitus B",
+                    text: "Hepatitus B"
+                  },
+                  {
+                    value: "AllVaccinationsHPV",
+                    text: "HPV"
+                  },
+                  {
+                    value: "AllVaccinationsMenACWY",
+                    text: "MenACWY"
+                  },
+                  {
+                    value: "AllVaccinationsMenB",
+                    text: "MenB"
+                  },
+                  {
+                    value: "AllVaccinationsMMR",
+                    text: "MMR"
+                  },
+                  {
+                    value: "AllVaccinationsMMRV",
+                    text: "MMRV"
+                  },
+                  {
+                    value: "AllVaccinationsPertussis",
+                    text: "Pertussis"
+                  },
+                  {
+                    value: "AllVaccinationsPneumococcal",
+                    text: "Pneumococcal"
+                  },
+                  {
+                    value: "AllVaccinationsRotavirus",
+                    text: "Rotavirus"
+                  },
+                  {
+                    value: "AllVaccinationsRSV",
+                    text: "RSV"
+                  },
+                  {
+                    value: "AllVaccinationsShingles",
+                    text: "Shingles"
+                  }
+                ]
+              }) }}
+
+              {{ button({
+                text: "Continue"
+              })}}
+            </form>
+          </div>
+          <div class="nhsuk-grid-column-one-third">
+            {% set contentHTML %}
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Name</span><br>Nadia Hillaker</p>
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Date of birth</span><br>{{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { month: -6 }) }}<br>(6 months old today)</p>
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">NHS number</span><br>944 930 6001</p>
+            {% endset %}
+
+            {{ card({
+              heading: "Patient",
+              feature: true,
+              descriptionHtml: contentHTML
+            }) }}
+          </div>
+        </div>
+      {% endset -%}
+
+      {% set contentZeroToFiveYears %}
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-two-thirds">
+            <h2 class="nhsuk-heading-s">Choose all <span class="nhsuk-u-visually-hidden">0 to 5 years vaccines </span>that apply</h2>
+            <form method="post" novalidate>
+              {{ checkboxes({
+                idPrefix: "ZeroToFiveYearsSeasonal",
+                name: "ZeroToFiveYearsSeasonal",
+                fieldset: {
+                  legend: {
+                    text: "Seasonal",
+                    size: "m"
+                  }
+                },
+                items: [
+                  {
+                    value: "ZeroToFiveYearsCovid",
+                    text: "COVID-19"
+                  },
+                  {
+                    value: "ZeroToFiveYearsFlu",
+                    text: "Flu"
+                  }
+                ]
+              }) }}
+
+              {{ checkboxes({
+                idPrefix: "ZeroToFiveYearsNonseasonal",
+                name: "ZeroToFiveYearsNonseasonal",
+                fieldset: {
+                  legend: {
+                    text: "Non-seasonal",
+                    size: "m"
+                  }
+                },
+                items: [
+                  {
+                    value: "ZeroToFiveYears4-in-1 pre-school booster",
+                    text: "4-in-1 pre-school booster"
+                  },
+                  {
+                    value: "ZeroToFiveYears6-in-1",
+                    text: "6-in-1"
+                  },
+                  {
+                    value: "ZeroToFiveYearsBCG",
+                    text: "BCG"
+                  },
+                  {
+                    value: "ZeroToFiveYearsHepatitis B",
+                    text: "Hepatitis B"
+                  },
+                  {
+                    value: "ZeroToFiveYearsMenB",
+                    text: "MenB"
+                  },
+                  {
+                    value: "ZeroToFiveYearsMMRV",
+                    text: "MMRV"
+                  },
+                  {
+                    value: "ZeroToFiveYearsPneumococcal",
+                    text: "Pneumococcal"
+                  },
+                  {
+                    value: "ZeroToFiveYearsRotavirus",
+                    text: "Rotavirus"
+                  }
+                ]
+              }) }}
+
+              {{ button({
+                text: "Continue"
+              })}}
+            </form>
+          </div>
+          <div class="nhsuk-grid-column-one-third">
+            {% set contentHTML %}
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Name</span><br>Nadia Hillaker</p>
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Date of birth</span><br>{{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { month: -6 }) }}<br>(6 months old today)</p>
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">NHS number</span><br>944 930 6001</p>
+            {% endset %}
+
+            {{ card({
+              heading: "Patient",
+              feature: true,
+              descriptionHtml: contentHTML
+            }) }}
+          </div>
+        </div>
+      {% endset -%}
+
+      {% set contentSixToTenYears %}
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-two-thirds">
+            <h2 class="nhsuk-heading-s">Choose all <span class="nhsuk-u-visually-hidden">0 to 5 years vaccines </span>that apply</h2>
+            <form method="post" novalidate>
+              {{ checkboxes({
+                idPrefix: "SixToTenYearsSeasonal",
+                name: "SixToTenYearsSeasonal",
+                fieldset: {
+                  legend: {
+                    text: "Seasonal",
+                    size: "m"
+                  }
+                },
+                items: [
+                  {
+                    value: "SixToTenYearsCovid",
+                    text: "COVID-19"
+                  },
+                  {
+                    value: "SixToTenYearsFlu",
+                    text: "Flu"
+                  }
+                ]
+              }) }}
+
+              {{ checkboxes({
+                idPrefix: "SixToTenYearsNonseasonal",
+                name: "SixToTenYearsNonseasonal",
+                fieldset: {
+                  legend: {
+                    text: "Non-seasonal",
+                    size: "m"
+                  }
+                },
+                items: [
+                  {
+                    value: "SixToTenYears6-in-1",
+                    text: "6-in-1"
+                  },
+                  {
+                    value: "SixToTenYearsMMR",
+                    text: "MMR"
+                  }
+                ]
+              }) }}
+
+              {{ button({
+                text: "Continue"
+              })}}
+            </form>
+          </div>
+          <div class="nhsuk-grid-column-one-third">
+            {% set contentHTML %}
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Name</span><br>Nadia Hillaker</p>
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Date of birth</span><br>{{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { month: -6 }) }}<br>(6 months old today)</p>
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">NHS number</span><br>944 930 6001</p>
+            {% endset %}
+
+            {{ card({
+              heading: "Patient",
+              feature: true,
+              descriptionHtml: contentHTML
+            }) }}
+          </div>
+        </div>
+      {% endset -%}
+
+      {% set contentElevenToTwentyFourYears %}
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-two-thirds">
+            <h2 class="nhsuk-heading-s">Choose all <span class="nhsuk-u-visually-hidden">0 to 5 years vaccines </span>that apply</h2>
+            <form method="post" novalidate>
+              {{ checkboxes({
+                idPrefix: "ElevenToTwentyFourYearsSeasonal",
+                name: "ElevenToTwentyFourYearsSeasonal",
+                fieldset: {
+                  legend: {
+                    text: "Seasonal",
+                    size: "m"
+                  }
+                },
+                items: [
+                  {
+                    value: "ElevenToTwentyFourYearsCovid",
+                    text: "COVID-19"
+                  },
+                  {
+                    value: "ElevenToTwentyFourYearsFlu",
+                    text: "Flu"
+                  }
+                ]
+              }) }}
+
+              {{ checkboxes({
+                idPrefix: "ElevenToTwentyFourYearsNonseasonal",
+                name: "ElevenToTwentyFourYearsNonseasonal",
+                fieldset: {
+                  legend: {
+                    text: "Non-seasonal",
+                    size: "m"
+                  }
+                },
+                items: [
+                  {
+                    value: "ElevenToTwentyFourYears3-in-1 teenage booster",
+                    text: "3-in-1 teenage booster"
+                  },
+                  {
+                    value: "ElevenToTwentyFourYearsHPV",
+                    text: "HPV"
+                  },
+                  {
+                    value: "ElevenToTwentyFourYearsMenACWY",
+                    text: "MenACWY"
+                  },
+                  {
+                    value: "ElevenToTwentyFourYearsMMR",
+                    text: "MMR"
+                  }
+                ]
+              }) }}
+
+              {{ button({
+                text: "Continue"
+              })}}
+            </form>
+          </div>
+          <div class="nhsuk-grid-column-one-third">
+            {% set contentHTML %}
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Name</span><br>Nadia Hillaker</p>
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Date of birth</span><br>{{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { month: -6 }) }}<br>(6 months old today)</p>
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">NHS number</span><br>944 930 6001</p>
+            {% endset %}
+
+            {{ card({
+              heading: "Patient",
+              feature: true,
+              descriptionHtml: contentHTML
+            }) }}
+          </div>
+        </div>
+      {% endset -%}
+
+      {% set contentAdult %}
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-two-thirds">
+            <h2 class="nhsuk-heading-s">Choose all <span class="nhsuk-u-visually-hidden">0 to 5 years vaccines </span>that apply</h2>
+            <form method="post" novalidate>
+              {{ checkboxes({
+                idPrefix: "AdultSeasonal",
+                name: "AdultSeasonal",
+                fieldset: {
+                  legend: {
+                    text: "Seasonal",
+                    size: "m"
+                  }
+                },
+                items: [
+                  {
+                    value: "AdultCovid",
+                    text: "COVID-19"
+                  },
+                  {
+                    value: "AdultFlu",
+                    text: "Flu"
+                  }
+                ]
+              }) }}
+
+              {{ checkboxes({
+                idPrefix: "AdultNonseasonal",
+                name: "AdultNonseasonal",
+                fieldset: {
+                  legend: {
+                    text: "Non-seasonal",
+                    size: "m"
+                  }
+                },
+                items: [
+                  {
+                    value: "AdultShingles",
+                    text: "Shingles"
+                  },
+                  {
+                    value: "AdultMMR",
+                    text: "MMR"
+                  },
+                  {
+                    value: "AdultRSV",
+                    text: "RSV"
+                  },
+                  {
+                    value: "AdultPneumococcal",
+                    text: "Pneumococcal"
+                  }
+                ]
+              }) }}
+
+              {{ button({
+                text: "Continue"
+              })}}
+            </form>
+          </div>
+          <div class="nhsuk-grid-column-one-third">
+            {% set contentHTML %}
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Name</span><br>Nadia Hillaker</p>
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Date of birth</span><br>{{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { month: -6 }) }}<br>(6 months old today)</p>
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">NHS number</span><br>944 930 6001</p>
+            {% endset %}
+
+            {{ card({
+              heading: "Patient",
+              feature: true,
+              descriptionHtml: contentHTML
+            }) }}
+          </div>
+        </div>
+      {% endset -%}
+
+      {% set contentMaternity %}
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-two-thirds">
+            <h2 class="nhsuk-heading-s">Choose all <span class="nhsuk-u-visually-hidden">0 to 5 years vaccines </span>that apply</h2>
+            <form method="post" novalidate>
+              {{ checkboxes({
+                idPrefix: "MaternitySeasonal",
+                name: "MaternitySeasonal",
+                fieldset: {
+                  legend: {
+                    text: "Seasonal",
+                    size: "m"
+                  }
+                },
+                items: [
+                  {
+                    value: "MaternityCovid",
+                    text: "COVID-19"
+                  },
+                  {
+                    value: "MaternityFlu",
+                    text: "Flu"
+                  }
+                ]
+              }) }}
+
+              {{ checkboxes({
+                idPrefix: "MaternityNonseasonal",
+                name: "MaternityNonseasonal",
+                fieldset: {
+                  legend: {
+                    text: "Non-seasonal",
+                    size: "m"
+                  }
+                },
+                items: [
+                  {
+                    value: "MaternityRSV",
+                    text: "RSV"
+                  },
+                  {
+                    value: "MaternityPertussis",
+                    text: "Pertussis"
+                  }
+                ]
+              }) }}
+
+              {{ button({
+                text: "Continue"
+              })}}
+            </form>
+          </div>
+          <div class="nhsuk-grid-column-one-third">
+            {% set contentHTML %}
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Name</span><br>Nadia Hillaker</p>
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Date of birth</span><br>{{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { month: -6 }) }}<br>(6 months old today)</p>
+              <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">NHS number</span><br>944 930 6001</p>
+            {% endset %}
+
+            {{ card({
+              heading: "Patient",
+              feature: true,
+              descriptionHtml: contentHTML
+            }) }}
+          </div>
+        </div>
+      {% endset -%}
+
+      {{ tabs({
+        items: [
+        {
+          label: "All vaccinations",
+          id: "all-vaccinations",
+          panel: {
+            html: contentAllVaccinations
+            }
+          },
+          {
+            label: "0 to 5 years",
+            id: "zero-to-five-years",
+            panel: {
+              html: contentZeroToFiveYears
+            }
+          },
+          {
+            label: "6 to 10 years",
+            id: "six-to-ten-years",
+            panel: {
+              html: contentSixToTenYears
+            }
+          },
+          {
+            label: "11 to 24 years",
+            id: "eleven-to-twenty-four-years",
+            panel: {
+              html: contentElevenToTwentyFourYears
+            }
+          },
+          {
+            label: "Adult",
+            id: "adult",
+            panel: {
+              html: contentAdult
+            }
+          },
+          {
+            label: "Maternity",
+            id: "maternity",
+            panel: {
+              html: contentMaternity
+            }
+          }
+        ]
+      }) }}
+
+      {{ details({
+        summaryText: "If your vaccine is not listed",
+        html: "Go to <a href=\"#/\">Vaccines</a> to add it."
+      }) }}
+
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      if (window.location.hash) {
+        window.addEventListener('load', function () {
+          window.scrollTo(0, 0)
+        })
+      }
+    })()
+    
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual'
+    }
+  </script>
+
+{% endblock %}

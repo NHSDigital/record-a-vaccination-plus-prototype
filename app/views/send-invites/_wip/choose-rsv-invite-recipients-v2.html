@@ -1,0 +1,559 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Choose RSV invite recipients
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    <form method="post" action="invite-templates">
+
+      <div class="nhsuk-form-group">
+
+        <fieldset class="nhsuk-fieldset" aria-describedby="rsv-filters-hint">
+          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+            <h1 class="nhsuk-fieldset__heading">
+              Choose RSV invite recipients
+            </h1>
+          </legend>
+
+          <div class="counter-panel nhsuk-u-margin-bottom-4">
+            <div class="counter-inline" data-counter data-start="763" data-format="number" data-currency="GBP" data-min="0">
+              <label id="remaining-label-before" class="nhsuk-label nhsuk-u-margin-bottom-0" for="remaining">
+                763 Patients uploaded, 
+              </label>
+              <input class="nhsuk-input nhsuk-input--width-4" id="row-count" name="row-count" type="text" readonly aria-describedby="remaining-label-after" aria-labelledby="remaining-label-before remaining remaining-label-after" value="100">
+              <label id="remaining-label-after" class="nhsuk-label nhsuk-u-margin-bottom-0" for="row-count">
+                patients selected
+              </label>
+            </div>
+            <div class="nhsuk-u-visually-hidden" aria-live="polite" id="remaining-live"></div>
+          </div>
+    
+          <div class="nhsuk-hint" id="rsv-filters-hint">
+            Select patient filters to be applied
+          </div>
+          <div class="nhsuk-checkboxes" data-module="nhsuk-checkboxes">
+
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="check-28-weeks-pregnant" name="rsv-filters" type="checkbox" value="check-28-weeks-pregnant">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="check-28-weeks-pregnant">
+                Patient is at least 28 weeks pregnant
+              </label>
+            </div>
+
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="check-happy-to-be-contacted" name="rsv-filters" type="checkbox" value="check-happy-to-be-contacted">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="check-happy-to-be-contacted">
+                Patient is happy to be contacted
+              </label>
+            </div>
+
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="check-provided-mobile-number" name="rsv-filters" type="checkbox" value="check-provided-mobile-number">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="check-provided-mobile-number">
+                Patient has provided mobile phone number
+              </label>
+            </div>
+
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="check-rsv-explained" name="rsv-filters" type="checkbox" value="check-rsv-explained">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="check-rsv-explained">
+                RSV vaccine explained and side effects were discussed
+              </label>
+            </div>
+
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="check-not-received-rsv-in-last-year" name="rsv-filters" type="checkbox" value="check-not-received-rsv-in-last-year">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="check-not-received-rsv-in-last-year">
+                Patient has not received RSV vaccination in the last year
+              </label>
+            </div>
+
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="check-no-existing-booking-rsv" name="rsv-filters" type="checkbox" value="check-no-existing-booking-rsv">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="check-no-existing-booking-rsv">
+                Patient does not have an existing booking for an RSV vaccination
+              </label>
+            </div>
+
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="check-not-invited-rsv-last-fortnight" name="rsv-filters" type="checkbox" value="check-not-invited-rsv-last-fortnight">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="check-not-invited-rsv-last-fortnight">
+                Patient has not been invited for an RSV in last fortnight
+              </label>
+            </div>
+
+            <div class="nhsuk-checkboxes__item">
+              <input class="nhsuk-checkboxes__input" id="check-not-received-another-vacc-invite-last-fortnight" name="rsv-filters" type="checkbox" value="check-not-received-another-vacc-invite-last-fortnight">
+              <label class="nhsuk-label nhsuk-checkboxes__label" for="heck-not-received-another-vacc-invite-last-fortnight">
+                Patient has not received another vaccination invite in last fortnight
+              </label>
+            </div>
+
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- TILE FILTERS -->
+      <fieldset class="nhsuk-fieldset">
+        <div class="nhsuk-grid-row">
+          <input class="tile__input filter-tile" type="checkbox" id="filter-28weeks" / style="display:none">
+          <input class="tile__input filter-tile" type="checkbox" id="filter-contacted" / style="display:none">
+          <input class="tile__input filter-tile" type="checkbox" id="filter-phone" / style="display:none">
+          <input class="tile__input filter-tile" type="checkbox" id="filter-rsv-explained" / style="display:none">
+          <input class="tile__input filter-tile" type="checkbox" id="filter-not-rsv-lastyear" / style="display:none">
+          <input class="tile__input filter-tile" type="checkbox" id="filter-not-booked-rsv" / style="display:none">
+          <input class="tile__input filter-tile" type="checkbox" id="filter-not-rsv-14days" / style="display:none">
+          <input class="tile__input filter-tile" type="checkbox" id="filter-other-vaccine" / style="display:none">
+        </div>
+      </fieldset>
+
+      <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-6">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">
+            View patient list
+          </span>
+        </summary>
+        <div class="nhsuk-details__text">
+          <p>Scroll horizontally to view full patient record details</p>
+          {#<div class="ons-like-scroll" role="region" tabindex="0" aria-label="Scrollable data table" data-src="{{ assetPath }}/send-invite-data/send-invites-patient-data.json">#}
+
+          {# X-GOV Secondary navigation #}
+          <nav class="x-govuk-secondary-navigation nhsuk-u-margin-bottom-6" aria-label="Secondary menu">
+            <ul class="x-govuk-secondary-navigation__list">
+              <li id="liFiltered" class="x-govuk-secondary-navigation__list-item x-govuk-secondary-navigation__list-item--current">
+                <a id="linkFiltered" class="x-govuk-secondary-navigation__link" aria-current=page href="javascript:void(0)" onclick="switchToFiltered()">
+                  Filtered (32)
+                </a>
+              </li>
+              <li id="liSuppressed" class="x-govuk-secondary-navigation__list-item ">
+                <a id="linkSuppressed" class="x-govuk-secondary-navigation__link" href="javascript:void(0)" onclick="switchToSuppressed()">
+                  Suppressed (6)
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          {# Filtered #}
+          <div id="panelFiltered">
+            <div class="ons-like-scroll" role="region" tabindex="0" aria-label="Scrollable data table" data-src="/send-invite-data/send-invites-patient-data.json">
+              <table class="nhsuk-table" aria-describedby="table-caption">
+                <caption id="table-caption" class="nhsuk-table__caption nhsuk-u-visually-hidden">Patient list</caption>
+                <thead><tr id="table-head-row"></tr></thead>
+                <tbody id="removable-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          {# Suppressed #}
+          <div id="panelSuppressed" class="hiddenPanel">
+<div class="ons-like-scroll" role="region" tabindex="0" aria-label="Scrollable data table (suppressed)">
+  <table class="nhsuk-table" aria-describedby="suppressed-table-caption">
+    <caption id="suppressed-table-caption" class="nhsuk-table__caption nhsuk-u-visually-hidden">Suppressed patient list</caption>
+    <thead><tr id="suppressed-head-row"></tr></thead>
+    <tbody id="suppressed-table-body"></tbody>
+  </table>
+</div>
+</div>
+
+          <div class="nhsuk-u-visually-hidden" aria-live="polite" id="table-live"></div>
+        </div>
+      </details>
+
+      <fieldset class="nhsuk-fieldset">
+        <div class="nhsuk-button-group">
+          <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Confirm</button>
+        </div>
+      </fieldset>
+
+    </form>
+
+    <style>
+      .ons-like-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; background: #ffffff; border: 1px solid #d8dde0; border-left: 0; border-right: 0; }
+        .nhsuk-table { margin-bottom: 0; min-width: 640px; width: 100%; border-collapse: collapse; }
+        .nhsuk-table thead th { position: sticky; top: 0; z-index: 2; background: #fff; }
+        .nhsuk-table__cell, .nhsuk-table__header { background: #fff; white-space: nowrap; }
+        .is-sticky-col { position: sticky; left: 0; z-index: 3; background: #fff; box-shadow: inset -1px 0 0 #d8dde0; }
+        .table-empty { text-align: left; color: #425563; }
+        .hidden-row { display: none; }
+        .counter-panel { display: flex; align-items: center; gap: .5rem; }
+        .counter-panel .nhsuk-label { margin: 0; }
+        .counter-panel .nhsuk-input { text-align: center; font-weight: 700; }
+        
+        .nhsuk-grid-row { align-items: stretch; }
+        .nhsuk-grid-row > [class^="nhsuk-grid-column-"] {
+        @media (max-width: 640px) {
+        }
+        .counter-panel { margin-top: 0px; margin-bottom: 40px }
+        .counter-panel .nhsuk-input { text-align: center; font-weight: bold;}
+        .counter-inline { display: flex; align-items: center;font-weight: bold; gap: 0.5rem; flex-wrap: wrap; }
+        #remaining.nhsuk-input--width-4 { max-width: 6ch; text-align: center; }
+</style>
+
+  <script>
+    function switchToFiltered() {
+      var theFilteredPanel = document.getElementById("panelFiltered");
+      var theSuppressedPanel = document.getElementById("panelSuppressed");
+
+      var theFilteredLi = document.getElementById("liFiltered");
+      var theSuppressedLi = document.getElementById("liSuppressed");
+
+      var theFilteredLink = document.getElementById("linkFiltered");
+      var theSuppressedLink = document.getElementById("linkSuppressed");
+
+      // set the LI LINK to be the current sub-navigation tab
+      theFilteredLi.classList.add("x-govuk-secondary-navigation__list-item--current");
+      theSuppressedLi.classList.remove("x-govuk-secondary-navigation__list-item--current");
+
+      // set the FILTERED LINK to be the current sub-navigation tab
+      theFilteredLink.setAttribute("aria-current","page");
+      theSuppressedLink.removeAttribute("aria-current");
+
+      // display the FILTERED PANEL and hide suppressed
+      theFilteredPanel.classList.remove("hiddenPanel");
+      theSuppressedPanel.classList.add("hiddenPanel");
+    }
+
+    function switchToSuppressed() {
+      var theFilteredPanel = document.getElementById("panelFiltered");
+      var theSuppressedPanel = document.getElementById("panelSuppressed");
+
+      var theFilteredLi = document.getElementById("liFiltered");
+      var theSuppressedLi = document.getElementById("liSuppressed");
+
+      var theFilteredLink = document.getElementById("linkFiltered");
+      var theSuppressedLink = document.getElementById("linkSuppressed");
+
+      // set the LI LINK to be the current sub-navigation tab
+      theFilteredLi.classList.remove("x-govuk-secondary-navigation__list-item--current");
+      theSuppressedLi.classList.add("x-govuk-secondary-navigation__list-item--current");
+
+      // set the SUPPRESSED LINK to be the current sub-navigation tab
+      theFilteredLink.removeAttribute("aria-current");
+      theSuppressedLink.setAttribute("aria-current","page");
+
+      // display the SUPPRESSED PANEL and hide suppressed
+      theFilteredPanel.classList.add("hiddenPanel");
+      theSuppressedPanel.classList.remove("hiddenPanel");
+    }
+  </script>
+
+    <script type="module">
+      (function(){
+        var theadRow  = document.getElementById('table-head-row');
+        var tbody     = document.getElementById('removable-table-body');
+        var suppressedHead  = document.getElementById('suppressed-head-row');
+        var suppressedTbody = document.getElementById('suppressed-table-body');
+        var live      = document.getElementById('table-live');
+        var rowCount  = document.getElementById('row-count');
+        var container = document.querySelector('.ons-like-scroll[data-src]');
+        var colIndexMap = {}; // normalised header -> index within JSON columns
+        var linkFiltered = document.getElementById('linkFiltered');
+        var linkSuppressed = document.getElementById('linkSuppressed');
+
+        function announce(msg){ if(live){ live.textContent = msg; } }
+        function updateRowCount(){ rowCount.value = tbody.querySelectorAll('tr:not(.hidden-row):not(.empty-state)').length; updateNavCounts(); }
+        function clearEmptyStates(){ tbody.querySelectorAll('.empty-state').forEach(r => r.remove()); }
+        function updateEmptyState(){
+          clearEmptyStates();
+          if (tbody.querySelectorAll('tr:not(.hidden-row)').length === 0) {
+            var tr = document.createElement('tr'); tr.className = 'nhsuk-table__row empty-state';
+            var td = document.createElement('td'); td.className = 'nhsuk-table__cell table-empty';
+            td.colSpan = (theadRow && theadRow.children.length) ? theadRow.children.length : 1;
+            td.textContent = 'There are no patients currently selected.';
+            tr.appendChild(td); tbody.appendChild(tr);
+          }
+        }
+
+
+        function updateNavCounts(){
+          try {
+            var filteredCount = tbody ? tbody.querySelectorAll('tr:not(.hidden-row):not(.empty-state)').length : 0;
+            var suppressedCount = suppressedTbody ? suppressedTbody.querySelectorAll('tr').length : 0;
+            if (linkFiltered) linkFiltered.innerHTML = 'Filtered (' + filteredCount + ')';
+            if (linkSuppressed) linkSuppressed.innerHTML = 'Suppressed (' + suppressedCount + ')';
+          } catch(e){ /* no-op */ }
+        }
+
+        // Normalise header keys (lowercase, trim, collapse whitespace)
+        function norm(s){
+          return String(s || '').toLowerCase().trim().replace(/\s+/g, ' ');
+        }
+
+        function buildHeader(columns){
+          // Build headers for filtered table and mirror to suppressed
+          theadRow.innerHTML = '';
+          var thAction = document.createElement('th');
+          thAction.scope = 'col';
+          thAction.className = 'nhsuk-table__header table-col-action is-sticky-col';
+          thAction.textContent = 'Action';
+          theadRow.appendChild(thAction);
+
+          colIndexMap = {};
+          columns.forEach(function(col, i){
+            var th = document.createElement('th'); th.scope = 'col'; th.className = 'nhsuk-table__header'; th.textContent = col;
+            colIndexMap[norm(col)] = i;
+            theadRow.appendChild(th);
+          });
+
+          // Mirror header to suppressed table
+          if (suppressedHead) {
+            suppressedHead.innerHTML = '';
+            var thAction2 = document.createElement('th'); thAction2.scope='col'; thAction2.className='nhsuk-table__header table-col-action is-sticky-col'; thAction2.textContent='Action';
+            suppressedHead.appendChild(thAction2);
+            columns.forEach(function(col){ var th=document.createElement('th'); th.scope='col'; th.className='nhsuk-table__header'; th.textContent=col; suppressedHead.appendChild(th); });
+          }
+        }
+
+        function buildRow(values){
+          var tr = document.createElement('tr'); tr.className = 'nhsuk-table__row hidden-row';
+          var tdAction = document.createElement('td'); tdAction.className = 'nhsuk-table__cell table-col-action is-sticky-col';
+          var a = document.createElement('a'); a.href = '#'; a.className = 'nhsuk-link nhsuk-link--no-visited-state'; a.setAttribute('data-remove',''); a.innerHTML = 'Suppress<span class="nhsuk-u-visually-hidden"> this patient</span>';
+          tdAction.appendChild(a); tr.appendChild(tdAction);
+          values.forEach(function(v){
+            var td = document.createElement('td'); td.className = 'nhsuk-table__cell';
+            td.textContent = (v==null?'':String(v));
+            tr.appendChild(td);
+          });
+          return tr;
+        }
+
+        function swapActionCell(row, to){ // to: 'add' or 'remove'
+          var actionCell = row.querySelector('td.table-col-action');
+          if (!actionCell) { actionCell = row.querySelector('td:first-child'); }
+          if (!actionCell) return;
+          var link = document.createElement('a'); link.href='#'; link.className='nhsuk-link nhsuk-link--no-visited-state';
+          if (to === 'add') { link.setAttribute('data-add',''); link.innerHTML='Filter<span class="nhsuk-u-visually-hidden"> this patient</span>'; }
+          else { link.setAttribute('data-remove',''); link.innerHTML='Suppress<span class="nhsuk-u-visually-hidden"> this patient</span>'; }
+          actionCell.innerHTML=''; actionCell.appendChild(link);
+        }
+
+
+        document.addEventListener('click', function(e){
+          var removeBtn = e.target.closest('[data-remove]');
+          var addBtn = e.target.closest('[data-add]');
+          if (!removeBtn && !addBtn) return;
+          e.preventDefault();
+
+          if (removeBtn) {
+            var row = removeBtn.closest('tr'); if(!row) return;
+            var labelCell = row.querySelector('td:nth-child(2)');
+            var label = labelCell ? labelCell.textContent.trim() : 'row';
+            // Move to suppressed
+            row.classList.remove('hidden-row'); // always visible in suppressed
+            swapActionCell(row, 'add');
+            suppressedTbody.appendChild(row);
+            announce(label + ' suppressed from patient list');
+            updateRowCount(); updateEmptyState(); updateNavCounts();
+          } else if (addBtn) {
+            var row = addBtn.closest('tr'); if(!row) return;
+            var labelCell = row.querySelector('td:nth-child(2)');
+            var label = labelCell ? labelCell.textContent.trim() : 'row';
+            // Move back to filtered
+            swapActionCell(row, 'remove');
+            tbody.appendChild(row);
+            // Re-apply filters to decide visibility
+            applyFilters();
+            announce(label + ' filtered back to patient list'); updateNavCounts();
+          }
+        });
+
+        async function loadData(){
+          var src = container ? container.getAttribute('data-src') : null; if (!src) return null;
+          try {
+            const res = await fetch(src, { cache: 'no-cache' });
+            if (res.ok) return await res.json();
+            console.error('Fetch failed', res.status, res.statusText);
+          } catch(e){ console.error('Fetch error', e); }
+          return null;
+        }
+
+        // Parse UK date format (dd/mm/yyyy or dd-mm-yyyy)
+        function parseDate(str){
+          if(!str) return NaN;
+          var s = String(str).trim().replace(/\//g, "-");
+          var m = /^([0-3]?\d)-([0-1]?\d)-(\d{4})$/.exec(s);
+          if (m) {
+            var d = parseInt(m[1],10), mo = parseInt(m[2],10)-1, y = parseInt(m[3],10);
+            var dt = new Date(y, mo, d);
+            if (dt && dt.getFullYear()===y && dt.getMonth()===mo && dt.getDate()===d) return dt;
+            return NaN;
+          }
+          var dt2 = new Date(s);
+          return isNaN(dt2) ? NaN : dt2;
+        }
+
+        // Read a cell by header (offset +1 because Actions column is first)
+        function cellByHeader(cells, header){
+          var idx = colIndexMap[norm(header)];
+          return (typeof idx==='number' && cells[idx+1]) ? cells[idx+1].textContent.trim() : '';
+        }
+
+        // AND logic; none selected => show nothing
+        function applyFilters(){
+          var fContacted = document.getElementById('filter-contacted').checked;
+          var fPhone     = document.getElementById('filter-phone').checked;
+          var f28Weeks   = document.getElementById('filter-28weeks').checked;
+          var fExpl      = document.getElementById('filter-rsv-explained').checked;
+          var fNoYear    = document.getElementById('filter-not-rsv-lastyear').checked;
+          var fNotBook   = document.getElementById('filter-not-booked-rsv').checked;
+          var fNoOther   = document.getElementById('filter-other-vaccine').checked;
+          var fNo14      = document.getElementById('filter-not-rsv-14days').checked;
+
+          var anySelected = fContacted || fPhone || f28Weeks || fExpl || fNoYear || fNotBook || fNoOther || fNo14;
+
+          tbody.querySelectorAll('tr').forEach(function(row){
+            if(row.classList.contains('empty-state')) return;
+
+            var cells = row.querySelectorAll('td');
+            var visible = anySelected; // nothing selected => show nothing
+
+            function cell(header){ return cellByHeader(cells, header); }
+
+            // 1) Happy to be contacted
+            if(visible && fContacted && cell('Happy to be contacted') !== 'Yes') visible = false;
+
+            // 2) Phone present
+            if(visible && fPhone && cell('Phone number') === '') visible = false;
+
+            // 3) ≥ 28 weeks pregnant (from Due date)
+            if(visible && f28Weeks){
+              var due = parseDate(cell('Due date'));
+              if(isNaN(due)){ visible = false; }
+              else {
+                var weeksToDue = (due - new Date()) / (1000*60*60*24*7);
+                var gestWeeks = 40 - weeksToDue;
+                if(gestWeeks < 28) visible = false;
+              }
+            }
+
+            // 4) RSV explained & offered
+            if(visible && fExpl && cell('RSV explained and offered') !== 'Yes') visible = false;
+
+            // 5) Hasn't had RSV in last year (Date of last RSV vaccination)
+            if(visible && fNoYear){
+              var last = parseDate(cell('Date of last RSV vaccination'));
+              if(!isNaN(last)){
+                var days = (new Date() - last) / (1000*60*60*24);
+                if(days <= 365) visible = false;
+              }
+            }
+
+            // 6) Not already booked (any booking date >= today => exclude)
+            if(visible && fNotBook){
+              var booked = parseDate(cell('Date of RSV booking'));
+              if(!isNaN(booked)){
+                var todayMid = new Date(); todayMid.setHours(0,0,0,0);
+                if(booked >= todayMid) visible = false;
+              }
+            }
+
+            // 7) Has NOT been offered other vaccine in last fortnight
+            if(visible && fNoOther){
+              var other = parseDate(cell('Date of last invite'));
+              if(!isNaN(other)) visible = false;
+            }
+
+            // 8) Hasn't had RSV invite in last 14 days
+            if(visible && fNo14){
+              var lastRSVInvite = parseDate(cell('Date of last RSV invite'));
+              if(!isNaN(lastRSVInvite)){
+                var days14 = (new Date() - lastRSVInvite) / (1000*60*60*24);
+                if(days14 <= 14) visible = false;
+              }
+            }
+
+            row.classList.toggle('hidden-row', !visible);
+          });
+
+          // Override count to 276 when ALL filters are ticked
+          if (fContacted && fPhone && f28Weeks && fExpl && fNoYear && fNotBook && fNoOther && fNo14) {
+            rowCount.value = 276;
+          } else {
+            updateRowCount();
+          }
+
+          updateEmptyState();
+        }
+
+        (async function init(){
+          var data = await loadData(); if(!data){ updateEmptyState(); return; }
+
+          // Expecting the {columns, rows} structure produced by your converter
+          var columns, rows;
+          if(data.columns && data.rows){ columns = data.columns; rows = data.rows; }
+          else if(Array.isArray(data)){ columns = Object.keys(data[0]||{}); rows = data.map(o => columns.map(c => o[c])); }
+          else { updateEmptyState(); return; }
+
+          buildHeader(columns);
+
+          var frag = document.createDocumentFragment();
+          rows.forEach(vals => frag.appendChild(buildRow(vals)));
+          tbody.innerHTML = ''; tbody.appendChild(frag);
+
+          document.querySelectorAll('.filter-tile').forEach(cb => cb.addEventListener('change', applyFilters));
+
+          updateRowCount();
+          updateEmptyState();
+          updateNavCounts();
+        })();
+      })();
+    </script>
+
+    <script>
+      // Sync NHSUK checkboxes to the underlying tile checkboxes so we don't change existing logic.
+      (function() {
+        const pairs = [
+          ['check-28-weeks-pregnant', 'filter-28weeks'],
+          ['check-happy-to-be-contacted', 'filter-contacted'],
+          ['check-provided-mobile-number', 'filter-phone'],
+          ['check-rsv-explained', 'filter-rsv-explained'],
+          ['check-not-received-rsv-in-last-year', 'filter-not-rsv-lastyear'],
+          ['check-no-existing-booking-rsv', 'filter-not-booked-rsv'],
+          ['check-not-invited-rsv-last-fortnight', 'filter-not-rsv-14days'],
+          ['check-not-received-another-vacc-invite-last-fortnight', 'filter-other-vaccine']
+        ];
+
+        function wire() {
+          pairs.forEach(([nhsId, tileId]) => {
+            const nhs = document.getElementById(nhsId);
+            const tile = document.getElementById(tileId);
+            if (!nhs || !tile) return;
+
+            // When NHSUK checkbox changes, mirror to tile checkbox and dispatch change
+            nhs.addEventListener('change', () => {
+              tile.checked = nhs.checked;
+              const evt = new Event('change', { bubbles: true });
+              tile.dispatchEvent(evt);
+            });
+
+            // On load, if NHSUK checkbox is pre-checked, mirror it and dispatch change
+            if (nhs.checked !== tile.checked) {
+              tile.checked = nhs.checked;
+              const evt = new Event('change', { bubbles: true });
+              tile.dispatchEvent(evt);
+            }
+          });
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', wire);
+        } else {
+          wire();
+        }
+      })();
+    </script>
+
+
+  </div>
+</div>
+{% endblock %}

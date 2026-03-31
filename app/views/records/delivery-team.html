@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+
+{% set pageName = "Which team was it? – Records" %}
+
+{% set currentSection = "records" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/records/records/" + vaccination.id,
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form action="/records/records/{{ vaccination.id }}" method="post">
+        <input type="hidden" name="changedField" value="Team">
+
+        {{ radios({
+          idPrefix: "deliveryTeam",
+          name: "deliveryTeam",
+          fieldset: {
+            legend: {
+              text: "Which team was it?",
+              classes: "nhsuk-fieldset__legend--l",
+              isPageHeading: true
+            }
+          },
+          items: [
+            {
+              value: "Anne Ward Maternity Unit",
+              text: "Anne Ward Maternity Unit",
+              checked: (data.deliveryTeam === "Anne Ward Maternity Unit")
+            },
+            {
+              value: "St Mary’s Hospital",
+              text: "St Mary’s Hospital",
+              checked: (data.deliveryTeam === "St Mary’s Hospital")
+            },
+            {
+              value: "Josephine Clinic",
+              text: "Josephine Clinic",
+              checked: (data.deliveryTeam === "Josephine Clinic")
+            }
+          ]
+        }) }}
+
+        {{ button({
+          text: "Save"
+        })}}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
+

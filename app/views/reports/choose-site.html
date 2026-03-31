@@ -1,0 +1,180 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Choose sites" %}
+
+{% set currentSection = "monitor" %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form action="/reports/choose-data" method="post">
+
+        {% if data['e2eCurrentUserType'] == "infant" %}
+          {{ checkboxes({
+            idPrefix: "reportSites",
+            name: "reportSites",
+            fieldset: {
+              legend: {
+                text: "Choose sites",
+                classes: "nhsuk-fieldset__legend--l",
+                isPageHeading: true
+              }
+            },
+            items: [
+              {
+                value: "Strouts Place Medical Centre",
+                text: "Strouts Place Medical Centre"
+              },
+              {
+                value: "Bright Beginnings Health Team",
+                text: "Bright Beginnings Health Team"
+              },
+              {
+                value: "Bethnal Green Health Centre",
+                text: "Bethnal Green Health Centre"
+              },
+              {
+                value: "Suttons Wharf Health Centre",
+                text: "Suttons Wharf Health Centre"
+              },
+              {
+                value: "The Mission Practice",
+                text: "The Mission Practice"
+              },
+              {
+                value: "The Albion Health Centre",
+                text: "The Albion Health Centre"
+              },
+              {
+                value: "Blithehale Health Centre",
+                text: "Blithehale Health Centre"
+              },
+              {
+                value: "Health E1 Homeless Medical Centre",
+                text: "Health E1 Homeless Medical Centre"
+              },
+              {
+                value: "The Spitalfields Practice",
+                text: "The Spitalfields Practice"
+              },
+              {
+                value: "The Grove Road Surgery",
+                text: "The Grove Road Surgery"
+              },
+              {
+                value: "The Tredegar Practice",
+                text: "The Tredegar Practice"
+              },
+              {
+                value: "Harley Grove Medical Centre",
+                text: "Harley Grove Medical Centre"
+              },
+              {
+                value: "St Stephen’s Health Centre",
+                text: "St Stephen’s Health Centre"
+              }
+            ]
+          }) }}
+        {% else %}
+          {{ checkboxes({
+            idPrefix: "reportSites",
+            name: "reportSites",
+            fieldset: {
+              legend: {
+                text: "Choose sites",
+                classes: "nhsuk-fieldset__legend--l",
+                isPageHeading: true
+              }
+            },
+            items: [
+              {
+                value: "Birmingham Children's Hospital",
+                text: "Birmingham Children's Hospital"
+              },
+              {
+                value: "Birmingham Women's Hospital",
+                text: "Birmingham Women's Hospital"
+              },
+              {
+                value: "Good Hope Hospital Clinics",
+                text: "Good Hope Hospital Clinics"
+              },
+              {
+                value: "Birmingham Road (Forward Thinking Birmingham)",
+                text: "Birmingham Road (Forward Thinking Birmingham)"
+              },
+              {
+                value: "Blakesley Centre (Forward Thinking Birmingham)",
+                text: "Blakesley Centre (Forward Thinking Birmingham)"
+              },
+              {
+                value: "Children's Hearing Assessment Centre",
+                text: "Children's Hearing Assessment Centre"
+              },
+              {
+                value: "East Community Clinical Psych - Coventry Road",
+                text: "East Community Clinical Psych - Coventry Road"
+              },
+              {
+                value: "Finch Road (Forward Thinking Birmingham)",
+                text: "Finch Road (Forward Thinking Birmingham)"
+              },
+              {
+                value: "Hob Community Clinical Psychology - Carnegie Centre",
+                text: "Hob Community Clinical Psychology - Carnegie Centre"
+              },
+              {
+                value: "Hob Community Clinical Psychology - City Hospital",
+                text: "Hob Community Clinical Psychology - City Hospital"
+              },
+              {
+                value: "Leach Heath Medical Centre",
+                text: "Leach Heath Medical Centre"
+              },
+              {
+                value: "Oaklands Centre (Forward Thinking Birmingham)",
+                text: "Oaklands Centre (Forward Thinking Birmingham)"
+              },
+              {
+                value: "Park House Child & Family Centre",
+                text: "Park House Child & Family Centre"
+              },
+              {
+                value: "Park View Clinic",
+                text: "Park View Clinic"
+              },
+              {
+                value: "Percy Road Health Centre",
+                text: "Percy Road Health Centre"
+              },
+              {
+                value: "The Child & Family Centre (Maas Road)",
+                text: "The Child & Family Centre (Maas Road)"
+              },
+              {
+                value: "The Old Priory Surgery",
+                text: "The Old Priory Surgery"
+              }
+            ]
+          }) }}
+        {% endif %}
+
+        {{ button({
+          text: "Continue",
+          classes: "nhsuk-u-margin-top-4"
+        }) }}
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

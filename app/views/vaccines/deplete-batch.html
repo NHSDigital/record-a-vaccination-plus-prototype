@@ -1,0 +1,59 @@
+{# extends 'layout.html' #}
+{% extends 'e2e-layout.html' %}
+
+{% set pageName = "Deplete batch" %}
+
+{# set currentSection = "vaccines" #}
+{% set currentSection = "organise" %}
+
+{% block header %}
+  {% include "includes/e2e-header-logged-in.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "/vaccines/" + vaccine.id, text: "Back" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuks-heading-l">{{ pageName }}</h1>
+
+      {{ summaryList({
+        rows: [
+          {
+            key: {
+              text: "Batch number"
+            },
+            value: {
+              text: batch.batchNumber
+            }
+          },
+          {
+            key: {
+              text: "Expiry date"
+            },
+            value: {
+              text: batch.expiryDate | govukDate
+            }
+          }
+          ]
+        }) }}
+      <p>Depleted batches will be made unavailable.</p>
+
+      <form action="/vaccines/{{ vaccine.id }}/{{ batch.batchNumber }}/depleted" method="post" novalidate="true">
+
+
+        {{ button({
+          "text": "Confirm deplete batch"
+        }) }}
+
+      </form>
+
+
+    </div>
+  </div>
+
+
+{% endblock %}

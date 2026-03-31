@@ -1,0 +1,58 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Vaccination saved" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {{ panel({
+        titleText: "Vaccinations saved",
+        html: "Nadia Hillaker's vaccination records will be sent to their GP record."
+      }) }}
+
+      <h2 class="nhsuk-heading-m">Vaccination records saved</h2>
+
+      <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-6">
+        {% for vax in data.recordedVaccinations %}
+          <li>{{ vax.vaccine }}</li>
+        {% endfor %}
+      </ul>
+
+      <form method="post" action="/ravs-infants/concept-done" novalidate>
+
+        {{ radios({
+          idPrefix: "next-step",
+          name: "nextStep",
+          fieldset: {
+            legend: {
+              text: "What would you like to record now?",
+              classes: "nhsuk-fieldset__legend--m"
+            }
+          },
+          items: [
+            {
+              value: "same-patient",
+              text: "Record further vaccinations for Nadia Hillaker"
+            },
+            {
+              divider: "or"
+            },
+            {
+              value: "another-patient",
+              text: "Record vaccinations for another patient"
+            }
+          ]
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

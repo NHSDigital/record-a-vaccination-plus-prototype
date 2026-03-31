@@ -1,0 +1,12 @@
+.app-feedback-panel {
+  background-color: nhsuk-colour("white");
+  border-color: nhsuk-colour("blue");
+  border-width: nhsuk-spacing(1);
+  border-style: solid;
+  padding: nhsuk-spacing(4);
+  margin-bottom: nhsuk-spacing(4);
+}
+
+.app-feedback-panel__title {
+  @include nhsuk-font-size(22);
+}

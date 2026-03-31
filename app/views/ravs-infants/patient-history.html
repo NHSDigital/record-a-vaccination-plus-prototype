@@ -1,0 +1,92 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Check the patient's details" %}
+{% set currentSection = "vaccinate" %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "do-you-have-the-patients-number" }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">
+        Check {{ data.firstName }} {{ data.lastName }}’s details and vaccination history
+      </h1>
+
+      {{ summaryList({
+        classes: 'xnhsuk-summary-list--no-border',
+        rows: [
+          {
+            key: { text: "Name" },
+            value: { text: data.firstName + " " + data.lastName }
+          },
+          {
+            key: { text: "Date of birth" },
+            value: { html: data.dobFormatted + "<br><span class='nhsuk-u-secondary-text-color'>(" + data.ageLabel + ")</span>" | safe }
+          },
+          {
+            key: { text: "Address" },
+            value: { html: data.address | safe }
+          },
+          {
+            key: { text: "NHS number" },
+            value: { text: data.nhsNumberFormatted }
+          },
+          {
+            key: { text: "Registered GP" },
+            value: { html: data.gpAddress | safe }
+          }
+        ]
+      }) }}
+
+      <h2 class="nhsuk-heading-m">Vaccination history</h2>
+      {#<p>
+        This shows NHS vaccinations given in England. Currently it includes COVID-19,
+        flu and RSV, plus some pertussis, pneumococcal and MMR vaccination records.
+      </p>#}
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      {% if data.patient.vaccinationHistory | length == 0 %}
+        <p class="nhsuk-body">No vaccination records are available.</p>
+      {% else %}
+        <table class="nhsuk-table">
+          <colgroup>
+            <col style="width: 25%">
+            <col style="width: 35%">
+            <col style="width: 40%">
+          </colgroup>
+          <thead class="nhsuk-table__head">
+            <tr>
+              <th class="nhsuk-table__header">Date</th>
+              <th class="nhsuk-table__header">Vaccine</th>
+              <th class="nhsuk-table__header">Product</th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            {% for item in data.patient.vaccinationHistory %}
+              <tr>
+                <td class="nhsuk-table__cell">{{ item.date }}</td>
+                <td class="nhsuk-table__cell">{{ item.vaccine | safe }}</td>
+                <td class="nhsuk-table__cell">{{ item.product }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+
+      <form action="patient-history" method="post" novalidate>
+        {{ button({ text: "Continue" }) }}
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

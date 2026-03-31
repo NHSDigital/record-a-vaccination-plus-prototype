@@ -9,18 +9,16 @@
 
 {% block head %}
   <!-- Add your custom CSS or Sass in /app/assets/sass/main.scss -->
-  <link href="/assets/sass/main.css" rel="stylesheet">
+  <link href="/css/main.css" rel="stylesheet">
 {% endblock %}
 
-<!-- Edit the header -->
-<!-- Header code examples can be found at https://service-manual.nhs.uk/design-system/components/header -->
+<!-- Set the page title -->
+{% block pageTitle %}
+  {% if pageName %}{{ pageName }} – {% endif %}NHS {{ serviceName }}
+{% endblock %}
+
 {% block header %}
-  {{ header({
-    service: {
-      text: serviceName,
-      href: "/"
-    }
-  }) }}
+  {% include "includes/header-logged-in-organisation.html" %}
 {% endblock %}
 
 <!-- Edit the footer -->
@@ -34,8 +32,8 @@
           text: "Home"
         },
         {
-          href: "/prototype-admin/reset?returnPage=" + (currentPage | urlencode),
-          text: "Reset data"
+          href: "/prototype-admin/reset",
+          text: "Reset prototype test data"
         }
       ]
     }
@@ -43,7 +41,21 @@
 {% endblock %}
 
 {% block bodyEnd %}
-  {{ super() }}
-  <script type="module" src="/assets/javascript/main.js"></script>
-  {% block pageScripts %}{% endblock %}
+  <script src="/nhsuk-frontend/nhsuk-frontend.min.js" type="module"></script>
+  <script type="module">
+    import { initAll } from '/nhsuk-frontend/nhsuk-frontend.min.js'
+    initAll()
+  </script>
+
+  {% block scripts %}
+    <!-- Custom JavaScript files can be added to this file -->
+    {% include "includes/scripts.html" %}
+
+    <script src="/js/x-govuk.js"></script>
+    <script>
+      window.GOVUKPrototypeComponents.initAll()
+    </script>
+    <!-- For adding page specific JavsScript -->
+    {% block pageScripts %}{% endblock %}
+  {% endblock %}
 {% endblock %}

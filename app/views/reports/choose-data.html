@@ -1,0 +1,158 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Choose data" %}
+
+{% set currentSection = "monitor" %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if error %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: [error]
+        }) }}
+      {% endif %}
+
+      <form action="/reports/update-data" method="post" novalidate="true">
+
+        {% if data['e2eCurrentUserType'] == "infant" %}
+          {{ checkboxes({
+            idPrefix: "data",
+            name: "data",
+            errorMessage: {
+              text: error.text
+            } if error,
+            fieldset: {
+              legend: {
+                text: "Choose data",
+                isPageHeading: true,
+                classes: "nhsuk-fieldset__legend--l"
+              }
+            },
+            items: [
+              {
+                value: "Age of child",
+                text: "Age of child",
+                checked: (data.data | arrayOrStringIncludes("Age of child")) or true
+              },{
+                value: "Scheduled visits",
+                text: "Scheduled visits",
+                checked: (data.data | arrayOrStringIncludes("Scheduled visits")) or true
+              },{
+                value: "Patients",
+                text: "Patients",
+                checked: (data.data | arrayOrStringIncludes("Patients")),
+                hint: {
+                  text: "NHS number, name, date of birth, address, due date, General Practice name"
+                }
+              },
+              {
+                value: "Staff",
+                text: "Staff",
+                checked: (data.data | arrayOrStringIncludes("Staff")),
+                hint: {
+                  text: "Recorder or vaccinator names and email addresses"
+                }
+              },
+              {
+                value: "Site or delivery team",
+                text: "Site or delivery team",
+                checked: (data.data | arrayOrStringIncludes("Site or delivery team")),
+                hint: {
+                  text: "Names and ODS codes"
+                }
+              },{
+                value: "Assessment and consent",
+                text: "Assessment and consent",
+                checked: (data.data | arrayOrStringIncludes("Assessment and consent")),
+                hint: {
+                  text: "Vaccinated and not givens, date, consent and eligibility details, and comments"
+                }
+              },{
+                value: "Vaccination",
+                text: "Vaccination",
+                checked: (data.data | arrayOrStringIncludes("Vaccination")),
+                hint: {
+                  text: "Date, vaccine details and dose given, site of body, legal mechanism and comments"
+                }
+              }
+            ]
+          }) }}
+        {% else %}
+          {{ checkboxes({
+            idPrefix: "data",
+            name: "data",
+            errorMessage: {
+              text: error.text
+            } if error,
+            fieldset: {
+              legend: {
+                text: "Choose data",
+                isPageHeading: true,
+                classes: "nhsuk-fieldset__legend--l"
+              }
+            },
+            items: [
+              {
+                value: "Patients",
+                text: "Patients",
+                checked: (data.data | arrayOrStringIncludes("Patients")),
+                hint: {
+                  text: "NHS number, name, date of birth, address, due date, General Practice name"
+                }
+              },
+              {
+                value: "Staff",
+                text: "Staff",
+                checked: (data.data | arrayOrStringIncludes("Staff")),
+                hint: {
+                  text: "Recorder or vaccinator names and email addresses"
+                }
+              },
+              {
+                value: "Site or delivery team",
+                text: "Site or delivery team",
+                checked: (data.data | arrayOrStringIncludes("Site or delivery team")),
+                hint: {
+                  text: "Names and ODS codes"
+                }
+              },{
+                value: "Assessment and consent",
+                text: "Assessment and consent",
+                checked: (data.data | arrayOrStringIncludes("Assessment and consent")),
+                hint: {
+                  text: "Vaccinated and not givens, date, consent and eligibility details, and comments"
+                }
+              },{
+                value: "Vaccination",
+                text: "Vaccination",
+                checked: (data.data | arrayOrStringIncludes("Vaccination")),
+                hint: {
+                  text: "Date, vaccine details and dose given, site of body, legal mechanism and comments"
+                }
+              }
+            ]
+          }) }}
+        {% endif %}
+
+        {{ button({
+          text: "Continue",
+          classes: "nhsuk-u-margin-top-4"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

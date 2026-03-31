@@ -1,0 +1,38 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Report is ready" %}
+
+{% set currentSection = "monitor" %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">Report is ready</h1>
+
+      {#{{ button({
+        text: "Download report",
+        href: "/reports"
+      }) }}#}
+
+      <a href="/reports" id="download" value="download" role="button" draggable="false" class="nhsuk-button" data-module="nhsuk-button">
+        Download report
+      </a>
+
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    var button = document.getElementById('download');
+    button.onclick = downloadReport;
+    function downloadReport() {
+      window.open("/download/download-report.csv");
+    }
+  </script>
+{% endblock %}

@@ -1,0 +1,179 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Check" %}
+{% set currentSection = "prepare" %}
+{% set organisation = {name: data.nhsTrusts[data.organisationCode]} %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/user-admin/add-user",
+    text: "Go back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-xl">Check and {% if existingUserWithSameEmail %}activate{% else %}add{% endif %} user</h1>
+
+      {# --- Normalise pathways into an array --- #}
+      {% set pathwaysList = [] %}
+      {% if data.pathways %}
+        {% if (data.pathways ~ '') == data.pathways %}
+          {% set pathwaysList = [data.pathways] %}
+        {% elif data.pathways is iterable %}
+          {% set pathwaysList = data.pathways %}
+        {% endif %}
+      {% endif %}
+
+      {# --- Build HTML for the Pathways summary row (one per line, no bullets) --- #}
+      {% set pathwaysHtml %}
+        {% if pathwaysList | length > 0 %}
+          <ul class="nhsuk-list">
+            {% for p in pathwaysList %}
+              <li>{{ (p | default('') | string) | replace('-', ' ') | capitalize }}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          Not applicable
+        {% endif %}
+      {% endset %}
+
+      <div class="summary-no-border">
+        <style>
+          .summary-no-border .nhsuk-summary-list__row:last-of-type {
+            border-bottom: none;
+          }
+        </style>
+
+        {% if data["mvp"] == 'true' %}
+          {{ summaryList({
+            rows: [
+              {
+                key: { text: "Clinician" },
+                value: { html: (data["clinician"] | default('') | string | capitalize) },
+                actions: { items: [{ href: "/user-admin/add-user", text: "Change", visuallyHiddenText: "clinician" }] }
+              },
+              {
+                key: { text: "Name" },
+                value: { text: ( (data.firstName | default('') | string) ~ ' ' ~ (data.lastName | default('') | string) ) },
+                actions: { items: [{ href: "/user-admin/add-user", text: "Change", visuallyHiddenText: "name" }] }
+              },
+              {
+                key: { text: "Email address" },
+                value: { html: (data["email"] | default('') | string) },
+                actions: { items: [{ href: "/user-admin/add-user", text: "Change", visuallyHiddenText: "email address" }] }
+              },
+              {
+                key: { text: "Permission levels" },
+                value: { html: "Manage clinics and sessions<br>Record Vaccinations<br>Manage users" },
+                actions: { items: [{ href: "/user-admin/add-user", text: "Change", visuallyHiddenText: "permission level" }] }
+              }
+            ]
+          }) }}
+        {% else %}
+          {{ summaryList({
+            rows: [
+              {
+                key: { text: "Clinician" },
+                value: { html: (data["clinician"] | default('') | string | capitalize) },
+                actions: { items: [{ href: "/user-admin/add-user", text: "Change", visuallyHiddenText: "clinician" }] }
+              },
+              {
+                key: { text: "Name" },
+                value: { text: ( (data.firstName | default('') | string) ~ ' ' ~ (data.lastName | default('') | string) ) },
+                actions: { items: [{ href: "/user-admin/add-user", text: "Change", visuallyHiddenText: "name" }] }
+              },
+              {
+                key: { text: "Email address" },
+                value: { html: (data["email"] | default('') | string) },
+                actions: { items: [{ href: "/user-admin/add-user", text: "Change", visuallyHiddenText: "email address" }] }
+              },
+              {
+                key: { text: "Start date" },
+                value: { html: "Today" },
+                actions: { items: [{ href: "#/", text: "Change", visuallyHiddenText: "start date" }] }
+              },
+              {
+                key: { text: "End date" },
+                value: { html: "No end date" },
+                actions: { items: [{ href: "#/", text: "Change", visuallyHiddenText: "end date" }] }
+              },
+              {
+                key: { text: "Permission levels" },
+                value: { html: "Manage clinics and sessions<br>Record Vaccinations<br>Manage users" },
+                actions: { items: [{ href: "/user-admin/add-user", text: "Change", visuallyHiddenText: "permission level" }] }
+              }
+            ]
+          }) }}
+        {% endif %}
+      </div>
+
+      {% if (data["clinicmanager"] | default('') | string) | lower == 'yes' %}
+        {{ summaryList({
+          rows: [
+            {
+              key: { text: "Clinic Manager pathways" },
+              value: { html: pathwaysHtml | safe },
+              actions: { items: [{ href: "add-pathways-mvp?return=check", text: "Change", visuallyHiddenText: "Pathways" }] }
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <!--
+      {% if (data["clinicmanager"] | default('') | string) | lower == 'yes' %}
+        <h2 class="nhsuk-heading-m">Pathways</h2>
+
+        <dl class="nhsuk-summary-list">
+          {% for pathway in pathwaysList %}
+            <div class="nhsuk-summary-list__row">
+              <dt class="nhsuk-summary-list__key">
+                {{ (pathway | default('') | string) | replace('-', ' ') | capitalize }}
+              </dt>
+              <dd class="nhsuk-summary-list__value">
+                {% set key = (pathway | default('') | string) ~ '_sites' %}
+                {% set sites = data[key] %}
+                {% if sites %}
+                  {% if (sites ~ '') == sites %}
+                    <p>{{ sites }}</p>
+                  {% elif sites is iterable %}
+                    {% for site in sites %}
+                      <p>{{ site }}</p>
+                    {% endfor %}
+                  {% else %}
+                    <p>{{ sites }}</p>
+                  {% endif %}
+                {% else %}
+                  <p>No sites added</p>
+                {% endif %}
+              </dd>
+              <dd class="nhsuk-summary-list__actions">
+                <a href="add-pathways-mvp?return=check">
+                  Change<span class="nhsuk-u-visually-hidden"> {{ (pathway | default('') | string) }}</span>
+                </a>
+              </dd>
+            </div>
+          {% endfor %}
+        </dl>
+      {% endif %}
+      -->
+
+      {% if existingUserWithSameEmail %}
+        <p>{{ data['firstName'] | default('') | string }} will be activated and sent this email:</p>
+      {% else %}
+        <p>{{ data['firstName'] | default('') | string }} will be sent this welcome email with information about activating an account:</p>
+      {% endif %}
+
+      <div class="app-email-preview">
+        {% include "user-admin/_welcome-email.html" %}
+      </div>
+
+      <form action="/user-admin/add?addedUser=true" method="post">
+        {{ button({ "text": "Confirm and send" }) }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Manage eligibility options" %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "#/" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form action="concept-eligibility-choose" method="post" novalidate>
+
+        {% set eligibilityOptions = [
+          "Aged 75 and over, not in a care home",
+          "Age-based eligibility",
+          "Carer",
+          "Healthcare worker",
+          "Household contacts of people with immunosuppression",
+          "Immunosuppressed",
+          "In a clinical risk group",
+          "Pregnant",
+          "Resident in a care home",
+          "Social care worker"
+        ] %}
+
+        {% set items = [] %}
+        {% for option in eligibilityOptions %}
+          {% set items = (items.push({
+            text: option,
+            value: option,
+            checked: (data.eligibility and option in data.eligibility)
+            }), items) %}
+        {% endfor %}
+
+        {{ checkboxes({
+          idPrefix: "eligibility",
+          name: "eligibility",
+          errorMessage: {
+            text: (errors | first).text
+          } if (errors | length) > 0,
+          fieldset: {
+            legend: {
+              text: "Manage eligibility options",
+              classes: "nhsuk-fieldset__legend--l",
+              isPageHeading: true
+            }
+          },
+          hint: {
+            text: "Select all eligibility criteria options that are relevant"
+          },
+          items: items
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        })}}
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,330 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Maternity Digital Vaccination Services - Guidance" %}
+
+{% set currentSection = "prepare" %}
+
+{% block pageTitle %}
+  Maternity Digital Vaccination Services - Guidance
+{% endblock %}
+
+{% block header %}
+  {% include "includes/e2e-header-logged-in.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-1?loggedIn=true">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-1/prepare">Prepare</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Guidance</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">
+        Guidance
+      </h1>
+
+      <p class="nhsuk-body">Training content, communications, clinical directives.</p>
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">    
+
+      {# MOJ Navigation #}
+      <nav class="moj-sub-navigation nhsuk-u-margin-bottom-6" aria-label="Sub navigation">
+        <ul class="moj-sub-navigation__list">
+          <li class="moj-sub-navigation__item">
+            <a id="linkClinicalGuidance" class="moj-sub-navigation__link" aria-current="page" href="javascript:void(0)" onclick="switchToClinicalGuidance()">Clinical guidance</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a id="linkTrainingMaterial" class="moj-sub-navigation__link" href="javascript:void(0)" onclick="switchToTrainingMaterial()">Training material</a>
+          </li>
+        </ul>
+      </nav>
+
+      {# CLINICAL GUIDANCE #}
+      <div id="panelClinicalGuidance">
+
+        <ul class="nhsuk-grid-row nhsuk-card-group">
+          <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Patient Group Direction (PGD)</a> </h3>
+                <p class="nhsuk-card__description"></p>
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Green Book</a> </h3>
+                <p class="nhsuk-card__description"></p>
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Yellow Card</a> </h3>
+                <p class="nhsuk-card__description"></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+      </div>
+
+      {# TRAINING MATERIAL #}
+      <div id="panelTrainingMaterial" class="moj-nav-hidden">
+
+        {# TRAINING SECTION 1 #}
+        <h2 class="nhsuk-heading-m">Tooling</h2>
+
+        <ul class="nhsuk-grid-row nhsuk-card-group">
+          <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Selecting a cohort and sending invites</a> </h3>
+                <p class="nhsuk-card__description">Identifying who is eligible and deciding how to engage with them</p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Manage clinics</a> </h3>
+                <p class="nhsuk-card__description"></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/iteration-1/guidance/record-vaccines">Record vaccines</a> </h3>
+                <p class="nhsuk-card__description"></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Understanding uptake and reporting</a> </h3>
+                <p class="nhsuk-card__description"></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Payments</a> </h3>
+                <p class="nhsuk-card__description"></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Managing users and sites</a> </h3>
+                <p class="nhsuk-card__description"></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+
+<!--
+        {# TRAINING SECTION 2 #}
+        <h2 class="nhsuk-heading-m">Section 2</h2>
+
+        <ul class="nhsuk-grid-row nhsuk-card-group">
+          <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Section 2 sub-section 1</a> </h3>
+                <p class="nhsuk-card__description">Further training material on another subject</p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Section 2 sub-section 2</a> </h3>
+                <p class="nhsuk-card__description">Further training material on another subject</p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+-->
+      </div>
+
+    </div>
+
+    {# UPDATES AND MEMOS #}
+    <div class="nhsuk-grid-column-one-third">
+
+      <h2 class="nhsuk-heading-m">
+        Updates and memos
+      </h2>
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable nhsuk-card--secondary">
+            <div class="nhsuk-card__content nhsuk-card__content--secondary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-xs nhsuk-u-margin-bottom-2"> <a class="nhsuk-card__link" href="#/">Revised PGD for RSV in maternity</a> </h3>
+              <p class="nhsuk-card__description nhsuk-u-margin-bottom-2"><strong class="nhsuk-tag nhsuk-tag--blue">NHS England</strong></p>
+              <p class="nhsuk-body-s">17 June 2025</p>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable nhsuk-card--secondary">
+            <div class="nhsuk-card__content nhsuk-card__content--secondary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-xs nhsuk-u-margin-bottom-2"> <a class="nhsuk-card__link" href="#/">Update to clinic locations for Flu vaccinations</a> </h3>
+              <p class="nhsuk-card__description nhsuk-u-margin-bottom-2"><strong class="nhsuk-tag nhsuk-tag--blue">Jenny Smith, Trust lead</strong></p>
+              <p class="nhsuk-body-s">10 June 2025</p>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable nhsuk-card--secondary">
+            <div class="nhsuk-card__content nhsuk-card__content--secondary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-xs nhsuk-u-margin-bottom-2"> <a class="nhsuk-card__link" href="#/">New clinic creation work flows</a> </h3>
+              <p class="nhsuk-card__description nhsuk-u-margin-bottom-2"><strong class="nhsuk-tag nhsuk-tag--blue">VDS Digital Services</strong></p>
+              <p class="nhsuk-body-s">28 May 2025</p>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable nhsuk-card--secondary">
+            <div class="nhsuk-card__content nhsuk-card__content--secondary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-xs nhsuk-u-margin-bottom-2"> <a class="nhsuk-card__link" href="#/">New policy for recording eligibility</a> </h3>
+              <p class="nhsuk-card__description nhsuk-u-margin-bottom-2"><strong class="nhsuk-tag nhsuk-tag--blue">Jenny Smith, Trust lead</strong></p>
+              <p class="nhsuk-body-s">15 May 2025</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+
+  {# CONTACT #}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+
+      <h2 class="nhsuk-heading-m">Contact</h2>
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Extra support</a> </h2>
+              <p class="nhsuk-card__description">Additional information</p>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Providing feedback</a> </h2>
+              <p class="nhsuk-card__description">Additional information</p>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Taking part in research</a> </h2>
+              <p class="nhsuk-card__description">Additional information</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+  <script>
+    function switchToClinicalGuidance() {
+      var theClinicalGuidancePanel = document.getElementById("panelClinicalGuidance");
+      var theTrainingMaterialPanel = document.getElementById("panelTrainingMaterial");
+
+      var theClinicalGuidanceLink = document.getElementById("linkClinicalGuidance");
+      var theTrainingMaterialLink = document.getElementById("linkTrainingMaterial");
+
+      // set the CLINICAL GUIDANCE LINK to be the current sub-navigation tab
+      theClinicalGuidanceLink.setAttribute("aria-current","page");
+      theTrainingMaterialLink.removeAttribute("aria-current");
+
+      // display the CLINICAL GUIDANCE PANEL and hide other panels
+      theClinicalGuidancePanel.classList.remove("moj-nav-hidden");
+      theTrainingMaterialPanel.classList.add("moj-nav-hidden");
+    }
+
+    function switchToTrainingMaterial() {
+      var theClinicalGuidancePanel = document.getElementById("panelClinicalGuidance");
+      var theTrainingMaterialPanel = document.getElementById("panelTrainingMaterial");
+
+      var theClinicalGuidanceLink = document.getElementById("linkClinicalGuidance");
+      var theTrainingMaterialLink = document.getElementById("linkTrainingMaterial");
+
+      // set the TRAINING MATERIAL LINK to be the current sub-navigation tab
+      theClinicalGuidanceLink.removeAttribute("aria-current");
+      theTrainingMaterialLink.setAttribute("aria-current","page");
+
+      // display the TRAINING MATERIAL PANEL and hide other panels
+      theClinicalGuidancePanel.classList.add("moj-nav-hidden");
+      theTrainingMaterialPanel.classList.remove("moj-nav-hidden");
+    }
+  </script>
+
+{% endblock %}

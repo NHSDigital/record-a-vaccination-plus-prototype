@@ -1,0 +1,128 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Which batch are you using?" %}
+
+{% set currentSection = "vaccinate" %}
+{% set organisationSetting = currentUser.organisations | findById(data.currentOrganisationId) %}
+
+{% set dosageVaccines = [
+  'DTaP/IPV/Hib/HepB (6-in-1)',
+  'Flu',
+  'MenB',
+  'Pneumococcal'
+] %}
+
+{% block beforeContent %}
+  {% if dosageVaccines.includes(data.whichVaccine) %}
+    {{ backLink({ href: "dosage" }) }}
+  {% else %}
+    {{ backLink({ href: "vaccine" }) }}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+    {% if error %}
+      {{ errorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          error
+        ]
+      }) }}
+    {% endif %}
+
+{# Remove or comment out the following... #}
+{#<p>whichVaccine = {{ data.whichVaccine }}</p>#}
+
+    <form action="batch" method="post" novalidate>
+
+      {% set items = [] %}
+      {% for batch in (batches) %}
+        {% set items = (items.push({
+          text: batch.batchNumber,
+          hint: {
+            text: "Expires " + (batch.expiryDate | govukDate)
+          },
+          value: batch.id
+        }), items) %}
+      {% endfor %}
+
+      {% if organisationSetting.permissionLevel != "Recorder" %}
+        {% set items = (items.push({
+          divider: "or"
+        }), items) %}
+        {% set items = (items.push({
+          value: "add-new",
+          text: "Add a batch"
+        }), items) %}
+      {% endif %}
+
+        {{ radios({
+          "idPrefix": "vaccineBatch",
+          "name": "vaccineBatch",
+          "fieldset": {
+            "legend": {
+              "text": "Which batch are you using?",
+              "classes": "nhsuk-fieldset__legend--l",
+              "isPageHeading": true
+            }
+          },
+            items: [
+              {
+                value: "XX123456",
+                text: "XX123456",
+                hint: {
+                  html: "Expires 3 " + date({month: 'long', year: 'numeric'}, {'month': +13})
+                }
+              },
+              {
+                value: "914-151",
+                text: "914-151",
+                hint: {
+                  html: "Expires 15 " + date({month: 'long', year: 'numeric'}, {'month': +3})
+                }
+              },
+              {
+                divider: "or"
+              },
+              {
+                value: "addBatch",
+                text: "Add a batch"
+              }
+            ]
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        })}}
+      </form>
+
+      {% if organisationSetting.permissionLevel == "Recorder" %}
+        {{ details({
+          summaryText: "If the batch is not listed",
+          html: "An administrator needs to add the batch."
+        }) }}
+      {% endif %}
+
+    </div>
+
+    <div class="nhsuk-grid-column-one-third">
+      {% set contentHTML %}
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Name</span><br>{{ data.firstName }} {{ data.lastName }}</p>
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Date of birth</span><br>{{ data.dobFormatted }}<br>({{ data.ageLabel }})</p>
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">NHS number</span><br>{{ data.nhsNumberFormatted }}</p>
+      {% endset %}
+
+      {{ card({
+        heading: "Patient",
+        feature: true,
+        descriptionHtml: contentHTML
+      }) }}
+    </div>
+
+  </div>
+
+{% endblock %}
+

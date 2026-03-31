@@ -1,0 +1,268 @@
+<!-- Use this page as the index for your project -->
+
+<!-- ADDING CUSTOM CSS - Add your custom CSS or Sass in /app/assets/sass/main.scss -->
+
+<!-- Extends the layout from /views/layout.html -->
+{# extends '../../create-availability/layout.html' #}
+
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "run" %}
+
+<!--
+  In /views/layout.html you can:
+    - change the header and footer
+    - add custom CSS and JavaScript
+-->
+
+<!-- Set the page title -->
+{% block pageTitle %}
+  Jodie Brown
+{% endblock %}
+
+<!-- For adding a breadcrumb -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/breadcrumbs -->
+{% block beforeContent %}
+  {# backLink({
+    href: "/mya/manage-sites",
+    text: "Go back"
+  }) #}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-run-clinics">Run clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Patient tracker</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+<!-- For adding a back link -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/back-link -->
+{% block outerContent %}
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <!-- Change the page title here -->
+      <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-4">Jodie Brown</h1>
+
+      <p class="nhsuk-body">NHS number <strong>916532568</strong></p>
+ 
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      {# MOJ Navigation START #}
+      <nav class="moj-sub-navigation nhsuk-u-padding-bottom-2" aria-label="Sub navigation">
+        <ul class="moj-sub-navigation__list">
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="profile?addHistory=viewedUpdate">Profile</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="recent-activity">Recent activity</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" aria-current="page">Status and history</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="bookings">Bookings</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="/e2e-record-vaccinations/entry-from-patient-tracker">Record vaccination</a>
+          </li>
+        </ul>
+      </nav>
+      {# MOJ Navigation END #}
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form action="status-and-history?addHistory=show" method="post">
+
+        <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-3">
+          Intent for
+          {% if data["selectVaccine"] == "RSV" %}
+            RSV
+          {% elif data["selectVaccine"] == "Pertussis" %}
+            Pertussis
+          {% elif data["selectVaccine"] == "Flu" %}
+            Flu
+          {% endif %}
+        </h2>
+
+        {#<div class="nhsuk-form-group">
+          <label class="nhsuk-label nhsuk-label--m" for="selectVaccine">
+            Vaccination
+          </label>
+          <select class="nhsuk-select" id="selectVaccine" name="selectVaccine">
+            <option value="Select vaccination" selected>Select vaccination</option>
+            <option value="RSV">RSV</option>
+            <option value="Pertussis">Pertussis</option>
+            <option value="Flu">Flu</option>
+          </select>
+        </div>#}
+
+        <div class="nhsuk-form-group">
+          <fieldset class="nhsuk-fieldset">
+            <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--m">
+              <h1 class="nhsuk-fieldset__heading"><span class="nhsuk-u-visually-hidden">Reason</span></h1>
+            </legend>
+
+            {# ACCEPTING #}
+            <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-3">Accepting</h2>
+            <div class="nhsuk-radios">
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="radio-1" name="chosenReason" type="radio" value="Not yet elligible">
+                <label class="nhsuk-label nhsuk-radios__label" for="radio-1">Not yet elligible</label>
+              </div>
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="radio-2" name="chosenReason" type="radio" value="acceptingOther" aria-describedby="acceptingOther-hint">
+                <label class="nhsuk-label nhsuk-radios__label" for="radio-2">Other</label>
+                <div class="nhsuk-hint nhsuk-radios__hint" id="acceptingOther-hint">
+                  Please provide more details in 'Further information (optional)'
+                </div>
+              </div>
+            </div>
+
+            {# CONSIDERING #}
+            <h2 class="nhsuk-heading-s nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-3">Considering</h2>
+            <div class="nhsuk-radios">
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="radio-3" name="chosenReason" type="radio" value="consideringMisinformation or myths">
+                <label class="nhsuk-label nhsuk-radios__label" for="radio-3">Misinformation or myths</label>
+              </div>
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="radio-4" name="chosenReason" type="radio" value="Needs time to think">
+                <label class="nhsuk-label nhsuk-radios__label" for="radio-4">Needs time to think</label>
+              </div>
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="radio-5" name="chosenReason" type="radio" value="Patient has a fear of needles">
+                <label class="nhsuk-label nhsuk-radios__label" for="radio-5">Patient has a fear of needles</label>
+              </div>
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="radio-6" name="chosenReason" type="radio" value="Patient has concerns about side effects">
+                <label class="nhsuk-label nhsuk-radios__label" for="radio-6">Patient has concerns about side effects</label>
+              </div>
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="radio-7" name="chosenReason" type="radio" value="consideringOther" aria-describedby="consideringOther-hint">
+                <label class="nhsuk-label nhsuk-radios__label" for="radio-7">Other</label>
+                <div class="nhsuk-hint nhsuk-radios__hint" id="declinedOther-hint">
+                  Please provide more details in 'Further information (optional)'
+                </div>
+              </div>
+            </div>
+
+            {# DID NOT ATTEND (DNA) #}
+            <h2 class="nhsuk-heading-s nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-3">Did Not Attend (DNA)</h2>
+            <div class="nhsuk-radios">
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="radio-8" name="chosenReason" type="radio" value="Missed scheduled appointment">
+                <label class="nhsuk-label nhsuk-radios__label" for="radio-8">Missed scheduled appointment</label>
+              </div>
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="radio-9" name="chosenReason" type="radio" value="dnaOther" aria-describedby="dnaOther-hint">
+                <label class="nhsuk-label nhsuk-radios__label" for="radio-9">Other</label>
+                <div class="nhsuk-hint nhsuk-radios__hint" id="declinedOther-hint">
+                  Please provide more details in 'Further information (optional)'
+                </div>
+              </div>
+            </div>
+
+            {# DECLINED #}
+            <h2 class="nhsuk-heading-s nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-3">Declined</h2>
+            <div class="nhsuk-radios nhsuk-u-margin-bottom-3">
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="radio-10" name="chosenReason" type="radio" value="declinedMisinformation or myths">
+                <label class="nhsuk-label nhsuk-radios__label" for="radio-10">Misinformation or myths</label>
+              </div>
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="radio-11" name="chosenReason" type="radio" value="Patient believes they don't need the vaccine">
+                <label class="nhsuk-label nhsuk-radios__label" for="radio-11">Patient believes they don't need the vaccine</label>
+              </div>
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="radio-12" name="chosenReason" type="radio" value="Patient doesn't trust the safety of the vaccine or its effectiveness">
+                <label class="nhsuk-label nhsuk-radios__label" for="radio-12">Patient doesn't trust the safety of the vaccine or its effectiveness</label>
+              </div>
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="radio-13" name="chosenReason" type="radio" value="Patient has medical contraindications">
+                <label class="nhsuk-label nhsuk-radios__label" for="radio-13">Patient has medical contraindications</label>
+              </div>
+              <div class="nhsuk-radios__item">
+                <input class="nhsuk-radios__input" id="radio-14" name="chosenReason" type="radio" value="declinedOther" aria-describedby="declinedOther-hint">
+                <label class="nhsuk-label nhsuk-radios__label" for="radio-14">Other</label>
+                <div class="nhsuk-hint nhsuk-radios__hint" id="declinedOther-hint">
+                  Please provide more details in 'Further information (optional)'
+                </div>
+              </div>
+            </div>
+
+          </fieldset>
+        </div>
+
+        {{ characterCount({
+          name: "further-information",
+          id: "further-information",
+          maxlength: 200,
+          label: {
+            text: "Further information (optional)",
+            classes: "nhsuk-label--m",
+            isPageHeading: "false"
+          },
+          hint: {
+            text: "Do not include personal information like your name, date of birth or NHS number"
+          }
+        }) }}
+
+        <div class="govuk-button-group">
+          <button type="submit" class="nhsuk-button nhsuk-u-margin-right-3" data-module="nhsuk-button">
+            Update
+          </button>
+          <p class="nhsuk-body"><a class="nhsuk-link" href="status-and-history">Cancel</a></p>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+// Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+  
+  // Find the close link
+  const closeLink = document.querySelector('.nhsuk-notification-banner__link');
+    
+  // Find the entire notification banner
+  const notificationBanner = document.querySelector('.nhsuk-notification-banner');
+    
+  // Add click event listener to the close link
+  if (closeLink && notificationBanner) {
+    closeLink.addEventListener('click', function(event) {
+    // Prevent the default link behavior
+    event.preventDefault();
+        
+    // Hide the notification banner
+    notificationBanner.style.display = 'none';
+        
+    // Alternative: remove the element completely from the DOM
+    // notificationBanner.remove();
+    });
+  }
+});
+</script>
+{% endblock %}

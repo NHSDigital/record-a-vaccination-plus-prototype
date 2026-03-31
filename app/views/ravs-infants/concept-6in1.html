@@ -1,0 +1,601 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "6-in-1" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% set organisationSetting = currentUser.organisations | findById(data.currentOrganisationId) %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "/ravs-infants/previous-vaccine" }) }}
+{% endblock %}
+
+{% block content %}
+
+  {% set errors = (errors or data.errors or []) %}
+
+  {% set htmlInfanrixHexa %}
+    {{ radios({
+      idPrefix: "vaccineInfanrixHexaBatch",
+      name: "vaccineInfanrixHexaBatch",
+      fieldset: {
+        legend: {
+          text: "Batch",
+          classes: "nhsuk-fieldset__legend--s"
+        }
+      },
+      items: [
+        {
+          value: "XX123456",
+          text: "XX123456",
+          hint: {
+            html: "Expires 3 " + date({month: 'long', year: 'numeric'}, {'month': +13})
+          }
+        },
+        {
+          value: "914-151",
+          text: "914-151",
+          hint: {
+            html: "Expires 15 " + date({month: 'long', year: 'numeric'}, {'month': +3})
+          }
+        },
+        {
+          divider: "or"
+        },
+        {
+          value: "addBatch",
+          text: "Add a batch"
+        }
+      ]
+    }) }}
+  {% endset -%}
+
+  {% set htmlVaxelis %}
+    {{ radios({
+      idPrefix: "vaccineVaxelisBatch",
+      name: "vaccineVaxelisBatch",
+      fieldset: {
+        legend: {
+          text: "Batch",
+          classes: "nhsuk-fieldset__legend--s"
+        }
+      },
+      items: [
+        {
+          value: "321-980",
+          text: "321-980",
+          hint: {
+            html: "Expires 21 " + date({month: 'long', year: 'numeric'}, {'month': +1})
+          }
+        },
+        {
+          divider: "or"
+        },
+        {
+          value: "addBatch",
+          text: "Add a batch"
+        }
+      ]
+    }) }}
+  {% endset -%}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      {% if (errors | length) > 0 %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: errors
+        }) }}
+      {% endif %}
+      
+      <span class="nhsuk-caption-l">0 to 5 years</span>
+      <h1 class="nhsuk-heading-l nhsuk-u-padding-bottom-4">6-in-1</h1>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+
+    <div class="nhsuk-grid-column-two-thirds">
+      
+      <form method="post" action="/ravs-infants/next-vaccine" novalidate>
+      
+        <input type="hidden" name="whichVaccine" value="6-in-1">
+
+        {# ELIGIBILITY #}
+
+        {% set html6in1eligibility %}
+          {{ radios({
+            idPrefix: "6in1EligibilityReason",
+            name: "6in1EligibilityReason",
+            fieldset: {
+              legend: {
+                text: "Eligibility reason",
+                classes: "nhsuk-fieldset__legend--s"
+              }
+            },
+            items: [
+              {
+                value: "Resident in a care home",
+                text: "Resident in a care home",
+                checked: data['6in1EligibilityReason'] == "Resident in a care home"
+              },
+              {
+                value: "Aged 75 and over, not in a care home",
+                text: "Aged 75 and over, not in a care home",
+                checked: data['6in1EligibilityReason'] == "Aged 75 and over, not in a care home"
+              },
+              {
+                value: "Immunosuppressed",
+                text: "Immunosuppressed",
+                checked: data['6in1EligibilityReason'] == "Immunosuppressed"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {{ radios({
+          idPrefix: "6in1Eligibility",
+          name: "6in1Eligibility",
+          fieldset: {
+            legend: {
+              text: "Why are you giving them the vaccine?",
+              classes: "nhsuk-fieldset__legend--m"
+            }
+          },
+          classes: "nhsuk-u-padding-bottom-2",
+          items: [
+            {
+              value: "Based on age eligibility (0 to 5 years)",
+              text: "Based on age eligibility (0 to 5 years)",
+              checked: data['6in1Eligibility'] == "Based on age eligibility (0 to 5 years)"
+            },
+            {
+              value: "For another reason",
+              text: "For another reason",
+              checked: data['6in1Eligibility'] == "For another reason",
+              conditional: {
+                html: html6in1eligibility
+              }
+            }
+          ]
+        }) }}
+
+        {# PRODUCT #}
+
+        {{ radios({
+          idPrefix: "which6in1product",
+          name: "which6in1product",
+          fieldset: {
+            legend: {
+              text: "Which product are you using?",
+              classes: "nhsuk-fieldset__legend--m"
+            }
+          },
+          classes: "nhsuk-u-padding-bottom-2",
+          items: [
+            {
+              value: "Infanrix Hexa",
+              text: "Infanrix Hexa",
+              checked: data.which6in1product == "Infanrix Hexa",
+              conditional: {
+                html: htmlInfanrixHexa
+              }
+            },
+            {
+              value: "Vaxelis",
+              text: "Vaxelis",
+              checked: data.which6in1product == "Vaxelis",
+              conditional: {
+                html: htmlVaxelis
+              }
+            }
+          ]
+        }) }}
+
+        {# DOSE #}
+
+        {{ radios({
+          idPrefix: "productDose",
+          name: "productDose",
+          fieldset: {
+            legend: {
+              text: "Which dose are you giving?",
+              classes: "nhsuk-fieldset__legend--m"
+            }
+          },
+          errorMessage: {
+            text: (errors | first).text
+          } if (errors | length) > 0,
+          items: [
+            {
+              value: "Dose 1",
+              text: "Dose 1",
+              checked: data.productDose == "Dose 1"
+            },
+            {
+              value: "Dose 2",
+              text: "Dose 2",
+              checked: data.productDose == "Dose 2"
+            },
+            {
+              value: "Dose 3",
+              text: "Dose 3",
+              checked: data.productDose == "Dose 3"
+            },
+            {
+              value: "Dose 4",
+              text: "Dose 4",
+              checked: data.productDose == "Dose 4"
+            }
+          ]
+        }) }}
+
+        {# INJECTION SITE #}
+
+        {% set 6in1InjectionSitesomewhereElseHtml %}
+          {{ radios({
+            idPrefix: "6in1InjectionSitesomewhereElse",
+            name: "6in1InjectionSitesomewhereElse",
+            fieldset: {
+              legend: {
+                text: "Injection site",
+                classes: "nhsuk-fieldset__legend--s"
+              }
+            },
+            errorMessage: {
+              text: other6in1InjectionSitesomewhereElseError.text
+            } if 6in1InjectionSitesomewhereElse,
+            items: [
+              {
+                value: "Left arm",
+                text: "Left arm",
+                checked: (data.6in1InjectionSite == 'Left arm')
+              },
+              {
+                value: "Right arm",
+                text: "Right arm",
+                checked: (data.6in1InjectionSite == 'Right arm')
+              },
+              {
+                value: "Left buttock",
+                text: "Left buttock",
+                checked: (data.6in1InjectionSite == "Left buttock")
+              },
+              {
+                value: "Right buttock",
+                text: "Right buttock",
+                checked: (data.6in1InjectionSite == "Right buttock")
+              }
+            ]
+          }) }}
+        {% endset %}
+
+        {{ radios({
+          idPrefix: "injection-site",
+          name: "injectionSite",
+          fieldset: {
+            legend: {
+              text: "Where did you give the injection?",
+              classes: "nhsuk-fieldset__legend--m"
+            }
+          },
+          classes: "nhsuk-u-padding-bottom-2",
+          items: [
+            {
+              value: "Left thigh",
+              text: "Left thigh",
+              checked: (data.injectionSite == "Left thigh")
+            },
+            {
+              value: "Right thigh",
+              text: "Right thigh",
+              checked: (data.injectionSite == "Right thigh")
+            },
+            {
+              divider: "or"
+            },
+            {
+              value: "other",
+              text: "Somewhere else",
+              checked: (data.injectionSite == "other"),
+              conditional: {
+                html: 6in1InjectionSitesomewhereElseHtml
+              }
+            }
+          ]
+        }) }}
+
+        {# CONSENT #}
+        {% set consentClinicianHtml %}
+          {{ input({
+            label: {
+              text: "Name"
+            },
+            errorMessage: {
+              text: consentClinicianError.text
+            } if consentClinicianError,
+            id: "consent-clinician-name",
+            name: "consentClinicianName",
+            value: data.consentClinicianName
+          }) }}
+        {% endset %}
+
+        {% set consentAttorneyHtml %}
+          {{ input({
+            label: {
+              text: "Name"
+            },
+            errorMessage: {
+              text: consentAttorneyError.text
+            } if consentAttorneyError,
+            id: "consent-attorney-name",
+            name: "consentAttorneyName",
+            value: data.consentAttorneyName
+          }) }}
+
+          {{ input({
+            label: {
+              text: "Relationship to the patient"
+            },
+            errorMessage: {
+              text: consentAttorneyRelationshipError.text
+            } if consentAttorneyRelationshipError,
+            id: "consent-attorney-relationship",
+            name: "consentAttorneyRelationship",
+            value: data.consentAttorneyRelationship
+          }) }}
+        {% endset %}
+
+        {% set consentParentHtml %}
+          {{ input({
+            label: {
+              text: "Consenting parent or guardians first and last name"
+            },
+            errorMessage: {
+              text: consentParentError.text
+            } if consentParentError,
+            id: "consent-parent-name",
+            name: "consentParentName",
+            value:
+              data.consentParentName
+              or data.sessionConsent?.name
+          }) }}
+        {% endset %}
+
+        {% set consentAdvocateHtml %}
+          {{ input({
+            label: {
+              text: "Name"
+            },
+            errorMessage: {
+              text: consentAdvocateError.text
+            } if consentAdvocateError,
+            id: "consent-advocate-name",
+            name: "consentAdvocateName",
+            value: data.consentAdvocateName
+          }) }}
+        {% endset %}
+
+        {% set consentDeputyHtml %}
+          {{ input({
+            label: {
+              text: "Name"
+            },
+            errorMessage: {
+              text: consentDeputyError.text
+            } if consentDeputyError,
+            id: "consent-deputy-name",
+            name: "consentDeputyName",
+            value: data.consentDeputyName
+          }) }}
+
+          {{ input({
+            label: {
+              text: "Relationship to the patient"
+            },
+            errorMessage: {
+              text: consentDeputyRelationshipError.text
+            } if consentDeputyRelationshipError,
+            id: "consent-deputy-relationship",
+            name: "consentDeputyRelationship",
+            value: data.consentDeputyRelationship
+          }) }}
+        {% endset %}
+
+        {% set consentSomeoneElseHtml %}
+          {{ radios({
+            idPrefix: "consent-someone-else",
+            name: "consentSomeoneElseType",
+            fieldset: {
+              legend: {
+                text: "Consent given by",
+                classes: "nhsuk-fieldset__legend--s"
+              }
+            },
+            items: [
+              {
+                value: "Clinician acting in the patient's best interests",
+                text: "Clinician acting in the patient's best interests",
+                conditional: {
+                  html: consentClinicianHtml
+                }
+              },
+              {
+                value: "Person with lasting power of attorney for health and welfare",
+                text: "Person with lasting power of attorney for health and welfare",
+                conditional: {
+                  html: consentAttorneyHtml
+                }
+              },
+              {
+                value: "Independent mental capacity advocate",
+                text: "Independent mental capacity advocate",
+                conditional: {
+                  html: consentAdvocateHtml
+                }
+              },
+              {
+                value: "Court appointed deputy",
+                text: "Court appointed deputy",
+                conditional: {
+                  html: consentDeputyHtml
+                }
+              }
+            ]
+          }) }}
+        {% endset %}
+
+        {{ radios({
+          idPrefix: "consent",
+          name: "consent",
+          fieldset: {
+            legend: {
+              text: ("Who is giving consent?" if data.vaccinationToday == 'yes' else "Who gave consent?"),
+              classes: "nhsuk-fieldset__legend--m"
+            }
+          },
+          classes: "nhsuk-u-padding-bottom-2",
+          errorMessage: {
+            text: consentError.text
+          } if consentError,
+          items: [
+            {
+              value: "Parent or guardian",
+              text: "Parent or guardian",
+              checked:
+                data.consent === "Parent or guardian"
+                or data.sessionConsent?.type === "Parent or guardian",
+              conditional: {
+                html: consentParentHtml
+              }
+            },
+            {
+              divider: "or"
+            },
+            {
+              value: "someone-else",
+              text: "Someone else",
+              checked: (data.consent === "someone-else"),
+              conditional: {
+                html: consentSomeoneElseHtml
+              }
+            }
+          ]
+        }) }}
+
+        {# SET DEFAULT CONSENT #}
+        
+        {#{{ radios({
+          idPrefix: "defaultConsent",
+          name: "defaultConsent",
+          fieldset: {
+            legend: {
+              text: "Set as consent giver for all vaccines recorded in this session?",
+              classes: "nhsuk-fieldset__legend--m"
+            }
+          },
+          classes: "nhsuk-u-padding-bottom-2",
+          errorMessage: {
+            text: defaultConsentError.text
+          } if defaultConsentError,
+          items: [
+            {
+              value: "Yes",
+              text: "Yes",
+              checked: (data.defaultConsent === "Yes")
+            },
+            {
+              value: "No",
+              text: "No",
+              checked: (data.defaultConsent === "No")
+            }
+          ]
+        }) }}#}
+
+        <div class="nhsuk-button-group">
+          {{ button({
+            text: "Continue"
+          }) }}
+          <a href="/ravs-infants/not-recorded?index={{ data.currentVaccineIndex }}" class="nhsuk-link">Do not record this vaccination</a>
+        </div>
+
+      </form>
+
+    </div>
+
+    <div class="nhsuk-grid-column-one-third">
+
+      {% set selectedVaccines = [] %}
+
+      {% for group in [
+        data.AllVaccinationsSeasonal,
+        data.AllVaccinationsNonseasonal,
+        data.ZeroToFiveYearsSeasonal,
+        data.ZeroToFiveYearsNonseasonal,
+        data.SixToTenYearsSeasonal,
+        data.SixToTenYearsNonseasonal,
+        data.ElevenToTwentyFourYearsSeasonal,
+        data.ElevenToTwentyFourYearsNonseasonal,
+        data.AdultSeasonal,
+        data.AdultNonseasonal,
+        data.MaternitySeasonal,
+        data.MaternityNonseasonal
+      ] %}
+        {% if group %}
+          {% for vaccine in group %}
+            {% set _ = selectedVaccines.push(vaccine) %}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+
+      {% set contentHTML %}
+        <p class="nhsuk-body">
+          <span class="nhsuk-u-font-weight-bold">Name</span><br>
+          Nadia Hillaker
+        </p>
+
+        <p class="nhsuk-body">
+          <span class="nhsuk-u-font-weight-bold">Date of birth</span><br>
+          {{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { months: -6 }) }}<br>
+          (6 months old today)
+        </p>
+
+        <p class="nhsuk-body">
+          <span class="nhsuk-u-font-weight-bold">NHS number</span><br>
+          944 930 6001
+        </p>
+
+        {% if selectedVaccines.length > 0 %}
+          <p class="nhsuk-body nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">
+            Recording vaccinations
+          </p>
+
+          <ol class="nhsuk-list nhsuk-list--number nhsuk-u-margin-bottom-0">
+            {% for vaccine in selectedVaccines %}
+              <li>
+                {{ vaccine
+                  | replace('Covid', 'COVID-19')
+                  | replace('AllVaccinations', '')
+                  | replace('ZeroToFiveYears', '')
+                  | replace('SixToTenYears', '')
+                  | replace('ElevenToTwentyFourYears', '')
+                  | replace('Adult', '')
+                  | replace('Maternity', '')
+                }}
+              </li>
+            {% endfor %}
+          </ol>
+        {% endif %}
+      {% endset %}
+
+      {{ card({
+        heading: "Patient",
+        feature: true,
+        descriptionHtml: contentHTML
+      }) }}
+    </div>
+
+  </div>
+
+{% endblock %}

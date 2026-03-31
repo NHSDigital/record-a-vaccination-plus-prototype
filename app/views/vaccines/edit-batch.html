@@ -1,0 +1,88 @@
+{# extends 'layout.html' #}
+{% extends 'e2e-layout.html' %}
+
+{% set pageName = "Edit batch" %}
+
+{# set currentSection = "vaccines" #}
+{% set currentSection = "organise" %}
+
+{% block header %}
+  {% include "includes/e2e-header-logged-in.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "/vaccines/" + vaccine.id, text: "Back" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuks-heading-xl">Edit batch</h1>
+
+      <form action="/vaccines/{{ vaccine.id }}/{{ batch.batchNumber }}/update" method="post" novalidate="true">
+
+        {{ input({
+          "label": {
+            "text": "Batch number"
+          },
+          "id": "batch-number",
+          "name": "batchNumber",
+          classes: "nhsuk-input--width-20",
+          value: batch.batchNumber
+        }) }}
+
+        {{ dateInput({
+          "id": "batchExpiryDate",
+          "namePrefix": "batchExpiryDate",
+          "fieldset": {
+            "legend": {
+              "text": "Expiry date",
+              "classes": "nhsuk-label--s"
+            }
+          },
+          values: {
+            day: day,
+            month: month,
+            year: year
+          }
+        }) }}
+
+        {% if vaccine.vaccineProduct == "Spikevax JN.1" %}
+
+          {{ radios({
+            "idPrefix": "pack-type",
+            "name": "packType",
+            "fieldset": {
+              "legend": {
+                "text": "Pack size",
+                classes: "nhsuk-fieldset__legend--s"
+              }
+            },
+            "items": [
+              {
+                "value": "Single vial",
+                "text": "Single vial",
+                checked: (batch.packType == "Single vial")
+              },
+              {
+                "value": "10 vials",
+                "text": "10 vials",
+                checked: (batch.packType == "10 vials")
+              }
+            ]
+          }) }}
+
+        {% endif %}
+
+        {{ button({
+          "text": "Continue"
+      }) }}
+      </form>
+
+
+    </div>
+  </div>
+
+
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Check these details still apply" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "/ravs-infants/done" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      {{ summaryList({
+          rows: [
+            {
+              key: {
+                text: "Date"
+              },
+              value: {
+                text: ("Today" if data.vaccinationToday == "yes" else (data.vaccinationDate | isoDateFromDateInput | govukDate))
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/record-vaccinations",
+                    text: "Change",
+                    visuallyHiddenText: "vaccination date"
+                  }
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Site"
+              },
+              value: {
+                text: data.deliveryTeam
+              },
+              actions: {
+                items: [
+                  {
+                    href: "delivery-team",
+                    text: "Change",
+                    visuallyHiddenText: "site"
+                  }
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Vaccinator"
+              },
+              value: {
+                text: currentUser.firstName + " " + currentUser.lastName
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/record-vaccinations/vaccinator",
+                    text: "Change",
+                    visuallyHiddenText: "contact information"
+                  }
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Vaccine"
+              },
+              value: {
+                html: (data.whichVaccine | capitaliseFirstLetter) + "<br>" + data.vaccineProduct
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/record-vaccinations/vaccine",
+                    text: "Change",
+                    visuallyHiddenText: "vaccine"
+                  }
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Batch"
+              },
+              value: {
+                html: data.vaccineBatch + "<br>Expires 4 March 2026"
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/record-vaccinations/batch",
+                    text: "Change",
+                    visuallyHiddenText: "vaccine batch"
+                  }
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Eligibility"
+              },
+              value: {
+                html: ((data.eligibility | join("<br>")) if (data.eligibility | isArray) else data.eligibility)
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/record-vaccinations/eligibility?from=/record-vaccinations/review-previous",
+                    text: "Change",
+                    visuallyHiddenText: "eligibility"
+                  }
+                ]
+              }
+            } if (data.eligibility),
+            {
+              key: {
+                text: "Role"
+              },
+              value: {
+                text: data.healthcareWorker
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/record-vaccinations/healthcare-worker",
+                    text: "Change",
+                    visuallyHiddenText: "role"
+                  }
+                ]
+              }
+            } if (data.eligibility == "Health or social care worker"),
+            {
+              key: {
+                text: "Location"
+              },
+              value: {
+                html: data.locationType
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/record-vaccinations/location",
+                    text: "Change",
+                    visuallyHiddenText: "contact information"
+                  }
+                ]
+              }
+            } if (data.locationType)
+          ]
+        }) }}
+
+      {{ button({
+        text: "Continue",
+        href: "do-you-have-the-patients-number?nhsNumber"
+      })}}
+
+      <p><a href="do-you-have-the-patients-number?nhsNumber">Start again</a> to record a vaccination from the beginning.</p>
+
+    </div>
+  </div>
+
+{% endblock %}
+

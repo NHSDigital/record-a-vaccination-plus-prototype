@@ -1,0 +1,222 @@
+<!-- Use this page as the index for your project -->
+
+<!-- ADDING CUSTOM CSS - Add your custom CSS or Sass in /app/assets/sass/main.scss -->
+
+<!-- Extends the layout from /views/layout.html -->
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+<!-- Set the page title -->
+{% block pageTitle %}
+Book vaccinations prototype
+{% endblock %}
+
+<!-- For adding a breadcrumb -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/breadcrumbs -->
+{% block beforeContent %}
+{#
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Manage clinics</li>
+      <li class="nhsuk-breadcrumb__list-item">BREADCRUMB TBC</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+#}
+
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+  
+{% endblock %}
+
+<!-- For adding a back link -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/back-link -->
+{% block outerContent %}
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <!-- Change the page title here -->
+
+      <!-- Add your content here -->
+      <!-- Styles and components can be found at https://service-manual.nhs.uk/design-system -->
+
+      <form action="choose-time-range" method="get" class="form">
+
+        <fieldset class="nhsuk-fieldset">
+          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+            <span class="nhsuk-caption-l">Birmingham Women's Hospital</span>
+            <h1 class="nhsuk-fieldset__heading">
+              Choose a date
+            </h1>
+          </legend>
+          <p>{{data['pharmacy']}}</p>
+
+
+          <p class="nhsuk-body-l">Next 10 available days</p>
+        <div class="nhsuk-form-group">
+          <div class="nhsuk-radios">
+      
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="appt-days-radio" name="date" type="radio" value="{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +1}) }}">
+              <label class="nhsuk-label nhsuk-radios__label" for="appt-days">
+                {{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +11}) }}
+              </label>
+              <div class="nhsuk-hint nhsuk-radios__hint" id="example-hints-1-item-hint">
+                AM - Available <br>
+                PM - Available
+              </div>
+            </div>
+      
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="appt-days-radio" name="date" type="radio" value="{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +2}) }}">
+              <label class="nhsuk-label nhsuk-radios__label" for="appt-days-radio">
+                {{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +12}) }}
+              </label>
+              <div class="nhsuk-hint nhsuk-radios__hint" id="example-hints-1-item-hint">
+                AM - Available <br>
+                PM - Unavailable
+              </div>
+            </div>
+
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="appt-days-radio" name="date" type="radio" value="{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +3}) }}">
+              <label class="nhsuk-label nhsuk-radios__label" for="appt-days-radio">
+                {{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +13}) }}
+              </label>
+              <div class="nhsuk-hint nhsuk-radios__hint" id="example-hints-1-item-hint">
+                AM - Available <br>
+                PM - Unavailable
+              </div>
+            </div>
+
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="appt-days-radio" name="date" type="radio" value="{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +4}) }}">
+              <label class="nhsuk-label nhsuk-radios__label" for="appt-days-radio">
+                {{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +14}) }}
+              </label>
+              <div class="nhsuk-hint nhsuk-radios__hint" id="example-hints-1-item-hint">
+                AM - Available <br>
+                PM - Unavailable
+              </div>
+            </div>
+
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="appt-days-radio" name="date" type="radio" value="{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +5}) }}">
+              <label class="nhsuk-label nhsuk-radios__label" for="appt-days-radio">
+                {{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +15}) }}
+              </label>
+              <div class="nhsuk-hint nhsuk-radios__hint" id="example-hints-1-item-hint">
+                AM - Available <br>
+                PM - Unavailable
+              </div>
+            </div>
+
+                        <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="appt-days-radio" name="date" type="radio" value="{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +1}) }}">
+              <label class="nhsuk-label nhsuk-radios__label" for="appt-days">
+                {{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +16}) }}
+              </label>
+              <div class="nhsuk-hint nhsuk-radios__hint" id="example-hints-1-item-hint">
+                AM - Available <br>
+                PM - Available
+              </div>
+            </div>
+      
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="appt-days-radio" name="date" type="radio" value="{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +2}) }}">
+              <label class="nhsuk-label nhsuk-radios__label" for="appt-days-radio">
+                {{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +17}) }}
+              </label>
+              <div class="nhsuk-hint nhsuk-radios__hint" id="example-hints-1-item-hint">
+                AM - Available <br>
+                PM - Unavailable
+              </div>
+            </div>
+
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="appt-days-radio" name="date" type="radio" value="{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +3}) }}">
+              <label class="nhsuk-label nhsuk-radios__label" for="appt-days-radio">
+                {{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +18}) }}
+              </label>
+              <div class="nhsuk-hint nhsuk-radios__hint" id="example-hints-1-item-hint">
+                AM - Available <br>
+                PM - Unavailable
+              </div>
+            </div>
+
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="appt-days-radio" name="date" type="radio" value="{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +4}) }}">
+              <label class="nhsuk-label nhsuk-radios__label" for="appt-days-radio">
+                {{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +19}) }}
+              </label>
+              <div class="nhsuk-hint nhsuk-radios__hint" id="example-hints-1-item-hint">
+                AM - Available <br>
+                PM - Unavailable
+              </div>
+            </div>
+
+            <div class="nhsuk-radios__item">
+              <input class="nhsuk-radios__input" id="appt-days-radio" name="date" type="radio" value="{{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +5}) }}">
+              <label class="nhsuk-label nhsuk-radios__label" for="appt-days-radio">
+                {{ date({weekday: 'long', day: 'numeric', month: 'long'}, {'day': +20}) }}
+              </label>
+              <div class="nhsuk-hint nhsuk-radios__hint" id="example-hints-1-item-hint">
+                AM - Available <br>
+                PM - Unavailable
+              </div>
+            </div>
+
+          </div>
+          </div>
+        </fieldset>
+
+        <nav class="nhsuk-pagination" role="navigation" aria-label="Pagination">
+            <ul class="nhsuk-list nhsuk-pagination__list">
+                <li class="nhsuk-pagination-item--previous">
+                    <a class="nhsuk-pagination__link nhsuk-pagination__link--prev" href="#/">
+                      <span class="nhsuk-pagination__title">Show earlier dates</span>
+                      <span class="nhsuk-u-visually-hidden">:</span>
+                      <span class="nhsuk-pagination__page">Previous 10 available days</span>
+                      <svg class="nhsuk-icon nhsuk-icon--arrow-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                        <path d="M10.7 6.3c.4.4.4 1 0 1.4L7.4 11H19a1 1 0 0 1 0 2H7.4l3.3 3.3c.4.4.4 1 0 1.4a1 1 0 0 1-1.4 0l-5-5A1 1 0 0 1 4 12c0-.3.1-.5.3-.7l5-5a1 1 0 0 1 1.4 0Z"/>
+                      </svg>
+                    </a>
+                  </li>
+              <li class="nhsuk-pagination-item--next">
+                <a class="nhsuk-pagination__link nhsuk-pagination__link--next" href="#/">
+                  <span class="nhsuk-pagination__title">Show later dates</span>
+                  <span class="nhsuk-u-visually-hidden">:</span>
+                  <span class="nhsuk-pagination__page">Next 10 available days</span>
+                  <svg class="nhsuk-icon nhsuk-icon--arrow-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                    <path d="m14.7 6.3 5 5c.2.2.3.4.3.7 0 .3-.1.5-.3.7l-5 5a1 1 0 0 1-1.4-1.4l3.3-3.3H5a1 1 0 0 1 0-2h11.6l-3.3-3.3a1 1 0 1 1 1.4-1.4Z"/>
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        <button class="nhsuk-button" data-module="nhsuk-button" type="submit">
+          Continue to time range
+        </button>
+    </form>
+
+<p class="nhsuk-body">
+  <a class="nhsuk-link" href="book-patient-sites">
+    Choose a different clinic
+  </a>
+</p>
+      
+      </div>
+      <!-- End of content -->
+
+    </div>
+  </div>
+{% endblock %}

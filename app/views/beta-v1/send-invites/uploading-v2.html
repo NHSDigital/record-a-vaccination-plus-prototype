@@ -1,0 +1,36 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Uploading patient cohort list
+{% endblock %}
+
+{% block beforeContent %}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l nhsuk-u-padding-bottom-2">
+        <!--<span class="nhsuk-caption-l">Engage patients</span>-->
+        Uploading patient cohort list
+      </h1>
+
+      <div aria-live="polite" class="nhsuk-body">
+        <div class="spinner spinner--extra-large" aria-hidden="true"></div>
+        <p class="nhsuk-body nhsuk-u-padding-top-5">Please wait, uploading patient data...</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Wait 2.5 seconds, then move on...
+    setTimeout(function() {
+      window.location.href = "success-upload-v2";
+    }, 2500);
+  </script>
+
+{% endblock %}

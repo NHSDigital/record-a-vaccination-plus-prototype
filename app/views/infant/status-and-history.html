@@ -1,0 +1,409 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "run" %}
+
+{% block pageTitle %}
+  {% if data['e2eCurrentUserType'] == "infant" %}Sam Brown{% else %}Jodie Brown{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-run-clinics">Run clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Patient tracker</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+{% block outerContent %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <!-- Change the page title here -->
+      <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-4">{% if data['e2eCurrentUserType'] == "infant" %}Sam Brown{% else %}Jodie Brown{% endif %}</h1>
+
+      <p class="nhsuk-body">NHS number <strong>{% if data['e2eCurrentUserType'] == "infant" %}9434765919{% else %}916532568{% endif %}</strong></p>
+ 
+      {% if data['e2eCurrentUserType'] == "infant" %}
+        {#<p class="nhsuk-body">Date of birth <strong>26 June 2025 <span id="headerSinceDate"></span></strong></p>#}
+        <p class="nhsuk-body">Date of birth <strong>26 June 2025 (aged 13 months and 1 week)</strong></p>
+      {% endif %}
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      {# MOJ Navigation START #}
+      <nav class="moj-sub-navigation nhsuk-u-padding-bottom-2" aria-label="Sub navigation">
+        <ul class="moj-sub-navigation__list">
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="#/">Profile</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="#/">Recent activity</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" aria-current="page">Status and history</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="#/">Bookings</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="#/">Record vaccination</a>
+          </li>
+        </ul>
+      </nav>
+      {# MOJ Navigation END #}
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {# NHS Tabs #}
+      <div class="nhsuk-tabs" data-module="nhsuk-tabs">
+        <h2 class="nhsuk-tabs__title nhsuk-u-visually-hidden">
+          Contents
+        </h2>
+        <ul class="nhsuk-tabs__list">
+          <li class="nhsuk-tabs__list-item nhsuk-tabs__list-item--selected">
+            <a class="nhsuk-tabs__tab" href="#by-vaccine">
+              By vaccine
+            </a>
+          </li>
+          <li class="nhsuk-tabs__list-item">
+            <a class="nhsuk-tabs__tab" href="#by-schedule">
+              By schedule
+            </a>
+          </li>
+        </ul>
+
+        {# BY VACCINE TAB CONTENT #}
+        <div class="nhsuk-tabs__panel nhsuk-tabs__panel--hidden" id="by-vaccine">
+          <h1 class="nhsuk-heading-m nhsuk-u-visually-hidden">
+            By vaccine
+          </h1>
+
+          {# PREVIOUSLY RECEIVED #}
+
+          <h2 class="nhsuk-heading-m">
+            Previously received
+          </h2>
+
+          {# EXPANDER START: Visit 1 from 8 weeks #}
+          <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-4" {{ 'open' if data["selectVaccine"] == "RSV" }}>
+            <summary class="nhsuk-details__summary">
+              <span class="nhsuk-details__summary-text">
+                Visit 1 from 8 weeks
+              </span>
+            </summary>
+            <div class="nhsuk-details__text">
+            </div>
+          </details>
+
+          {# EXPANDER START: Visit 2 from 12 weeks #}
+          <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-4" {{ 'open' if data["selectVaccine"] == "RSV" }}>
+            <summary class="nhsuk-details__summary">
+              <span class="nhsuk-details__summary-text">
+                Visit 2 from 12 weeks
+              </span>
+            </summary>
+            <div class="nhsuk-details__text">
+            </div>
+          </details>
+
+          {# EXPANDER START: Visit 3 from 16 weeks #}
+          <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-4" {{ 'open' if data["selectVaccine"] == "RSV" }}>
+            <summary class="nhsuk-details__summary">
+              <span class="nhsuk-details__summary-text">
+                Visit 3 from 16 weeks
+              </span>
+            </summary>
+            <div class="nhsuk-details__text">
+            </div>
+          </details>
+
+          <hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+
+          <h1 class="nhsuk-heading-m">
+            Next due
+          </h1>
+
+          {# EXPANDER START: Visit 4 from 12 months #}
+          <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-4" {{ 'open' if data["selectVaccine"] == "RSV" }}>
+            <summary class="nhsuk-details__summary">
+              <span class="nhsuk-details__summary-text">
+                Visit 4 from 12 months
+              </span>
+            </summary>
+            <div class="nhsuk-details__text">
+
+              {# MMR #}
+              <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-4">
+                MMR
+              </h2>
+
+              {# MMR status expander #}
+              <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-4" {{ 'open' if data["selectVaccine"] == "RSV" }}>
+                <summary class="nhsuk-details__summary">
+                  <span class="nhsuk-details__summary-text">
+                    <span class="nhsuk-u-visually-hidden">RSV </span>Status
+                  </span>
+                </summary>
+                <div class="nhsuk-details__text">
+                </div>
+              </details>
+
+              {# MMR history expander #}
+              <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-4">
+                <summary class="nhsuk-details__summary">
+                  <span class="nhsuk-details__summary-text">
+                    <span class="nhsuk-u-visually-hidden">MMR </span>History
+                  </span>
+                </summary>
+                <div class="nhsuk-details__text">
+                </div>
+              </details>
+
+              <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+
+              {# Pneumococcal (2nd dose) #}
+              <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-4">
+                Pneumococcal (2nd dose)
+              </h2>
+
+              {# Pneumococcal (2nd dose) status expander #}
+              <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-4" {{ 'open' if data["selectVaccine"] == "RSV" }}>
+                <summary class="nhsuk-details__summary">
+                  <span class="nhsuk-details__summary-text">
+                    <span class="nhsuk-u-visually-hidden">RSV </span>Status
+                  </span>
+                </summary>
+                <div class="nhsuk-details__text">
+                </div>
+              </details>
+
+              {# Pneumococcal (2nd dose) history expander #}
+              <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-4">
+                <summary class="nhsuk-details__summary">
+                  <span class="nhsuk-details__summary-text">
+                    <span class="nhsuk-u-visually-hidden">Pneumococcal (2nd dose) </span>History
+                  </span>
+                </summary>
+                <div class="nhsuk-details__text">
+                </div>
+              </details>
+
+              <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+        
+              {# Men B (3rd dose) #}
+              <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-4">
+                Men B (3rd dose)
+              </h2>
+
+              {# Men B (3rd dose) status expander #}
+              <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-4" {{ 'open' if data["selectVaccine"] == "RSV" }}>
+                <summary class="nhsuk-details__summary">
+                  <span class="nhsuk-details__summary-text">
+                    <span class="nhsuk-u-visually-hidden">RSV </span>Status
+                  </span>
+                </summary>
+                <div class="nhsuk-details__text">
+
+                  {# Explained #}
+                  <h3 class="nhsuk-heading-s">Explained</h3>
+                  <table class="nhsuk-table nhsuk-u-margin-bottom-6">
+                    <thead class="nhsuk-table__head">
+                      <tr>
+                        <th scope="col" class="nhsuk-table__header nhsuk-u-font-size-22"><span class="nhsuk-u-visually-hidden">Vaccine</span></th>
+                        <th scope="col" class="nhsuk-table__header">Explained and offered</th>
+                        <th scope="col" class="nhsuk-table__header">Side effects discussed</th>
+                      </tr>
+                    </thead>
+                    <tbody class="nhsuk-table__body">
+                      <tr class="nhsuk-table__row">
+                        <td class="nhsuk-table__cell">MMR</td>
+                        <td class="nhsuk-table__cell">Yes</td>
+                        <td class="nhsuk-table__cell">Yes</td>
+                      </tr>
+                      <tr class="nhsuk-table__row">
+                        <td class="nhsuk-table__cell">Pneumococcal (2nd&nbsp;dose)</td>
+                        <td class="nhsuk-table__cell">Yes</td>
+                        <td class="nhsuk-table__cell">No</td>
+                      </tr>
+                      <tr class="nhsuk-table__row">
+                        <td class="nhsuk-table__cell">Men B (3rd&nbsp;dose)</td>
+                        <td class="nhsuk-table__cell">Yes</td>
+                        <td class="nhsuk-table__cell">No</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  {# Contacted #}
+                  <h3 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">Contacted</h3>
+                  <ul class="nhsuk-list nhsuk-list--bullet">
+                    <li>Invite 1 SMS sent 29 June 2026</li>
+                    <li>Invite 2 SMS sent 6 July 2026</li>
+                    <li>Intent check phone call on 29 July 2026</li>
+                  </ul>
+
+                  {# Booked #}
+                  <h3 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">Booked</h3>
+                  <ul class="nhsuk-list nhsuk-list--bullet">
+                    {% if data["selectVaccine"] == "RSV" %}
+                      {% if (data['addHistory'] == 'show') or (data['addHistory'] == 'viewedUpdate') %}
+                        <li>Appointment scheduled for RSV 2pm on 21 September 2025 at Birmingham Women's Hospital</li>
+                      {% endif %}
+                    {% else %}
+                      <li>Visit 4 (12 months) booked for 20 July 2025 </li>
+                      <ul class="custom-mya-nav nhsuk-u-padding-bottom-4">
+                        <li><a class="nhsuk-link" href="/staff-book-patient-appointment/book-patient-sites?nhsNumberKnown&journey=BookPatient">Manage appointment</a></li>
+                        <li><a class="nhsuk-link" href="/e2e-record-vaccinations/entry-from-patient-tracker">Record vaccination</a></li>
+                      </ul>
+                      <li><strong>DNA'd</strong> Visit 4 (12 months) booked for 20 July 2025 </li>
+                    {% endif %}
+                  </ul>
+
+                  {#<ul class="custom-mya-nav nhsuk-u-padding-bottom-4">
+                    <li><a class="nhsuk-link" href="/staff-book-patient-appointment/book-patient-sites?nhsNumberKnown&journey=BookPatient">Manage appointment</a></li>
+                    <li><a class="nhsuk-link" href="/e2e-record-vaccinations/entry-from-patient-tracker">Record vaccination</a></li>
+                  </ul>#}
+
+                  {# INTENT #}
+                  <h3 class="nhsuk-heading-s">Intent</h3>
+                  <table class="nhsuk-table nhsuk-u-margin-bottom-6">
+                    <thead class="nhsuk-table__head nhsuk-u-visually-hidden">
+                      <tr>
+                        <th scope="col" class="nhsuk-table__header nhsuk-u-font-size-22">Vaccine</th>
+                        <th scope="col" class="nhsuk-table__header">Intent</th>
+                      </tr>
+                    </thead>
+                    <tbody class="nhsuk-table__body">
+                      <tr class="nhsuk-table__row">
+                        <td class="nhsuk-table__cell">MMR</td>
+                        <td class="nhsuk-table__cell"><strong class="nhsuk-tag nhsuk-tag--yellow">Considering</strong></td>
+                      </tr>
+                      <tr class="nhsuk-table__row">
+                        <td class="nhsuk-table__cell">Pneumococcal (2nd&nbsp;dose)</td>
+                        <td class="nhsuk-table__cell"><strong class="nhsuk-tag nhsuk-tag--green">Accepts</strong></td>
+                      </tr>
+                      <tr class="nhsuk-table__row">
+                        <td class="nhsuk-table__cell">Men B (3rd&nbsp;dose)</td>
+                        <td class="nhsuk-table__cell"><strong class="nhsuk-tag nhsuk-tag--green">Accepts</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <p class="nhsuk-body nhsuk-u-margin-bottom-0">Spoke to Jodie Brown (Mum) on phone to re-invite. Worried about MMR safety but happy to receive Pneumococcal and Men B separately.</p>
+
+                  <ul class="custom-mya-nav nhsuk-u-padding-top-4">
+                    {#<li><a class="nhsuk-link" href="update-intent?selectVaccine=RSV">Update intent</a></li>#}
+                    <li><a href="update-intent?selectVaccine=RSV" class="nhsuk-button nhsuk-button--secondary-custom app-button--small nhsuk-u-margin-bottom-0" role="button" draggable="false">Update intent</a></li>
+                  </ul>
+
+                  {#<p class="nhsuk-card__description nhsuk-body-s nhsuk-u-margin-top-2">1 September 2025</p>#}
+
+                  {#<hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">#}
+
+                </div>
+              </details>
+
+              {# Men B (3rd dose) history expander #}
+              <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-4">
+                <summary class="nhsuk-details__summary">
+                  <span class="nhsuk-details__summary-text">
+                    <span class="nhsuk-u-visually-hidden">Men B (3rd dose) </span>History
+                  </span>
+                </summary>
+                <div class="nhsuk-details__text">
+                  <ul class="nhsuk-list nhsuk-list--bullet">
+                    <li>No recorded history for this vaccine</li>
+                  </ul>
+                </div>
+              </details>
+
+            </div>
+          </details>
+
+          <hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+
+          {# ALL UPCOMING #}
+
+          <h1 class="nhsuk-heading-m">
+            All upcoming
+          </h1>
+
+          {# EXPANDER START: Visit 5 from 18 months #}
+          <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-4" {{ 'open' if data["selectVaccine"] == "RSV" }}>
+            <summary class="nhsuk-details__summary">
+              <span class="nhsuk-details__summary-text">
+                Visit 5 from 18 months
+              </span>
+            </summary>
+            <div class="nhsuk-details__text">
+            </div>
+          </details>
+
+          {# EXPANDER START: Visit 6 from 3 years 4 months #}
+          <details class="nhsuk-details nhsuk-expander nhsuk-u-margin-bottom-4" {{ 'open' if data["selectVaccine"] == "RSV" }}>
+            <summary class="nhsuk-details__summary">
+              <span class="nhsuk-details__summary-text">
+                Visit 6 from 3 years 4 months
+              </span>
+            </summary>
+            <div class="nhsuk-details__text">
+            </div>
+          </details>
+
+        </div>
+
+        {# BY SCHEDULE TAB CONTENT #}
+        <div class="nhsuk-tabs__panel" id="by-schedule">
+          <h1 class="nhsuk-heading-m nhsuk-u-visually-hidden">
+            By schedule
+          </h1>
+          <h2 class="nhsuk-heading-m">
+            By schedule content
+          </h2>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function hideDiv(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.display = 'none';
+      }
+    }
+
+    function showDiv(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.display = 'flex';
+      }
+    }
+
+    function showDetails(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.display = 'block';
+      }
+    }
+  </script>
+
+{% endblock %}

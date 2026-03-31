@@ -1,0 +1,73 @@
+
+table {
+  max-width: 100%;
+}
+
+.app-table__cell--break-all {
+  word-break: break-all;
+}
+
+.app-table__header--min-width-100 {
+  min-width: 100px;
+}
+
+.app-table__header--min-width-200 {
+  min-width: 100px;
+  @include nhsuk-media-query($from: desktop) {
+    min-width: 200px;
+  }
+}
+
+.app-table__cell--border-right,
+.app-table__header--border-right {
+  border-right: 2px solid nhsuk-colour("grey-4");
+}
+
+.app-table__header--border-top {
+  border-top: 2px solid nhsuk-colour("grey-4");
+}
+
+.app-table__cell--padding-left,
+.app-table__header--padding-left {
+  @include nhsuk-responsive-padding(2, "left");
+}
+
+.app-table__header--align-bottom {
+  vertical-align: bottom;
+}
+
+.nhsuk-table__header--centred {
+  text-align: center;
+  @include nhsuk-responsive-padding(2, "left");
+  @include nhsuk-responsive-padding(2, "right");
+}
+
+.app-table__cell--right-aligned,
+.app-table__header--right-aligned {
+  text-align: right;
+}
+
+.nhsuk-table--padding-2 td,
+.nhsuk-table--padding-2 th {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.nhsuk-table--padding-2 tr th:first-child,
+.nhsuk-table--padding-2 tr td:first-child {
+  padding-left: 0;
+}
+
+.nhsuk-table--padding-2 tr th:last-child,
+.nhsuk-table--padding-2 tr td:last-child {
+  padding-right: 0;
+}
+
+.nhsuk-table tbody tr:last-child td,
+.nhsuk-table tbody tr:last-child th {
+  border-bottom-width: 3px;
+}
+
+.nhsuk-table__row--bold td {
+  font-weight: bold;
+}

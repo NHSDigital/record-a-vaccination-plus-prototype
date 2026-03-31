@@ -1,0 +1,347 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Which vaccine are you giving?" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% set organisationSetting = currentUser.organisations | findById(data.currentOrganisationId) %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "vaccinator" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if (errors | length) > 0 %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: errors
+        }) }}
+      {% endif %}
+
+      <form method="post" novalidate>
+
+        {% set items = [] %}
+        {% for deliveryTeam in (sitesInUse | sort(false, false, "name")) %}
+          {% set items = (items.push({
+            text: deliveryTeam.name,
+            value: deliveryTeam.id
+          }), items) %}
+        {% endfor %}
+
+        {% set htmlBCG %}
+          {{ radios({
+            idPrefix: "vaccineProduct",
+            name: "vaccineProduct",
+            fieldset: {
+              legend: {
+                text: "Vaccine product",
+                isPageHeading: false
+              }
+            },
+            items: [
+              {
+                value: "BCG Vaccine AJV",
+                text: "BCG Vaccine AJV"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {% set htmlCOVID %}
+          {{ radios({
+            idPrefix: "vaccineProduct",
+            name: "vaccineProduct",
+            fieldset: {
+              legend: {
+                text: "Vaccine product",
+                isPageHeading: false
+              }
+            },
+            items: [
+              {
+                value: "Comirnaty 3 LP.8.1JN.1",
+                text: "Comirnaty 3 LP.8.1JN.1"
+              },
+              {
+                value: "Comirnaty 10 LP.8.1",
+                text: "Comirnaty 10 LP.8.1"
+              },
+              {
+                value: "Comirnaty KP.2",
+                text: "Comirnaty KP.2"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {% set html6in1 %}
+          {{ radios({
+            idPrefix: "vaccineProduct",
+            name: "vaccineProduct",
+            fieldset: {
+              legend: {
+                text: "Vaccine product",
+                isPageHeading: false
+              }
+            },
+            items: [
+              {
+                value: "Infanrix Hexa",
+                text: "Infanrix Hexa"
+              },
+              {
+                value: "Vaxelis",
+                text: "Vaxelis"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {% set htmlFlu %}
+          {{ radios({
+            idPrefix: "vaccineProduct",
+            name: "vaccineProduct",
+            fieldset: {
+              legend: {
+                text: "Vaccine product",
+                isPageHeading: false
+              }
+            },
+            items: [
+              {
+                value: "Adjuvanted Trivalent Influenza Vaccine (aTIV)",
+                text: "Adjuvanted Trivalent Influenza Vaccine (aTIV)"
+              },
+              {
+                value: "Cell-based Trivalent Influenza Vaccine (TIVc)",
+                text: "Cell-based Trivalent Influenza Vaccine (TIVc)"
+              },
+              {
+                value: "Efluelda (TIV-HD)",
+                text: "Efluelda (TIV-HD)"
+              },
+              {
+                value: "Fluenz (LAIV)",
+                text: "Fluenz (LAIV)"
+              },
+              {
+                value: "Influvac (TIVe)",
+                text: "Influvac (TIVe)"
+              },
+              {
+                value: "Supemtek (TIVr)",
+                text: "Supemtek (TIVr)"
+              },
+              {
+                value: "Vaxigrip (TIVe)",
+                text: "Vaxigrip (TIVe)"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {% set htmlHepB %}
+          {{ radios({
+            idPrefix: "vaccineProduct",
+            name: "vaccineProduct",
+            fieldset: {
+              legend: {
+                text: "Vaccine product",
+                isPageHeading: false
+              }
+            },
+            items: [
+              {
+                value: "Engerix B Monovalent",
+                text: "Engerix B Monovalent"
+              },
+              {
+                value: "Fendrix Monovalent",
+                text: "Fendrix Monovalent"
+              },
+              {
+                value: "HBvaxPRO Monovalent",
+                text: "HBvaxPRO Monovalent"
+              },
+              {
+                value: "PreHevbri Monovalent",
+                text: "PreHevbri Monovalent"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {% set htmlMenB %}
+          {{ radios({
+            idPrefix: "vaccineProduct",
+            name: "vaccineProduct",
+            fieldset: {
+              legend: {
+                text: "Vaccine product",
+                isPageHeading: false
+              }
+            },
+            items: [
+              {
+                value: "4CMenB (Bexsero)",
+                text: "4CMenB (Bexsero)"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {% set htmlMMRV %}
+          {{ radios({
+            idPrefix: "vaccineProduct",
+            name: "vaccineProduct",
+            fieldset: {
+              legend: {
+                text: "Vaccine product",
+                isPageHeading: false
+              }
+            },
+            items: [
+              {
+                value: "Priorix-Tetra (GSK)",
+                text: "Priorix-Tetra (GSK)"            
+              },
+              {
+                value: "ProQuad (MSD)",
+                text: "ProQuad (MSD)"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {% set htmlPneumococcal %}
+          {{ radios({
+            idPrefix: "vaccineProduct",
+            name: "vaccineProduct",
+            fieldset: {
+              legend: {
+                text: "Vaccine product",
+                isPageHeading: false
+              }
+            },
+            items: [
+              {
+                value: "PCV13 (Prevenar 13)",
+                text: "PCV13 (Prevenar 13)"
+              },
+              {
+                value: "PPV23 (Pneumovax 23)",
+                text: "PPV23 (Pneumovax 23)"
+              },
+              {
+                value: "PCV15 (Vaxneuvance)",
+                text: "PCV15 (Vaxneuvance)"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {{ radios({
+          idPrefix: "whichVaccine",
+          name: "whichVaccine",
+          fieldset: {
+            legend: {
+              text: "Which vaccine are you giving " + data.firstName + " " + data.lastName + "?",
+              classes: "nhsuk-fieldset__legend--l",
+              isPageHeading: true
+            }
+          },
+          errorMessage: {
+            text: (errors | first).text
+          } if (errors | length) > 0,
+            items: [
+              {
+                value: "BCG",
+                text: "BCG",
+                conditional: {
+                  html: htmlBCG
+                }
+              },
+              {
+                value: "COVID-19",
+                text: "COVID-19",
+                conditional: {
+                  html: htmlCOVID
+                }                
+              },
+              {
+                value: "6-in-1",
+                text: "6-in-1",
+                conditional: {
+                  html: html6in1
+                }
+              },
+              {
+                value: "Flu",
+                text: "Flu",
+                conditional: {
+                  html: htmlFlu
+                }
+              },
+              {
+                value: "Hepatitis B",
+                text: "Hepatitis B",
+                conditional: {
+                  html: htmlHepB
+                }
+              },
+              {
+                value: "MenB",
+                text: "MenB",
+                conditional: {
+                  html: htmlMenB
+                }
+              },
+              {
+                value: "MMRV",
+                text: "MMRV",
+                conditional: {
+                  html: htmlMMRV
+                }
+              },
+              {
+                value: "Pneumococcal",
+                text: "Pneumococcal",
+                conditional: {
+                  html: htmlPneumococcal
+                }
+              }
+            ]
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        })}}
+      </form>
+
+      {{ details({
+        summaryText: "If your vaccine is not listed",
+        html: "Go to <a href=\"#/\">Vaccines</a> to add it."
+      }) }}
+
+    </div>
+
+    <div class="nhsuk-grid-column-one-third">
+      {% set contentHTML %}
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Name</span><br>{{ data.firstName }} {{ data.lastName }}</p>
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Date of birth</span><br>{{ data.dobFormatted }}<br>({{ data.ageLabel }})</p>
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">NHS number</span><br>{{ data.nhsNumberFormatted }}</p>
+      {% endset %}
+
+      {{ card({
+        heading: "Patient",
+        feature: true,
+        descriptionHtml: contentHTML
+      }) }}
+    </div>
+
+  </div>
+
+{% endblock %}

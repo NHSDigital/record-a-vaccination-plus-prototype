@@ -1,0 +1,384 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Sortable table
+<script src="/js/send-invite-data/patient-data-v2.js"></script>
+
+<script>
+(function(){
+  var PAGE_SIZE = 25;
+  function hasMOJ(){ return window.MOJFrontend && MOJFrontend.SortableTable; }
+  function initMOJ(){
+    try{
+      if (window.MOJFrontend && MOJFrontend.initAll) MOJFrontend.initAll();
+      document.querySelectorAll('[data-module="moj-sortable-table"]').forEach(function(el){
+        try { if (el.__mojSortable && el.__mojSortable.destroy) el.__mojSortable.destroy(); } catch(_){}
+        if (hasMOJ()) el.__mojSortable = new MOJFrontend.SortableTable(el);
+      });
+    }catch(e){}
+  }
+  function buildHeader(columns){
+    var headRow = document.getElementById('head-row');
+    headRow.innerHTML = '';
+    columns.forEach(function(c, i){
+      var th = document.createElement('th');
+      th.className = 'nhsuk-table__header';
+      th.setAttribute('scope','col');
+      if (String(c).trim().toLowerCase() === 'patient name') {
+        th.setAttribute('aria-sort','ascending');
+      } else {
+        th.setAttribute('aria-sort','none');
+      }
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'govuk-link moj-sortable__button';
+      btn.setAttribute('data-index', String(i));
+      btn.textContent = c;
+      th.appendChild(btn);
+      headRow.appendChild(th);
+    });
+  }
+  function buildRow(row){
+    var tr = document.createElement('tr');
+    tr.className = 'nhsuk-table__row';
+    row.forEach(function(val){
+      var td = document.createElement('td');
+      td.className = 'nhsuk-table__cell';
+      td.textContent = (val==null ? '' : String(val));
+      tr.appendChild(td);
+    });
+    return tr;
+  }
+  function showPage(rows, page){
+    var tbody = document.getElementById('body');
+    var start = (page-1) * PAGE_SIZE;
+    var end = start + PAGE_SIZE;
+    tbody.innerHTML = '';
+    var frag = document.createDocumentFragment();
+    rows.slice(start, end).forEach(function(r){ frag.appendChild(buildRow(r)); });
+    tbody.appendChild(frag);
+    initMOJ();
+  }
+  function numberWindow(total, current){
+    var out = [];
+    var max = 5;
+    var start = Math.max(1, current - 2);
+    var end   = Math.min(total, start + max - 1);
+    if (end - start < max - 1) start = Math.max(1, end - max + 1);
+    if (start > 1){ out.push(1); if (start > 2) out.push('…'); }
+    for (var n=start; n<=end; n++) out.push(n);
+    if (end < total){ if (end < total - 1) out.push('…'); out.push(total); }
+    return out;
+  }
+  function renderPager(total, current){
+    var host = document.getElementById('pagination');
+    if(!host) return;
+    var pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    current = Math.min(Math.max(1, current), pages);
+    var nav = document.createElement('nav');
+    nav.className = 'nhsuk-pagination nhsuk-pagination--numbered';
+    nav.setAttribute('role','navigation');
+    nav.setAttribute('aria-label','Pagination');
+    var ul = document.createElement('ul');
+    ul.className = 'nhsuk-pagination__list';
+    function addPrev(){
+      var li = document.createElement('li');
+      li.className = 'nhsuk-pagination__item nhsuk-pagination__item--previous';
+      var a = document.createElement('a');
+      a.className = 'nhsuk-pagination__link nhsuk-pagination__link--prev';
+      a.href = '#/';
+      a.dataset.page = String(current - 1);
+      a.innerHTML = '<span class="nhsuk-pagination__title">Previous<span class="nhsuk-u-visually-hidden"> page</span></span>';
+      if (current === 1) a.setAttribute('aria-disabled','true');
+      li.appendChild(a); ul.appendChild(li);
+    }
+    function addNext(){
+      var li = document.createElement('li');
+      li.className = 'nhsuk-pagination__item nhsuk-pagination__item--next';
+      var a = document.createElement('a');
+      a.className = 'nhsuk-pagination__link nhsuk-pagination__link--next';
+      a.href = '#/';
+      a.dataset.page = String(current + 1);
+      a.innerHTML = '<span class="nhsuk-pagination__title">Next<span class="nhsuk-u-visually-hidden"> page</span></span>';
+      if (current === pages) a.setAttribute('aria-disabled','true');
+      li.appendChild(a); ul.appendChild(li);
+    }
+    addPrev();
+    numberWindow(pages, current).forEach(function(token){
+      var li = document.createElement('li');
+      if (token === '…'){
+        li.className = 'nhsuk-pagination__item nhsuk-pagination__item--ellipsis';
+        li.innerHTML = '&ctdot;';
+      } else {
+        li.className = 'nhsuk-pagination__item';
+        var a = document.createElement('a');
+        a.className = 'nhsuk-pagination__link';
+        a.href = '#/';
+        a.textContent = token;
+        a.dataset.page = String(token);
+        if (token === current) a.setAttribute('aria-current','page');
+        li.appendChild(a);
+      }
+      ul.appendChild(li);
+    });
+    addNext();
+    nav.appendChild(ul);
+    host.innerHTML = '';
+    host.appendChild(nav);
+  }
+  function dmyToISO(s){
+    var m = /^([0-3]?\d)\/([0-1]?\d)\/(\d{4})$/.exec(String(s||'').trim());
+    if (!m) return ''; // non-date or blank → no override
+    var dd = ('0'+m[1]).slice(-2);
+    var mm = ('0'+m[2]).slice(-2);
+    var yyyy = m[3];
+    return yyyy + '-' + mm + '-' + dd; // ISO for lexicographic sort
+  }
+  function wirePager(rows){
+    var host = document.getElementById('pagination');
+    if(!host) return;
+    host.addEventListener('click', function(e){
+      var a = e.target.closest('a.nhsuk-pagination__link');
+      if (!a || a.getAttribute('aria-disabled') === 'true') return;
+      e.preventDefault();
+      var page = parseInt(a.dataset.page, 10);
+      showPage(rows, page);
+      renderPager(rows.length, page);
+    });
+  }
+  function start(){
+    var data = window.patientData;
+    var DUE_IDX = data.columns.findIndex(c => String(c).trim().toLowerCase() === 'due date');
+    if (!data || !data.columns || !data.rows) return;
+    buildHeader(data.columns);
+    var page = 1;
+    showPage(data.rows, page);
+    renderPager(data.rows.length, page);
+    wirePager(data.rows);
+  }
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){
+      if (window.patientData) start();
+      else setTimeout(start, 0);
+    });
+  } else {
+    if (window.patientData) start();
+    else setTimeout(start, 0);
+  }
+})();
+</script>
+
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-l">Sortable table</h1>
+
+      <div class="moj-scrollable-pane">
+
+        <table class="nhsuk-table moj-sortable-table" data-module="moj-sortable-table">
+  <thead class="nhsuk-table__head"><tr id="head-row" class="nhsuk-table__row"></tr></thead>
+  <tbody id="body" class="nhsuk-table__body"></tbody>
+</table>
+      </div>
+
+      <div id="pagination" class="nhsuk-u-margin-top-4"></div>
+
+
+    </div>
+  </div>
+<script src="/js/send-invite-data/patient-data-v2.js"></script>
+
+<script>
+(function(){
+  var PAGE_SIZE = 25;
+  function hasMOJ(){ return window.MOJFrontend && MOJFrontend.SortableTable; }
+  function initMOJ(){
+    try{
+      if (window.MOJFrontend && MOJFrontend.initAll) MOJFrontend.initAll();
+      document.querySelectorAll('[data-module="moj-sortable-table"]').forEach(function(el){
+        try { if (el.__mojSortable && el.__mojSortable.destroy) el.__mojSortable.destroy(); } catch(_){}
+        if (hasMOJ()) el.__mojSortable = new MOJFrontend.SortableTable(el);
+      });
+    }catch(e){}
+  }
+  // Override compare for "Due date" column (dd/mm/yyyy)
+  function addDateSort(columns){
+    if (!window.MOJFrontend || !MOJFrontend.SortableTable) return;
+    var idx = columns.findIndex(function(c){
+      return String(c).trim().toLowerCase() === 'due date';
+    });
+    if (idx < 0) return;
+
+    // Add a custom compare function
+    var originalCompare = MOJFrontend.SortableTable.prototype.compareRows;
+    MOJFrontend.SortableTable.prototype.compareRows = function(a, b){
+      var col = this.currentSortColumn;
+      if (col === idx){
+        var av = parseDMY(a.cells[col].innerText);
+        var bv = parseDMY(b.cells[col].innerText);
+        return av - bv;
+      }
+      return originalCompare.call(this, a, b);
+    };
+
+    function parseDMY(s){
+      var m = /^([0-3]?\d)\/([0-1]?\d)\/(\d{4})$/.exec(String(s).trim());
+      if (m){
+        return Date.UTC(+m[3], +m[2]-1, +m[1]);   // y, m, d → ms timestamp
+      }
+      return Number.MAX_SAFE_INTEGER;            // non-date values go to the bottom
+    }
+  }
+  function buildHeader(columns){
+    var headRow = document.getElementById('head-row');
+    headRow.innerHTML = '';
+    columns.forEach(function(c, i){
+      var th = document.createElement('th');
+      th.className = 'nhsuk-table__header';
+      th.setAttribute('scope','col');
+      if (String(c).trim().toLowerCase() === 'patient name') th.setAttribute('aria-sort','ascending');
+      else th.setAttribute('aria-sort','none');
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'govuk-link moj-sortable__button';
+      btn.setAttribute('data-index', String(i));
+      btn.textContent = c;
+      th.appendChild(btn);
+      headRow.appendChild(th);
+    });
+  }
+  function buildRow(row){
+    var tr = document.createElement('tr');
+    tr.className = 'nhsuk-table__row';
+    row.forEach(function(val, i){
+      var td = document.createElement('td');
+      td.className = 'nhsuk-table__cell';
+
+      // For Due date: add ISO sort value so MOJ sorts by full date, not the dd prefix
+      if (typeof DUE_IDX !== 'undefined' && i === DUE_IDX){
+        var iso = dmyToISO(val);
+        if (iso) td.setAttribute('data-sort-value', iso);
+      }
+
+      td.textContent = (val==null ? '' : String(val));
+      tr.appendChild(td);
+    });
+    return tr;
+  }
+  function showPage(rows, page){
+    var tbody = document.getElementById('body');
+    var start = (page-1) * PAGE_SIZE;
+    var end = start + PAGE_SIZE;
+    tbody.innerHTML = '';
+    var frag = document.createDocumentFragment();
+    rows.slice(start, end).forEach(function(r){ frag.appendChild(buildRow(r)); });
+    tbody.appendChild(frag);
+    initMOJ();
+  }
+  function numberWindow(total, current){
+    var out = [];
+    var max = 5;
+    var start = Math.max(1, current - 2);
+    var end   = Math.min(total, start + max - 1);
+    if (end - start < max - 1) start = Math.max(1, end - max + 1);
+    if (start > 1){ out.push(1); if (start > 2) out.push('…'); }
+    for (var n=start; n<=end; n++) out.push(n);
+    if (end < total){ if (end < total - 1) out.push('…'); out.push(total); }
+    return out;
+  }
+  function renderPager(total, current){
+    var host = document.getElementById('pagination');
+    if(!host) return;
+    var pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    current = Math.min(Math.max(1, current), pages);
+    var nav = document.createElement('nav');
+    nav.className = 'nhsuk-pagination nhsuk-pagination--numbered';
+    nav.setAttribute('role','navigation');
+    nav.setAttribute('aria-label','Pagination');
+    var ul = document.createElement('ul');
+    ul.className = 'nhsuk-pagination__list';
+    function addPrev(){
+      var li = document.createElement('li');
+      li.className = 'nhsuk-pagination__item nhsuk-pagination__item--previous';
+      var a = document.createElement('a');
+      a.className = 'nhsuk-pagination__link nhsuk-pagination__link--prev';
+      a.href = '#/';
+      a.dataset.page = String(current - 1);
+      a.innerHTML = '<span class="nhsuk-pagination__title">Previous<span class="nhsuk-u-visually-hidden"> page</span></span>';
+      if (current === 1) a.setAttribute('aria-disabled','true');
+      li.appendChild(a); ul.appendChild(li);
+    }
+    function addNext(){
+      var li = document.createElement('li');
+      li.className = 'nhsuk-pagination__item nhsuk-pagination__item--next';
+      var a = document.createElement('a');
+      a.className = 'nhsuk-pagination__link nhsuk-pagination__link--next';
+      a.href = '#/';
+      a.dataset.page = String(current + 1);
+      a.innerHTML = '<span class="nhsuk-pagination__title">Next<span class="nhsuk-u-visually-hidden"> page</span></span>';
+      if (current === pages) a.setAttribute('aria-disabled','true');
+      li.appendChild(a); ul.appendChild(li);
+    }
+    addPrev();
+    numberWindow(pages, current).forEach(function(token){
+      var li = document.createElement('li');
+      if (token === '…'){
+        li.className = 'nhsuk-pagination__item nhsuk-pagination__item--ellipsis';
+        li.innerHTML = '&ctdot;';
+      } else {
+        li.className = 'nhsuk-pagination__item';
+        var a = document.createElement('a');
+        a.className = 'nhsuk-pagination__link';
+        a.href = '#/';
+        a.textContent = token;
+        a.dataset.page = String(token);
+        if (token === current) a.setAttribute('aria-current','page');
+        li.appendChild(a);
+      }
+      ul.appendChild(li);
+    });
+    addNext();
+    nav.appendChild(ul);
+    host.innerHTML = '';
+    host.appendChild(nav);
+  }
+  function wirePager(rows){
+    var host = document.getElementById('pagination');
+    if(!host) return;
+    host.addEventListener('click', function(e){
+      var a = e.target.closest('a.nhsuk-pagination__link');
+      if (!a || a.getAttribute('aria-disabled') === 'true') return;
+      e.preventDefault();
+      var page = parseInt(a.dataset.page, 10);
+      showPage(rows, page);
+      renderPager(rows.length, page);
+    });
+  }
+  function start(){
+    var data = window.patientData;
+    if (!data || !data.columns || !data.rows) return;
+    buildHeader(data.columns);
+    addDateSort(data.columns);
+    var page = 1;
+    showPage(data.rows, page);
+    renderPager(data.rows.length, page);
+    wirePager(data.rows);
+  }
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){
+      if (window.patientData) start();
+      else setTimeout(start, 0);
+    });
+  } else {
+    if (window.patientData) start();
+    else setTimeout(start, 0);
+  }
+})();
+</script>
+
+{% endblock %}

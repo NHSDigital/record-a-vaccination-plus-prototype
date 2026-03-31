@@ -1,0 +1,298 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "run" %}
+
+{% block pageTitle %}
+  {% if data['e2eCurrentUserType'] == "infant" %}Sam Brown{% else%}Jodie Brown{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% if data['pid'] == "P298" %}
+    <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+  {% else %}
+    <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+      <ol class="nhsuk-breadcrumb__list">
+        <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+        <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-run-clinics">Run clinics</a></li>
+        <li class="nhsuk-breadcrumb__list-item">Patient tracker</li>
+      </ol>
+      <a class="nhsuk-back-link" href="javascript:history.back()">
+        Go back
+      </a>
+    </nav>
+  {% endif %}
+{% endblock %}
+
+{% block outerContent %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-4">{% if data['e2eCurrentUserType'] == "infant" %}Sam Brown{% else %}Jodie Brown{% endif %}</h1>
+
+      <p class="nhsuk-body">NHS number <strong>{% if data['e2eCurrentUserType'] == "infant" %}9434765919{% else %}916532568{% endif %}</strong></p>
+ 
+      {% if data['e2eCurrentUserType'] == "infant" %}
+        <p class="nhsuk-body">Date of birth <strong>26 June 2024 (aged 13 months and 1 week)</strong></p>
+      {% endif %}
+ 
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      {# MOJ Navigation START #}
+      <nav class="moj-sub-navigation nhsuk-u-padding-bottom-2" aria-label="Sub navigation">
+        <ul class="moj-sub-navigation__list">
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="profile">Profile</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="recent-activity">Recent activity</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="status-and-history">Status and history</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" aria-current="page">Bookings</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="/e2e-record-vaccinations/entry-from-patient-tracker">Record vaccination</a>
+          </li>
+        </ul>
+      </nav>
+      {# MOJ Navigation END #}
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if data['e2eCurrentUserType'] == "infant" %}
+
+        {# Visit 4 from 12 months  #}
+        <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-4">
+          Visit 4 from 12 months 
+        </h2>
+
+        <div class="nhsuk-card">
+          <div class="nhsuk-card__content nhsuk-u-padding-top-4">
+            <p class="nhsuk-card__description">
+
+              <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-0">
+                <li>Pneumococcal</li>
+                <li>MenB</li>
+              </ul>
+
+              <dl class="nhsuk-summary-list nhsuk-summary-list--no-border nhsuk-u-margin-bottom-3">
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">
+                    Status
+                  </dt>
+                  <dd class="nhsuk-summary-list__value">
+                    {% if data['provider'] == "strouts" %}
+                      Strouts Place Medical Centre
+                    {% else %}
+                      Bright Beginnings Health Team
+                    {% endif %}
+                  </dd>
+                </div>
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">
+                    Date
+                  </dt>
+                  <dd class="nhsuk-summary-list__value">
+                    Wednesday 29 November 2025
+                  </dd>
+                </div>
+              </dl>
+              <ul class="custom-mya-nav nhsuk-u-padding-bottom-0">
+                <li><a class="nhsuk-link" href="#/">Manage appointment</a></li>
+              </ul>
+            </p>
+          </div>
+        </div>
+
+        <div class="nhsuk-card">
+          <div class="nhsuk-card__content nhsuk-u-padding-top-4">
+            <p class="nhsuk-card__description">
+
+              <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-0">
+                <li>MMR (1st dose)</li>
+              </ul>
+
+              <dl class="nhsuk-summary-list nhsuk-summary-list--no-border nhsuk-u-margin-bottom-3">
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">
+                    Status
+                  </dt>
+                  <dd class="nhsuk-summary-list__value">
+                    No booking
+                  </dd>
+                </div>
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">
+                    Eligibility
+                  </dt>
+                  <dd class="nhsuk-summary-list__value">
+                    Thursday 26 June 2025
+                  </dd>
+                </div>
+              </dl>
+              <ul class="custom-mya-nav nhsuk-u-padding-bottom-0">
+                <li><a class="nhsuk-link" href="#/">Book appointment</a></li>
+              </ul>
+            </p>
+          </div>
+        </div>
+
+        {# Visit 4 from 3 years 4 months #}
+        <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-4">
+          Visit 4 from 3 years 4 months
+        </h2>
+
+        <div class="nhsuk-card">
+          <div class="nhsuk-card__content nhsuk-u-padding-top-4">
+            <p class="nhsuk-card__description">
+
+              <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-top-0">
+                <li>MMR (2nd dose)</li>
+                <li>4-in-1</li>
+              </ul>
+
+              <dl class="nhsuk-summary-list nhsuk-summary-list--no-border nhsuk-u-margin-bottom-3">
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">
+                    Status
+                  </dt>
+                  <dd class="nhsuk-summary-list__value">
+                    No booking
+                  </dd>
+                </div>
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">
+                    Eligibility
+                  </dt>
+                  <dd class="nhsuk-summary-list__value">
+                    Tuesday 26 October 2027
+                  </dd>
+                </div>
+              </dl>
+              <ul class="custom-mya-nav nhsuk-u-padding-bottom-0">
+                <li>No booking available</li>
+              </ul>
+            </p>
+          </div>
+        </div>
+
+      {% else %}
+
+        {# RSV #}
+        <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-4">
+          RSV
+        </h2>
+
+        <div class="nhsuk-card">
+          <div class="nhsuk-card__content nhsuk-u-padding-top-4">
+            <p class="nhsuk-card__description">
+              <dl class="nhsuk-summary-list nhsuk-summary-list--no-border nhsuk-u-margin-bottom-3">
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">
+                    Status
+                  </dt>
+                  <dd class="nhsuk-summary-list__value">
+                    No booking
+                  </dd>
+                </div>
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">
+                    Eligibility
+                  </dt>
+                  <dd class="nhsuk-summary-list__value">
+                    From Tuesday 9 September 2025
+                  </dd>
+                </div>
+              </dl>
+              <ul class="custom-mya-nav nhsuk-u-padding-bottom-0">
+                <li>No booking available</li>
+              </ul>
+            </p>
+          </div>
+        </div>
+
+        {# Pertussis #}
+        <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-4">
+          Pertussis
+        </h2>
+
+        <div class="nhsuk-card">
+          <div class="nhsuk-card__content nhsuk-u-padding-top-4">
+            <p class="nhsuk-card__description">
+              <dl class="nhsuk-summary-list nhsuk-summary-list--no-border nhsuk-u-margin-bottom-3">
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">
+                    Status
+                  </dt>
+                  <dd class="nhsuk-summary-list__value">
+                    Birmingham Women's Hospital
+                  </dd>
+                </div>
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">
+                    Date
+                  </dt>
+                  <dd class="nhsuk-summary-list__value">
+                    Monday 14 July 2025
+                  </dd>
+                </div>
+              </dl>
+              <ul class="custom-mya-nav nhsuk-u-padding-bottom-0">
+                <li><a class="nhsuk-link" href="#/">Manage appointment</a></li>
+              </ul>
+            </p>
+          </div>
+        </div>
+
+        {# Flu #}
+        <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-4">
+          Flu
+        </h2>
+
+        <div class="nhsuk-card">
+          <div class="nhsuk-card__content nhsuk-u-padding-top-4">
+            <p class="nhsuk-card__description">
+              <dl class="nhsuk-summary-list nhsuk-summary-list--no-border nhsuk-u-margin-bottom-3">
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">
+                    Status
+                  </dt>
+                  <dd class="nhsuk-summary-list__value">
+                    No booking
+                  </dd>
+                </div>
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">
+                    Eligibility
+                  </dt>
+                  <dd class="nhsuk-summary-list__value">
+                    From now
+                  </dd>
+                </div>
+              </dl>
+              <ul class="custom-mya-nav nhsuk-u-padding-bottom-0">
+                <li><a class="nhsuk-link" href="/staff-book-patient-appointment/book-patient-sites?nhsNumberKnown&journey=BookPatient">Book appointment</a></li>
+              </ul>
+            </p>
+          </div>
+        </div>
+
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}

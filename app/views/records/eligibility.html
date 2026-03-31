@@ -1,0 +1,101 @@
+{% extends 'layout.html' %}
+
+{% set pageName = "Why was the patient eligible for the vaccine? – Records" %}
+
+{% set currentSection = "records" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/records/records/" + vaccination.id,
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form action="/records/records/{{ vaccination.id }}" method="post">
+        <input type="hidden" name="changedField" value="Eligibility">
+
+
+        {% from 'checkboxes/macro.njk' import checkboxes %}
+
+
+          {{ checkboxes({
+            idPrefix: "eligibility",
+            name: "eligibility",
+            fieldset: {
+              legend: {
+                text: "Why was Jodie Brown eligible for the vaccine?",
+                classes: "nhsuk-fieldset__legend--l",
+                isPageHeading: true
+              }
+            },
+        hint: {
+            text: "You can select more than 1 option. But only the first option selected is sent to NHS England."
+          },
+
+            items: [
+              {
+                value: "Resident in a care home",
+                text: "Resident in a care home"
+              },
+              {
+                value: "Staff in a care home",
+                text: "Staff in a care home"
+              },
+              {
+                value: "Healthcare worker",
+                text: "Healthcare worker"
+              },
+              {
+                value: "Social worker",
+                text: "Social worker"
+              },
+              {
+                value: "Based on age",
+                text: "Based on age"
+              },
+              {
+                value: "Pregnant",
+                text: "Pregnant"
+              },
+              {
+                value: "Immunosuppressed",
+                text: "Immunosuppressed"
+              },
+              {
+                value: "In a clinical risk group",
+                text: "In a clinical risk group"
+              },
+              {
+                value: "Homeless or living in a closed setting",
+                text: "Homeless or living in a closed setting"
+              },
+              {
+                value: "Household contact of someone immunosuppressed",
+                text: "Household contact of someone immunosuppressed"
+              },
+              {
+                value: "Carer",
+                text: "Carer"
+              },
+              {
+                value: "Has had CAR-T therapy or a stem cell transplant since their last vaccination",
+                text: "Has had CAR-T therapy or a stem cell transplant since their last vaccination"
+              }
+            ]
+          }) }}
+
+
+        {{ button({
+          text: "Save"
+        })}}
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
+

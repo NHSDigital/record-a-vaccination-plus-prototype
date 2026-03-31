@@ -1,0 +1,128 @@
+{% extends 'layout.html' %}
+
+{% set pageName = "Which vaccine are you giving?" %}
+
+{% set currentSection = "vaccinate" %}
+{% set organisationSetting = currentUser.organisations | findById(data.currentOrganisationId) %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "/record-vaccinations/vaccinator" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if vaccineError %}
+        {% set error = {text: vaccineError, href: "#vaccine-1"} %}
+      {% elseif vaccineProductError %}
+        {% if data.vaccine == "RSV" %}
+          {% set errorHref = "#vaccineProductRsv-1" %}
+        {% elseif data.vaccine == "COVID-19" %}
+          {% set errorHref = "#vaccineProductCovid-1" %}
+        {% elseif data.vaccine == "Pertussis" %}
+          {% set errorHref = "#vaccineProductPertussis-1" %}
+        {% elseif data.vaccine == "Flu" %}
+          {% set errorHref = "#vaccineProductFlu-1" %}
+        {% endif %}
+
+        {% set error = {text: vaccineProductError, href: errorHref} %}
+      {% endif %}
+
+      {% if error %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            error
+          ]
+        }) }}
+      {% endif %}
+
+      <form action="/record-vaccinations/answer-vaccine" method="post" novalidate>
+
+      {% if data.repeatPatient == 'yes' and data.patientName %}
+
+        {% set question = ("Which vaccine are you giving " + data.patientName + "?" if data.vaccinationToday == 'yes' else "Which vaccine did you give " + data.patientName + "?") %}
+      {% else %}
+        {% set question = ("Which vaccine are you giving?" if data.vaccinationToday == 'yes' else "Which vaccine did you give?") %}
+      {% endif %}
+
+      {% set items = [] %}
+
+      {% for vaccine in (vaccinesAvailable) %}
+
+        {% if vaccine.products %}
+
+          {% set productItems = [] %}
+          {% for vaccineProduct in (vaccine.products) %}
+            {% set productItems = (productItems.push({
+              value: vaccineProduct.name,
+              text: vaccineProduct.name
+            }), productItems) %}
+          {% endfor %}
+
+          {% set conditionalHtml %}
+            {{ radios({
+              "idPrefix": "vaccineProduct" + vaccine.name,
+              "name": "vaccineProduct",
+              "fieldset": {
+                "legend": {
+                  "text": "Vaccine product"
+                }
+              },
+              "items": productItems
+            }) }}
+          {% endset %}
+        {% endif %}
+
+        {% set items = (items.push({
+          value: vaccine.name,
+          text: vaccine.name,
+          conditional: {
+            html: conditionalHtml
+          } if vaccine.products
+        }), items) %}
+      {% endfor %}
+
+      {{ radios({
+        "idPrefix": "vaccine",
+        "name": "vaccine",
+        "fieldset": {
+          "legend": {
+            "text": question,
+            "classes": "nhsuk-fieldset__legend--l",
+            "isPageHeading": true
+          }
+        },
+        errorMessage: {
+          text: vaccineError
+        } if vaccineError,
+        "items": items
+      }) }}
+
+
+        {{ button({
+          text: "Continue"
+        })}}
+
+        {% if organisationSetting.permissionLevel == "Recorder" %}
+          {{ details({
+            text: "If the vaccine is not listed",
+            html: "An administrator needs to add it."
+          }) }}
+        {% else %}
+          {{ details({
+            text: "If the vaccine is not listed",
+            html: "You need to go to <a href=\"/vaccines\">Vaccines</a> to add it."
+          }) }}
+        {% endif %}
+
+
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
+

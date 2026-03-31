@@ -1,0 +1,101 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Which vaccine are you giving?" %}
+
+{% set currentSection = "organise" %}
+{% set organisationSetting = currentUser.organisations | findById(data.currentOrganisationId) %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form action="choose-date" method="post" novalidate>
+
+        {% set pertussisHtml %}
+          {{ radios({
+            idPrefix: "pertussis",
+            name: "pertussis",
+            fieldset: {
+              legend: {
+                text: "Vaccine product"
+              }
+            },
+            items: [
+              {
+                value: "pertussis1",
+                text: "Adacel vaccine suspension"
+              },
+              {
+                value: "pertussis2",
+                text: "Boostrix-IPV suspension"
+              },
+              {
+                value: "pertussis3",
+                text: "epevax vaccine suspension"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {% set rsvHtml %}
+          {{ radios({
+            idPrefix: "rsv",
+            name: "rsv",
+            fieldset: {
+              legend: {
+                text: "Vaccine product"
+              }
+            },
+            items: [
+              {
+                value: "rsv1",
+                text: "Abrysvo"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {{ radios({
+          "idPrefix": "vaccine",
+          "name": "vaccine",
+          "fieldset": {
+            "legend": {
+              "html": "Which vaccine are you giving Jodie&nbsp;Brown?
+              ",
+              "classes": "nhsuk-fieldset__legend--l",
+              "isPageHeading": true
+            }
+          },
+          items: [
+            {
+              value: "RSV",
+              text: "RSV",
+              conditional: {
+                html: rsvHtml
+              }
+            },
+            {
+              value: "Pertussis",
+              text: "Pertussis",
+              conditional: {
+                html: pertussisHtml
+              }
+            }
+          ]
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        })}}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
+

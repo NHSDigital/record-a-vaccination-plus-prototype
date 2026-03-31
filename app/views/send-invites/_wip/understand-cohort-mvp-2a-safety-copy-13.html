@@ -1,0 +1,1976 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  {% if data['invite-type'] == 'rsv' %}
+    RSV uptake overview
+  {% elif data['invite-type'] == 'pertussis' %}
+    Pertussis uptake overview
+  {% else %}
+    All patients overview
+  {% endif %}
+{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="https://unpkg.com/govuk-frontend@5/dist/govuk-frontend.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/@ministryofjustice/frontend@5/dist/moj-frontend.min.css">
+  <style>
+
+    #filterByButtons {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    #filterByButtons p {
+      margin: 0;
+    }
+
+    #filterByButtons .nhsuk-button {
+      display: inline-flex !important;
+      width: auto !important;
+      margin: 0 !important;
+      white-space: nowrap;
+    }
+
+    .moj-scrollable-pane{
+      position: relative;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      //background: #fff; /* match page background */
+    }
+
+    .moj-scrollable-pane::before,
+    .moj-scrollable-pane::after{
+      content:"";
+      position:absolute;
+      top:0; bottom:0;
+      width:16px;
+      pointer-events:none;
+      display:none;
+    }
+    .moj-scrollable-pane::before{
+      left:0;
+      background: linear-gradient(to right, rgba(0,0,0,.12), rgba(0,0,0,0));
+    }
+    .moj-scrollable-pane::after{
+      right:0;
+      background: linear-gradient(to left, rgba(0,0,0,.12), rgba(0,0,0,0));
+    }
+
+    .moj-scrollable-pane.--has-scroll.--left::before{ display:block; }
+    .moj-scrollable-pane.--has-scroll.--right::after{ display:block; }
+
+    .nhsuk-table thead th,
+    .is-sticky-col{ background:#fff; }
+
+    .moj-scrollable-pane { position: relative; z-index: 1; }
+
+    .nhsuk-table thead th { position: sticky; top: 0; z-index: 10; }
+
+    .moj-scrollable-pane::before,
+    .moj-scrollable-pane::after { pointer-events: none; }
+
+    .nhsuk-grid-row, .nhsuk-grid-column-full { position: relative; z-index: 0; }
+
+    #filtered-pagination,
+    #suppressed-pagination {
+      position: relative;
+      z-index: 1;
+      clear: both;
+    }
+
+    #filtered-pagination .nhsuk-pagination,
+    #suppressed-pagination .nhsuk-pagination {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: .25rem;
+      pointer-events: none;
+    }
+
+    #filtered-pagination .nhsuk-pagination a.nhsuk-pagination__link,
+    #suppressed-pagination .nhsuk-pagination a.nhsuk-pagination__link {
+      pointer-events: auto;
+    }
+
+    #filtered-pagination .nhsuk-pagination [aria-disabled="true"],
+    #suppressed-pagination .nhsuk-pagination [aria-disabled="true"] {
+      pointer-events: none;     /* disabled items stay inert */
+    }
+
+    .x-govuk-secondary-navigation { position: relative; z-index: 30; }
+    #filterByButtons { position: relative; z-index: 20; }
+    .moj-scrollable-pane { position: relative; z-index: 1; }
+    .nhsuk-table thead th { position: sticky; top: 0; z-index: 10; }
+
+    .app-form-group--inline {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .app-inline-field {
+      display: inline-block;
+      margin: 0;
+    }
+
+    .app-form-group--inline .nhsuk-button {
+      width: auto;
+      margin: 0;
+      display: inline-flex;
+    }
+
+    .is-sticky-col {
+      position:sticky; left:0; 
+      background:#f0f4f5; 
+      z-index:3; 
+      box-shadow: inset -1px 0 0 #d8dde0; 
+    }
+
+    /* When Action is present, nudge the sticky Patient name to the width of the Action cell */
+    .table-col-action { width: 1%; white-space: nowrap; } /* usually small link */
+    .nhsuk-table td.is-sticky-col:nth-child(2),
+    .nhsuk-table th.is-sticky-col:nth-child( (hideAction?1:2) ) { left: var(--sticky-offset, 120px); }
+
+    #orderByAll:active:not(:focus-visible) {
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Focus ring only when navigating with keyboard */
+    #filterByButtons a[role="radio"]:focus-visible {
+      outline: 3px solid #005eb8;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 2px #ffffff;
+    }
+
+    /* Remove the ring on mouse click */
+    #filterByButtons a[role="radio"]:focus:not(:focus-visible) {
+      outline: none;
+      box-shadow: none;
+    }
+
+  </style>
+{% endblock %}
+
+{% block beforeContent %}
+  <a class="nhsuk-back-link" href="#" id="backLink">Go back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    <h1 class="nhsuk-heading-l">
+      {% if data['invite-type'] == 'rsv' %}
+        RSV uptake overview
+      {% elif data['invite-type'] == 'pertussis' %}
+        Pertussis uptake overview
+      {% else %}
+        All patients overview
+      {% endif %}
+    </h1>
+
+    <nav aria-label="Secondary menu" class="x-govuk-secondary-navigation">
+      <ul class="x-govuk-secondary-navigation__list">
+        <li class="x-govuk-secondary-navigation__list-item x-govuk-secondary-navigation__list-item--current" id="liFiltered">
+          <a aria-current="page" href="#" id="linkFiltered">Vaccinated</a>
+        </li>
+        <li class="x-govuk-secondary-navigation__list-item" id="liUnvaccinated">
+          <a href="#" id="linkUnvaccinated">Eligible</a>
+        </li>
+        <li class="x-govuk-secondary-navigation__list-item" id="liCloseToDueDate">
+          <a href="#" id="linkCloseToDueDate">Not yet eligible</a>
+        </li>
+        <li class="x-govuk-secondary-navigation__list-item" id="liImmunosuppressed" style="display: none">
+          <a href="#" id="linkImmunosuppressed">Close to due date</a>
+        </li>
+
+        {% if hideAction %}
+          <li class="x-govuk-secondary-navigation__list-item" id="liSuppressed" style="display:none">
+            <a href="#" id="linkSuppressed"><strong>Removed</strong></a>
+          </li>
+        {% else %}
+          <li class="x-govuk-secondary-navigation__list-item" id="liSuppressed">
+            <a href="#" id="linkSuppressed"><strong>Removed</strong></a>
+          </li>
+        {% endif %}
+
+      </ul>
+    </nav>
+
+    <div id="currentTabDetails" class="nhsuk-u-margin-top-4" style="overflow:auto;">
+      <p class="nhsuk-body" style="margin-top:0">54 of 763 are currently considering at least one vaccination.</p>
+      <p class="nhsuk-body">Patients who have expressed uncertainty about their uptake intentions.</p>
+    </div>
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+
+          <div id="filterByPatient" class="nhsuk-u-margin-bottom-6">
+            <form action="" method="get" novalidate>
+              <div class="app-form-group--inline">
+                {{ input({
+                  type: "search",
+                  name: "nameOrNhsNumber",
+                  value: data.nameOrNhsNumber,
+                  label: {
+                    text: "Patient name or NHS number",
+                    classes: "nhsuk-u-font-weight-bold"
+                  }
+                }) }}
+                {{ button({
+                  classes: "nhsuk-button--secondary app-button--small",
+                  text: "Search"
+                }) }}
+              </div>
+            </form>
+          </div>
+
+        <!--
+        <div id="filterByPatient" class="nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-0">
+          {% set filtersHtml %}
+            <form action="" method="get" novalidate>
+              <div class="app-form-group--inline">
+                {{ input({
+                  type: "search",
+                  name: "nameOrNhsNumber",
+                  value: data.nameOrNhsNumber,
+                  label: {
+                    text: "Patient name or NHS number"
+                  }
+                }) }}
+                {{ button({
+                  classes: "nhsuk-button--secondary app-button--small",
+                  text: "Search"
+                }) }}
+              </div>
+            </form>
+          {% endset %}
+
+          {{ card({
+            classes: "nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-6 app-card--filters",
+            styles: "background-color: rgba(216, 221, 224, 0.5);",
+            heading: "Find a patient",
+            feature: true,
+            descriptionHtml: filtersHtml
+          }) }}
+        </div>
+        -->
+
+      </div>
+    </div>
+  
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+  <div id="filterByButtons" class="nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-4 nhsuk-button-group" role="radiogroup" aria-label="Filter by weeks pregnant" style="display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;">
+    <p class="nhsuk-body nhsuk-u-margin-right-0 nhsuk-u-font-weight-bold" style="margin:0;">Filter:</p>
+    <a href="#" id="orderBy32weeks" role="radio" aria-checked="false" class="nhsuk-button nhsuk-button--secondary app-button--small">More than 32 weeks</a>
+    <a href="#" id="orderBy36weeks" role="radio" aria-checked="false" class="nhsuk-button nhsuk-button--secondary app-button--small">More than 36 weeks</a>
+    <a href="#" id="orderByAll" role="radio" aria-checked="false" class="nhsuk-button nhsuk-button--secondary app-button--small">Clear filters</a>
+  </div>
+
+  <!--<div id="panelFiltered">
+    <div aria-label="Send list table" class="ons-like-scroll" role="region" tabindex="0">
+      <table class="nhsuk-table moj-sortable-table" data-module="moj-sortable-table">
+        <thead><tr id="table-head-row"></tr></thead>
+        <tbody id="removable-table-body"></tbody>
+      </table>
+    </div>
+    <div class="nhsuk-u-margin-top-4" id="filtered-pagination"></div>
+  </div>
+
+  <div class="hiddenPanel" id="panelSuppressed">
+    <div aria-label="Excluded table" class="ons-like-scroll" role="region" tabindex="0">
+      <table class="nhsuk-table moj-sortable-table" data-module="moj-sortable-table">
+        <thead><tr id="suppressed-head-row"></tr></thead>
+        <tbody id="suppressed-table-body"></tbody>
+      </table>
+      <div class="nhsuk-u-margin-top-4" id="suppressed-pagination"></div>
+    </div>
+  </div>-->
+
+<!-- Filtered panel -->
+<div id="panelFiltered">
+  <div class="moj-scrollable-pane" aria-label="Send list table" role="region" tabindex="0">
+    <table id="filtered-table" class="nhsuk-table moj-sortable-table" data-module="moj-sortable-table">
+      <thead><tr id="table-head-row"></tr></thead>
+      <tbody id="removable-table-body"></tbody>
+    </table>
+  </div>
+  <div id="filtered-pagination" class="nhsuk-u-margin-top-4"></div>
+</div>
+
+<!-- Removed panel -->
+<div id="panelSuppressed" class="hiddenPanel">
+  <div class="moj-scrollable-pane" aria-label="Excluded table" role="region" tabindex="0">
+    <table id="suppressed-table" class="nhsuk-table moj-sortable-table" data-module="moj-sortable-table">
+      <thead><tr id="suppressed-head-row"></tr></thead>
+      <tbody id="suppressed-table-body"></tbody>
+    </table>
+  </div>
+  <div id="suppressed-pagination" class="nhsuk-u-margin-top-4"></div>
+</div>
+
+  <div class="nhsuk-u-margin-top-4">
+    <div class="row-counter-line" style="display:flex;align-items:center;gap:12px;">
+      <input aria-label="Patients selected" class="nhsuk-input nhsuk-input--width-5" style="display: none" id="row-count" readonly="" type="text" value="0"/>
+      {#<span class="nhsuk-body">patients chosen to be invited for {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %}</span>#}
+    </div>
+  </div>
+
+  <div class="nhsuk-u-margin-top-0">
+    <a class="nhsuk-button" data-module="nhsuk-button" href="#/">Export this list to CSV</a>
+    <p class="nhsuk-body"><a class="nhsuk-link" id="backToInvite" href="#/">Back to <strong>Understand my cohort</strong></a></p>
+  </div>
+
+  <div aria-live="polite" class="nhsuk-u-visually-hidden" id="table-live"></div>
+</div>
+</div>
+
+<style>
+  .ons-like-scroll{overflow-x:auto;background:#f0f4f5;border:1px solid #d8dde0;border-left:0;border-right:0;}
+  .nhsuk-table{margin-bottom:0;min-width:640px;width:100%;border-collapse:collapse;}
+  .nhsuk-table thead th{position:sticky;top:0;background:#f0f4f5;}
+  .nhsuk-table__header,.nhsuk-table__cell{white-space:nowrap;}
+  .table-col-action a{white-space:nowrap;display:inline-block;}
+  .is-sticky-col{position:sticky;left:0;background:#f0f4f5;z-index:3;box-shadow:inset -1px 0 0 #d8dde0;}
+  .hiddenPanel{display:none;}
+  .hidden-row{display:none;}
+  .nhsuk-pagination--numbered__item span[aria-hidden]{padding:0 .4rem;display:inline-block;}
+  .app-button--small.is-selected { background-color: #005eb8; color: white; box-shadow: inset 0 0px 0 rgba(0,0,0,0.2); }
+</style>
+
+<!-- Your data -->
+<script src="/js/send-invite-data/patient-data-v2.js"></script>
+
+<!-- Include MOJ Frontend if not already bundled -->
+<script src="/js/vendor/moj-frontend.min.js" defer></script>
+
+<script>
+(function () {
+  // back links
+  (function(){var qs=location.search||'';var base=location.pathname.replace(/[^\/]+$/,'');var n=document.getElementById('backLink');if(n) n.href=base+'understand-cohort-mvp-1'+qs;})();
+  (function(){var qs=location.search||'';var base=location.pathname.replace(/[^\/]+$/,'');var n=document.getElementById('backToInvite');if(n) n.href=base+'understand-cohort-mvp-1'+qs;})();
+
+  // state from URL (Considering filters)
+  var params=new URLSearchParams(location.search);
+  function sel(k){ return params.getAll(k).includes('1'); }
+  var selected={
+    f28w:sel('f28w'), fContacted:sel('fContacted'), fPhone:sel('fPhone'),
+    fExpl:sel('fExpl'), fNo9m:sel('fNo9m'), fNoBook:sel('fNoBook'),
+    fNo14:sel('fNo14'), fNoOther:sel('fNoOther')
+  };
+
+  // URL flag: hide Action column if ?hideAction=1 (or true) or ?noAction=1
+  var hideAction = (function () {
+    var p = new URLSearchParams(location.search);
+    var v = (p.get('hideAction') || p.get('noAction') || '').toLowerCase();
+    return v === '1' || v === 'true';
+  })();
+
+  // els
+  var theadRow=document.getElementById('table-head-row');
+  var tbody=document.getElementById('removable-table-body');
+  var suppressedHead=document.getElementById('suppressed-head-row');
+  var suppressedTbody=document.getElementById('suppressed-table-body');
+  var rowCount=document.getElementById('row-count');
+
+  var linkFiltered=document.getElementById('linkFiltered');
+  var linkUnvaccinated=document.getElementById('linkUnvaccinated');
+  var linkCloseToDueDate=document.getElementById('linkCloseToDueDate');
+  var linkImmunosuppressed=document.getElementById('linkImmunosuppressed');
+  var linkSuppressed=document.getElementById('linkSuppressed');
+
+  var liFiltered=document.getElementById('liFiltered');
+  var liUnvaccinated=document.getElementById('liUnvaccinated');
+  var liCloseToDueDate=document.getElementById('liCloseToDueDate');
+  var liImmunosuppressed=document.getElementById('liImmunosuppressed');
+  var liSuppressed=document.getElementById('liSuppressed');
+
+  var panelFiltered=document.getElementById('panelFiltered');
+  var panelSuppressed=document.getElementById('panelSuppressed');
+  var currentTabDetails=document.getElementById('currentTabDetails');
+  var orderByName=document.getElementById('orderByName');
+  var orderByNumber=document.getElementById('orderByNumber');
+  var orderByDueDate=document.getElementById('orderByDueDate');
+
+  // Completely hide the "Removed" panel and tab behaviour when Action is hidden in the URL
+  if (hideAction) {
+    // Hide the nav tab (Nunjucks already removes it visually, this is JS backup)
+    if (liSuppressed) liSuppressed.style.display = 'none';
+
+    // Hide the panel entirely
+    if (panelSuppressed) panelSuppressed.style.display = 'none';
+
+    // Prevent any click from switching to the Removed view
+    if (linkSuppressed) {
+      linkSuppressed.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      });
+    }
+  }
+
+  // utils
+  function norm(s){ return String(s||'').toLowerCase().trim().replace(/\s+/g,' '); }
+  function parseDate(str){
+    if(!str) return NaN; var s=String(str).trim(); if(!s) return NaN;
+    var m=/^([0-3]?\d)[\/-]([0-1]?\d)[\/-](\d{4})$/.exec(s); // d-m-y or d/m/y
+    if(m){ var d=+m[1],mo=+m[2]-1,y=+m[3]; var dt=new Date(y,mo,d); if(dt&&dt.getFullYear()===y&&dt.getMonth()===mo&&dt.getDate()===d) return dt; }
+    var t=Date.parse(s); if(!isNaN(t)) return new Date(t); return NaN;
+  }
+  function getData(){ return window.PATIENT_DATA||window.patientDataV2||window.patientData||window.patient_list_data; }
+  function getColIndexByName(cols, header){
+    var want=norm(header);
+    for(var i=0;i<cols.length;i++){ if(norm(cols[i])===want) return i; }
+    return -1;
+  }
+
+  function sortKeyFromDdMmYyyy(str){
+    // Accepts "d/m/yyyy" or "dd/mm/yyyy" and returns "yyyy/mm/dd" with zero padding
+    var m = /^([0-3]?\d)[\/-]([0-1]?\d)[\/-](\d{4})$/.exec(String(str||'').trim());
+    if(!m) return ''; // fall back to text sort if not a date
+    var d = String(m[1]).padStart(2,'0');
+    var mo = String(m[2]).padStart(2,'0');
+    var y = m[3];
+    return y + '/' + mo + '/' + d; // <-- lexically sortable
+  }
+
+  // --- 1) List the headers that should sort as dates (exact names) ---
+  const DATE_HEADER_NAMES = [
+    'DOB',
+    'Due date',
+    'Pertussis eligible (16 weeks)',
+    'RSV eligible (28 weeks)',
+    'COVID-19 & Flu eligible',
+    'Date of last Pertussis vaccination',
+    'Date of last RSV vaccination',
+    'Date of last Flu vaccination',
+    'Date of last COVID vaccination',
+    'Date of Pertussis vaccination booking',
+    'Date of RSV vaccination booking',
+    'Date of Flu vaccination booking',
+    'Date of COVID vaccination booking',
+    'Date of last Pertussis invite',
+    'Date of last RSV invite',
+    'Date of last Flu invite',
+    'Date of last COVID invite'
+  ];
+
+  // Track which original data indexes are date columns
+  let DATE_INDEXES = new Set();
+  function computeDateIndexes(cols){
+    DATE_INDEXES = new Set();
+    DATE_HEADER_NAMES.forEach(h => {
+      const idx = getColIndexByName(cols, h);
+      if (idx >= 0) DATE_INDEXES.add(idx);
+    });
+  }
+
+  // --- 2) Robust date parsing and keying (supports dd/mm/yyyy, d/m/yyyy, dd-mm-yyyy, ISO, "1 Jan 2025") ---
+  function _tryParseDate(val){
+    if (val == null) return NaN;
+    const s = String(val).trim();
+    if (!s) return NaN;
+
+    // ISO / native
+    const t = Date.parse(s);
+    if (!Number.isNaN(t)) return new Date(t);
+
+    // d/m/yyyy or d-m-yyyy
+    let m = /^([0-3]?\d)[\/-]([0-1]?\d)[\/-](\d{4})$/.exec(s);
+    if (m){
+      const d = +m[1], mo = (+m[2])-1, y = +m[3];
+      const dt = new Date(y, mo, d);
+      if (dt && dt.getFullYear()===y && dt.getMonth()===mo && dt.getDate()===d) return dt;
+    }
+
+    // d Mon yyyy / d Month yyyy
+    m = /^([0-3]?\d)\s+([A-Za-z]+)\s+(\d{4})$/.exec(s);
+    if (m){
+      const months = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,sept:8,oct:9,nov:10,dec:11};
+      const d = +m[1], y = +m[3];
+      const key = m[2].toLowerCase();
+      const mo = months[key] ?? months[key.slice(0,3)];
+      if (mo>=0){
+        const dt = new Date(y, mo, d);
+        if (dt && dt.getFullYear()===y && dt.getMonth()===mo && dt.getDate()===d) return dt;
+      }
+    }
+    return NaN;
+  }
+
+  function _dateSortKey(val){
+    const dt = _tryParseDate(val);
+    if (Number.isNaN(+dt)) return '';
+    const y = String(dt.getFullYear());
+    const m = String(dt.getMonth()+1).padStart(2,'0');
+    const d = String(dt.getDate()).padStart(2,'0');
+    return `${y}/${m}/${d}`;
+  }
+
+  // --- 3) Case/space normaliser so header matching is resilient ---
+  function _normHeader(s){
+    return String(s || '')
+      .replace(/\s+/g,' ')   // collapse spaces
+      .trim()
+      .toLowerCase();
+  }
+  const _TARGET_HEADERS_NORM = new Set(DATE_HEADER_NAMES.map(_normHeader));
+
+  // --- 4) Find the column indexes that match the target header names ---
+  function _findDateColumnIndexes(table){
+    const ths = table.querySelectorAll('thead th, thead td');
+    const idxs = [];
+    for (let i=0;i<ths.length;i++){
+      const label = (ths[i].innerText || ths[i].textContent || '').trim();
+      if (_TARGET_HEADERS_NORM.has(_normHeader(label))) {
+        // th may have a data-index from MOJ; prefer actual DOM order for TD access
+        idxs.push(i);
+      }
+    }
+    return idxs;
+  }
+
+  // --- 5) Set data-sort-value on each cell in those columns ---
+  function _applyDateKeysToColumns(table, colIdxs){
+    const tbody = table.tBodies && table.tBodies[0];
+    if (!tbody) return;
+
+    for (let r=0; r<tbody.rows.length; r++){
+      const row = tbody.rows[r];
+      // Some tables hide/remove columns; guard by existing cell count
+      for (const c of colIdxs){
+        if (c < row.cells.length){
+          const td = row.cells[c];
+          const text = (td.innerText || td.textContent || '').trim();
+          const key = _dateSortKey(text);
+          if (key){
+            td.setAttribute('data-sort-value', key);
+          } else {
+            // If you want empties to sort last, uncomment the next line:
+            // td.setAttribute('data-sort-value', '9999/12/31');
+          }
+        }
+      }
+    }
+  }
+
+  // --- 6) Apply to all MOJ sortable tables on the page ---
+  function applyExplicitDateSortKeysForAllTables(){
+    const tables = document.querySelectorAll('table[data-module="moj-sortable-table"], table.moj-sortable-table');
+    tables.forEach(table => {
+      const idxs = _findDateColumnIndexes(table);
+      if (idxs.length) _applyDateKeysToColumns(table, idxs);
+    });
+  }
+
+  // LIVE search getters (reads the input each time)
+  function _getSearchNow(){
+    const input = document.querySelector('input[name="nameOrNhsNumber"]');
+    let raw = (input && input.value != null) ? String(input.value).trim() : '';
+
+    if (!raw) {
+      const p = new URLSearchParams(location.search);
+      raw = (p.get('nameOrNhsNumber') || '').trim();
+    }
+
+    const digits = raw.replace(/\D/g, '');
+    return { raw, digits };
+  }
+
+  function _matchesSearch(values, cols) {
+    const { raw, digits } = _getSearchNow();
+    if (!raw) return true; // no search -> include everything
+
+    const idxName = getColIndexByName(cols, 'Patient name');
+    const idxNhs  = getColIndexByName(cols, 'NHS number');
+
+    // NHS-number exact match if mostly digits
+    if (digits.length >= 6) {
+      const nhs = (idxNhs >= 0 ? String(values[idxNhs] || '') : '').replace(/\D/g, '');
+      return nhs === digits;
+    }
+
+    // Otherwise, case-insensitive name contains
+    const name = (idxName >= 0 ? String(values[idxName] || '') : '').toLowerCase();
+    return name.includes(raw.toLowerCase());
+  }
+
+  // ---- Weeks filter state + helpers ----
+  let weeksThreshold = null; // null | 32 | 36
+
+  // Find a Due date / EDD column robustly
+  function _getDueDateIndex(cols){
+    const names = cols.map(c => String(c || '').toLowerCase());
+    let idx = names.findIndex(n => n === 'due date');
+    if (idx < 0) idx = names.findIndex(n => n.startsWith('due date'));
+    if (idx < 0) idx = names.findIndex(n => n.includes('due') && n.includes('date'));
+    if (idx < 0) idx = names.findIndex(n => n === 'edd' || n.includes('(edd)'));
+    return idx; // -1 if not found
+  }
+
+  function _daysBetweenUTC(a, b){
+    const A = new Date(a.getFullYear(), a.getMonth(), a.getDate());
+    const B = new Date(b.getFullYear(), b.getMonth(), b.getDate());
+    return Math.round((B - A) / (24*60*60*1000));
+  }
+
+  // Reuse your existing _tryParseDate if present; fallback to parseDate
+  function _parseDue(val){
+    if (typeof _tryParseDate === 'function') {
+      const d = _tryParseDate(val);
+      return (Number.isNaN(+d) ? parseDate(val) : d);
+    }
+    return parseDate(val);
+  }
+
+  // Gestational age in weeks from today's date + Due date
+  function gestationalAgeWeeks(values, cols){
+    const idxDue = _getDueDateIndex(cols);
+    if (idxDue < 0) return NaN;
+
+    const due = _parseDue(values[idxDue]);
+    if (Number.isNaN(+due)) return NaN;
+
+    const today = new Date(); today.setHours(0,0,0,0);
+    const daysUntilDue = _daysBetweenUTC(today, due); // future = positive
+    const gaDays = 280 - daysUntilDue;                // 280 days = 40 weeks
+    return gaDays / 7;
+  }
+
+  function isMoreThanWeeks(values, cols, threshold){
+    try {
+      const ga = gestationalAgeWeeks(values, cols);
+      if (Number.isNaN(ga)) return false; // missing/invalid due date -> fail when filter active
+      return ga > threshold;
+    } catch(e){
+      return false;
+    }
+  }
+
+  // Hide columns
+  //var HIDDEN_COLUMNS=[
+  //  'Patient ID','Contactable',
+  //  'Pertussis eligible (16 weeks)','RSV eligible (28 weeks)','COVID-19 & Flu eligible',
+  //  'Pertussis explained and offered','Pertussis side effects discussed',
+  //  'RSV explained and offered','RSV side effects discussed',
+  //  'Flu explained and offered','Flu side effects discussed',
+  //  'Date of last Pertussis vaccination','Date of last RSV vaccination','Date of last Flu vaccination','Date of last COVID vaccination',
+  //  'Date of Pertussis vaccination booking','Date of RSV vaccination booking','Date of Flu vaccination booking','Date of COVID vaccination booking',
+  //  'Date of last Pertussis invite','Date of last RSV invite','Date of last Flu invite','Date of last COVID invite'
+  //];
+
+  //////////////////////////
+  // START HIDE COLUMNS
+
+  var inviteTypeParam = (new URLSearchParams(location.search).get('invite-type') || '').toLowerCase();
+
+  if (inviteTypeParam === 'rsv') {
+    // Hide only RSV-related columns
+    var HIDDEN_COLUMNS = [
+      'Patient ID',
+      'Pertussis eligible (16 weeks)',
+      'COVID-19 & Flu eligible',
+      'Pertussis explained and offered',
+      'Pertussis side effects discussed',
+      'Flu explained and offered',
+      'Flu side effects discussed',
+      'Contactable',
+      'Date of last Pertussis vaccination',
+      'Date of last Flu vaccination',
+      'Date of last COVID vaccination',
+      'Date of Pertussis vaccination booking',
+      'Date of Flu vaccination booking',
+      'Date of COVID vaccination booking',
+      'Date of last Pertussis invite',
+      'Date of last Flu invite',
+      'Date of last COVID invite'
+    ];
+
+  } else if (inviteTypeParam === 'pertussis') {
+    // Hide only Pertussis-related columns
+    var HIDDEN_COLUMNS = [
+      'Patient ID',
+      'RSV eligible (28 weeks)',
+      'COVID-19 & Flu eligible',
+      'RSV explained and offered',
+      'RSV side effects discussed',
+      'Flu explained and offered',
+      'Flu side effects discussed',
+      'Contactable',
+      'Date of last RSV vaccination',
+      'Date of last Flu vaccination',
+      'Date of last COVID vaccination',
+      'Date of RSV vaccination booking',
+      'Date of Flu vaccination booking',
+      'Date of COVID vaccination booking',
+      'Date of last RSV invite',
+      'Date of last Flu invite',
+      'Date of last COVID invite'
+    ];
+
+  } else if (inviteTypeParam === 'all') {
+    // Show everything except the most sensitive identifiers
+    var HIDDEN_COLUMNS = [
+      'Patient ID',
+      'Contactable'
+    ];
+
+  } else {
+    // Default: hide the full extended set
+    var HIDDEN_COLUMNS = [
+      'Patient ID',
+      'Contactable'
+    ];
+  }
+
+  // END HIDE COLUMNS
+  //////////////////////////
+
+  // deterministic buckets
+  function djb2(str){ var h=5381; for(var i=0;i<str.length;i++){ h=((h<<5)+h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
+  function keyFor(values){ return String(values&&values.length?values[0]:JSON.stringify(values||[])); } // stable key from first data column
+  function bucketFor(values){ return djb2(keyFor(values))%10; }
+  function isUnvaccinated(v){ var b=bucketFor(v); return b===0||b===1||b===2; }
+  function isCloseToDue(v){ var b=bucketFor(v); return b===3||b===4; }
+  function isImmuno(v){ var b=bucketFor(v); return b===5; }
+
+  // -------- Sorting state (for your top pill buttons; MOJ handles header clicks) --------
+  var sortBy = 'name'; // 'name' | 'number' | 'dueDate' | null
+
+  function cmpName(cols,a,b){
+    var i=getColIndexByName(cols,'Patient name');
+    var sa=(i>=0?String(a[i]||''):'').toLowerCase();
+    var sb=(i>=0?String(b[i]||''):'').toLowerCase();
+    if(sa<sb) return -1; if(sa>sb) return 1; return 0;
+  }
+  function cmpNumber(cols,a,b){
+    var i=getColIndexByName(cols,'NHS number');
+    var na=(i>=0?String(a[i]||'').replace(/\D/g,''):'');
+    var nb=(i>=0?String(b[i]||'').replace(/\D/g,''):'');
+    var ai=na?parseInt(na,10):Number.POSITIVE_INFINITY;
+    var bi=nb?parseInt(nb,10):Number.POSITIVE_INFINITY;
+    return ai-bi;
+  }
+  function cmpDueDate(cols,a,b){
+    var i=getColIndexByName(cols,'Due date');
+    var da=(i>=0?parseDate(a[i]):NaN);
+    var db=(i>=0?parseDate(b[i]):NaN);
+    var ta=isNaN(+da)?Number.POSITIVE_INFINITY:+da;
+    var tb=isNaN(+db)?Number.POSITIVE_INFINITY:+db;
+    return ta-tb;
+  }
+  function sortValuesList(cols, list){
+    if(!sortBy) return list;
+    var arr=list.slice();
+    if(sortBy==='name') arr.sort(function(a,b){ return cmpName(cols,a,b); });
+    else if(sortBy==='number') arr.sort(function(a,b){ return cmpNumber(cols,a,b); });
+    else if(sortBy==='dueDate') arr.sort(function(a,b){ return cmpDueDate(cols,a,b); });
+    return arr;
+  }
+  function sortSuppressedTbody(){
+    if(!sortBy) return;
+    var rows=Array.from(suppressedTbody.querySelectorAll('tr'));
+    if(rows.length<2) return;
+    var data=getData(), cols=data.columns;
+
+    rows.sort(function(r1,r2){
+      var v1=[]; var v2=[];
+      try{ v1=JSON.parse(r1.dataset.values||'[]'); }catch(_){}
+      try{ v2=JSON.parse(r2.dataset.values||'[]'); }catch(_){}
+      if(sortBy==='name') return cmpName(cols,v1,v2);
+      if(sortBy==='number') return cmpNumber(cols,v1,v2);
+      if(sortBy==='dueDate') return cmpDueDate(cols,v1,v2);
+      return 0;
+    });
+    var frag=document.createDocumentFragment();
+    rows.forEach(function(r){ frag.appendChild(r); });
+    suppressedTbody.appendChild(frag);
+  }
+  // -----------------------------------------
+
+  function removedCount(){ return suppressedTbody.querySelectorAll('tr').length; }
+
+  function getCountsLive(){
+    var data=getData(); if(!data) return {considering:0,unvax:0,close:0,immuno:0,total:0};
+    var cols=data.columns, rows=data.rows||data;
+    var anySel=Object.values(selected).some(Boolean);
+    var cCon=0,cUn=0,cCl=0,cIm=0;
+    rows.forEach(function(vals){
+      var key = keyFor(vals);
+      if(removedKeys.has(key)) return;
+      if(anySel && passesFilters(vals,cols)) cCon++;
+      if(isUnvaccinated(vals)) cUn++;
+      if(isCloseToDue(vals)) cCl++;
+      if(isImmuno(vals)) cIm++;
+    });
+    return {considering:cCon,unvax:cUn,close:cCl,immuno:cIm,total:rows.length};
+  }
+
+  function labelCounts(){
+    return useLiveCounts ? getCountsLive()
+      : {considering:BASE_COUNTS[VIEW.CONSIDERING],unvax:BASE_COUNTS[VIEW.UNVAX],close:BASE_COUNTS[VIEW.CLOSE],immuno:BASE_COUNTS[VIEW.IMMUNO],total:BASE_TOTAL};
+  }
+
+  function setNavLabels(){
+    var c=labelCounts();
+    if(linkFiltered) linkFiltered.textContent='Vaccinated ('+(c.considering||0)+')';
+    if(linkUnvaccinated) linkUnvaccinated.textContent='Eligible ('+(c.unvax||0)+')';
+    if(linkCloseToDueDate) linkCloseToDueDate.textContent='Not yet eligible ('+(c.close||0)+')';
+    //if(linkImmunosuppressed) linkImmunosuppressed.textContent='Close to due date ('+(c.immuno||0)+')';
+
+    if (!hideAction) {
+      if (linkSuppressed) {
+        linkSuppressed.innerHTML = '<strong>Removed (' + removedCount() + ')</strong>';
+      }
+    }
+  }
+
+  function detailsHtml(view, count, total) {
+    const inviteType = new URLSearchParams(location.search).get('invite-type');
+
+    let labelVaccine = 'the RSV vaccine';
+    if (inviteType === 'pertussis') labelVaccine = 'the Pertussis vaccine';
+    if (inviteType === 'all') labelVaccine = 'RSV or Pertussis vaccines';
+
+    if (view === VIEW.CONSIDERING) {
+      return `<p class="nhsuk-body nhsuk-u-margin-top-2">Patients who have had ${labelVaccine}.</p>`;
+    }
+    if (view === VIEW.UNVAX) {
+      return `<p class="nhsuk-body nhsuk-u-margin-top-2">Patients eligible for ${labelVaccine} who have not had the vaccine.</p>`;
+    }
+    if (view === VIEW.CLOSE) {
+      return `<p class="nhsuk-body nhsuk-u-margin-top-2">Patients not yet at 28 weeks of pregnancy.</p>`;
+    }
+    if (view === VIEW.IMMUNO) {
+      return `<p class="nhsuk-body nhsuk-u-margin-top-2">Unvaccinated patients with less than four weeks before their due date.</p>`;
+    }
+    return '';
+  }
+
+  function renderRemovedParagraph(){
+    if(!currentTabDetails) return;
+    var n=removedCount();
+    currentTabDetails.innerHTML='';
+    var p1=document.createElement('p'); p1.className='nhsuk-body nhsuk-u-margin-top-2';
+    p1.textContent='Patients you have manually removed from the list.';
+    currentTabDetails.appendChild(p1);
+  }
+
+  function setDetailsFor(view){
+    if(!currentTabDetails) return;
+    if(view===VIEW.REMOVED){ renderRemovedParagraph(); return; }
+    var c=labelCounts();
+    var count=(view===VIEW.CONSIDERING)?c.considering:(view===VIEW.UNVAX)?c.unvax:(view===VIEW.CLOSE)?c.close:c.immuno;
+    var total=c.total||BASE_TOTAL;
+    currentTabDetails.innerHTML=detailsHtml(view,count,total);
+  }
+
+  // include rules per view — now honours search AND weeks thresholds
+  function includeInView(view, values, cols){
+    const key = keyFor(values);
+    if (removedKeys.has(key)) return false;
+
+    // 1) Search filter (now live)
+    if (!_matchesSearch(values, cols)) return false;
+
+    // 2) Weeks filter (if set): require GA > threshold based on Due date vs today
+    if (typeof weeksThreshold === 'number' && weeksThreshold != null) {
+      if (!isMoreThanWeeks(values, cols, weeksThreshold)) return false;
+    }
+
+    // 3) Existing view logic
+    if (view === VIEW.UNVAX)  return isUnvaccinated(values);
+    if (view === VIEW.CLOSE)  return isCloseToDue(values);
+    if (view === VIEW.IMMUNO) return isImmuno(values);
+
+    if (view === VIEW.CONSIDERING){
+      const anySel = Object.values(selected).some(Boolean);
+      return anySel ? passesFilters(values, cols) : false;
+    }
+    return false;
+  }
+
+  // ---------- MOJ Sortable: init after each render ----------
+  function initMojSortableTables(){
+    try {
+      if (!window.MOJFrontend) return false;
+      if (MOJFrontend.initAll) MOJFrontend.initAll();
+      var els = document.querySelectorAll('[data-module="moj-sortable-table"]');
+      if (MOJFrontend.SortableTable && els.length){
+        els.forEach(function(el){
+          if(!el.__mojBound){ new MOJFrontend.SortableTable(el); el.__mojBound = true; }
+        });
+      }
+      return true;
+    } catch(e){ return false; }
+  }
+  // ----------------------------------------------------------
+
+  // build table header WITH MOJ-required <button>s
+  function buildHeader(columns){
+    theadRow.innerHTML='';
+    suppressedHead.innerHTML='';
+
+    // Only add the Action column if not hidden (kept sticky if present)
+    if (!hideAction) {
+      var thA = document.createElement('th');
+      thA.className = 'nhsuk-table__header is-sticky-col table-col-action';
+      thA.textContent = 'Action';
+      theadRow.appendChild(thA);
+      suppressedHead.appendChild(thA.cloneNode(true));
+    }
+
+    var visibleIndex = 0;                          // counts *rendered* data columns
+    var actualIndexOffset = hideAction ? 0 : 1;    // data-index offset (Action at 0 if present)
+
+    columns.forEach(function(c){
+      if (HIDDEN_COLUMNS.includes(c)) return;
+
+      function makeTh(){
+        var th = document.createElement('th');
+        th.className = 'nhsuk-table__header';
+        th.setAttribute('scope','col');
+
+        // Always keep Patient name sticky in the header too
+        if (norm(c) === 'patient name') {
+          th.classList.add('is-sticky-col');
+          th.setAttribute('aria-sort', 'none');
+        } else {
+          th.setAttribute('aria-sort', 'none');
+        }
+
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'govuk-link';
+        btn.textContent = c;
+
+        // IMPORTANT: index must match TBODY order (with or without Action)
+        btn.setAttribute('data-index', String(actualIndexOffset + visibleIndex));
+
+        th.appendChild(btn);
+        return th;
+      }
+
+      theadRow.appendChild(makeTh());
+      suppressedHead.appendChild(makeTh());
+      visibleIndex++;
+    });
+  }
+
+  // build a row from ORIGINAL values (full array in data order)
+  function buildRow(values, toSuppressed){
+    var tr = document.createElement('tr');
+    tr.dataset.key = keyFor(values);
+    try{ tr.dataset.values = JSON.stringify(values); }catch(e){}
+
+    // Action column (conditionally rendered)
+    if (!hideAction) {
+      var tdA = document.createElement('td');
+      tdA.className = 'nhsuk-table__cell is-sticky-col table-col-action';
+      var a = document.createElement('a');
+      a.href = '#';
+      a.className = 'nhsuk-link nhsuk-link--no-visited-state';
+      if (toSuppressed) { a.setAttribute('data-add',''); a.textContent='Add back'; }
+      else { a.setAttribute('data-remove',''); a.textContent='Remove'; }
+      tdA.appendChild(a);
+      tr.appendChild(tdA);
+    }
+
+    var cols = getData().columns;
+    if (!DATE_INDEXES.size) computeDateIndexes(cols); // initialise once per render
+
+    var idxPID   = getColIndexByName(cols,'Patient ID');
+    var idxPName = getColIndexByName(cols,'Patient name');
+    var idxNHS   = getColIndexByName(cols,'NHS number');
+    var idxDue   = getColIndexByName(cols,'Due date');
+
+    // DOB index (DOB or Date of birth)
+    var idxDOB = getColIndexByName(cols,'DOB');
+    if (idxDOB < 0) idxDOB = getColIndexByName(cols,'Date of birth');
+
+    values.forEach(function(v, i){
+      if (HIDDEN_COLUMNS.includes(cols[i])) return;
+
+      var td = document.createElement('td');
+      td.className = 'nhsuk-table__cell';
+
+      // Always keep Patient name sticky in the body
+      if (i === idxPName) td.classList.add('is-sticky-col');
+
+      // Sort keys
+      if (i === idxNHS) {
+        td.setAttribute('data-sort-value', String(v||'').replace(/\D/g,''));
+      } else if (i === idxDue) {
+        var key = sortKeyFromDdMmYyyy(v);
+        if (key) td.setAttribute('data-sort-value', key);
+      } else if (i === idxDOB) {
+        var dobKey = sortKeyFromDdMmYyyy(v);
+        if (dobKey) td.setAttribute('data-sort-value', dobKey);
+      } else if (DATE_INDEXES.has(i)) {
+        // Force stable YYYY/MM/DD key for *all* other date columns
+        var key = _dateSortKey(v); // you already have this helper in the file
+        if (key) {
+          td.setAttribute('data-sort-value', key);
+        } else {
+          // Mark empties explicitly so we can push them to bottom after sort
+          td.setAttribute('data-sort-empty', '1');
+        }
+      }
+      
+      // Render cell content
+      if (i === idxPName) {
+        var pid = (idxPID >= 0 ? values[idxPID] : '');
+        var link = document.createElement('a');
+        //link.href = 'mvp-view-patient-details?pid=' + encodeURIComponent(pid);
+        //link.href = '/patient-tracker/profile?pid=' + encodeURIComponent(pid) + '&addHistory=&selectVaccine=&chosenReason=&further-information=';
+
+        if (pid === 'P298') {
+          link.href = '/patient-tracker/profile?pid=' + encodeURIComponent(pid) + '&addHistory=&selectVaccine=&chosenReason=&further-information=';
+        } else {
+          link.href = 'mvp-view-patient-details?pid=' + encodeURIComponent(pid);
+        }
+
+        link.className = 'nhsuk-link nhsuk-link--no-visited-state';
+        link.textContent = v || '';
+        td.appendChild(link);
+
+        // explicit sort key so A–Z / Z–A is stable and case-insensitive
+        td.setAttribute('data-sort-value', String(v || '').toLowerCase().trim());
+      } else {
+        td.textContent = v == null ? '' : String(v);
+      }
+
+      tr.appendChild(td);
+    });
+
+    return tr;
+  }
+
+  // Considering filters
+  function passesFilters(values,cols){
+    var today=new Date(); today.setHours(0,0,0,0);
+    var cutoff9=new Date(today); cutoff9.setMonth(cutoff9.getMonth()-9);
+    var cutoff14=new Date(today.getTime()-14*24*60*60*1000);
+    var idx=function(h){ return cols.findIndex(function(c){ return norm(c)===norm(h); }); };
+    var get=function(h){ var i=idx(h); return i>=0?values[i]:''; };
+    var vis=true;
+    if(selected.fContacted && get('Contactable')!=='Yes') vis=false;
+    if(selected.fPhone && get('Phone number')==='') vis=false;
+    if(selected.f28w){ var e=parseDate(get('RSV eligible (28 weeks)')); if(isNaN(e)||(today<=e)) vis=false; }
+    if(selected.fExpl && get('RSV side effects discussed')!=='Yes') vis=false;
+    if(selected.fNo9m){ var l=parseDate(get('Date of last RSV vaccination')); if(!isNaN(l)&&l>=cutoff9) vis=false; }
+    if(selected.fNoBook){ var b=parseDate(get('Date of RSV vaccination booking')); if(!isNaN(b)&&b>today) vis=false; }
+    if(selected.fNo14){ var inv=parseDate(get('Date of last RSV invite')); if(!isNaN(inv)&&inv>=cutoff14) vis=false; }
+    if(selected.fNoOther){
+      var p=parseDate(get('Date of last Pertussis invite'));
+      var f=parseDate(get('Date of last Flu invite'));
+      var c=parseDate(get('Date of last COVID invite'));
+      if((!isNaN(p)&&p>today)||(!isNaN(f)&&f>today)||(!isNaN(c)&&c>today)) vis=false;
+    }
+    return vis;
+  }
+
+  // views
+  var VIEW={ CONSIDERING:'considering', UNVAX:'unvax', CLOSE:'close', IMMUNO:'immuno', REMOVED:'removed' };
+  var currentView=VIEW.CONSIDERING;
+
+  // initial counts
+  var BASE_TOTAL=763;
+  var BASE_COUNTS=(function(o){ o[VIEW.CONSIDERING]=54; o[VIEW.UNVAX]=395; o[VIEW.CLOSE]=122; o[VIEW.IMMUNO]=85; return o; })({});
+  var REMOVED_TOTAL=736;
+
+  var useLiveCounts=false;
+  var removedKeys=new Set();
+
+  function removedCount(){ return suppressedTbody.querySelectorAll('tr').length; }
+
+  function renderView(view){
+    const data = getData(); if(!data) return;
+    const cols = data.columns, rows = data.rows || data;
+
+    panelFiltered.classList.remove('hiddenPanel');
+    panelSuppressed.classList.add('hiddenPanel');
+
+    buildHeader(cols);
+    tbody.innerHTML = '';
+
+    // Build list for the requested view
+    let list = [];
+    rows.forEach(v => { if (includeInView(view, v, cols)) list.push(v); });
+
+    // If this view is empty AND (we're in CONSIDERING with no filters chosen),
+    // fall back to UNVAX so the page never looks empty on first load.
+    const anySel = Object.values(selected).some(Boolean);
+    if (!list.length && view === VIEW.CONSIDERING && !anySel) {
+      view = VIEW.UNVAX;
+      currentView = VIEW.UNVAX;
+      list = [];
+      rows.forEach(v => { if (includeInView(view, v, cols)) list.push(v); });
+      setActiveNav(liUnvaccinated);
+    }
+
+    // Optional "Order by" (your pill buttons)
+    list = sortValuesList(cols, list);
+
+    // Render rows
+    const frag = document.createDocumentFragment();
+    list.forEach(vals => frag.appendChild(buildRow(vals, false)));
+    tbody.appendChild(frag);
+
+    if (rowCount) rowCount.value = tbody.querySelectorAll('tr').length;
+
+    setNavLabels();
+    setDetailsFor(view);
+
+    // Pagination + MOJ sorter
+    state.filteredPage = 1;
+    renderFiltered();
+    applyExplicitDateSortKeysForAllTables();
+    initMojSortableTables();
+  }
+
+// ---------- PAGINATION (scoped delegation) ----------
+var PAGE_SIZE = 25;
+var filteredPager = document.getElementById('filtered-pagination');
+var suppressedPager = document.getElementById('suppressed-pagination');
+if (!suppressedPager && panelSuppressed) {
+  suppressedPager = document.createElement('div');
+  suppressedPager.id = 'suppressed-pagination';
+  suppressedPager.className = 'nhsuk-u-margin-top-4';
+  panelSuppressed.appendChild(suppressedPager);
+}
+var state = { filteredPage: 1, suppPage: 1 };
+
+function getRows(tb){ return Array.from(tb.querySelectorAll('tr')); }
+function totalPages(tb){ return Math.max(1, Math.ceil(getRows(tb).length / PAGE_SIZE)); }
+function clamp(tb, p){ var t = totalPages(tb); return Math.min(Math.max(1, p), t); }
+function showPage(tb, p){
+  var rows = getRows(tb);
+  var start = (p-1)*PAGE_SIZE, end = start + PAGE_SIZE;
+  rows.forEach(function(r, i){ r.style.display = (i >= start && i < end) ? '' : 'none'; });
+}
+
+function buildNumberedList(total, current, ctx){
+  var ul = document.createElement('ul'); ul.className='nhsuk-pagination__list--numbered';
+  function addPage(n){
+    var li=document.createElement('li'); li.className='nhsuk-pagination__item';
+    var a=document.createElement('a'); a.className='nhsuk-pagination__link'; a.href='#/'; a.setAttribute('aria-label','Page '+n);
+    a.dataset.page=n; a.dataset.pager=ctx; a.textContent=n; if(n===current) a.setAttribute('aria-current','page');
+    li.appendChild(a); ul.appendChild(li);
+  }
+  function dots(){ var li=document.createElement('li'); li.className='nhsuk-pagination__item'; var s=document.createElement('span'); s.setAttribute('aria-hidden','true'); s.textContent='…'; li.appendChild(s); ul.appendChild(li); }
+  var windowSize=5, start=Math.max(1,current-Math.floor(windowSize/2)), end=Math.min(total,start+windowSize-1);
+  start=Math.max(1, Math.min(start, total-windowSize+1));
+  if(start>1){ addPage(1); if(start>2) dots(); }
+  for(var i=start;i<=end;i++) addPage(i);
+  if(end<total){ if(end<total-1) dots(); addPage(total); }
+  return ul;
+}
+
+function buildPager(total, current, ctx){
+  var nav=document.createElement('nav');
+  nav.className='nhsuk-pagination nhsuk-pagination--numbered';
+  nav.setAttribute('role','navigation');
+  nav.setAttribute('aria-label','Pagination');
+
+  var prevWrap=document.createElement('div'); prevWrap.className='nhsuk-pagination__prev';
+  if(current>1){
+    var prev=document.createElement('a'); prev.className='nhsuk-pagination__link'; prev.href='#/'; prev.rel='prev';
+    prev.dataset.page=current-1; prev.dataset.pager=ctx;
+    prev.innerHTML = 'Previous<span class="nhsuk-u-visually-hidden"> page</span>';
+    prevWrap.appendChild(prev);
+  } else {
+    var prevSpan=document.createElement('span'); prevSpan.className='nhsuk-pagination__link'; prevSpan.setAttribute('aria-disabled','true');
+    prevSpan.innerHTML = 'Previous<span class="nhsuk-u-visually-hidden"> page</span>';
+    prevWrap.appendChild(prevSpan);
+  }
+  nav.appendChild(prevWrap);
+
+  nav.appendChild(buildNumberedList(total, current, ctx));
+
+  var nextWrap=document.createElement('div'); nextWrap.className='nhsuk-pagination__next';
+  if(current<total){
+    var next=document.createElement('a'); next.className='nhsuk-pagination__link'; next.href='#/'; next.rel='next';
+    next.dataset.page=current+1; next.dataset.pager=ctx;
+    next.innerHTML = 'Next<span class="nhsuk-u-visually-hidden"> page</span>';
+    nextWrap.appendChild(next);
+  } else {
+    var nextSpan=document.createElement('span'); nextSpan.className='nhsuk-pagination__link'; nextSpan.setAttribute('aria-disabled','true');
+    nextSpan.innerHTML = 'Next<span class="nhsuk-u-visually-hidden"> page</span>';
+    nextWrap.appendChild(nextSpan);
+  }
+  nav.appendChild(nextWrap);
+  return nav;
+}
+
+function renderSection(tb, pagerEl, pageRef, ctx){
+  if(!pagerEl) return;
+  var current = clamp(tb, state[pageRef]);
+  state[pageRef] = current;
+  showPage(tb, current);
+  pagerEl.innerHTML = '';
+  pagerEl.appendChild(buildPager(totalPages(tb), current, ctx));
+}
+function renderFiltered(){ renderSection(tbody, document.getElementById('filtered-pagination'), 'filteredPage', 'filtered'); afterFilteredRender(); }
+function renderSupp(){ renderSection(suppressedTbody, document.getElementById('suppressed-pagination'), 'suppPage', 'suppressed'); afterSuppressedRender(); }
+
+// NEW: scoped delegation instead of document-level capture
+function wirePaginationDelegation() {
+  function delegate(containerId, stateKey, renderFn) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    container.addEventListener('click', function (e) {
+      var link = e.target.closest('.nhsuk-pagination__link');
+      if (!link || !link.dataset.page || !link.dataset.pager) return;
+      e.preventDefault();
+      var page = parseInt(link.dataset.page, 10);
+      if (!page) return;
+      if (stateKey === 'filtered'){ state.filteredPage = page; renderFiltered(); }
+      if (stateKey === 'suppressed'){ state.suppPage = page; renderSupp(); }
+    });
+  }
+  delegate('filtered-pagination', 'filtered', renderFiltered);
+  delegate('suppressed-pagination', 'suppressed', renderSupp);
+}
+wirePaginationDelegation();
+// ---------- /PAGINATION ----------
+
+  // remove / add back — using the row's stable key + full values
+  tbody.addEventListener('click',function(e){
+    var t=e.target.closest('[data-remove]'); if(!t) return; e.preventDefault();
+    var tr=t.closest('tr');
+    var key=tr.dataset.key;
+    var values=[]; try{ values=JSON.parse(tr.dataset.values||'[]'); }catch(_){ values=[]; }
+    removedKeys.add(key);
+    suppressedTbody.appendChild(buildRow(values,true));
+    tr.remove();
+    useLiveCounts=true;
+    setNavLabels();
+    setDetailsFor(currentView);
+    renderFiltered(); renderSupp();
+  });
+
+  suppressedTbody.addEventListener('click',function(e){
+    var t=e.target.closest('[data-add]'); if(!t) return; e.preventDefault();
+    var tr=t.closest('tr');
+    var key=tr.dataset.key;
+    var values=[]; try{ values=JSON.parse(tr.dataset.values||'[]'); }catch(_){ values=[]; }
+    removedKeys.delete(key);
+    var data=getData(), cols=data.columns;
+    if(includeInView(currentView, values, cols)){ tbody.appendChild(buildRow(values,false)); }
+    tr.remove();
+    useLiveCounts=true;
+    setNavLabels();
+    setDetailsFor(currentView);
+    renderFiltered(); renderSupp();
+  });
+
+  function _pushDateEmptiesToBottom(table, colIndex){
+    const tb = table.tBodies && table.tBodies[0];
+    if (!tb) return;
+
+    const rows = Array.from(tb.rows);
+    if (!rows.length) return;
+
+    // Partition rows by whether the active cell is empty (no sort key & marked)
+    const withData = [];
+    const empties  = [];
+    rows.forEach(r => {
+      const td = r.cells[colIndex];
+      if (!td) { withData.push(r); return; }
+      const hasKey = td.getAttribute('data-sort-value');
+      const isEmpty = td.getAttribute('data-sort-empty') === '1' || (!hasKey && !td.textContent.trim());
+      (isEmpty ? empties : withData).push(r);
+    });
+
+    if (!empties.length) return;
+
+    const frag = document.createDocumentFragment();
+    withData.concat(empties).forEach(r => frag.appendChild(r));
+    tb.appendChild(frag);
+  }
+
+  // tabs
+  function setActiveNav(target){
+    [liFiltered,liUnvaccinated,liCloseToDueDate,liImmunosuppressed,liSuppressed].forEach(function(li){
+      if(!li) return; li.classList.toggle('x-govuk-secondary-navigation__list-item--current', li===target);
+    });
+    [linkFiltered,linkUnvaccinated,linkCloseToDueDate,linkImmunosuppressed,linkSuppressed].forEach(function(a){
+      if(!a) return; a.removeAttribute('aria-current');
+    });
+    var a=target&&target.querySelector('a'); if(a) a.setAttribute('aria-current','page');
+  }
+
+  function wireTabs(){
+    linkFiltered.addEventListener('click',function(e){
+      e.preventDefault(); currentView=VIEW.CONSIDERING; setActiveNav(liFiltered); renderView(currentView);
+    });
+    linkUnvaccinated.addEventListener('click',function(e){
+      e.preventDefault(); currentView=VIEW.UNVAX; setActiveNav(liUnvaccinated); renderView(currentView);
+    });
+    linkCloseToDueDate.addEventListener('click',function(e){
+      e.preventDefault(); currentView=VIEW.CLOSE; setActiveNav(liCloseToDueDate); renderView(currentView);
+    });
+    linkImmunosuppressed.addEventListener('click',function(e){
+      e.preventDefault(); currentView=VIEW.IMMUNO; setActiveNav(liImmunosuppressed); renderView(currentView);
+    });
+    linkSuppressed.addEventListener('click',function(e){
+      e.preventDefault();
+      currentView=VIEW.REMOVED; setActiveNav(liSuppressed);
+      panelSuppressed.classList.remove('hiddenPanel'); panelFiltered.classList.add('hiddenPanel');
+      setNavLabels();
+      renderRemovedParagraph();
+      sortSuppressedTbody();
+      renderSupp();
+      // >>> Bind MOJ Sortable on the Removed table too
+      applyExplicitDateSortKeysForAllTables();
+      initMojSortableTables();
+    });
+  }
+
+  // --- Clear-filters focus/press defuser (load + reload + BFCache) ---
+  (function defuseClearFiltersFocus(){
+    const clearBtn = document.getElementById('orderByAll');
+    if (!clearBtn) return;
+
+    // Never show as selected on load
+    clearBtn.classList.remove('is-selected');
+
+    // Temporarily remove focusability during first paint, then restore
+    const prevTabIndex = clearBtn.getAttribute('tabindex');
+    clearBtn.setAttribute('tabindex', '-1');
+
+    // Ensure it's not pre-focused on load or BFCache restore
+    const defocus = () => clearBtn.blur();
+    requestAnimationFrame(defocus);
+    setTimeout(defocus, 0);
+    window.addEventListener('pageshow', defocus);
+
+    // Restore focusability so keyboard users can tab to it
+    setTimeout(() => {
+      if (prevTabIndex === null) clearBtn.removeAttribute('tabindex');
+      else clearBtn.setAttribute('tabindex', prevTabIndex);
+    }, 200);
+
+    // Prevent sticky :active on mouse down, but DO NOT blur on keyboard
+    clearBtn.addEventListener('mousedown', (e) => {
+      e.preventDefault();      // stops :active sticking
+      clearBtn.blur();         // drop mouse focus only
+    });
+  })();
+
+  // --- Pill UI helpers ---
+  function updateWeeksPillSelection(){
+    const pills = document.querySelectorAll('#filterByButtons a[role="radio"]');
+
+    pills.forEach(p => {
+      p.classList.remove('is-selected');
+      p.setAttribute('aria-checked', 'false');
+    });
+
+    if (weeksThreshold === 32) {
+      const el = document.getElementById('orderBy32weeks');
+      el?.classList.add('is-selected');
+      el?.setAttribute('aria-checked', 'true');
+    } else if (weeksThreshold === 36) {
+      const el = document.getElementById('orderBy36weeks');
+      el?.classList.add('is-selected');
+      el?.setAttribute('aria-checked', 'true');
+    } else {
+      // No weeks filter active; none selected
+    }
+  }
+
+  // --- Clear weeks + clear search (no reload) ---
+  (function wireWeeksFilterPills(){
+    const container = document.getElementById('filterByButtons');
+    if (!container) return;
+
+    updateWeeksPillSelection();
+
+    container.addEventListener('click', function(e){
+      const a = e.target.closest('a');
+      if (!a) return;
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+
+      // Detect whether this activation came from mouse or keyboard
+      const isMouse = e.detail > 0; // Mouse clicks usually have detail=1; keyboard clicks are 0
+
+      // Only blur (remove focus) if it's a mouse click
+      if (isMouse) a.blur();
+
+      if (a.id === 'orderBy32weeks') {
+        weeksThreshold = 32;
+        updateWeeksPillSelection();
+        state.filteredPage = 1;
+        renderView(currentView);
+        renderFiltered();
+        return;
+      }
+
+      if (a.id === 'orderBy36weeks') {
+        weeksThreshold = 36;
+        updateWeeksPillSelection();
+        state.filteredPage = 1;
+        renderView(currentView);
+        renderFiltered();
+        return;
+      }
+
+      if (a.id === 'orderByAll') {
+        // Clear filters
+        weeksThreshold = null;
+
+        const input = document.querySelector('input[name="nameOrNhsNumber"]');
+        if (input) input.value = '';
+
+        const url = new URL(location.href);
+        url.searchParams.delete('nameOrNhsNumber');
+        history.replaceState({}, '', url.toString());
+
+        updateWeeksPillSelection();
+        const clearBtn = document.getElementById('orderByAll');
+        clearBtn?.classList.remove('is-selected');
+
+        state.filteredPage = 1;
+        renderView(currentView);
+        renderFiltered();
+
+        // If keyboard activation, keep focus for visible ring; if mouse, blur
+        if (isMouse) setTimeout(() => clearBtn?.blur(), 50);
+
+        return;
+      }
+    });
+  })();
+
+  // --- Keyboard navigation for weeks filter pills ---
+  (function makeWeeksPillsKeyboardFriendly(){
+    const container = document.getElementById('filterByButtons');
+    if (!container) return;
+    const pills = Array.from(container.querySelectorAll('a[role="radio"]'));
+
+    container.addEventListener('keydown', e => {
+      const current = document.activeElement;
+      const idx = pills.indexOf(current);
+      if (idx === -1) return;
+
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        const next = pills[(idx + 1) % pills.length];
+        next.focus();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        const prev = pills[(idx - 1 + pills.length) % pills.length];
+        prev.focus();
+      }
+    });
+  })();
+
+  // init
+  var BASE_TOTAL=763;
+  var BASE_COUNTS=(function(o){ o[VIEW.CONSIDERING]=54; o[VIEW.UNVAX]=395; o[VIEW.CLOSE]=122; o[VIEW.IMMUNO]=85; return o; })({});
+  var useLiveCounts=false;
+
+  function init(){
+    if(!getData()){ console.error('No data'); return; }
+    wireTabs();
+    setNavLabels();
+
+    // Start in Considering, but the renderView() now auto-falls back to UNVAX if empty
+    currentView = VIEW.CONSIDERING;
+    setActiveNav(liFiltered);
+    renderView(currentView);
+
+    state.filteredPage = 1; state.suppPage = 1;
+    renderFiltered(); renderSupp();
+  }
+  window.addEventListener('load',init);
+})();
+
+function mojAudit(){
+  const out = [];
+  const mojCss = !!Array.from(document.styleSheets).find(s=>String(s.href||'').includes('moj-frontend'));
+  const mojJs  = !!window.MOJFrontend;
+  if(!mojCss) out.push('❌ MOJ CSS not detected');
+  if(!mojJs)  out.push('❌ MOJ JS not detected');
+
+  document.querySelectorAll('[data-module="moj-sortable-table"]').forEach((table,ti)=>{
+    const headBtns = table.querySelectorAll('thead th > button.govuk-link');
+    if(!headBtns.length) out.push(`❌ [T${ti}] No header buttons for sortable`);
+
+    // Detect hidden first column (breaks index mapping)
+    const firstThHidden = !!table.querySelector('thead th:first-child[style*="display:none"], thead th:first-child[hidden]');
+    const firstTdHidden = !!table.querySelector('tbody td:first-child[style*="display:none"], tbody td:first-child[hidden]');
+    if(firstThHidden || firstTdHidden) out.push(`❌ [T${ti}] First column hidden (Action col?) — breaks MOJ index alignment`);
+
+    // Check index mapping vs presence of an Action cell in body
+    const hasAction = !!table.querySelector('tbody tr td:first-child');
+    headBtns.forEach((btn, i)=>{
+      const idx = parseInt(btn.getAttribute('data-index'),10);
+      if (hasAction && idx === i){
+        out.push(`❌ [T${ti}] Header btn ${i} has data-index=${idx} (should be ${i+1} if Action col is at index 0)`);
+      }
+    });
+  });
+
+  // Pagination click target robustness
+  const usesOldClass = !!document.querySelector('.nhsuk-pagination--numbered__link');
+  if(usesOldClass) out.push('⚠️ Pagination uses deprecated class .nhsuk-pagination--numbered__link (prefer matching by [data-page][data-pager])');
+
+  if(!out.length) console.log('%cMOJ/NHS audit: all good ✅','color:green');
+  else out.forEach(m=>console.warn(m));
+}
+
+// Turn plain <th> text (or <a>) into the MOJ-required <button.govuk-link data-index=…>
+// offset = 1 if you have a leading "Action" column in TBODY at index 0; otherwise 0
+function retrofitHeaderButtons(tableSelector, offset){
+  const table = document.querySelector(tableSelector);
+  if (!table) return;
+
+  const ths = table.querySelectorAll('thead th');
+  if (!ths.length) return;
+
+  let visible = 0; // counts only data columns (skip the leading Action th)
+  ths.forEach((th, i)=>{
+    if (offset === 1 && i === 0) return; // skip first TH only when Action col is present
+
+    // If a button already exists, normalise its index and move on
+    const existingBtn = th.querySelector('button.govuk-link');
+    if (existingBtn){
+      existingBtn.setAttribute('data-index', String(offset + visible));
+      visible++;
+      return;
+    }
+
+    // Build a fresh button from the current text/anchor label
+    const label = (th.querySelector('a')?.textContent || th.textContent || '').trim();
+    if (!label) { visible++; return; } // nothing to retrofit
+
+    // Clear th and insert a proper MOJ header button
+    th.textContent = '';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'govuk-link';
+    btn.textContent = label;
+    btn.setAttribute('data-index', String(offset + visible));
+    th.appendChild(btn);
+
+    visible++;
+  });
+}
+
+function _wirePostSortFix(tableId){
+  const table = document.getElementById(tableId);
+  if (!table) return;
+
+  // Delegate clicks on header buttons
+  table.querySelector('thead')?.addEventListener('click', function(e){
+    const btn = e.target.closest('button.govuk-link[data-index]');
+    if (!btn) return;
+
+    // Let MOJ do its sort first, then fix empties at the bottom
+    const colIndex = parseInt(btn.getAttribute('data-index'), 10);
+    setTimeout(() => _pushDateEmptiesToBottom(table, colIndex), 0);
+  });
+}
+
+function afterFilteredRender(){
+  retrofitHeaderButtons('#filtered-table', hideAction ? 0 : 1);
+  applyExplicitDateSortKeysForAllTables();
+  initMojSortableTables();
+  _wirePostSortFix('filtered-table');
+}
+
+function afterSuppressedRender(){
+  retrofitHeaderButtons('#suppressed-table', hideAction ? 0 : 1);
+  applyExplicitDateSortKeysForAllTables();
+  initMojSortableTables();
+  _wirePostSortFix('suppressed-table');
+}
+
+(function wirePatientSearch(){
+  const form  = document.querySelector('#filterByPatient form');
+  if (!form) return;
+  const input = form.querySelector('input[name="nameOrNhsNumber"]');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const params = new URLSearchParams(location.search);
+
+    const val = (input?.value || '').trim();
+    if (val) params.set('nameOrNhsNumber', val);
+    else params.delete('nameOrNhsNumber');
+
+    // ✅ Preserves hideAction and invite-type
+    location.search = params.toString();
+  });
+})();
+
+</script>
+
+</script>
+
+<script src="https://unpkg.com/govuk-frontend@5/dist/govuk-frontend.min.js" defer></script>
+<script>
+  window.addEventListener('load', function () {
+    // make sure GOV.UK marks the body as supported (prevents MOJ JS complaints)
+    document.body.classList.add('govuk-frontend-supported');
+    window.GOVUKFrontend?.initAll?.();
+    window.MOJFrontend?.initAll?.();
+  });
+</script>
+
+<script>
+window.addEventListener('load', function(){
+  const params = new URLSearchParams(location.search);
+  const input = document.querySelector('input[name="nameOrNhsNumber"]');
+
+  // If the query parameter is gone, ensure the box is blank
+  if (input && !params.has('nameOrNhsNumber')) {
+    input.value = '';
+  }
+});
+</script>
+
+{# --- Sticky column retrofit --- #}
+<style>
+/* ---- FINAL sticky header fix (safe override) ---- */
+
+/* 1) Make stacking work predictably for sticky cells */
+table.nhsuk-table {
+  border-collapse: separate !important;   /* critical: z-index works per cell */
+  border-spacing: 0;                       /* keep visual look identical */
+}
+
+/* 2) Ensure every header cell paints above the table background */
+table.nhsuk-table thead th {
+  position: relative;                      /* create stacking context */
+  z-index: 1;
+  background: #fff !important;             /* no bleed-through */
+}
+
+/* 3) Sticky columns: give cells their own stacking contexts + opaque bg */
+table.nhsuk-table th.is-sticky-col,
+table.nhsuk-table td.is-sticky-col {
+  position: sticky;
+  background: #fff !important;
+}
+
+/* 4) Explicit layering: headers above body; Action above Patient */
+table.nhsuk-table thead th.is-sticky-col.sticky-action  { z-index: 70 !important; }
+table.nhsuk-table thead th.is-sticky-col.sticky-patient { z-index: 60 !important; }
+table.nhsuk-table tbody td.is-sticky-col.sticky-action  { z-index: 40 !important; }
+table.nhsuk-table tbody td.is-sticky-col.sticky-patient { z-index: 30 !important; }
+
+/* 5) Clean seam on the right edge of sticky columns */
+//table.nhsuk-table th.is-sticky-col::after,
+//table.nhsuk-table td.is-sticky-col::after {
+//  content: "";
+//  position: absolute;
+//  top: 0; bottom: 0;
+//  right: -1px;   /* IMPORTANT: sits just outside the cell’s box */
+//  width: 1px;
+//  background: #d8dde0;
+//  pointer-events: none;
+//}
+
+/* 6) If anything else is still painting on top, force non-sticky headers lower */
+table.nhsuk-table thead th:not(.is-sticky-col) { z-index: 10; }  /* below sticky headers */
+
+</style>
+
+<script>
+(function(){
+  let tries = 0;
+  function ready(){
+    const params = new URLSearchParams(location.search);
+    const invite = (params.get('invite-type') || '').toLowerCase();
+    const INVITE_IS_ALL = (invite === 'all');
+
+    const tables = Array.from(document.querySelectorAll('table.nhsuk-table'));
+    if (!tables.length || !document.querySelector('tbody tr')) {
+      if (++tries < 60) return setTimeout(ready, 100);
+      return;
+    }
+
+    tables.forEach(table => {
+      const theadRow = table.tHead ? table.tHead.rows[0] : table.querySelector('thead tr');
+      if (!theadRow) return;
+
+      const headers = Array.from(theadRow.cells);
+      const idxName   = headers.findIndex(th => th.textContent.trim().toLowerCase() === 'patient name');
+      const idxAction = headers.findIndex(th => th.textContent.trim().toLowerCase() === 'action');
+
+      // Always freeze Patient name
+      if (idxName > -1) {
+        headers[idxName].classList.add('is-sticky-col','sticky-patient');
+        table.querySelectorAll('tbody tr').forEach(tr => {
+          const td = tr.cells[idxName];
+          if (td) td.classList.add('is-sticky-col','sticky-patient');
+        });
+      }
+
+      // Freeze Action only for invite-type=all
+      if (idxAction > -1) {
+        if (INVITE_IS_ALL) {
+          headers[idxAction].classList.add('is-sticky-col','sticky-action');
+          table.querySelectorAll('tbody tr').forEach(tr => {
+            const td = tr.cells[idxAction];
+            if (td) td.classList.add('is-sticky-col','sticky-action');
+          });
+        } else {
+          headers[idxAction].classList.remove('is-sticky-col','sticky-action');
+          table.querySelectorAll('tbody tr').forEach(tr => {
+            const td = tr.cells[idxAction];
+            if (td) td.classList.remove('is-sticky-col','sticky-action');
+          });
+        }
+      }
+
+      // Offset Patient name by the Action column width (+ divider/border) so it never sits under Action
+      let actionWidth = 0;
+      if (idxAction > -1) {
+        const el =
+          headers[idxAction] ||
+          table.querySelector(`tbody tr td:nth-child(${idxAction + 1})`);
+
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const cs   = getComputedStyle(el);
+          const br   = parseFloat(cs.borderRightWidth) || 0;
+          const fudgeDivider = 1; // our ::after divider is 1px
+          actionWidth = Math.ceil(rect.width + br + fudgeDivider);
+        }
+      }
+      // Offset Patient name by the widest Action cell so it never sits underneath
+      let offsetPx = 0;
+      if (INVITE_IS_ALL && idxAction > -1){
+        offsetPx = getMaxActionWidth(table, idxAction);
+      }
+      table.style.setProperty('--sticky-offset', offsetPx ? `${offsetPx}px` : '0px');
+    });
+
+    // Recalc after MOJ sort toggles
+    const thead = table.tHead || table.querySelector('thead');
+    if (thead){
+      thead.addEventListener('click', () => {
+        // allow MOJ to finish layout
+        setTimeout(() => {
+          const idxName   = findHeaderIndex(headers, 'patient name');
+          const idxAction = findHeaderIndex(headers, 'action');
+          const offsetPx  = (INVITE_IS_ALL && idxAction > -1) ? getMaxActionWidth(table, idxAction) : 0;
+          table.style.setProperty('--sticky-offset', offsetPx ? `${offsetPx}px` : '0px');
+        }, 0);
+      });
+    }
+
+  }
+
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    ready();
+  } else {
+    document.addEventListener('DOMContentLoaded', ready);
+  }
+})();
+</script>
+{# --- End sticky column retrofit --- #}
+
+{# --- STICKY COL RETROFIT PACK (drop-in) --- #}
+<style id="sticky-retrofit-pack-css">
+  /* 0) Make z-index on table cells behave */
+  table.nhsuk-table { border-collapse: separate !important; border-spacing: 0; }
+
+  /* 1) Base sticky styling */
+  .is-sticky-col { 
+    position: sticky; 
+    background: #fff !important; 
+    box-shadow: inset -1px 0 0 #d8dde0; 
+  }
+
+  /* 2) Roles for our two sticky columns */
+  .sticky-action  { left: 0; z-index: 70 !important; }
+  .sticky-patient { left: var(--sticky-offset, 0px); z-index: 60 !important; }
+
+  /* 3) Ensure non-sticky headers sit below stickies and are opaque */
+  .nhsuk-table thead th { position: relative; z-index: 10; background: #fff !important; }
+
+  /* 4) Sticky body cells below their headers */
+  .nhsuk-table tbody td.sticky-action  { z-index: 40 !important; }
+  .nhsuk-table tbody td.sticky-patient { z-index: 30 !important; }
+
+  /* 5) Visual seam on sticky column right edge (sits just outside the cell) */
+  .nhsuk-table th.is-sticky-col::after,
+  .nhsuk-table td.is-sticky-col::after {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; right: -1px; /* IMPORTANT: outside the box */
+    width: 1px; background: #d8dde0; pointer-events: none;
+  }
+  
+  /* --- remove all left borders / divider lines from sticky columns --- */
+  table.nhsuk-table th.is-sticky-col,
+  table.nhsuk-table td.is-sticky-col {
+    border-left: none !important;
+    box-shadow: none !important;     /* remove any inset shading */
+  }
+
+  /* also remove the right-edge divider we previously added */
+  table.nhsuk-table th.is-sticky-col::after,
+  table.nhsuk-table td.is-sticky-col::after {
+    content: none !important;
+  }
+
+</style>
+
+<script id="sticky-retrofit-pack-js">
+(function(){
+  /* ---------------- utilities ---------------- */
+  function getHeaderText(th){
+    const el = th.querySelector('button') || th;
+    let txt = (el.textContent || '').toLowerCase().replace(/\s+/g,' ').trim();
+    txt = txt.replace(/\s*(sorted?|ascending|descending|sort|by).*$/,'').trim();
+    return txt;
+  }
+  function findHeaderIndex(headers, target){
+    target = target.toLowerCase();
+    for (let i=0;i<headers.length;i++){
+      const label = getHeaderText(headers[i]);
+      if (label === target || label.startsWith(target)) return i;
+    }
+    return -1;
+  }
+  function isVisible(el){
+    // visible in layout (width/height > 0 and not display:none)
+    return !!(el && el.offsetParent !== null && el.getClientRects().length);
+  }
+  // Measure the WIDEST Action cell (header + up to 50 rows) + border + divider
+  function getMaxActionWidth(table, idxAction){
+    if (idxAction < 0) return 0;
+    let max = 0;
+
+    const th = table.tHead ? table.tHead.rows[0].cells[idxAction] : null;
+    if (th) max = Math.max(max, Math.ceil(th.getBoundingClientRect().width));
+
+    const body = table.tBodies[0];
+    const rows = body ? Array.from(body.rows) : [];
+    for (const tr of rows.slice(0, 50)){
+      const td = tr.cells[idxAction]; if (!td) continue;
+      const w = Math.ceil(td.getBoundingClientRect().width);
+      if (w > max) max = w;
+    }
+
+    let borderRight = 0;
+    const refEl = th || (rows[0] && rows[0].cells[idxAction]);
+    if (refEl){
+      const cs = getComputedStyle(refEl);
+      borderRight = parseFloat(cs.borderRightWidth) || 0;
+    }
+    const divider = 1; // ::after width
+    return max + borderRight + divider;
+  }
+
+  function applyForTable(table, inviteType){
+    if (!isVisible(table)) return; // skip hidden panels; we'll catch them when shown
+    const INVITE_IS_ALL = (inviteType === 'all');
+
+    const theadRow = table.tHead ? table.tHead.rows[0] : table.querySelector('thead tr');
+    if (!theadRow) return;
+
+    const headers = Array.from(theadRow.cells);
+    const idxName   = findHeaderIndex(headers, 'patient name');
+    const idxAction = findHeaderIndex(headers, 'action');
+
+    // Clear previous classes
+    headers.forEach(th => th.classList.remove('is-sticky-col','sticky-action','sticky-patient'));
+    table.querySelectorAll('tbody td').forEach(td => td.classList.remove('is-sticky-col','sticky-action','sticky-patient'));
+
+    // Always stick Patient name (header + body)
+    if (idxName > -1){
+      headers[idxName].classList.add('is-sticky-col','sticky-patient');
+      table.querySelectorAll('tbody tr').forEach(tr => {
+        const td = tr.cells[idxName]; if (td) td.classList.add('is-sticky-col','sticky-patient');
+      });
+    }
+
+    // Stick Action only for invite-type=all
+    if (idxAction > -1 && INVITE_IS_ALL){
+      headers[idxAction].classList.add('is-sticky-col','sticky-action');
+      table.querySelectorAll('tbody tr').forEach(tr => {
+        const td = tr.cells[idxAction]; if (td) td.classList.add('is-sticky-col','sticky-action');
+      });
+    }
+
+    // Compute left offset for Patient name
+    const offsetPx = (INVITE_IS_ALL && idxAction > -1) ? getMaxActionWidth(table, idxAction) : 0;
+    table.style.setProperty('--sticky-offset', offsetPx ? (offsetPx + 'px') : '0px');
+  }
+
+  /* --------------- apply everywhere --------------- */
+  let rafToken = null;
+  function recalcAll(){
+    if (rafToken) return; // throttle to next frame
+    rafToken = requestAnimationFrame(() => {
+      rafToken = null;
+      const params = new URLSearchParams(location.search);
+      const invite = (params.get('invite-type') || '').toLowerCase();
+
+      // Apply to all NHS tables currently in the DOM (visible panels will stick;
+      // hidden panels will be handled when they become visible)
+      const tables = Array.from(document.querySelectorAll('table.nhsuk-table'));
+      tables.forEach(t => applyForTable(t, invite));
+    });
+  }
+
+  // Recalc on:
+  // - initial render (with async retry)
+  // - window resize (column widths change)
+  // - tab/sub-nav switches (DOM mutations or link clicks)
+  let tries = 0;
+  function ready(){
+    const tables = document.querySelectorAll('table.nhsuk-table');
+    const hasRows = !!document.querySelector('tbody tr');
+    if (!tables.length || !hasRows){
+      if (++tries < 60) return setTimeout(ready, 100);
+    }
+    recalcAll();
+  }
+
+  // Sub-navigation: listen for clicks on anything that looks like a subnav link or tab
+  document.addEventListener('click', function(e){
+    const a = e.target.closest('a, button, [role="tab"]');
+    if (!a) return;
+    // allow the panel to switch, then recalc
+    setTimeout(recalcAll, 0);
+  });
+
+  // Mutations (panels shown/hidden via classes/attributes)
+  const mo = new MutationObserver(() => setTimeout(recalcAll, 0));
+  mo.observe(document.body, { attributes:true, childList:true, subtree:true });
+
+  // Resize (container/table size changes)
+  window.addEventListener('resize', recalcAll);
+
+  if (document.readyState === 'complete' || document.readyState === 'interactive') ready();
+  else document.addEventListener('DOMContentLoaded', ready);
+})();
+</script>
+{# --- END STICKY COL RETROFIT PACK --- #}
+
+{% endblock %}
+
+{% block pageScripts %}
+{% endblock %}

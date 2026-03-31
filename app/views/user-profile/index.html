@@ -1,0 +1,130 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Your profile" %}
+
+{% set currentSection = "user-profile" %}
+
+{% set organisationSettings = currentUser.organisations | findById(currentOrganisation.id) %}
+
+{% if data["e2eCurrentUserType"] == "admin" %}
+  {% set userEmail = 'alex.shah@nhs.net' %}
+  {% set userName = 'Alex Shah' %}
+{% elif data["e2eCurrentUserType"] == "OH" %}
+  {% set userEmail = 'kirsty.green@nhs.net' %}
+  {% set userName = 'Kirsty Green' %}
+{% elif data["e2eCurrentUserType"] == "infant" %}
+  {% set userEmail = 'samantha.walker@nhs.net' %}
+  {% set userName = 'Samantha Walker' %}
+{% else %}
+  {% set userEmail = 'jane.smith@nhs.net' %}
+  {% set userName = 'Jane Smith' %}
+{% endif %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-xl">Your profile</h1>
+
+        {% set permissionLevelHtml %}
+          <div>{{ organisationSettings.permissionLevel }}</div>
+          <p class="app-summary__explanation">
+            {% if organisationSettings.permissionLevel == "Lead administrator" %}
+              Can record vaccinations, create reports, manage vaccines and users
+            {% elseif organisationSettings.permissionLevel == "Administrator" %}
+              Can record vaccinations, create reports and manage vaccines
+            {% elseif organisationSettings.permissionLevel == "Recorder" %}
+              Can record vaccinations only
+            {% endif %}
+          </p>
+        {% endset %}
+
+        {% set organisationHtml %}
+          <div>Birmingham Women's and Children's NHS Foundation Trust</div>
+          <p class="app-summary__explanation">
+            Steelhouse Lane, Birmingham, West Midlands, B4 6NH
+          </p>
+
+        {% endset %}
+
+        {{ summaryList({
+          classes: "nhsuk-u-margin-bottom-4",
+          rows: [
+            {
+              key: {
+                text: "Name"
+              },
+              value: {
+                text: (userName) | safe
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/user-profile/name",
+                    text: "Change",
+                    visuallyHiddenText: "name"
+                  }
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Email address"
+              },
+              value: {
+                text: (userEmail) | safe
+              },
+              actions: {
+                items: [
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Organisation"
+              },
+              value: {
+                html: organisationHtml
+              },
+              actions: {
+                items: [
+                  {
+                  }
+                ]
+              }
+            },
+            {
+              key: {
+                text: "Permission level"
+              },
+              value: {
+                html: permissionLevelHtml
+              },
+              actions: {
+                items: [
+                  {
+                  }
+                ]
+              }
+            }
+          ]
+        }) }}
+
+      {% if organisationSettings.permissionLevel != 'Lead administrator' %}
+
+        <p>Only lead administrators can change permission levels. The lead administrators for Southampton NHS Trust are:</p>
+
+        <ul class="nhsuk-list nhsuk-list--bullet">
+          {% for user in leadAdminUsersAtSameOrganisation %}
+            <li>{{ user.firstName }} {{ user.lastName }} ({{ user.email }})</li>
+          {% endfor %}
+        </ul>
+
+      {% endif %}
+
+      <p>If you need to change your email address, <a href="/contact-us">contact support</a>.</p>
+
+    </div>
+  </div>
+
+
+{% endblock %}

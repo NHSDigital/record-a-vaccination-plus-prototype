@@ -1,0 +1,229 @@
+<!-- Use this page as the index for your project -->
+
+<!-- ADDING CUSTOM CSS - Add your custom CSS or Sass in /app/assets/sass/main.scss -->
+
+<!-- Extends the layout from /views/layout.html -->
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+<!-- Set the page title -->
+{% block pageTitle %}
+Book vaccinations prototype
+{% endblock %}
+
+<!-- For adding a breadcrumb -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/breadcrumbs -->
+{% block beforeContent %}
+{#
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Manage clinics</li>
+      <li class="nhsuk-breadcrumb__list-item">BREADCRUMB TBC</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+#}
+
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+  
+{% endblock %}
+
+<!-- For adding a back link -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/back-link -->
+{% block outerContent %}
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <!-- Change the page title here -->
+
+      <!-- Add your content here -->
+      <!-- Styles and components can be found at https://service-manual.nhs.uk/design-system -->
+
+      <h1 class="nhsuk-heading-l">Arrange Jodie Brown's appointment</h1>
+
+        <form action="confirmation-messages" method="get" class="form">
+            <!--<span class="nhsuk-caption-l">Birmingham Women's Hospital</span>-->
+
+            <h2 class="nhsuk-heading-m">Check appointment details</h2>
+
+              <!--<h2 class="nhsuk-heading-m">Booked for</h2>
+
+              <table class="nhsuk-table">
+                <thead role="rowgroup" class="nhsuk-table__head">
+                  <tr role="row">
+                    <th role="columnheader" class="" scope="col">
+                      Name
+                    </th>
+                    <th role="columnheader" class="" scope="col">
+                        Date of birth
+                      </th>
+                    </tr>
+                </thead>
+                <tbody class="nhsuk-table__body">
+                  <tr role="row" class="nhsuk-table__row">
+                    <td class="nhsuk-table__cell">{{data['first-name']}} {{data['last-name']}}</td>
+                    <td class="nhsuk-table__cell "><span id="dobDisplay"></span></td>
+                  </tr>
+                </tbody>
+              </table>-->
+              
+    
+    
+              <!--<p><a class="nhsuk-link" href="#">Change who this booking is for</a></p>-->
+
+              <!--<h2 class="nhsuk-heading-m">Appointment details</h2>-->
+
+          <dl class="nhsuk-summary-list">
+
+            <!--
+            <div class="nhsuk-summary-list__row">
+              <dt class="nhsuk-summary-list__key">
+                Vaccination type
+              </dt>
+              <dd class="nhsuk-summary-list__value">
+                Pertussis
+              </dd>
+              <dd class="nhsuk-summary-list__actions">
+                <a href="appt-postcode">
+                  Change<span class="nhsuk-u-visually-hidden"> postcode near where you'd like your appointment</span>
+                </a>
+              </dd>
+            </div>
+            -->
+
+            <!--<div class="nhsuk-summary-list__row">
+                <dt class="nhsuk-summary-list__key">
+                  Access needs
+                </dt>
+                <dd class="nhsuk-summary-list__value">
+                  Accessible toilet available</br>
+                  Braille translation service
+                </dd>
+            
+                <dd class="nhsuk-summary-list__actions">
+            
+                  <a href="appt-postcode">
+                    Change<span class="nhsuk-u-visually-hidden"> Access needs for anyone attending the appointment</span>
+                  </a>
+            
+                </dd>
+            
+              </div>-->
+  
+            <div class="nhsuk-summary-list__row">
+              <dt class="nhsuk-summary-list__key">
+                Site location
+              </dt>
+              <dd class="nhsuk-summary-list__value">
+                Birmingham Women's Hospital,<br>Mindelsohn Way,<br>Edgbaston,<br>Birmingham,<br>West Midlands,<br>B15 2TG
+              </dd>
+          
+              <!--<dd class="nhsuk-summary-list__actions">
+          
+                <a href="#">
+                  Change<span class="nhsuk-u-visually-hidden"> contact information</span>
+                </a>
+          
+              </dd>-->
+          
+            </div>
+
+            <div class="nhsuk-summary-list__row">
+                <dt class="nhsuk-summary-list__key">
+                  Date
+                </dt>
+                <dd class="nhsuk-summary-list__value">
+                  {% if data['chosenDate'] == 'choose' %}
+                    Saturday 15 November
+                  {% else %}
+                    {{data['chosenDate']}}
+                  {% endif %}
+                </dd>
+            
+                <!--<dd class="nhsuk-summary-list__actions">
+            
+                  <a href="choose-date">
+                    Change<span class="nhsuk-u-visually-hidden"> appointment date</span>
+                  </a>
+            
+                </dd>-->
+            
+              </div>
+  
+              <div class="nhsuk-summary-list__row">
+                <dt class="nhsuk-summary-list__key">
+                  Time
+                </dt>
+                <dd class="nhsuk-summary-list__value">
+                  {% if data['date'] == 'slotOne' and data['chosenAppointmentTime1'] != 'choose' %}
+                    {{ data['chosenAppointmentTime1'] }}
+                  {% elif data['date'] == 'slotTwo' and data['chosenAppointmentTime2'] != 'choose' %}
+                    {{ data['chosenAppointmentTime2'] }}
+                  {% elif data['date'] == 'slotThree' and data['chosenAppointmentTime3'] != 'choose' %}
+                    {{ data['chosenAppointmentTime3'] }}
+                  {% elif data['date'] == 'slotFour' and data['chosenAppointmentTime4'] != 'choose' %}
+                    {{ data['chosenAppointmentTime4'] }}
+                  {% elif data['date'] == 'slotFive' and data['chosenAppointmentTime5'] != 'choose' %}
+                    {{ data['chosenAppointmentTime5'] }}
+                  {% else %}
+                    6:40pm
+                  {% endif %}
+                </dd>
+                <!--<dd class="nhsuk-summary-list__actions">
+                  <a href="choose-time-range">
+                    Change<span class="nhsuk-u-visually-hidden"> appointment time</span>
+                  </a>
+                </dd>-->
+              </div>
+
+              <div class="nhsuk-summary-list__row">
+                <dt class="nhsuk-summary-list__key">
+                  Vaccination type
+                </dt>
+                <dd class="nhsuk-summary-list__value">
+                  RSV
+                </dd>
+              </div>              
+          
+          </dl>       
+
+        <button class="nhsuk-button" data-module="nhsuk-button" type="submit">
+          Continue
+        </button>
+
+    </form>
+
+    <p class="nhsuk-body">
+      <a class="nhsuk-link" href="choose-date">
+        Change the appointment
+      </a>
+    </p>
+      
+      </div>
+      <!-- End of content -->
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let dob = localStorage.getItem("dob");
+            let age = localStorage.getItem("age");
+    
+            if (dob) {
+                document.getElementById("dobDisplay").textContent = `${dob}`;
+                document.getElementById("ageDisplay").textContent = `Your age: ${age}`;
+            }
+        });
+    </script>
+    
+    </div>
+  </div>
+{% endblock %}

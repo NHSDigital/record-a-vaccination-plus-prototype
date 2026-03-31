@@ -1,4 +1,296 @@
 // Import NHS.UK frontend library
 @import "nhsuk-frontend/dist/nhsuk";
 
-// Add your custom CSS/Sass styles below.
+// Local override classes
+@import 'overrides';
+
+// Components that are not in the NHS.UK frontend library
+@import 'components/list-border';
+@import 'components/related-nav';
+@import 'components/indent-list';
+@import 'components/feedback-panel';
+@import 'components/form-group';
+// the following is required, but not sure where... need to isolate the issue
+//@import 'components/checkboxes';
+//@import 'components/nhsuk-header';
+@import '_moj-sub-navigation';
+
+// Import GOVUK-frontend
+//
+// This is so we can use a few components within the GOV.UK Design System
+// which aren’t yet part of the NHS Design System
+@import "govuk-frontend/dist/govuk/all";
+
+// Reset some GOV.UK variables to be NHS-branded
+$govuk-font-family: 'Frutiger W01';
+$govuk-error-colour: $nhsuk-error-colour;
+$govuk-input-border-colour: $nhsuk-form-border-colour;
+$govuk-brand-colour: $nhsuk-link-colour;
+
+// Import X-GOVUK prototype components
+@import "node_modules/@x-govuk/govuk-prototype-components/src/x-govuk";
+
+// Local components or modifiers
+@import 'components/header';
+@import 'components/summary-list';
+@import 'components/table';
+@import 'components/button';
+@import 'components/filters';
+@import 'components/section';
+@import 'components/tag';
+@import 'components/numbered-heading';
+@import 'components/multi-select';
+@import 'components/search';
+@import 'spinner';
+
+//@import '../../components/pagination/_pagination';
+
+@import "node_modules/hmrc-frontend/hmrc/all-govuk-and-hmrc";
+
+@import "autocomplete-overrides";
+
+@import '../../components/secondary-navigation/_secondary-navigation';
+
+
+// Custom styles
+.hiddenPanel {
+  display: none;
+}
+
+// Force NHS font on GOV.UK/HMRC text and timeline selectors
+.govuk-body,
+.govuk-heading-xl, .govuk-heading-l, .govuk-heading-m, .govuk-heading-s,
+.govuk-caption-xl, .govuk-caption-l, .govuk-caption-m,
+.govuk-list, .govuk-link,
+.hmrc-timeline, .hmrc-timeline__event, .hmrc-timeline__event-title, .hmrc-timeline__event-meta {
+  font-family: "Frutiger W01", arial, sans-serif;
+}
+
+.hmrc-timeline__event-meta {
+  font-size: 0.95rem;
+}
+
+// Send invites
+.set-comms-rules-link-button {
+  background: none;
+  border: none;
+  color: #005eb8;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+}
+
+.set-comms-rules-link-button:hover {
+  text-decoration: none;
+  color:#7C2855
+}
+
+.set-comms-rules-link-button:active,
+.set-comms-rules-link-button:focus {
+  background-color: #ffeb3b; /* $nhsuk-focus-color is #ffeb3b */
+}
+
+.custom-expander {
+  border: 1px solid #d8dde0;
+  padding: 32px 32px 10px 32px;
+
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 4px solid #e0d8dd;
+}
+
+.custom-expander .content {
+  flex: 1;
+  margin-right: 1rem;
+}
+
+.custom-expander .delete-link {
+  white-space: nowrap;
+}
+
+.delete-link a {
+  color: #d5281b;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.delete-link a:hover {
+  text-decoration: none;
+}
+
+// General custom
+
+.right-align-override {
+  text-align: right;
+}
+
+.left-align-override {
+  text-align: left;
+}
+
+.autocomplete__wrapper ul > li {
+  margin-bottom: 0;
+}
+
+///////////////////////////////////////////
+// Add your custom CSS/Sass styles below...
+///////////////////////////////////////////
+
+// Custom MYA horiz nav
+  .custom-mya-nav {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .custom-mya-nav li {
+    margin-right: 20px;
+  }
+////
+
+.column-two-thirds {
+  width: 66.66%;
+}
+
+//.nhsuk-header--left .nhsuk-header__navigation-list {
+//  justify-content: normal;
+//}
+
+// Visually hide content, but not from screen readers
+.custom-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Header links active state //
+.nhsuk-buttons--small{
+  padding: 6px 8px !important;
+  font-size: 1rem !important;
+  line-height: 1.2 !important;
+}
+
+//.nhsuk-header__navigation-link[aria-current]:not(:focus):not(:active) {
+//  border-bottom: nhsuk-spacing(1) solid $nhsuk-border-color;
+//  text-decoration: none;
+//
+//  .nhsuk-header__drop-down & {
+//    border-bottom-color: transparent;
+//  }
+//}
+
+// Email styles
+.app-email-preview {
+  margin-top: 20px;
+  border: 5px solid #b1b4b6;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.app-email-preview--okta p {
+  font-size: 14px;
+  color: #5e5e5e;
+}
+
+.app-button--okta {
+  background-color: #1662dd;
+  font-weight: normal;
+  box-shadow: none;
+  display: block;
+  width: 200px;
+  font-size: 14px;
+  margin: 0 auto 30px auto;
+}
+
+// Okta gubbins
+
+.auth-container {
+  background-color: #fff;
+  border-color: #ddd #ddd #d8d8d8;
+  box-shadow: 0 2px 0 hsla(0,0%,69%,.12);
+  border-radius: 3px;
+  border-style: solid;
+  border-width: 1px;
+  font-size: 14px;
+  font-weight: 400;
+  height: auto;
+  line-height: 1.4;
+  margin: 100px auto 8px;
+  min-width: 300px;
+  overflow: auto;
+  position: relative;
+  width: 400px;
+}
+
+.auth-header {
+  padding: 30px 90px 0px;
+  position: relative;
+  border-bottom: 1px solid #ddd;
+  z-index: 10;
+
+  -moz-transition: padding-bottom 0.4s;
+  -webkit-transition: padding-bottom 0.4s;
+  transition: padding-bottom 0.4s;
+}
+
+#okta-sign-in .auth-org-logo {
+  display: block;
+  margin: 0 auto;
+  max-height: 40px;
+  max-width: 200px;
+}
+
+.auth-content {
+  padding: 60px 42px 20px;
+}
+
+.auth-container p,
+.auth-container ul {
+  font-size: 14px;
+}
+
+.auth-container li {
+  margin: 0;
+}
+
+.auth-container h2 {
+  font-size: 15px;
+  text-align: center;
+}
+
+#okta-sign-in .siw-main-view .siw-main-body .identifier-container {
+  margin-bottom: 15px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  text-overflow: ellipsis;
+  top: -5px;
+  white-space: nowrap;
+}
+
+#okta-sign-in .o-form .input-fix input[type=password], #okta-sign-in .o-form .input-fix input[type=tel], #okta-sign-in .o-form .input-fix input[type=text], #okta-sign-in .o-form .input-fix input[type=textbox] {
+  background: transparent;
+  border: 1px solid grey;
+  box-sizing: border-box;
+  height: 100%;
+  line-height: 18px;
+  margin: 0;
+  padding: 10px 8px;
+  width: 100%;
+  border-radius: 3px;
+}
+
+// Font override
+.govuk-notification-banner {
+  font-family: Frutiger, "Frutiger Linotype", Arial, sans-serif;
+}

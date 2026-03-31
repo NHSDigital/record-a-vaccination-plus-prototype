@@ -1,0 +1,744 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Sortable table
+{% endblock %}
+
+<script src="/js/send-invite-data/patient-data-v2.js"></script>
+
+<script>
+(function(){
+  var PAGE_SIZE = 25;
+
+  // Helper: convert dd/mm/yyyy -> yyyy-mm-dd (for sorting only)
+  function dmyToISO(s){
+    var m = /^([0-3]?\d)\/([0-1]?\d)\/(\d{4})$/.exec(String(s||'').trim());
+    if (!m) return '';
+    var dd = ('0'+m[1]).slice(-2), mm = ('0'+m[2]).slice(-2), yyyy = m[3];
+    return yyyy + '-' + mm + '-' + dd;
+  }
+  // Indices of columns that contain dd/mm/yyyy
+  var dateCols = [];
+  // === Column hiding config ===
+  // Add header names here (case-insensitive) to hide those columns from the table
+  var HIDDEN_COLUMNS = (window.HIDDEN_COLUMNS || []);
+  function norm(s){ return String(s||'').trim().toLowerCase(); }
+  // Indices (in the original data) that are visible after hiding
+  var visibleColIndices = [];
+  function hasMOJ(){ return window.MOJFrontend && MOJFrontend.SortableTable; }
+  function initMOJ(){
+    try{
+      if (window.MOJFrontend && MOJFrontend.initAll) MOJFrontend.initAll();
+      document.querySelectorAll('[data-module="moj-sortable-table"]').forEach(function(el){
+        try { if (el.__mojSortable && el.__mojSortable.destroy) el.__mojSortable.destroy(); } catch(_){}
+        if (hasMOJ()) el.__mojSortable = new MOJFrontend.SortableTable(el);
+      });
+    }catch(e){}
+  }
+  function buildHeader(columns){
+    var headRow = document.getElementById('head-row');
+    headRow.innerHTML = '';
+    visibleColIndices = [];
+    columns.forEach(function(c, i){
+      if ((window.HIDDEN_COLUMNS || HIDDEN_COLUMNS).map(norm).indexOf(norm(c)) !== -1) return; // skip hidden
+      visibleColIndices.push(i);
+      var th = document.createElement('th');
+      th.className = 'nhsuk-table__header';
+      th.setAttribute('scope','col');
+      if (norm(c) === 'patient name') th.setAttribute('aria-sort','ascending');
+      else th.setAttribute('aria-sort','none');
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'govuk-link moj-sortable__button';
+      btn.setAttribute('data-index', String(visibleColIndices.length-1));
+      btn.textContent = c;
+      th.appendChild(btn);
+      headRow.appendChild(th);
+    });
+  }
+  function buildRow(row){
+    var tr = document.createElement('tr');
+    tr.className = 'nhsuk-table__row';
+    visibleColIndices.forEach(function(origIdx, visIdx){
+      var val = row[origIdx];
+      var td = document.createElement('td');
+      td.className = 'nhsuk-table__cell';
+      // if this original column is a date col, add hidden ISO for sorting
+      if (Array.isArray(dateCols) && dateCols.indexOf(origIdx) !== -1){
+        var iso = dmyToISO(val);
+        if (iso) td.setAttribute('data-sort-value', iso);
+      }
+      td.textContent = (val==null ? '' : String(val));
+      tr.appendChild(td);
+    });
+    return tr;
+  }
+  function showPage(rows, page){
+    var tbody = document.getElementById('body');
+    var start = (page-1) * PAGE_SIZE;
+    var end = start + PAGE_SIZE;
+    tbody.innerHTML = '';
+    var frag = document.createDocumentFragment();
+    rows.slice(start, end).forEach(function(r){ frag.appendChild(buildRow(r)); });
+    tbody.appendChild(frag);
+    initMOJ();
+  }
+  function numberWindow(total, current){
+    var out = [];
+    var max = 5;
+    var start = Math.max(1, current - 2);
+    var end   = Math.min(total, start + max - 1);
+    if (end - start < max - 1) start = Math.max(1, end - max + 1);
+    if (start > 1){ out.push(1); if (start > 2) out.push('…'); }
+    for (var n=start; n<=end; n++) out.push(n);
+    if (end < total){ if (end < total - 1) out.push('…'); out.push(total); }
+    return out;
+  }
+  function renderPager(total, current){
+    var host = document.getElementById('pagination');
+    if(!host) return;
+    var pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    current = Math.min(Math.max(1, current), pages);
+    var nav = document.createElement('nav');
+    nav.className = 'nhsuk-pagination nhsuk-pagination--numbered';
+    nav.setAttribute('role','navigation');
+    nav.setAttribute('aria-label','Pagination');
+    var ul = document.createElement('ul');
+    ul.className = 'nhsuk-pagination__list';
+    function addPrev(){
+      var li = document.createElement('li');
+      li.className = 'nhsuk-pagination__item nhsuk-pagination__item--previous';
+      var a = document.createElement('a');
+      a.className = 'nhsuk-pagination__link nhsuk-pagination__link--prev';
+      a.href = '#/';
+      a.dataset.page = String(current - 1);
+      a.innerHTML = '<span class="nhsuk-pagination__title">Previous<span class="nhsuk-u-visually-hidden"> page</span></span>';
+      if (current === 1) a.setAttribute('aria-disabled','true');
+      li.appendChild(a); ul.appendChild(li);
+    }
+    function addNext(){
+      var li = document.createElement('li');
+      li.className = 'nhsuk-pagination__item nhsuk-pagination__item--next';
+      var a = document.createElement('a');
+      a.className = 'nhsuk-pagination__link nhsuk-pagination__link--next';
+      a.href = '#/';
+      a.dataset.page = String(current + 1);
+      a.innerHTML = '<span class="nhsuk-pagination__title">Next<span class="nhsuk-u-visually-hidden"> page</span></span>';
+      if (current === pages) a.setAttribute('aria-disabled','true');
+      li.appendChild(a); ul.appendChild(li);
+    }
+    addPrev();
+    numberWindow(pages, current).forEach(function(token){
+      var li = document.createElement('li');
+      if (token === '…'){
+        li.className = 'nhsuk-pagination__item nhsuk-pagination__item--ellipsis';
+        li.innerHTML = '&ctdot;';
+      } else {
+        li.className = 'nhsuk-pagination__item';
+        var a = document.createElement('a');
+        a.className = 'nhsuk-pagination__link';
+        a.href = '#/';
+        a.textContent = token;
+        a.dataset.page = String(token);
+        if (token === current) a.setAttribute('aria-current','page');
+        li.appendChild(a);
+      }
+      ul.appendChild(li);
+    });
+    addNext();
+    nav.appendChild(ul);
+    host.innerHTML = '';
+    host.appendChild(nav);
+  }
+  function wirePager(rows){
+    var host = document.getElementById('pagination');
+    if(!host) return;
+    host.addEventListener('click', function(e){
+      var a = e.target.closest('a.nhsuk-pagination__link');
+      if (!a || a.getAttribute('aria-disabled') === 'true') return;
+      e.preventDefault();
+      var page = parseInt(a.dataset.page, 10);
+      showPage(rows, page);
+      renderPager(rows.length, page);
+    });
+  }
+  function start(){
+    var data = window.patientData;
+    if (!data || !data.columns || !data.rows) return;
+    buildHeader(data.columns);
+    // Detect date columns (dd/mm/yyyy)
+    dateCols = [];
+    data.columns.forEach(function(c, i){
+      var hasDate = (data.rows || []).some(function(r){
+        var v = r[i];
+        return typeof v === 'string' && /^\s*[0-3]?\d\/[0-1]?\d\/\d{4}\s*$/.test(v);
+      });
+      if (hasDate) dateCols.push(i);
+    });
+    var page = 1;
+    showPage(data.rows, page);
+    renderPager(data.rows.length, page);
+    wirePager(data.rows);
+  }
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){
+      if (window.patientData) start();
+      else setTimeout(start, 0);
+    });
+  } else {
+    if (window.patientData) start();
+    else setTimeout(start, 0);
+  }
+})();
+
+</script>
+
+{% block content %}
+<script>
+  //window.HIDDEN_COLUMNS = ['Patient ID'];
+</script>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-l">Sortable table</h1>
+
+      <div class="moj-scrollable-pane">
+
+        <table class="nhsuk-table moj-sortable-table" data-module="moj-sortable-table">
+  <thead class="nhsuk-table__head"><tr id="head-row" class="nhsuk-table__row"></tr></thead>
+  <tbody id="body" class="nhsuk-table__body"></tbody>
+</table>
+      </div>
+
+      <div id="pagination" class="nhsuk-u-margin-top-4"></div>
+
+
+    </div>
+  </div>
+<script src="/js/send-invite-data/patient-data-v2.js"></script>
+
+<script>
+(function(){
+  var PAGE_SIZE = 25;
+
+  // Helper: convert dd/mm/yyyy -> yyyy-mm-dd (for sorting only)
+  function dmyToISO(s){
+    var m = /^([0-3]?\d)\/([0-1]?\d)\/(\d{4})$/.exec(String(s||'').trim());
+    if (!m) return '';
+    var dd = ('0'+m[1]).slice(-2), mm = ('0'+m[2]).slice(-2), yyyy = m[3];
+    return yyyy + '-' + mm + '-' + dd;
+  }
+  // Indices of columns that contain dd/mm/yyyy
+  var dateCols = [];
+
+  // === Column hiding config ===
+  // Add header names here (case-insensitive) to hide those columns from the table
+  //var HIDDEN_COLUMNS = (window.HIDDEN_COLUMNS || []);
+  var HIDDEN_COLUMNS = ['Patient ID'];
+
+  function norm(s){ return String(s||'').trim().toLowerCase(); }
+  // Indices (in the original data) that are visible after hiding
+  var visibleColIndices = [];
+  function hasMOJ(){ return window.MOJFrontend && MOJFrontend.SortableTable; }
+  function initMOJ(){
+    try{
+      if (window.MOJFrontend && MOJFrontend.initAll) MOJFrontend.initAll();
+      document.querySelectorAll('[data-module="moj-sortable-table"]').forEach(function(el){
+        try { if (el.__mojSortable && el.__mojSortable.destroy) el.__mojSortable.destroy(); } catch(_){}
+        if (hasMOJ()) el.__mojSortable = new MOJFrontend.SortableTable(el);
+      });
+    }catch(e){}
+  }
+  function buildHeader(columns){
+    var headRow = document.getElementById('head-row');
+    headRow.innerHTML = '';
+    visibleColIndices = [];
+    columns.forEach(function(c, i){
+      if ((window.HIDDEN_COLUMNS || HIDDEN_COLUMNS).map(norm).indexOf(norm(c)) !== -1) return; // skip hidden
+      visibleColIndices.push(i);
+      var th = document.createElement('th');
+      th.className = 'nhsuk-table__header';
+      th.setAttribute('scope','col');
+      if (norm(c) === 'patient name') th.setAttribute('aria-sort','ascending');
+      else th.setAttribute('aria-sort','none');
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'govuk-link moj-sortable__button';
+      btn.setAttribute('data-index', String(visibleColIndices.length-1));
+      btn.textContent = c;
+      th.appendChild(btn);
+      headRow.appendChild(th);
+    });
+  }
+  function buildRow(row){
+    var tr = document.createElement('tr');
+    tr.className = 'nhsuk-table__row';
+    visibleColIndices.forEach(function(origIdx, visIdx){
+      var val = row[origIdx];
+      var td = document.createElement('td');
+      td.className = 'nhsuk-table__cell';
+      // if this original column is a date col, add hidden ISO for sorting
+      if (Array.isArray(dateCols) && dateCols.indexOf(origIdx) !== -1){
+        var iso = dmyToISO(val);
+        if (iso) td.setAttribute('data-sort-value', iso);
+      }
+      td.textContent = (val==null ? '' : String(val));
+      tr.appendChild(td);
+    });
+    return tr;
+  }
+  function showPage(rows, page){
+    var tbody = document.getElementById('body');
+    var start = (page-1) * PAGE_SIZE;
+    var end = start + PAGE_SIZE;
+    tbody.innerHTML = '';
+    var frag = document.createDocumentFragment();
+    rows.slice(start, end).forEach(function(r){ frag.appendChild(buildRow(r)); });
+    tbody.appendChild(frag);
+    initMOJ();
+  }
+  function numberWindow(total, current){
+    var out = [];
+    var max = 5;
+    var start = Math.max(1, current - 2);
+    var end   = Math.min(total, start + max - 1);
+    if (end - start < max - 1) start = Math.max(1, end - max + 1);
+    if (start > 1){ out.push(1); if (start > 2) out.push('…'); }
+    for (var n=start; n<=end; n++) out.push(n);
+    if (end < total){ if (end < total - 1) out.push('…'); out.push(total); }
+    return out;
+  }
+  function renderPager(total, current){
+    var host = document.getElementById('pagination');
+    if(!host) return;
+    var pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    current = Math.min(Math.max(1, current), pages);
+    var nav = document.createElement('nav');
+    nav.className = 'nhsuk-pagination nhsuk-pagination--numbered';
+    nav.setAttribute('role','navigation');
+    nav.setAttribute('aria-label','Pagination');
+    var ul = document.createElement('ul');
+    ul.className = 'nhsuk-pagination__list';
+    function addPrev(){
+      var li = document.createElement('li');
+      li.className = 'nhsuk-pagination__item nhsuk-pagination__item--previous';
+      var a = document.createElement('a');
+      a.className = 'nhsuk-pagination__link nhsuk-pagination__link--prev';
+      a.href = '#/';
+      a.dataset.page = String(current - 1);
+      a.innerHTML = '<span class="nhsuk-pagination__title">Previous<span class="nhsuk-u-visually-hidden"> page</span></span>';
+      if (current === 1) a.setAttribute('aria-disabled','true');
+      li.appendChild(a); ul.appendChild(li);
+    }
+    function addNext(){
+      var li = document.createElement('li');
+      li.className = 'nhsuk-pagination__item nhsuk-pagination__item--next';
+      var a = document.createElement('a');
+      a.className = 'nhsuk-pagination__link nhsuk-pagination__link--next';
+      a.href = '#/';
+      a.dataset.page = String(current + 1);
+      a.innerHTML = '<span class="nhsuk-pagination__title">Next<span class="nhsuk-u-visually-hidden"> page</span></span>';
+      if (current === pages) a.setAttribute('aria-disabled','true');
+      li.appendChild(a); ul.appendChild(li);
+    }
+    addPrev();
+    numberWindow(pages, current).forEach(function(token){
+      var li = document.createElement('li');
+      if (token === '…'){
+        li.className = 'nhsuk-pagination__item nhsuk-pagination__item--ellipsis';
+        li.innerHTML = '&ctdot;';
+      } else {
+        li.className = 'nhsuk-pagination__item';
+        var a = document.createElement('a');
+        a.className = 'nhsuk-pagination__link';
+        a.href = '#/';
+        a.textContent = token;
+        a.dataset.page = String(token);
+        if (token === current) a.setAttribute('aria-current','page');
+        li.appendChild(a);
+      }
+      ul.appendChild(li);
+    });
+    addNext();
+    nav.appendChild(ul);
+    host.innerHTML = '';
+    host.appendChild(nav);
+  }
+  function wirePager(rows){
+    var host = document.getElementById('pagination');
+    if(!host) return;
+    host.addEventListener('click', function(e){
+      var a = e.target.closest('a.nhsuk-pagination__link');
+      if (!a || a.getAttribute('aria-disabled') === 'true') return;
+      e.preventDefault();
+      var page = parseInt(a.dataset.page, 10);
+      showPage(rows, page);
+      renderPager(rows.length, page);
+    });
+  }
+  function start(){
+    var data = window.patientData;
+    if (!data || !data.columns || !data.rows) return;
+    buildHeader(data.columns);
+    // Detect date columns (dd/mm/yyyy)
+    dateCols = [];
+    data.columns.forEach(function(c, i){
+      var hasDate = (data.rows || []).some(function(r){
+        var v = r[i];
+        return typeof v === 'string' && /^\s*[0-3]?\d\/[0-1]?\d\/\d{4}\s*$/.test(v);
+      });
+      if (hasDate) dateCols.push(i);
+    });
+    var page = 1;
+    showPage(data.rows, page);
+    renderPager(data.rows.length, page);
+    wirePager(data.rows);
+  }
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){
+      if (window.patientData) start();
+      else setTimeout(start, 0);
+    });
+  } else {
+    if (window.patientData) start();
+    else setTimeout(start, 0);
+  }
+})();
+
+(function(){
+  function norm(s){ return String(s||'').trim().toLowerCase(); }
+  var wanted = (window.HIDDEN_COLUMNS || []).map(norm);
+  if (!wanted.length) return;
+
+  function apply(){
+    var headRow = document.getElementById('head-row');
+    var tbody   = document.getElementById('body');
+    if (!headRow || !tbody) return;
+
+    // determine which header indices to hide
+    var ths = Array.from(headRow.children);
+    var hiddenIdx = ths
+      .map((th,i)=>({i,txt:norm(th.textContent)}))
+      .filter(o => wanted.includes(o.txt))
+      .map(o => o.i);
+
+    // hide header cells
+    hiddenIdx.forEach(i => {
+      if (ths[i]) ths[i].style.display = 'none';
+    });
+
+    // hide data cells in each row
+    Array.from(tbody.querySelectorAll('tr')).forEach(tr=>{
+      hiddenIdx.forEach(i => {
+        if (tr.children[i]) tr.children[i].style.display = 'none';
+      });
+    });
+  }
+
+  // run once initial table loads
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', apply);
+  } else {
+    apply();
+  }
+
+  // re-apply whenever pagination rebuilds rows
+  document.addEventListener('click', function(e){
+    if (e.target.closest('.nhsuk-pagination')) {
+      setTimeout(apply, 0);
+    }
+  });
+
+  // re-apply after MOJ sortable resort
+  document.addEventListener('click', function(e){
+    if (e.target.closest('.moj-sortable__button')) {
+      setTimeout(apply, 0);
+    }
+  });
+
+})();
+
+</script>
+
+<script>
+(function(){
+  // --- small retry to wait for your DOM/table to exist (and for any template to render)
+  var tries = 0;
+  function ready(fn){
+    if (document.readyState !== 'loading') return fn();
+    document.addEventListener('DOMContentLoaded', fn);
+  }
+  function untilTable(){
+    var pane = document.querySelector('.moj-scrollable-pane');
+    var headRow = document.getElementById('head-row');
+    var body = document.getElementById('body');
+    var pager = document.getElementById('pagination');
+    if (pane && headRow && body && pager) { init(pane, headRow, body, pager); }
+    else if (tries++ < 50) { setTimeout(untilTable, 100); }
+  }
+
+  function init(mainPane, mainHeadRow, mainBody, mainPager){
+    // 1) Inject CSS (no <head> needed)
+    var style = document.createElement('style');
+    style.textContent = [
+      '.hiddenPanel{display:none;}',
+      '.is-sticky-col{position:sticky;left:0;background:#fff;z-index:3;box-shadow:inset -1px 0 0 #d8dde0;}',
+      '.table-col-action a{white-space:nowrap;display:inline-block;}',
+      '.moj-badge{display:inline-block;margin-left:.4rem;font-size:12px;line-height:1;padding:.25em .5em;background:#1d70b8;color:#fff;border-radius:1em;vertical-align:middle;}',
+      /* keep headers on one line (belt & braces; you already fixed this, but harmless) */
+      '.moj-scrollable-pane thead th, .moj-scrollable-pane thead th *{white-space:nowrap;word-break:keep-all;overflow-wrap:normal;hyphens:none;max-width:none;}',
+      '.moj-scrollable-pane thead th br{display:none;}'
+    ].join('');
+    document.body.appendChild(style);
+
+    // 2) Build sub-nav (Vaccinated / Removed with badges)
+    var subnav = document.createElement('nav');
+    subnav.className = 'moj-sub-navigation';
+    subnav.setAttribute('aria-label','Sub navigation');
+    subnav.innerHTML =
+      '<ul class="moj-sub-navigation__list">' +
+      ' <li class="moj-sub-navigation__item">' +
+      '  <a id="linkVaccinated" class="moj-sub-navigation__link" href="#/">Vaccinated <span id="badgeVaccinated" class="moj-badge" aria-label="Vaccinated count"></span></a>' +
+      ' </li>' +
+      ' <li class="moj-sub-navigation__item">' +
+      '  <a id="linkRemoved" class="moj-sub-navigation__link" href="#/">Removed <span id="badgeRemoved" class="moj-badge" aria-label="Removed count"></span></a>' +
+      ' </li>' +
+      '</ul>';
+    // insert subnav just before the main pane
+    mainPane.parentNode.insertBefore(subnav, mainPane);
+
+    // 3) Build Removed panel (table + pagination)
+    var panelSuppressed = document.createElement('div');
+    panelSuppressed.id = 'panelSuppressed';
+    panelSuppressed.className = 'hiddenPanel';
+    panelSuppressed.innerHTML =
+      '<div class="moj-scrollable-pane" aria-label="Removed table" role="region" tabindex="0">' +
+      '  <table class="nhsuk-table moj-sortable-table" data-module="moj-sortable-table">' +
+      '    <thead class="nhsuk-table__head"><tr id="suppressed-head-row" class="nhsuk-table__row"></tr></thead>' +
+      '    <tbody id="suppressed-body" class="nhsuk-table__body"></tbody>' +
+      '  </table>' +
+      '</div>' +
+      '<div id="suppressed-pagination" class="nhsuk-u-margin-top-4"></div>';
+    // place Removed panel after the main pane + existing pager
+    mainPager.parentNode.insertBefore(panelSuppressed, mainPager.nextSibling);
+
+    var suppHeadRow = panelSuppressed.querySelector('#suppressed-head-row');
+    var suppBody    = panelSuppressed.querySelector('#suppressed-body');
+
+    // 4) Action column header in both tables
+    function prependActionHeader(rowEl){
+      if (!rowEl || rowEl.querySelector('th.table-col-action')) return;
+      var th = document.createElement('th');
+      th.className = 'nhsuk-table__header is-sticky-col table-col-action';
+      th.scope = 'col';
+      th.textContent = 'Action';
+      rowEl.insertBefore(th, rowEl.firstChild);
+    }
+    function copyHeadersToSuppressed(){
+      suppHeadRow.innerHTML = '';
+      var thA = document.createElement('th');
+      thA.className = 'nhsuk-table__header is-sticky-col table-col-action';
+      thA.scope = 'col';
+      thA.textContent = 'Action';
+      suppHeadRow.appendChild(thA);
+      Array.from(mainHeadRow.querySelectorAll('th')).forEach(function(th, idx){
+        // skip the injected Action in main if present
+        if (idx === 0 && th.classList.contains('table-col-action')) return;
+        var clean = document.createElement('th');
+        clean.className = 'nhsuk-table__header';
+        clean.scope = 'col';
+        clean.textContent = th.textContent.trim();
+        suppHeadRow.appendChild(clean);
+      });
+    }
+
+    // 5) Row action cells (Remove in main / Add back in removed)
+    function ensureActionCellForMain(tr){
+      if (!tr) return;
+      var first = tr.firstElementChild;
+      if (first && first.classList.contains('table-col-action')){
+        var a = first.querySelector('a'); if (a){ a.textContent = 'Remove'; a.removeAttribute('data-add-back'); a.setAttribute('data-remove',''); }
+        return;
+      }
+      var td = document.createElement('td');
+      td.className = 'nhsuk-table__cell is-sticky-col table-col-action';
+      var a = document.createElement('a');
+      a.href = '#/';
+      a.className = 'nhsuk-link nhsuk-link--no-visited-state';
+      a.textContent = 'Remove';
+      a.setAttribute('data-remove','');
+      td.appendChild(a);
+      tr.insertBefore(td, tr.firstChild);
+    }
+    function buildSuppressedRowFrom(trMain){
+      var tr = document.createElement('tr');
+      tr.className = 'nhsuk-table__row';
+      var tdA = document.createElement('td');
+      tdA.className = 'nhsuk-table__cell is-sticky-col table-col-action';
+      var link = document.createElement('a');
+      link.href = '#/';
+      link.className = 'nhsuk-link nhsuk-link--no-visited-state';
+      link.textContent = 'Add back';
+      link.setAttribute('data-add-back','');
+      tdA.appendChild(link); tr.appendChild(tdA);
+      Array.from(trMain.querySelectorAll('td')).forEach(function(td, idx){
+        if (idx === 0) return; // skip main action cell
+        var c = document.createElement('td');
+        c.className = 'nhsuk-table__cell';
+        c.textContent = td.textContent;
+        var sv = td.getAttribute('data-sort-value'); if (sv) c.setAttribute('data-sort-value', sv);
+        tr.appendChild(c);
+      });
+      return tr;
+    }
+
+    // 6) Badges + Removed pagination
+    function updateBadges(){
+      var bV = document.getElementById('badgeVaccinated');
+      var bR = document.getElementById('badgeRemoved');
+      if (bV) bV.textContent = String(mainBody.querySelectorAll('tr').length);
+      if (bR) bR.textContent = String(suppBody.querySelectorAll('tr').length);
+    }
+
+    var REM_PAGE_SIZE = 25;
+    function numberWindow(total, current){
+      var out=[], max=5, start=Math.max(1,current-2), end=Math.min(total,start+max-1);
+      if (end-start<max-1) start=Math.max(1,end-max+1);
+      if (start>1){ out.push(1); if (start>2) out.push('…'); }
+      for (var n=start;n<=end;n++) out.push(n);
+      if (end<total){ if (end<total-1) out.push('…'); out.push(total); }
+      return out;
+    }
+    function renderSuppPager(pages, current){
+      var host = document.getElementById('suppressed-pagination'); if(!host) return;
+      var nav = document.createElement('nav');
+      nav.className = 'nhsuk-pagination nhsuk-pagination--numbered';
+      nav.setAttribute('role','navigation'); nav.setAttribute('aria-label','Pagination');
+      var ul = document.createElement('ul'); ul.className = 'nhsuk-pagination__list';
+
+      function addPrev(){
+        var li=document.createElement('li'); li.className='nhsuk-pagination__item nhsuk-pagination__item--previous';
+        var a=document.createElement('a'); a.className='nhsuk-pagination__link nhsuk-pagination__link--prev'; a.href='#/'; a.dataset.page=String(current-1);
+        a.innerHTML='<span class="nhsuk-pagination__title">Previous<span class="nhsuk-u-visually-hidden"> page</span></span>';
+        if (current===1) a.setAttribute('aria-disabled','true');
+        li.appendChild(a); ul.appendChild(li);
+      }
+      function addNext(){
+        var li=document.createElement('li'); li.className='nhsuk-pagination__item nhsuk-pagination__item--next';
+        var a=document.createElement('a'); a.className='nhsuk-pagination__link nhsuk-pagination__link--next'; a.href='#/'; a.dataset.page=String(current+1);
+        a.innerHTML='<span class="nhsuk-pagination__title">Next<span class="nhsuk-u-visually-hidden"> page</span></span>';
+        if (current===pages) a.setAttribute('aria-disabled','true');
+        li.appendChild(a); ul.appendChild(li);
+      }
+
+      addPrev();
+      numberWindow(pages, current).forEach(function(tok){
+        var li=document.createElement('li');
+        if (tok==='…'){ li.className='nhsuk-pagination__item nhsuk-pagination__item--ellipsis'; li.innerHTML='&ctdot;'; }
+        else {
+          li.className='nhsuk-pagination__item';
+          var a=document.createElement('a'); a.className='nhsuk-pagination__link'; a.href='#/'; a.textContent=tok; a.dataset.page=String(tok);
+          if (tok===current) a.setAttribute('aria-current','page');
+          li.appendChild(a);
+        }
+        ul.appendChild(li);
+      });
+      addNext();
+
+      host.innerHTML=''; host.appendChild(nav);
+    }
+    function showSuppPage(page){
+      var rows = Array.from(suppBody.querySelectorAll('tr'));
+      var pages = Math.max(1, Math.ceil(rows.length / REM_PAGE_SIZE));
+      page = Math.min(Math.max(1, page||1), pages);
+      rows.forEach(function(tr, idx){
+        var s=(page-1)*REM_PAGE_SIZE, e=s+REM_PAGE_SIZE;
+        tr.style.display = (idx>=s && idx<e) ? '' : 'none';
+      });
+      renderSuppPager(pages, page);
+    }
+    panelSuppressed.addEventListener('click', function(e){
+      var a = e.target.closest('.nhsuk-pagination__link');
+      if (!a || a.getAttribute('aria-disabled')==='true') return;
+      e.preventDefault();
+      showSuppPage(parseInt(a.dataset.page,10)||1);
+    });
+
+    // 7) Moves
+    document.addEventListener('click', function(e){
+      var rem = e.target.closest('[data-remove]');
+      if (!rem) return;
+      e.preventDefault();
+      var tr = rem.closest('tr'); if (!tr) return;
+      var srow = buildSuppressedRowFrom(tr);
+      suppBody.appendChild(srow);
+      tr.remove();
+      updateBadges();
+      showSuppPage(1);
+    });
+    document.addEventListener('click', function(e){
+      var add = e.target.closest('[data-add-back]');
+      if (!add) return;
+      e.preventDefault();
+      var tr = add.closest('tr'); if (!tr) return;
+      // Build new main row
+      var newTr = document.createElement('tr'); newTr.className='nhsuk-table__row';
+      var act = document.createElement('td'); act.className='nhsuk-table__cell is-sticky-col table-col-action';
+      var a = document.createElement('a'); a.href='#/'; a.className='nhsuk-link nhsuk-link--no-visited-state'; a.textContent='Remove'; a.setAttribute('data-remove',''); act.appendChild(a);
+      newTr.appendChild(act);
+      Array.from(tr.querySelectorAll('td')).forEach(function(td, idx){
+        if (idx===0) return;
+        var c=document.createElement('td'); c.className='nhsuk-table__cell';
+        c.textContent=td.textContent;
+        var sv=td.getAttribute('data-sort-value'); if (sv) c.setAttribute('data-sort-value', sv);
+        newTr.appendChild(c);
+      });
+      mainBody.appendChild(newTr);
+      tr.remove();
+      updateBadges();
+      showSuppPage(1);
+    });
+
+    // 8) Sub-nav toggles
+    document.getElementById('linkVaccinated').addEventListener('click', function(e){
+      e.preventDefault();
+      mainPane.style.display = 'block';
+      panelSuppressed.classList.add('hiddenPanel');
+      updateBadges();
+      Array.from(mainBody.querySelectorAll('tr')).forEach(ensureActionCellForMain);
+    });
+    document.getElementById('linkRemoved').addEventListener('click', function(e){
+      e.preventDefault();
+      mainPane.style.display = 'none';
+      panelSuppressed.classList.remove('hiddenPanel');
+      copyHeadersToSuppressed();
+      updateBadges();
+      showSuppPage(1);
+    });
+
+    // 9) Initial run + reapply after sort/paginate
+    prependActionHeader(mainHeadRow);
+    Array.from(mainBody.querySelectorAll('tr')).forEach(ensureActionCellForMain);
+    copyHeadersToSuppressed();
+    updateBadges();
+    showSuppPage(1);
+
+    document.addEventListener('click', function(e){
+      if (e.target.closest('.moj-sortable__button') || e.target.closest('.nhsuk-pagination')) {
+        setTimeout(function(){
+          prependActionHeader(mainHeadRow);
+          Array.from(mainBody.querySelectorAll('tr')).forEach(ensureActionCellForMain);
+          updateBadges();
+        }, 0);
+      }
+    });
+  }
+
+  ready(untilTable);
+})();
+</script>
+
+{% endblock %}

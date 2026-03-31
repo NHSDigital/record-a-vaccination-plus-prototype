@@ -1,0 +1,201 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Review and send RSV invite
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+  <!--<nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Engage patients</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>-->
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      Review and send {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} invite
+    </h1>
+
+    <p class="nhsuk-body-l">
+      Review communications summary before sending.
+    </p>
+
+    <h2 class="nhsuk-heading-m">
+      Patients selected for {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} invite
+    </h2>
+
+    <p class="nhsuk-body">
+      Of <strong>763</strong> patients uploaded on {{ date({day: 'numeric', month: 'long', year: 'numeric'}) }} at {{ date({ hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Europe/London' }) | replace(" ", "") }}, 
+      you identified <strong>276</strong> patients to send the {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} invite to.
+    </p>
+
+    {# REGUALR LIST #}
+    {#<p>Your chosen patient criteria:</p>
+    <ul class="nhsuk-list nhsuk-list--bullet">
+      <li>Patient is at least 28 weeks pregnant</li>
+      <li>Patient is happy to be contacted</li>
+      <li>Patient has provided mobile phone number</li>
+      <li>RSV vaccine and side effects were discussed</li>
+      <li>Patient has not received RSV vaccination in the last year</li>
+      <li>Patient does not have an existing booking for an RSV vaccination</li>
+      <li>Patient has not been invited for an RSV vaccination in last fortnight</li>
+      <li>Patient has not received another vaccination invite in last fortnight</li>
+    </ul>#}
+
+    {# DO AND DON'T LIST #}
+    {#<div class="nhsuk-do-dont-list nhsuk-u-margin-bottom-6">
+      <h3 class="nhsuk-do-dont-list__label">Your chosen patient criteria</h3>
+      <ul class="nhsuk-list nhsuk-list--tick" role="list">
+        <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+            <path stroke-width="4" stroke-linecap="round" d="M18.4 7.8l-8.5 8.4L5.6 12" stroke="#007f3b"></path>
+          </svg>Patient is at least 28 weeks pregnant
+        </li>
+        <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+            <path stroke-width="4" stroke-linecap="round" d="M18.4 7.8l-8.5 8.4L5.6 12" stroke="#007f3b"></path>
+          </svg>Patient is happy to be contacted
+        </li>
+        <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+            <path stroke-width="4" stroke-linecap="round" d="M18.4 7.8l-8.5 8.4L5.6 12" stroke="#007f3b"></path>
+          </svg>Patient has provided mobile phone number
+        </li>
+        <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+            <path stroke-width="4" stroke-linecap="round" d="M18.4 7.8l-8.5 8.4L5.6 12" stroke="#007f3b"></path>
+          </svg>RSV vaccine and side effects were discussed
+        </li>
+        <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+            <path stroke-width="4" stroke-linecap="round" d="M18.4 7.8l-8.5 8.4L5.6 12" stroke="#007f3b"></path>
+          </svg>Patient has not received RSV vaccination in the last year
+        </li>
+        <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+            <path stroke-width="4" stroke-linecap="round" d="M18.4 7.8l-8.5 8.4L5.6 12" stroke="#007f3b"></path>
+          </svg>Patient does not have an existing booking for an RSV vaccination
+        </li>
+        <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+            <path stroke-width="4" stroke-linecap="round" d="M18.4 7.8l-8.5 8.4L5.6 12" stroke="#007f3b"></path>
+          </svg>Patient has not been invited for an RSV vaccination in last fortnight
+        </li>
+        <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+            <path stroke-width="4" stroke-linecap="round" d="M18.4 7.8l-8.5 8.4L5.6 12" stroke="#007f3b"></path>
+          </svg>Patient has not received another vaccination invite in last fortnight
+        </li>
+      </ul>
+    </div>#}
+
+    {# LIST USING THE TICK FROM THE DO AND DON'T LIST #}
+    <p class="nhsuk-body nhsuk-u-margin-bottom-2">Your chosen patient criteria:</p>
+    <ul class="nhsuk-list nhsuk-list--tick" role="list">
+      {% if data['e2eCurrentUserType'] != 'OH' %}
+        <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+            <path d="M11.4 18.8a2 2 0 0 1-2.7.1h-.1L4 14.1a1.5 1.5 0 0 1 2.1-2L10 16l8.1-8.1a1.5 1.5 0 1 1 2.2 2l-8.9 9Z" fill="#007f3b" stroke="#007f3b" />
+          </svg>At least 28 weeks pregnant
+        </li>
+      {% endif %}
+      <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+          <path d="M11.4 18.8a2 2 0 0 1-2.7.1h-.1L4 14.1a1.5 1.5 0 0 1 2.1-2L10 16l8.1-8.1a1.5 1.5 0 1 1 2.2 2l-8.9 9Z" fill="#007f3b" stroke="#007f3b" />
+        </svg>No communications opt out
+      </li>
+      <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+          <path d="M11.4 18.8a2 2 0 0 1-2.7.1h-.1L4 14.1a1.5 1.5 0 0 1 2.1-2L10 16l8.1-8.1a1.5 1.5 0 1 1 2.2 2l-8.9 9Z" fill="#007f3b" stroke="#007f3b" />
+        </svg>Mobile number is available
+      </li>
+      <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+          <path d="M11.4 18.8a2 2 0 0 1-2.7.1h-.1L4 14.1a1.5 1.5 0 0 1 2.1-2L10 16l8.1-8.1a1.5 1.5 0 1 1 2.2 2l-8.9 9Z" fill="#007f3b" stroke="#007f3b" />
+        </svg>Vaccine explained and side effects discussed
+      </li>
+      <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+          <path d="M11.4 18.8a2 2 0 0 1-2.7.1h-.1L4 14.1a1.5 1.5 0 0 1 2.1-2L10 16l8.1-8.1a1.5 1.5 0 1 1 2.2 2l-8.9 9Z" fill="#007f3b" stroke="#007f3b" />
+        </svg>{% if data['e2eCurrentUserType'] == 'OH' %}Negative (Td/IPV) blood test{% else %}No RSV vaccination in last 9 months{% endif %}
+      </li>
+      <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+          <path d="M11.4 18.8a2 2 0 0 1-2.7.1h-.1L4 14.1a1.5 1.5 0 0 1 2.1-2L10 16l8.1-8.1a1.5 1.5 0 1 1 2.2 2l-8.9 9Z" fill="#007f3b" stroke="#007f3b" />
+        </svg>No existing {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} booking
+      </li>
+      <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+          <path d="M11.4 18.8a2 2 0 0 1-2.7.1h-.1L4 14.1a1.5 1.5 0 0 1 2.1-2L10 16l8.1-8.1a1.5 1.5 0 1 1 2.2 2l-8.9 9Z" fill="#007f3b" stroke="#007f3b" />
+        </svg>No {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} invite in last fortnight
+      </li>
+      <li> <svg class="nhsuk-icon nhsuk-icon__tick" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="34" height="34">
+          <path d="M11.4 18.8a2 2 0 0 1-2.7.1h-.1L4 14.1a1.5 1.5 0 0 1 2.1-2L10 16l8.1-8.1a1.5 1.5 0 1 1 2.2 2l-8.9 9Z" fill="#007f3b" stroke="#007f3b" />
+        </svg>No other communications in last fortnight
+      </li>
+    </ul>
+
+    <div class="nhsuk-inset-text nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-4">
+      <span class="nhsuk-u-visually-hidden">Information: </span>
+      <p>You manually removed a further 3 patients</p>
+    </div>
+
+    <p class="nhsuk-body nhsuk-u-margin-bottom-6">
+      <a href="refine-and-confirm" class="nhsuk-link">View and edit patient list</a>
+    </p>
+
+    <h2 class="nhsuk-heading-m">
+      Message being sent to patient list
+    </h2>
+
+    <div class="nhsuk-card nhsuk-u-margin-bottom-4" id="card-rsv-focus">
+      <div class="nhsuk-card__content nhsuk-u-padding-bottom-2">
+        <div id="rsv-editable" aria-label="RSV message content" aria-live="polite">
+          <p class="nhsuk-body">Hello [First name],</p>
+          <p class="nhsuk-body">
+            You are invited to book an appointment for a {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} vaccination as you are eligible. Follow
+            <a href="#/" class="nhsuk-link">this link for further information on the {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} vaccine</a>.
+          </p>
+          <p class="nhsuk-body">
+            If you would like to make an appointment, please book
+            <a href="#/" class="nhsuk-link">using our online tool</a> or call us on {% if data['e2eCurrentUserType'] == 'OH' %}01209{% else %}121{% endif %} 472 1377.
+          </p>
+          <p class="nhsuk-body">
+            If you have already contacted us, please accept our apologies and ignore this reminder.
+          </p>
+          <p class="nhsuk-body">
+            {% if data['e2eCurrentUserType'] == 'OH' %}
+              Kind regards,<br />Royal Cornwall Hospitals Occupational Health team
+            {% else %}
+              Kind regards,<br />Birmingham Women's Hospital maternity team
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <p class="nhsuk-body nhsuk-u-margin-bottom-6">
+      <a href="invite-templates" class="nhsuk-link">Edit content</a>
+    </p>
+
+    <h2 class="nhsuk-heading-m">
+      Confirm and send
+    </h2>
+
+    <div class="nhsuk-warning-callout nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
+      <h3 class="nhsuk-warning-callout__label"> Important<span class="nhsuk-u-visually-hidden">:</span> </h3>
+      <p>Once you confirm, this cannot be undone.</p>
+    </div>
+
+    <form class="form" action="/iteration-2/landing-organise-clinics?invitesSent=show" method="post" class="submit">
+      <div class="govuk-button-group">
+        <button class="nhsuk-button" data-module="nhsuk-button" type="submit">
+          Confirm and send
+        </button>
+        <p class="nhsuk-body nhsuk-u-padding-left-4"><a class="nhsuk-link" href="/iteration-2/landing-organise-clinics?invitesSent">Cancel</a></p>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

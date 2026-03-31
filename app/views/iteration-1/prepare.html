@@ -1,0 +1,111 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Maternity Digital Vaccination Services - Guidance" %}
+
+{% set currentSection = "prepare" %}
+
+{% block pageTitle %}
+  Maternity Digital Vaccination Services - Guidance
+{% endblock %}
+
+{% block header %}
+  {% include "includes/e2e-header-logged-in.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-1?loggedIn=true">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Prepare</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">
+        Prepare
+      </h1>
+
+      <p class="nhsuk-body">Set up and manage your digital service, get ready for clinics.</p>
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">    
+
+      {# PREPARE #}
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Manage access</a> </h3>
+              <p class="nhsuk-card__description">Onboard organisations, onboard users, governance gateways, permissions</p> 
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/iteration-1/guidance">Guidance</a> </h3>
+              <p class="nhsuk-card__description">Training content, communications, clinical directives</p><p></p>
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+    </div>
+
+  </div>
+
+  {# CONTACT #}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+
+      <h2 class="nhsuk-heading-m">Contact</h2>
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Extra support</a> </h2>
+              <p class="nhsuk-card__description">Additional information</p>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Providing feedback</a> </h2>
+              <p class="nhsuk-card__description">Additional information</p>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="#/">Taking part in research</a> </h2>
+              <p class="nhsuk-card__description">Additional information</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+{% endblock %}

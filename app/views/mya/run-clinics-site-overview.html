@@ -1,0 +1,289 @@
+<!-- Use this page as the index for your project -->
+
+<!-- ADDING CUSTOM CSS - Add your custom CSS or Sass in /app/assets/sass/main.scss -->
+
+<!-- Extends the layout from /views/layout.html -->
+{# extends '../../create-availability/layout.html' #}
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "run" %}
+
+<!--
+  In /views/layout.html you can:
+    - change the header and footer
+    - add custom CSS and JavaScript
+-->
+
+<!-- Set the page title -->
+{% block pageTitle %}
+Site overview Hornsey Central Pharmacy
+{% endblock %}
+
+<!-- For adding a breadcrumb -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/breadcrumbs -->
+{% block beforeContent %}
+  {# backLink({
+    href: "/mya/manage-sites",
+    text: "Go back"
+  }) #}
+
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-run-clinics">Run clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/mya/choose-run-clinics-site">Scheduled appointments</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Hornsey Central Pharmacy</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+<!-- For adding a back link -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/back-link -->
+{% block outerContent %}
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      {#<p>Missing navigation (MYA Public Beta/Live 20 June 2025):<br><strong>Home | View bookings | Create availability | Change site details | Manage users | Reports</strong></p>
+
+      <p class="nhsuk-body-s"><strong>Download reports</strong> card isn't shown in Private Beta version</p>#}
+
+      {% if data ['availability-created'] == 'yes' %}
+      <div class="nhsuk-notification-banner nhsuk-notification-banner--success" role="region" aria-labelledby="nhsuk-notification-banner-title" data-module="nhsuk-notification-banner">
+        <div class="nhsuk-notification-banner__header">
+          <h2 class="nhsuk-notification-banner__title" id="nhsuk-notification-banner-title">
+           Success
+          </h2>
+        </div>
+        <div class="nhsuk-notification-banner__content">
+          <h3 class="nhsuk-heading-m">
+            You have created new availability for this site.
+            
+          </h3>
+          <p><a class="nhsuk-notification-banner__link" href="#">Close this message</a>.</p>
+        </div>
+      </div>
+  
+  {% endif %}
+      <!-- Change the page title here -->
+      <h1 class="nhsuk-heading-xl">Hornsey Central Pharmacy</h1>
+
+      <!-- <div class="nhsuk-inset-text">
+        <span class="nhsuk-u-visually-hidden">Information: </span>
+
+        <p>151 Park road, <br>London, <br>Greater London, <br>N8 8JD</p>
+      </div> -->
+
+      {# MOJ Navigation START #}
+      <nav class="moj-sub-navigation nhsuk-u-padding-bottom-2" aria-label="Sub navigation">
+        <ul class="moj-sub-navigation__list">
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" aria-current="page">Site details</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="/vaccines/">Vaccines</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="/mya/create-availability/month">Bookings</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="/mya/availability-overview">Availability</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="">Change site details</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="">Manage users</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="">Reports</a>
+          </li>
+        </ul>
+      </nav>
+      {# MOJ Navigation END #}
+
+      <dl class="nhsuk-summary-list">
+
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Address
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            151 Park road, <br>London, <br>Greater London, <br>N8 8JD
+          </dd>
+        </div>
+
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Phone number
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            0208 889 8056
+          </dd>
+        </div>
+
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            ODS code
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            FA1234
+          </dd>
+        </div>
+
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            ICB
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            NHS North East and North Cumbria ICB
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Region
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            North East and Yorkshire
+          </dd>
+        </div>
+
+        </div>
+
+      </dl>
+
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">
+                <a class="nhsuk-card__link" href="month">View and manage bookings</a>
+              </h2>
+              <!-- <p class="nhsuk-card__description">View and manage availability and appointments for your site</p> -->
+
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+
+            </div>
+          </div>
+
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">
+                <a class="nhsuk-card__link" href="../availability-overview">Create availability TO BE REMOVED</a>
+              </h2>
+              <!-- <p class="nhsuk-card__description">Create and edit available dates and sessions for your site</p> -->
+
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+
+            </div>
+          </div>
+
+        </li>
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">
+                <a class="nhsuk-card__link" href="site-details">Change site details and accessibility information</a>
+              </h2>
+              <!-- <p class="nhsuk-card__description">Assign accessibility attributes to this site</p> -->
+
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+
+            </div>
+          </div>
+
+        </li>
+
+      </ul>
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">
+                <a class="nhsuk-card__link" href="manage-users">Manage users</a>
+              </h2>
+              <!-- <p class="nhsuk-card__description">Assign roles to users to give them access to features at this site</p> -->
+
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+
+            </div>
+          </div>
+
+        </li>
+
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">
+                <a class="nhsuk-card__link" href="#/">Download reports</a>
+              </h2>
+              <!-- <p class="nhsuk-card__description">Assign roles to users to give them access to features at this site</p> -->
+
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+
+            </div>
+          </div>
+
+        </li>
+
+      </ul>
+
+
+      <!-- End of content -->
+
+    </div>
+  </div>
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+  // Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Find the close link
+    const closeLink = document.querySelector('.nhsuk-notification-banner__link');
+    
+    // Find the entire notification banner
+    const notificationBanner = document.querySelector('.nhsuk-notification-banner');
+    
+    // Add click event listener to the close link
+    if (closeLink && notificationBanner) {
+      closeLink.addEventListener('click', function(event) {
+        // Prevent the default link behavior
+        event.preventDefault();
+        
+        // Hide the notification banner
+        notificationBanner.style.display = 'none';
+        
+        // Alternative: remove the element completely from the DOM
+        // notificationBanner.remove();
+      });
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,275 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Maternity Vaccinations" %}
+
+{% set currentSection = "home" %}
+
+{% block pageTitle %}
+  Maternity Vaccinations
+{% endblock %}
+
+{% block header %}
+  {% include "includes/e2e-header-logged-in.html" %}
+{% endblock %}
+
+{% block main %}
+  <div class="nhsuk-width-container">
+    <div class="govuk-phase-banner">
+      <p class="govuk-phase-banner__content">
+        <strong class="nhsuk-tag">
+          NEWS
+        </strong>
+        <span class="nhsuk-body nhsuk-u-padding-left-2">
+          This is a new service. Help us improve it and <a class="nhsuk-link" href="#/">give your feedback by email</a>.
+        </span>
+      </p>
+    </div>
+  </div>
+
+<div class="nhsuk-hero">
+  <div class="nhsuk-width-container nhsuk-hero--border">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-one-half nhsuk-u-one-half-tablet">
+        <div class="nhsuk-hero__wrapper">
+          <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-5">Maternity Vaccinations</h1>
+
+          <p class="nhsuk-body">Services and information for delivering maternity vaccine programmes on behalf of the NHS, and privately.</p>
+
+        </div>
+      </div>
+      <div class="nhsuk-grid-column-one-half nhsuk-u-one-half-tablet nhsuk-u-padding-top-6 app-u-hide-on-mobile">
+        <img class="app-homepage-illustration" src="/images/portal-main-image.svg" alt="" role="presentation" style="width: 100%;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="app-section--white">
+  <div class="nhsuk-width-container">
+    <div class="nhsuk-main-wrapper nhsuk-u-padding-bottom-4">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-one-third">
+          <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2"><a href="#/" class="nhsuk-link">Scene setter</a></h2>
+          <p class="nhsuk-body">Setting the scene, cullimination of services.</p>
+        </div>
+        <div class="nhsuk-grid-column-one-third">
+          <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2"><a href="#/" class="nhsuk-link">How to use</a></h2>
+          <p class="nhsuk-body">Information how it is used.</p>
+        </div>
+        <div class="nhsuk-grid-column-one-third">
+          <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2"><a href="#/" class="nhsuk-link">Context of use and why</a></h2>
+          <p class="nhsuk-body">Contextual information as to what it is, and why it exists.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="nhsuk-width-container" id="prepare">
+  <div class="nhsuk-main-wrapper">
+  
+    {# PREPARE #}
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-2">Prepare</h2>
+        <p class="nhs-body">Set up and manage your digital service, get ready for clinics</p>
+
+        <ul class="nhsuk-grid-row nhsuk-card-group">
+          <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m"> <a class="nhsuk-card__link" href="#/">Manage access</a> </h2>
+                <p class="nhsuk-card__description">Onboard organisations, onboard users, governance gateways, permissions<br><br></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m"> <a class="nhsuk-card__link" href="/iteration-1/guidance/">Guidance</a> </h2>
+                <p class="nhsuk-card__description">Training content, communications, clinical directives<br><br></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+
+    {# ORGANISE CLINICS #}
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-2">Organise clinics</h2>
+        <p class="nhs-body">Plan clinics and invite patients, see patient lists</p>
+
+        <ul class="nhsuk-grid-row nhsuk-card-group">
+          <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m"> <a class="nhsuk-card__link" href="/appointments/index2">Manage clinics</a></h2>
+                <p class="nhsuk-card__description">Create availability, assign batches to clinics, stock management</p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m"> <a class="nhsuk-card__link" href="#/">Engage patients</a></h2>
+                <p class="nhsuk-card__description">Patient master list, record sentiment, send invites, recall, sign post external services</p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m"> <a class="nhsuk-card__link" href="#/">View clinic lists</a></h2>
+                <p class="nhsuk-card__description">View clinics, correct clinic lists<br><br><br></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+
+          {# CREATE AVAILABILITY : MYA #}
+          <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m"><a class="nhsuk-card__link" href="/mya/manage-sites">Create availability</a></h2>
+                <p class="nhsuk-card__description"><!--Public Beta/Live start point--><br><br></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+
+          {# ASSIGN BATCHES TO CLINICS : RAVS #}
+          <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m"><a class="nhsuk-card__link" href="/vaccines">Assign batches to clinics</a></h2>
+                <p class="nhsuk-card__description"><br><br><br></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+
+    <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+
+    {# RUN CLINICS #}
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-2">Run clinics</h2>
+        <p class="nhs-body">Record vaccinations, Record sentiment, manage stock</p>
+
+        <ul class="nhsuk-grid-row nhsuk-card-group">
+          <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m"> <a class="nhsuk-card__link" href="#/">Record vaccinations</a></h2>
+                <p class="nhsuk-card__description"><br><br></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m"> <a class="nhsuk-card__link" href="#/">Record sentiment</a></h2>
+                <p class="nhsuk-card__description"><br><br></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m"> <a class="nhsuk-card__link" href="#/">Stock management</a></h2>
+                <p class="nhsuk-card__description"><br><br><br></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+
+    {# MONITOR #}
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-2">Monitor</h2>
+        <p class="nhs-body">Report and enhance</p>
+
+        <ul class="nhsuk-grid-row nhsuk-card-group">
+          <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m"> <a class="nhsuk-card__link" href="#/">Understand uptake</a> </h2>
+                <p class="nhsuk-card__description">Reporting, insights<br><br><br></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m"> <a class="nhsuk-card__link" href="#/">Payments</a> </h2>
+                <p class="nhsuk-card__description"><br><br><br></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content nhsuk-card__content--primary">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m"> <a class="nhsuk-card__link" href="#/">Reporting</a> </h2>
+                <p class="nhsuk-card__description"><br><br><br></p> 
+                <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                  <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+                </svg>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

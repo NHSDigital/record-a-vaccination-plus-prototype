@@ -1,0 +1,404 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Patient list
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/send-invites/patient-upload?uploadedList">Manage patient lists</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Patient list</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">Go back</a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">Patient list</h1>
+
+    <details class="nhsuk-details">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">
+          Current patient list information
+        </span>
+      </summary>
+      <div class="nhsuk-details__text">
+        <p>
+          {% if data['uploadedList'] == 'true' %}
+            Current patient list being used is <strong>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv</strong> (13.7MB), and was uploaded {{ date({day: 'numeric', month: 'long', year: 'numeric'}) }} by Chloe Liu
+          {% else %}
+            Current patient list being used is <strong>dataset-2025-08-22.csv</strong> (12.1MB), and was uploaded 22 August 2025 by Alex Smith
+          {% endif %}
+        </p>
+        <p>Use <a href="patient-upload?uploadedList" class="nhsuk-link">Upload new patient list</a> to update patient list data.</p>
+        
+      </div>
+    </details>
+    
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    <p class="nhsuk-body nhsuk-u-margin-bottom-4">Patients on this list should be in the care of your Trust.</p>
+
+    <p class="nhsuk-body nhsuk-u-margin-bottom-2">Scroll horizontally or <a href="view-patient-list-fullwidth" class="nhsuk-link" target="_blank" rel="noopener noreferrer">open the table in a new tab</a> to view full patient record details.</p>
+
+    <!-- Secondary navigation -->
+    <nav class="x-govuk-secondary-navigation nhsuk-u-margin-bottom-6" aria-label="Secondary menu">
+      <ul class="x-govuk-secondary-navigation__list">
+        <li id="liAll" class="x-govuk-secondary-navigation__list-item x-govuk-secondary-navigation__list-item--current">
+          <a id="linkAll" class="x-govuk-secondary-navigation__link" aria-current="page" href="#" onclick="switchToAll(event)">Included (0)</a>
+        </li>
+        <li id="liSuppressed" class="x-govuk-secondary-navigation__list-item">
+          <a id="linkSuppressed" class="x-govuk-secondary-navigation__link" href="#" onclick="switchToSuppressed(event)">Excluded (0)</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- ALL PATIENTS -->
+    <div id="panelAll">
+      <p id="all-page-info-top" class="nhsuk-body nhsuk-u-margin-bottom-4"></p>
+      <div class="ons-like-scroll" role="region" tabindex="0" aria-label="Scrollable data table">
+        <table class="nhsuk-table" aria-describedby="table-caption">
+          <caption id="table-caption" class="nhsuk-table__caption nhsuk-u-visually-hidden">Patient list</caption>
+          <thead><tr id="table-head-row"></tr></thead>
+          <tbody id="all-table-body"></tbody>
+        </table>
+      </div>
+      <div id="all-pagination" class="nhsuk-u-margin-top-4"></div>
+    </div>
+
+    <!-- SUPPRESSED -->
+    <div id="panelSuppressed" class="hiddenPanel" aria-hidden="true">
+      <p id="suppressed-page-info-top" class="nhsuk-body nhsuk-u-margin-bottom-4"></p>
+      <div class="ons-like-scroll" role="region" tabindex="0" aria-label="Scrollable data table (suppressed)">
+        <table class="nhsuk-table" aria-describedby="suppressed-table-caption">
+          <caption id="suppressed-table-caption" class="nhsuk-table__caption nhsuk-u-visually-hidden">Excluded patient list</caption>
+          <thead><tr id="suppressed-head-row"></tr></thead>
+          <tbody id="suppressed-table-body"></tbody>
+        </table>
+      </div>
+      <div id="suppressed-pagination" class="nhsuk-u-margin-top-4"></div>
+    </div>
+
+    <div id="table-live" class="nhsuk-u-visually-hidden" aria-live="polite"></div>
+  </div>
+
+  <style>
+    .ons-like-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; background: #f0f4f5; border: 1px solid #d8dde0; border-left: 0; border-right: 0; }
+    .nhsuk-table { margin-bottom: 0; min-width: 640px; width: 100%; border-collapse: collapse; }
+    .nhsuk-table thead th { position: sticky; top: 0; z-index: 2; background: #f0f4f5; }
+    .nhsuk-table__cell, .nhsuk-table__header { background: #f0f4f5; white-space: nowrap; }
+    .is-sticky-col { position: sticky; left: 0; z-index: 3; background: #f0f4f5; }
+    .table-empty { text-align: left; color: #425563; }
+    .hiddenPanel { display: none; }
+    .nhsuk-pagination--numbered__item span[aria-hidden] { padding: 0 .4rem; display:inline-block; }
+  </style>
+
+  <script>
+    // Tabs (unchanged)
+    function switchToAll(e){ if(e) e.preventDefault();
+      document.getElementById('panelAll').classList.remove('hiddenPanel');
+      document.getElementById('panelAll').removeAttribute('aria-hidden');
+      document.getElementById('panelSuppressed').classList.add('hiddenPanel');
+      document.getElementById('panelSuppressed').setAttribute('aria-hidden','true');
+      document.getElementById('liAll').classList.add('x-govuk-secondary-navigation__list-item--current');
+      document.getElementById('liSuppressed').classList.remove('x-govuk-secondary-navigation__list-item--current');
+      document.getElementById('linkAll').setAttribute('aria-current','page');
+      document.getElementById('linkSuppressed').removeAttribute('aria-current');
+    }
+    function switchToSuppressed(e){ if(e) e.preventDefault();
+      document.getElementById('panelSuppressed').classList.remove('hiddenPanel');
+      document.getElementById('panelSuppressed').removeAttribute('aria-hidden');
+      document.getElementById('panelAll').classList.add('hiddenPanel');
+      document.getElementById('panelAll').setAttribute('aria-hidden','true');
+      document.getElementById('liSuppressed').classList.add('x-govuk-secondary-navigation__list-item--current');
+      document.getElementById('liAll').classList.remove('x-govuk-secondary-navigation__list-item--current');
+      document.getElementById('linkSuppressed').setAttribute('aria-current','page');
+      document.getElementById('linkAll').removeAttribute('aria-current');
+    }
+  </script>
+
+  <!-- NEW: JavaScript data source -->
+  <script src="/js/send-invite-data/patient-data-v2.js"></script>
+
+  <script>
+    (function(){
+      var PAGE_SIZE = 25;
+      var theadRow  = document.getElementById('table-head-row');
+      var allTbody  = document.getElementById('all-table-body');
+      var suppressedHead  = document.getElementById('suppressed-head-row');
+      var suppressedTbody = document.getElementById('suppressed-table-body');
+      var allPager = document.getElementById('all-pagination');
+      var suppressedPager = document.getElementById('suppressed-pagination');
+      var allInfoTop = document.getElementById('all-page-info-top');
+      var suppInfoTop = document.getElementById('suppressed-page-info-top');
+      var live = document.getElementById('table-live');
+      var linkAll = document.getElementById('linkAll');
+      var linkSuppressed = document.getElementById('linkSuppressed');
+
+      var state = { allPage: 1, suppPage: 1 };
+      var gColumns = [];
+
+      function announce(msg){ if(live) live.textContent = msg; }
+      function getRows(tb){ return Array.from(tb.querySelectorAll('tr')).filter(r => !r.classList.contains('empty-state')); }
+      function totalPages(tb){ return Math.max(1, Math.ceil(getRows(tb).length / PAGE_SIZE)); }
+      function clamp(tb, p){ var t = totalPages(tb); return Math.min(Math.max(1,p), t); }
+      function showPage(tb, p){
+        var rows = getRows(tb);
+        var start = (p-1)*PAGE_SIZE, end = start + PAGE_SIZE;
+        rows.forEach(function(r, i){ r.style.display = (i >= start && i < end) ? '' : 'none'; });
+      }
+      function updateCounts(){
+        var allCount = getRows(allTbody).length;
+        var suppCount = getRows(suppressedTbody).length;
+        linkAll.innerHTML = 'Included ('+allCount+')';
+        linkSuppressed.innerHTML = 'Excluded ('+suppCount+')';
+      }
+
+      function buildHeader(columns){
+        theadRow.innerHTML = '';
+        gColumns = columns.slice();
+        var thAction = document.createElement('th'); thAction.scope='col'; thAction.className='nhsuk-table__header table-col-action is-sticky-col'; thAction.textContent='Action'; theadRow.appendChild(thAction);
+        columns.forEach(function(col){
+          if(col === 'Patient ID') return; // hide Patient ID header
+          var th=document.createElement('th'); th.scope='col'; th.className='nhsuk-table__header'; th.textContent=col; theadRow.appendChild(th);
+        });
+        suppressedHead.innerHTML = '';
+        var thAction2 = document.createElement('th'); thAction2.scope='col'; thAction2.className='nhsuk-table__header table-col-action is-sticky-col'; thAction2.textContent='Action'; suppressedHead.appendChild(thAction2);
+        columns.forEach(function(col){
+          if(col === 'Patient ID') return;
+          var th2=document.createElement('th'); th2.scope='col'; th2.className='nhsuk-table__header'; th2.textContent=col; suppressedHead.appendChild(th2);
+        });
+      }
+
+      function slugifyName(name){
+        if (!name) return 'unknown';
+        return String(name)
+          .normalize('NFKD').replace(/[\u0300-\u036f]/g,'')
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g,'-')
+          .replace(/^-+|-+$/g,'')
+          .replace(/-{2,}/g,'-');
+      }
+
+      // Build a data row (unchanged columns/behaviour)
+      function buildRow(values){
+        var tr=document.createElement('tr'); tr.className='nhsuk-table__row';
+
+        var tdAction=document.createElement('td');
+        tdAction.className='nhsuk-table__cell table-col-action is-sticky-col';
+        tdAction.innerHTML='<a href="#" class="nhsuk-link nhsuk-link--no-visited-state" data-suppress>Exclude<span class="nhsuk-u-visually-hidden"> this patient</span></a>';
+        tr.appendChild(tdAction);
+
+        var idxPID  = gColumns.indexOf('Patient ID');
+        var idxName = gColumns.indexOf('Patient name');
+        var idxNHS  = gColumns.indexOf('NHS number');
+
+        for (var idx = 0; idx < values.length; idx++){
+          if (idx === idxPID) continue;
+
+          var td=document.createElement('td'); td.className='nhsuk-table__cell';
+
+          if (idx === idxName){
+            var nameText = (values[idx]==null?'':String(values[idx]));
+            var nameSlug = slugifyName(nameText);
+            var nhsRaw = (idxNHS >= 0 && values[idxNHS] != null) ? values[idxNHS] : '';
+            var nhs = nhsRaw ? String(nhsRaw).replace(/\s+/g,'') : 'unknown';
+            var pid = (idxPID >= 0 && values[idxPID] != null) ? String(values[idxPID]).trim() : '';
+            var qs = (pid ? '?pid=' + encodeURIComponent(pid) : '');
+            td.innerHTML =
+              '<a class="nhsuk-link nhsuk-link--no-visited-state" ' +
+              'href="/patient-details/index'+qs+'" ' +
+              'id="patient-'+nameSlug+'-'+nhs+'">' +
+              nameText + '</a>';
+          } else {
+            var v = values[idx];
+            td.textContent = (v==null?'':String(v));
+          }
+
+          tr.appendChild(td);
+        }
+
+        return tr;
+      }
+
+      function buildNumberedList(total, current, ctx){
+        var ul = document.createElement('ul'); ul.className='nhsuk-pagination__list--numbered';
+        function addPage(n){
+          var li=document.createElement('li'); li.className='nhsuk-pagination--numbered__item';
+          var a=document.createElement('a'); a.className='nhsuk-pagination--numbered__link'; a.href='#/'; a.setAttribute('aria-label','Page '+n);
+          a.dataset.page=n; a.dataset.pager=ctx; a.textContent=n; if(n===current) a.setAttribute('aria-current','page');
+          li.appendChild(a); ul.appendChild(li);
+        }
+        function addDots(){
+          var li=document.createElement('li'); li.className='nhsuk-pagination--numbered__item';
+          var s=document.createElement('span'); s.setAttribute('aria-hidden','true'); s.textContent='…';
+          li.appendChild(s); ul.appendChild(li);
+        }
+        var windowSize = 5;
+        var start = Math.max(1, current - Math.floor(windowSize/2));
+        var end = Math.min(total, start + windowSize - 1);
+        start = Math.max(1, Math.min(start, total-windowSize+1));
+        if(start>1){ addPage(1); if(start>2) addDots(); }
+        for(var i=start;i<=end;i++) addPage(i);
+        if(end<total){ if(end<total-1) addDots(); addPage(total); }
+        return ul;
+      }
+
+      function buildPager(total, current, ctx){
+        var nav=document.createElement('nav'); nav.className='nhsuk-pagination nhsuk-pagination--numbered'; nav.setAttribute('role','navigation'); nav.setAttribute('aria-label','Pagination');
+
+        var prevWrap=document.createElement('div'); prevWrap.className='nhsuk-pagination--numbered__prev';
+        if(current>1){
+          var prev=document.createElement('a'); prev.className='nhsuk-pagination--numbered__link'; prev.href='#/'; prev.rel='prev'; prev.dataset.page=current-1; prev.dataset.pager=ctx;
+          prev.innerHTML =
+            '<svg class="nhsuk-icon nhsuk-icon--arrow-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true"><path d="M10.7 6.3c.4.4.4 1 0 1.4L7.4 11H19a1 1 0 0 1 0 2H7.4l3.3 3.3c.4.4.4 1 0 1.4a1 1 0 0 1-1.4 0l-5-5A1 1 0 0 1 4 12c0-.3.1-.5.3-.7l5-5a1 1 0 0 1 1.4 0Z"/></svg> Previous<span class="nhsuk-u-visually-hidden"> page</span>';
+          prevWrap.appendChild(prev);
+        } else {
+          var prevSpan=document.createElement('span'); prevSpan.className='nhsuk-pagination--numbered__link'; prevSpan.setAttribute('aria-disabled','true');
+          prevSpan.innerHTML =
+            '<svg class="nhsuk-icon nhsuk-icon--arrow-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true"><path d="M10.7 6.3c.4.4.4 1 0 1.4L7.4 11H19a1 1 0 0 1 0 2H7.4l3.3 3.3c.4.4.4 1 0 1.4a1 1 0 0 1-1.4 0l-5-5A1 1 0 0 1 4 12c0-.3.1-.5.3-.7l5-5a1 1 0 0 1 1.4 0Z"/></svg> Previous<span class="nhsuk-u-visually-hidden"> page</span>';
+          prevWrap.appendChild(prevSpan);
+        }
+        nav.appendChild(prevWrap);
+
+        nav.appendChild(buildNumberedList(total,current,ctx));
+
+        var nextWrap=document.createElement('div'); nextWrap.className='nhsuk-pagination--numbered__next';
+        if(current<total){
+          var next=document.createElement('a'); next.className='nhsuk-pagination--numbered__link'; next.href='#/'; next.rel='next'; next.dataset.page=current+1; next.dataset.pager=ctx;
+          next.innerHTML =
+            'Next<span class="nhsuk-u-visually-hidden"> page</span>' +
+            '<svg class="nhsuk-icon nhsuk-icon--arrow-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true"><path d="m14.7 6.3 5 5c.2.2.3.4.3.7 0 .3-.1.5-.3.7l-5 5a1 1 0 0 1-1.4-1.4l3.3-3.3H5a1 1 0 0 1 0-2h11.6l-3.3-3.3a1 1 0 1 1 1.4-1.4Z"/></svg>';
+          nextWrap.appendChild(next);
+        } else {
+          var nextSpan=document.createElement('span'); nextSpan.className='nhsuk-pagination--numbered__link'; nextSpan.setAttribute('aria-disabled','true');
+          nextSpan.innerHTML =
+            'Next<span class="nhsuk-u-visually-hidden"> page</span>' +
+            '<svg class="nhsuk-icon nhsuk-icon--arrow-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true"><path d="m14.7 6.3 5 5c.2.2.3.4.3.7 0 .3-.1.5-.3.7l-5 5a1 1 0 0 1-1.4-1.4l3.3-3.3H5a1 1 0 0 1 0-2h11.6l-3.3-3.3a1 1 0 1 1 1.4-1.4Z"/></svg>';
+          nextWrap.appendChild(nextSpan);
+        }
+        nav.appendChild(nextWrap);
+
+        return nav;
+      }
+
+      function updateInfo(tb, infoEl, current){
+        var rows = getRows(tb);
+        if (!infoEl) return;
+        if (rows.length === 0){ infoEl.textContent = 'No records to display'; return; }
+        var start = (current-1)*PAGE_SIZE + 1;
+        var end = Math.min(start + PAGE_SIZE - 1, rows.length);
+        infoEl.textContent = 'Displaying patient records ' + start + ' to ' + end + ' of ' + rows.length;
+      }
+
+      function renderSection(tb, pagerEl, infoEl, pageRef, ctx){
+        var current = clamp(tb, state[pageRef]);
+        state[pageRef] = current;
+        showPage(tb, current);
+        updateInfo(tb, infoEl, current);
+        pagerEl.innerHTML = '';
+        pagerEl.appendChild(buildPager(totalPages(tb), current, ctx));
+      }
+
+      function renderAll(){ renderSection(allTbody, allPager, allInfoTop, 'allPage', 'all'); }
+      function renderSupp(){ renderSection(suppressedTbody, suppressedPager, suppInfoTop, 'suppPage', 'suppressed'); }
+
+      // Delegated clicks for pagination & suppress/restore (unchanged)
+      document.addEventListener('click', function(e){
+        var link = e.target.closest('.nhsuk-pagination--numbered__link');
+        if (link){
+          e.preventDefault();
+          var page = parseInt(link.dataset.page,10), ctx = link.dataset.pager;
+          if(!page || !ctx) return;
+          if(ctx==='all'){ state.allPage = page; renderAll(); announce('Page '+page+' of all patients'); }
+          else { state.suppPage = page; renderSupp(); announce('Page '+page+' of suppressed patients'); }
+          return;
+        }
+        var suppressBtn = e.target.closest('[data-suppress]');
+        var restoreBtn = e.target.closest('[data-restore]');
+        if (!suppressBtn && !restoreBtn) return;
+        e.preventDefault();
+        if (suppressBtn){
+          var row = suppressBtn.closest('tr'); if(!row) return;
+          var actionCell = row.querySelector('td.table-col-action') || row.firstElementChild;
+          actionCell.innerHTML = '<a href="#" class="nhsuk-link nhsuk-link--no-visited-state" data-restore>Include<span class="nhsuk-u-visually-hidden"> this patient</span></a>';
+          suppressedTbody.appendChild(row);
+        } else {
+          var row2 = restoreBtn.closest('tr'); if(!row2) return;
+          var actionCell2 = row2.querySelector('td.table-col-action') || row2.firstElementChild;
+          actionCell2.innerHTML = '<a href="#" class="nhsuk-link nhsuk-link--no-visited-state" data-suppress>Exclude<span class="nhsuk-u-visually-hidden"> this patient</span></a>';
+          allTbody.appendChild(row2);
+        }
+        updateCounts(); renderAll(); renderSupp();
+      });
+
+      // NEW: load data from JS file first, fallback to JSON if needed
+      async function loadData(){
+        // Expect one of these globals from /js/send-invite-data/patient-data-v2.js
+        var jsData =
+          window.PATIENT_DATA ||
+          window.patientDataV2 ||
+          window.patientData ||
+          window.patient_list_data ||
+          null;
+
+        if (jsData) return jsData;
+
+        // Non-breaking fallback to previous JSON source (kept for robustness)
+        try{
+          var res = await fetch('/send-invite-data/patient-data-v2.json', { cache:'no-cache' });
+          if(res.ok) return await res.json();
+        } catch(e){
+          console.error(e);
+        }
+        return null;
+      }
+
+      (async function init(){
+        var data = await loadData();
+        if(!data){
+          // Fallback header if data missing (kept minimal; order won't affect behaviour)
+          theadRow.innerHTML = '';
+          ['Action','Name','NHS number','DOB','Postcode'].forEach(function(h, i){
+            var th = document.createElement('th'); th.scope='col';
+            th.className = 'nhsuk-table__header' + (i===0 ? ' table-col-action is-sticky-col' : '');
+            th.textContent = h; theadRow.appendChild(th);
+          });
+          allInfoTop.textContent = 'No records to display';
+          suppInfoTop.textContent = 'No records to display';
+          return;
+        }
+
+        var columns, rows;
+        if(data.columns && data.rows){ columns=data.columns; rows=data.rows; gColumns = columns.slice(); }
+        else if(Array.isArray(data)){ columns=Object.keys(data[0]||{}); rows=data.map(o => columns.map(c => o[c])); }
+        else { columns=[]; rows=[]; }
+
+        buildHeader(columns);
+
+        var frag=document.createDocumentFragment();
+        rows.forEach(function(vals){ frag.appendChild(buildRow(vals)); });
+        allTbody.innerHTML=''; allTbody.appendChild(frag);
+
+        updateCounts();
+        state.allPage=1; state.suppPage=1;
+        renderAll(); renderSupp();
+      })();
+    })();
+  </script>
+
+  </div>
+</div>
+{% endblock %}

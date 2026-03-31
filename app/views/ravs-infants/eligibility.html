@@ -1,0 +1,104 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Why are you giving them the vaccine?" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "batch" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+{# Remove or comment out the following... #}
+{#<p>whichVaccine = {{ data.whichVaccine }}</p>#}
+
+      {% if (errors | length) > 0 %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: errors
+        }) }}
+      {% endif %}
+
+      <form action="eligibility" method="post" novalidate>
+
+        {% if data.whichVaccine == "COVID-19" %}
+          {% set eligibilityOptions = [
+            "Resident in a care home",
+            "Aged 75 and over, not in a care home",
+            "Immunosuppressed"
+          ] %}
+        {% elif data.whichVaccine == "Flu" %}
+          {% set eligibilityOptions = [
+            "In a clinical risk group",
+            "Age-based eligibility",
+            "Resident in a care home",
+            "Healthcare worker",
+            "Social care worker",
+            "Pregnant",
+            "Household contacts of people with immunosuppression",
+            "Carer"
+          ] %}
+        {% elif data.whichVaccine == "MenB" %}
+          {% set eligibilityOptions = [
+            "In a clinical risk group",
+            "Age-based eligibility 0 to 5 years"
+          ] %}
+        {% else %}
+          {% set eligibilityOptions = [
+            "In a clinical risk group",
+            "Age-based eligibility 0 to 5 years"
+          ] %}
+        {% endif %}
+
+        {% set items = [] %}
+        {% for option in eligibilityOptions %}
+          {% set items = (items.push({
+            text: option,
+            value: option,
+            checked: (data.eligibility == option)
+            }), items) %}
+        {% endfor %}
+
+        {{ radios({
+          idPrefix: "eligibility",
+          name: "eligibility",
+          errorMessage: {
+            text: (errors | first).text
+          } if (errors | length) > 0,
+          fieldset: {
+            legend: {
+              text: "Why are you giving them the vaccine?",
+              classes: "nhsuk-fieldset__legend--l",
+              isPageHeading: true
+            }
+          },
+          items: items
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        })}}
+      </form>
+
+    </div>
+
+    <div class="nhsuk-grid-column-one-third">
+      {% set contentHTML %}
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Name</span><br>{{ data.firstName }} {{ data.lastName }}</p>
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Date of birth</span><br>{{ data.dobFormatted }}<br>({{ data.ageLabel }})</p>
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">NHS number</span><br>{{ data.nhsNumberFormatted }}</p>
+      {% endset %}
+
+      {{ card({
+        heading: "Patient",
+        feature: true,
+        descriptionHtml: contentHTML
+      }) }}
+    </div>
+
+  </div>
+
+{% endblock %}

@@ -1,0 +1,570 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+{# Toggle driven by query string: ?fullwidth=true #}
+{% set isFullWidth = (data['fullwidth'] | lower) == 'true' %}
+
+{% block pageTitle %}
+  {% if data['invite-type'] == 'rsv' %}
+    RSV view - Patient list
+  {% elif data['invite-type'] == 'pertussis' %}
+    RSV view - Patient list
+  {% else %}
+    All vaccine uptake information - Patient list
+  {% endif %}
+{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <link href="https://unpkg.com/govuk-frontend@5/dist/govuk-frontend.min.css" rel="stylesheet"/>
+  <link href="https://unpkg.com/@ministryofjustice/frontend@5/dist/moj-frontend.min.css" rel="stylesheet"/>
+
+  <style>
+    #filterByButtons {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    #filterByButtons p {
+      margin: 0;
+    }
+
+    #filterByButtons > p {
+      margin: 0;
+      align-self: center;
+      line-height: 1;
+      padding: 0 0 1rem 0;
+      display: flex;
+      align-items: center;
+    }
+
+    #filterByButtons .nhsuk-button.is-selected {
+      background-color: #005eb8;
+      color: #ffffff;
+      border-color: #005eb8;
+    }
+
+    #filterByButtons .nhsuk-button--secondary.is-selected {
+      background-color: #005eb8;
+      color: #ffffff;
+      border-color: #005eb8;
+    }
+
+    .app-app-row-counter-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .app-row-counter-input {
+      display: none;
+    }
+
+    #currentTabDetails {
+      overflow: auto;
+    }
+
+    /* Scrollable pane base */
+    .moj-scrollable-pane {
+      position: relative;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Kill any built-in MOJ gradients inside our wrapper to avoid double fades */
+    .app-scroll-gradient .moj-scrollable-pane::before,
+    .app-scroll-gradient .moj-scrollable-pane::after {
+      content: none !important;
+    }
+
+    /* Gradient wrapper that sits *outside* the scroller, so the fade doesn't move */
+    .app-scroll-gradient {
+      position: relative;
+    }
+
+    .app-scroll-gradient::before,
+    .app-scroll-gradient::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 24px;
+      pointer-events: none;
+      z-index: 5;
+      display: none; /* turned on via modifier classes below */
+    }
+
+    /* Left fade: show when there is content scrolled off to the left */
+    .app-scroll-gradient.app-scroll-gradient--left::before {
+      left: 0;
+      display: block;
+      background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.22),
+        rgba(0, 0, 0, 0)
+      );
+    }
+
+    /* Right fade: show when there is more content to the right */
+    .app-scroll-gradient.app-scroll-gradient--right::after {
+      right: 0;
+      display: block;
+      background: linear-gradient(
+        to left,
+        rgba(0, 0, 0, 0.22),
+        rgba(0, 0, 0, 0)
+      );
+    }
+
+    /* Existing table / sticky styles stay as-is */
+    .nhsuk-table thead th,
+    .is-sticky-col { background: #fff; }
+
+    .moj-scrollable-pane { position: relative; z-index: 1; }
+
+    .nhsuk-table thead th {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nhsuk-grid-row,
+    .nhsuk-grid-column-full { position: relative; z-index: 0; }
+
+    #filtered-pagination,
+    #suppressed-pagination {
+      position: relative;
+      z-index: 1;
+      clear: both;
+    }
+
+    #filtered-pagination .nhsuk-pagination,
+    #suppressed-pagination .nhsuk-pagination {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: .25rem;
+      pointer-events: none;
+    }
+
+    #filtered-pagination .nhsuk-pagination a.nhsuk-pagination__link,
+    #suppressed-pagination .nhsuk-pagination a.nhsuk-pagination__link {
+      pointer-events: auto;
+    }
+
+    #filtered-pagination .nhsuk-pagination [aria-disabled="true"],
+    #suppressed-pagination .nhsuk-pagination [aria-disabled="true"] {
+      pointer-events: none;     /* disabled items stay inert */
+    }
+
+    .x-govuk-secondary-navigation { position: relative; z-index: 30; }
+    #filterByButtons { position: relative; z-index: 20; }
+    .nhsuk-table thead th { position: sticky; top: 0; z-index: 10; }
+
+    .app-form-group--inline {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .app-inline-field {
+      display: inline-block;
+      margin: 0;
+    }
+
+    .app-form-group--inline .nhsuk-button {
+      width: auto;
+      margin: 0;
+      display: inline-flex;
+    }
+
+    .is-sticky-col {
+      position: sticky;
+      left: 0;
+      background: #f0f4f5;
+      z-index: 3;
+      box-shadow: inset -1px 0 0 #d8dde0;
+    }
+
+    /* When Action is present, nudge the sticky Patient name to the width of the Action cell */
+    .table-col-action { width: 1%; white-space: nowrap; } /* usually small link */
+    .nhsuk-table td.is-sticky-col:nth-child(2),
+    .nhsuk-table th.is-sticky-col:nth-child( (hideAction?1:2) ) { left: var(--sticky-offset, 120px); }
+
+    #orderByAll:active:not(:focus-visible) {
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Focus ring only when navigating with keyboard */
+    #filterByButtons a[role="radio"]:focus-visible {
+      outline: 3px solid #005eb8;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 2px #ffffff;
+    }
+
+    /* Remove the ring on mouse click */
+    #filterByButtons a[role="radio"]:focus:not(:focus-visible) {
+      outline: none;
+      box-shadow: none;
+    }
+
+    /* --- FULL-WIDTH TABLE WRAPPER --- */
+    /* Base wrapper does nothing special by default */
+    .app-full-width-table {
+      position: relative;
+    }
+
+    /* Only when this modifier is present do we break out to full viewport width */
+    .app-full-width-table--active {
+      position: relative;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+      width: 100vw;
+
+      /* side padding – tweak as you like */
+      padding-left: 25px;
+      padding-right: 25px;
+      box-sizing: border-box;
+    }
+
+  </style>
+{% endblock %}
+
+{% block beforeContent %}
+  <a class="nhsuk-back-link" href="#" id="backLink">Go back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <span class="nhsuk-caption-l">
+        {% if data['invite-type'] == 'rsv' %}
+          RSV view
+        {% elif data['invite-type'] == 'pertussis' %}
+          Pertussis view
+        {% else %}
+          All vaccine uptake information
+        {% endif %}
+      </span>
+      <h1 class="nhsuk-heading-l">
+        Patient list
+      </h1>
+
+      <div class="nhsuk-checkboxes nhsuk-checkboxes--small nhsuk-u-margin-bottom-4">
+        <div class="nhsuk-checkboxes__item">
+          <input class="nhsuk-checkboxes__input"
+                id="toggle-fullwidth"
+                name="toggle-fullwidth"
+                type="checkbox"
+                {% if isFullWidth %}checked{% endif %}>
+          <label class="nhsuk-label nhsuk-checkboxes__label" for="toggle-fullwidth">
+            Set table to full width of browser window
+          </label>
+        </div>
+      </div>
+
+      <nav aria-label="Secondary menu" class="x-govuk-secondary-navigation">
+        <ul class="x-govuk-secondary-navigation__list">
+          <li class="x-govuk-secondary-navigation__list-item x-govuk-secondary-navigation__list-item--current" id="liFiltered">
+            <a aria-current="page" href="#" id="linkFiltered">
+              {% if data['invite-type'] == 'all' %}
+                Included
+              {% else %}
+                Vaccinated
+              {% endif %}
+            </a>
+          </li>
+
+          {% if data['invite-type'] != 'all' %}
+            <li class="x-govuk-secondary-navigation__list-item" id="liUnvaccinated">
+              <a href="#" id="linkUnvaccinated">Not yet vaccinated</a>
+            </li>
+            <li class="x-govuk-secondary-navigation__list-item" id="liCloseToDueDate">
+              <a href="#" id="linkCloseToDueDate">Not yet eligible</a>
+            </li>
+          {% else %}
+            <li class="x-govuk-secondary-navigation__list-item" id="liUnvaccinated" style="display: none">
+              <a href="#" id="linkUnvaccinated">Not yet vaccinated</a>
+            </li>
+            <li class="x-govuk-secondary-navigation__list-item" id="liCloseToDueDate" style="display: none">
+              <a href="#" id="linkCloseToDueDate">Not yet eligible</a>
+            </li>
+          {% endif %}
+
+          <li class="x-govuk-secondary-navigation__list-item" id="liImmunosuppressed" style="display: none">
+            <a href="#" id="linkImmunosuppressed">Close to due date</a>
+          </li>
+
+          {% if hideAction %}
+            <li class="x-govuk-secondary-navigation__list-item" id="liSuppressed" style="display:none">
+              <a href="#" id="linkSuppressed"><strong>Removed</strong></a>
+            </li>
+          {% else %}
+            <li class="x-govuk-secondary-navigation__list-item" id="liSuppressed">
+              <a href="#" id="linkSuppressed"><strong>Removed</strong></a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+
+      <div class="nhsuk-u-margin-top-4" id="currentTabDetails">
+        {# Optional explanatory copy area #}
+      </div>
+
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-two-thirds">
+          <div class="nhsuk-u-margin-bottom-6" id="filterByPatient">
+            <form action="" method="get" novalidate="">
+              <div class="app-form-group--inline">
+                {{ input({
+                  type: "search",
+                  name: "nameOrNhsNumber",
+                  value: data.nameOrNhsNumber,
+                  label: {
+                    text: "Patient name or NHS number",
+                    classes: "nhsuk-u-font-weight-bold"
+                  }
+                }) }}
+                {{ button({
+                  classes: "nhsuk-button nhsuk-button--secondary nhsuk-button--small",
+                  text: "Find"
+                }) }}
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+
+          <div aria-label="Filter by weeks pregnant" class="nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-4 nhsuk-button-group" id="filterByButtons" role="radiogroup">
+            <p class="nhsuk-body nhsuk-u-margin-right-0 nhsuk-u-font-weight-bold">Filter:</p>
+
+            {% if data['invite-type'] == 'all' %}
+              <a aria-checked="false" class="nhsuk-button nhsuk-button--secondary nhsuk-button--small" href="#" id="orderBy32weeks" role="radio">
+                No vaccinations
+              </a>
+              <a aria-checked="false" class="nhsuk-button nhsuk-button--secondary nhsuk-button--small" href="#" id="orderBy36weeks" role="radio">
+                Up to date vaccinations
+              </a>
+            {% else %}
+              <a aria-checked="false" class="nhsuk-button nhsuk-button--secondary nhsuk-button--small" href="#" id="orderBy32weeks" role="radio">
+                More than 32 weeks
+              </a>
+              <a aria-checked="false" class="nhsuk-button nhsuk-button--secondary nhsuk-button--small" href="#" id="orderBy36weeks" role="radio">
+                More than 36 weeks
+              </a>
+            {% endif %}
+
+            <a aria-checked="false" class="nhsuk-link nhsuk-u-font-weight-bold" href="#" id="orderByAll" role="radio">
+              Clear filters
+            </a>
+          </div>
+
+          <!-- Filtered panel -->
+          <div id="panelFiltered">
+            <div
+              class="app-full-width-table {% if isFullWidth %}app-full-width-table--active{% endif %}"
+              id="filtered-fullwidth-wrapper">
+              <div class="app-scroll-gradient">
+                <div aria-label="Send list table" class="moj-scrollable-pane" role="region" tabindex="0">
+                  <table class="nhsuk-table moj-sortable-table" data-module="moj-sortable-table" id="filtered-table">
+                    <thead><tr id="table-head-row"></tr></thead>
+                    <tbody id="removable-table-body"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="nhsuk-u-margin-top-4" id="filtered-pagination"></div>
+          </div>
+
+          <!-- Removed panel -->
+          <div class="hiddenPanel" id="panelSuppressed">
+            <div
+              class="app-full-width-table {% if isFullWidth %}app-full-width-table--active{% endif %}"
+              id="suppressed-fullwidth-wrapper">
+              <div class="app-scroll-gradient">
+                <div aria-label="Excluded table" class="moj-scrollable-pane" role="region" tabindex="0">
+                  <table class="nhsuk-table moj-sortable-table" data-module="moj-sortable-table" id="suppressed-table">
+                    <thead><tr id="suppressed-head-row"></tr></thead>
+                    <tbody id="suppressed-table-body"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="nhsuk-u-margin-top-4" id="suppressed-pagination"></div>
+          </div>
+
+          <div class="nhsuk-u-margin-top-4">
+            <div class="app-row-counter-line">
+              <input aria-label="Patients selected" class="nhsuk-input nhsuk-input--width-3 app-row-counter-input" id="row-count" readonly="" type="text" value="0"/>
+            </div>
+          </div>
+
+          <div class="nhsuk-u-margin-top-0">
+            <a class="nhsuk-button" data-module="nhsuk-button" href="mvp-export-patient-list">Export this list to CSV</a>
+            <p class="nhsuk-body">
+              <a class="nhsuk-link" href="#/" id="backToInvite">Back to <strong>Understand my cohort</strong></a>
+            </p>
+          </div>
+
+          <div aria-live="polite" class="nhsuk-u-visually-hidden" id="table-live"></div>
+        </div>
+      </div>
+
+      <style>
+        .ons-like-scroll{overflow-x:auto;background:#f0f4f5;border:1px solid #d8dde0;border-left:0;border-right:0;}
+        .nhsuk-table{margin-bottom:0;min-width:640px;width:100%;border-collapse:collapse;}
+        .nhsuk-table thead th{position:sticky;top:0;background:#f0f4f5;}
+        .nhsuk-table__header,.nhsuk-table__cell{white-space:nowrap;}
+        .table-col-action a{white-space:nowrap;display:inline-block;}
+        .hiddenPanel{display:none;}
+        .hidden-row{display:none;}
+        .nhsuk-pagination--numbered__item span[aria-hidden]{padding:0 .4rem;display:inline-block;}
+        .app-button--small.is-selected { background-color: #005eb8; color: white; box-shadow: inset 0 0px 0 rgba(0,0,0,0.2); }
+      </style>
+
+      {# --- Sticky column retrofit --- #}
+      <style>
+        /* ---- FINAL sticky header fix (safe override) ---- */
+
+        /* 1) Make stacking work predictably for sticky cells */
+        table.nhsuk-table {
+          border-collapse: separate !important;   /* critical: z-index works per cell */
+          border-spacing: 0;                       /* keep visual look identical */
+        }
+
+        /* 2) Ensure every header cell paints above the table background */
+        table.nhsuk-table thead th {
+          position: relative;                      /* create stacking context */
+          z-index: 1;
+          background: #fff !important;             /* no bleed-through */
+        }
+
+        /* 3) Sticky columns: give cells their own stacking contexts + opaque bg */
+        table.nhsuk-table th.is-sticky-col,
+        table.nhsuk-table td.is-sticky-col {
+          position: sticky;
+          background: #fff !important;
+        }
+
+        /* 4) Explicit layering: headers above body; Action above Patient */
+        table.nhsuk-table thead th.is-sticky-col.sticky-action  { z-index: 70 !important; }
+        table.nhsuk-table thead th.is-sticky-col.sticky-patient { z-index: 60 !important; }
+        table.nhsuk-table tbody td.is-sticky-col.sticky-action  { z-index: 40 !important; }
+        table.nhsuk-table tbody td.is-sticky-col.sticky-patient { z-index: 30 !important; }
+
+        /* 6) If anything else is still painting on top, force non-sticky headers lower */
+        table.nhsuk-table thead th:not(.is-sticky-col) { z-index: 10; }  /* below sticky headers */
+      </style>
+
+      {# --- End sticky column retrofit --- #}
+
+      {# --- STICKY COL RETROFIT PACK (drop-in) --- #}
+      <style id="sticky-retrofit-pack-css">
+        /* 0) Make z-index on table cells behave */
+        table.nhsuk-table { border-collapse: separate !important; border-spacing: 0; }
+
+        /* 1) Base sticky styling */
+        .is-sticky-col {
+          position: sticky;
+          background: #fff !important;
+          box-shadow: inset -1px 0 0 #d8dde0;
+        }
+
+        /* 2) Roles for our two sticky columns */
+        .sticky-action  { left: 0; z-index: 70 !important; }
+        .sticky-patient { left: var(--sticky-offset, 0px); z-index: 60 !important; }
+
+        /* 3) Ensure non-sticky headers sit below stickies and are opaque */
+        .nhsuk-table thead th { position: relative; z-index: 10; background: #fff !important; }
+
+        /* 4) Sticky body cells below their headers */
+        .nhsuk-table tbody td.sticky-action  { z-index: 40 !important; }
+        .nhsuk-table tbody td.sticky-patient { z-index: 30 !important; }
+
+        /* 5) Visual seam on sticky column right edge (sits just outside the cell) */
+        .nhsuk-table th.is-sticky-col::after,
+        .nhsuk-table td.is-sticky-col::after {
+          content: "";
+          position: absolute;
+          top: 0; bottom: 0; right: -1px; /* IMPORTANT: outside the box */
+          width: 1px; background: #d8dde0; pointer-events: none;
+        }
+
+        /* --- remove all left borders / divider lines from sticky columns --- */
+        table.nhsuk-table th.is-sticky-col,
+        table.nhsuk-table td.is-sticky-col {
+          border-left: none !important;
+          box-shadow: none !important;     /* remove any inset shading */
+        }
+
+        /* also remove the right-edge divider we previously added */
+        table.nhsuk-table th.is-sticky-col::after,
+        table.nhsuk-table td.is-sticky-col::after {
+          content: none !important;
+        }
+      </style>
+
+      {# --- END STICKY COL RETROFIT PACK --- #}
+    </div>
+  </div>
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="https://unpkg.com/govuk-frontend@5/dist/govuk-frontend.min.js" defer></script>
+  <script src="/js/clinics/mvp-patient-list.js" defer></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const checkbox = document.getElementById("toggle-fullwidth");
+      const filteredWrapper   = document.getElementById("filtered-fullwidth-wrapper");
+      const suppressedWrapper = document.getElementById("suppressed-fullwidth-wrapper");
+
+      const wrappers = [filteredWrapper, suppressedWrapper];
+
+      function applyFullWidth(isOn) {
+        wrappers.forEach(function (wrapper) {
+          if (!wrapper) return;
+          wrapper.classList.toggle("app-full-width-table--active", isOn);
+        });
+      }
+
+      function syncFromUrl() {
+        const url = new URL(window.location.href);
+        const param = url.searchParams.get("fullwidth");
+        const isOn = (param && param.toLowerCase() === "true") || false;
+
+        if (checkbox) {
+          checkbox.checked = isOn;
+        }
+        applyFullWidth(isOn);
+      }
+
+      // Initial sync from URL / server-rendered state
+      syncFromUrl();
+
+      if (checkbox) {
+        checkbox.addEventListener("change", function () {
+          const isOn = checkbox.checked;
+
+          // Toggle layout instantly
+          applyFullWidth(isOn);
+
+          // Update query param without reloading
+          const url = new URL(window.location.href);
+          url.searchParams.set("fullwidth", isOn ? "true" : "false");
+          window.history.replaceState({}, "", url.toString());
+        });
+      }
+    });
+  </script>
+{% endblock %}

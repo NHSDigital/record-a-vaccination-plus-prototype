@@ -1,0 +1,137 @@
+// MoJ Sub Navigation
+
+.moj-sub-navigation {
+  margin-bottom: 16px;
+
+  &__list {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid #b1b4b6;
+    min-height: 53px;
+    gap: 16px; // spacing between items on desktop
+
+    > li {
+      display: flex;
+      align-items: stretch;
+      margin: 0;
+      padding: 0;
+    }
+
+    @media (max-width: 640px) {
+      & {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        border-bottom: none;
+      }
+
+      > li {
+        width: 100%;
+        box-shadow: inset 0 -1px 0 #b1b4b6;
+
+        &:last-child {
+          box-shadow: none;
+        }
+      }
+    }
+  }
+}
+
+.moj-sub-navigation__item {
+  font-size: 19px;
+  font-weight: normal;
+}
+
+.moj-sub-navigation__link {
+  display: block;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 0;
+  padding-right: 0;
+  text-decoration: none;
+  position: relative;
+
+  @media (max-width: 640px) {
+    padding-left: 16px;
+  }
+
+  &:link,
+  &:visited {
+    color: #1d70b8;
+  }
+
+  &:hover {
+    color: lighten(#1d70b8, 25%);
+  }
+
+  &:focus {
+    color: #212b32;
+    outline: none;
+    box-shadow: none;
+    position: relative;
+  }
+
+  &:focus::before {
+    background-color: #212b32;
+    content: "";
+    display: block;
+    width: 100%;
+    height: 5px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    @media (max-width: 640px) {
+      width: 5px;
+      height: 100%;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: auto;
+    }
+  }
+
+  &[aria-current="page"] {
+    color: #003078;
+    text-decoration: none;
+    position: relative;
+
+
+
+    &::before {
+      background-color: #1d70b8;
+      content: "";
+      display: block;
+      position: absolute;
+
+      // Desktop: bottom bar
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      margin-bottom: -1px;
+  
+      @media (max-width: 640px) {
+        // Mobile: left bar
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+       margin-bottom: 0;
+      }
+    }
+
+    &:focus::before {
+      background-color: #212b32;
+    }
+  }
+}
+
+.moj-nav-hidden {
+  display: none;
+}

@@ -1,0 +1,155 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Choose patient list view
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      Export patient list to CSV
+    </h1>
+
+    <form method="post" action="/send-invites/mvp-review-export">
+
+      <fieldset class="nhsuk-fieldset">
+        <legend class="nhsuk-fieldset__legend">
+          <h2 class=" nhsuk-heading-m">
+            Choose list view to export
+          </h2>
+        </legend>
+        <div class="nhsuk-radios nhsuk-u-margin-bottom-6" data-module="nhsuk-radios">
+          <div class="nhsuk-radios__item">
+            <input
+              class="nhsuk-radios__input"
+              id="export-entire-list"
+              name="export-type"
+              type="radio"
+              value="entire-list">
+            <label class="nhsuk-label nhsuk-radios__label" for="export-entire-list">
+              Current list with no filters applied
+            </label>
+            {#<div id="export-entire-list-hint" class="nhsuk-hint nhsuk-radios__hint">
+              Additional information explaining what this option is
+            </div>#}
+          </div>
+          <div class="nhsuk-radios__item">
+            <input
+              class="nhsuk-radios__input"
+              id="export-filtered-list"
+              name="export-type"
+              type="radio"
+              value="filtered-list">
+            <label class="nhsuk-label nhsuk-radios__label" for="export-filtered-list">
+              Current list with chosen filters applied
+            </label>
+            {#<div id="export-filtered-list-hint" class="nhsuk-hint nhsuk-radios__hint">
+              Additional information explaining what this option is
+            </div>#}
+          </div>
+        </div>
+      </fieldset>
+
+      {% set baseColumns = [
+        { value: "custom-export-Patient name", text: "Patient name" },
+        { value: "custom-export-NHS number", text: "NHS number" },
+        { value: "custom-export-DOB", text: "Date of birth" },
+        { value: "custom-export-Due date", text: "Pregnancy due date" },
+        { value: "custom-export-Address Line 1", text: "Address line 1" },
+        { value: "custom-export-Address Line 2", text: "Address line 2" },
+        { value: "custom-export-Town", text: "Town or city" },
+        { value: "custom-export-Postcode", text: "Postcode" },
+        { value: "custom-export-Phone number", text: "Phone number" },
+        { value: "custom-export-Contactable", text: "Contactable" }
+      ] %}
+
+      {% set rsvColumns = [
+        { value: "custom-export-RSV eligible (28 weeks)", text: "RSV eligible (28 weeks)" },
+        { value: "custom-export-RSV explained and offered", text: "RSV explained and offered" },
+        { value: "custom-export-RSV side effects discussed", text: "RSV side effects discussed" },
+        { value: "custom-export-Date of last RSV vaccination", text: "Date of last RSV vaccination" },
+        { value: "custom-export-Date of RSV vaccination booking", text: "Date of RSV vaccination booking" },
+        { value: "custom-export-Date of last RSV invite", text: "Date of last RSV invite" }
+      ] %}
+
+      {% set pertussisColumns = [
+        { value: "custom-export-Pertussis eligible (16 weeks)", text: "Pertussis eligible (16 weeks)" },
+        { value: "custom-export-Pertussis explained and offered", text: "Pertussis explained and offered" },
+        { value: "custom-export-Pertussis side effects discussed", text: "Pertussis side effects discussed" },
+        { value: "custom-export-Date of last Pertussis vaccination", text: "Date of last Pertussis vaccination" },
+        { value: "custom-export-Date of Pertussis vaccination booking", text: "Date of Pertussis vaccination booking" },
+        { value: "custom-export-Date of last Pertussis invite", text: "Date of last Pertussis invite" }
+      ] %}
+
+      {% if data['invite-type'] == 'rsv' %}
+        {% set vaccineColumns = rsvColumns %}
+      {% elif data['invite-type'] == 'pertussis' %}
+        {% set vaccineColumns = pertussisColumns %}
+      {% else %}
+        {% set vaccineColumns = rsvColumns.concat(pertussisColumns).concat([
+          { value: "custom-export-COVID-19 & Flu eligible", text: "COVID-19 & Flu eligible" },
+          { value: "custom-export-Flu explained and offered", text: "Flu explained and offered" },
+          { value: "custom-export-Flu side effects discussed", text: "Flu side effects discussed" },
+          { value: "custom-export-Date of last Flu vaccination", text: "Date of last Flu vaccination" },
+          { value: "custom-export-Date of Flu vaccination booking", text: "Date of Flu vaccination booking" },
+          { value: "custom-export-Date of last Flu invite", text: "Date of last Flu invite" }
+        ]) %}
+      {% endif %}
+
+      {% set customColumnsHTML %}
+        {{ checkboxes({
+          idPrefix: "choose-columns-to-export",
+          name: "choose-columns-to-export",
+          fieldset: {
+            legend: {
+              text: "Choose the columns that are to be exported",
+              isPageHeading: false
+            }
+          },
+          items: baseColumns.concat(vaccineColumns)
+        }) }}
+      {% endset -%}
+
+      {{ radios({
+        idPrefix: "contact",
+        name: "contact",
+        fieldset: {
+          legend: {
+            text: "Choose data columns to export",
+            size: "m",
+            isPageHeading: false
+          }
+        },
+        items: [
+          {
+            value: "all-columns",
+            text: "All columns"
+          },
+          {
+            value: "custom-columns",
+            text: "Custom columns",
+            conditional: {
+              html: customColumnsHTML
+            }
+          }
+        ]
+      }) }}
+
+      <div class="nhsuk-button-group">
+        <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Continue</button>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

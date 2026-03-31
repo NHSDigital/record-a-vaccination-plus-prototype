@@ -1,0 +1,201 @@
+{% extends 'e2e-layout3-index-only.html' %}
+
+{% set pageName = "NHS Record a vaccination prototypes" %}
+
+{% block content %}
+	<div class="nhsuk-grid-row">
+    	<div class="nhsuk-grid-column-full">
+
+			<h1 class="nhsuk-heading-xl">
+        		VDS E2E MVP prototype
+			</h1>
+
+			<h2 class="nhsuk-heading-l">
+        		Landing page quick links
+			</h2>
+
+			{# QUICK LINKS #}
+			<ul class="nhsuk-grid-row nhsuk-card-group">
+				<li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+					<div class="nhsuk-card nhsuk-card--clickable">
+						<div class="nhsuk-card__content nhsuk-card__content--primary">
+							<h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/iteration-2/index?e2eCurrentUserType">Clinician</a> </h3>
+							<svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+								<path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z" />
+							</svg>
+						</div>
+					</div>
+				</li>
+				<li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+					<div class="nhsuk-card nhsuk-card--clickable">
+						<div class="nhsuk-card__content nhsuk-card__content--primary">
+							<h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/iteration-2/index?e2eCurrentUserType=infant">Infant</a> </h3>
+							<svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+								<path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z" />
+							</svg>
+						</div>
+					</div>
+				</li>
+				<li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+					<div class="nhsuk-card nhsuk-card--clickable">
+						<div class="nhsuk-card__content nhsuk-card__content--primary">
+							<h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/iteration-2/index?e2eCurrentUserType=OH">Occupational Health</a> </h3>
+							<svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+								<path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z" />
+							</svg>
+						</div>
+					</div>
+				</li>
+			</ul>
+
+			<h2 class="nhsuk-heading-l nhsuk-u-padding-top-4 nhsuk-u-padding-bottom-0">
+        		Individual journey links
+			</h2>
+
+			{# MOJ Navigation START #}
+			<nav class="moj-sub-navigation nhsuk-u-padding-bottom-2" aria-label="Sub navigation">
+				<ul class="moj-sub-navigation__list">
+					<li class="moj-sub-navigation__item">
+						<a class="moj-sub-navigation__link" href="index">Clinician &amp; admin</a>
+					</li>
+					<li class="moj-sub-navigation__item">
+						<a class="moj-sub-navigation__link" aria-current="page">Infant</a>
+					</li>
+					<li class="moj-sub-navigation__item">
+						<a class="moj-sub-navigation__link" href="index-oh">Occupational Health</a>
+					</li>
+				</ul>
+			</nav>
+			{# MOJ Navigation END #}
+		</div>
+	</div>
+
+	<div class="nhsuk-grid-row">
+    	<div class="nhsuk-grid-column-two-thirds">
+
+			<table class="nhsuk-table">
+				<thead class="nhsuk-table__head">
+
+					<tr class="nhsuk-table__row">
+						<td class="nhsuk-table__cell"><strong>RAVS Infants: As is</strong></td>
+						<td class="nhsuk-table__cell">
+							<ul class="nhsuk-list nhsuk-list--number">
+								<li><a href="/infants-as-is">Patient finder</a></li>					
+								<li><a href="/ravs-infants/">Home page</a></li>
+							</ul>
+						</td>
+					</tr>
+
+					<tr class="nhsuk-table__row">
+						<td class="nhsuk-table__cell"><strong>RAVS Infants: Concept</strong></td>
+						<td class="nhsuk-table__cell">
+							<ul class="nhsuk-list nhsuk-list--number">
+								<li><a href="/infants-concept">Patient finder</a></li>					
+								<li><a href="/ravs-infants/concept-vaccine?frstName=Nadir&lastName=Hillaker#zero-to-five-years">0 to 5 years</a></li>
+								<li><a href="/ravs-infants/concept-6in1">Record 6-in-1</a></li>
+							</ul>
+						</td>
+					</tr>
+
+					{#
+					<tr class="nhsuk-table__row">
+						<td class="nhsuk-table__cell"><strong>RAVS Infants:<br>Concept #1</strong></td>
+						<td class="nhsuk-table__cell">
+							<ul class="nhsuk-list nhsuk-list--number">
+								<li><a href="/ravs-infants/concept-1-vaccine#zero-to-five-years">0 to 5 years [Tab]</a></li>
+								<li><a href="/ravs-infants/concept-1-6in1">Record DTaP/IPV/Hib/HepB (6-in-1)</a></li>
+							</ul>
+						</td>
+					</tr></s>
+
+					<tr class="nhsuk-table__row">
+						<td class="nhsuk-table__cell"><strong>RAVS Infants:<br>Concept #2</strong></td>
+						<td class="nhsuk-table__cell">
+							<ul class="nhsuk-list nhsuk-list--number">
+								<li><a href="/ravs-infants/concept-2-vaccine">0 to 5 years [Filtered]</a></li>
+								<li><a href="/ravs-infants/concept-2-6in1#zero-to-five-years">Record DTaP/IPV/Hib/HepB (6-in-1)</a></li>
+							</ul>
+						</td>
+					</tr>
+
+					<tr class="nhsuk-table__row">
+						<td class="nhsuk-table__cell"><strong>RAVS Infants:<br>Concept #3a<br>(Content changes)</strong></td>
+						<td class="nhsuk-table__cell">
+							<ul class="nhsuk-list nhsuk-list--number">
+								<li><a href="/ravs-infants/concept-3a-vaccine#zero-to-five-years">0 to 5 years [Tab + Patient info]</a></li>
+								<li><a href="/ravs-infants/concept-3a-6in1">Record DTaP/IPV/Hib/HepB (6-in-1) [Patient info]</a></li>
+							</ul>
+						</td>
+					</tr>
+
+					<tr class="nhsuk-table__row">
+						<td class="nhsuk-table__cell"><strong>RAVS Infants:<br>Concept #3b<br>(Content changes)</strong></td>
+						<td class="nhsuk-table__cell">
+							<ul class="nhsuk-list nhsuk-list--number">
+								<li><a href="/ravs-infants/concept-3b-vaccine#zero-to-five-years">0 to 5 years [Tab + Patient info]</a></li>
+								<li><a href="/ravs-infants/concept-3b-6in1">Record DTaP/IPV/Hib/HepB (6-in-1) [Patient info]</a></li>
+							</ul>
+						</td>
+					</tr>
+					#}
+
+					<tr class="nhsuk-table__row">
+						<td class="nhsuk-table__cell"><strong>Samantha Walker (Infant&nbsp;user)</strong></td>
+						<td class="nhsuk-table__cell">
+							<a href="iteration-2/index?e2eCurrentUserType=infant">Portal landing page</a>
+						</td>
+					</tr>
+
+					<tr class="nhsuk-table__row">
+						<td class="nhsuk-table__cell"><strong>Add services to your session</strong></td>
+						<td class="nhsuk-table__cell">
+							<ul class="nhsuk-list nhsuk-list--bullet">
+								<li><a href="/infant/add-services-to-your-session-by-vaccine?e2eCurrentUserType=infant">By&nbsp;vaccine</a></li>
+								<li><a href="/infant/add-services-to-your-session-by-schedule?e2eCurrentUserType=infant">By&nbsp;schedule</a></li>
+							</ul>
+						</td>
+					</tr>
+
+					<tr class="nhsuk-table__row">
+						<td class="nhsuk-table__cell"><strong>Patient list</strong></td>
+						<td class="nhsuk-table__cell">
+							<ul class="nhsuk-list nhsuk-list--bullet">
+								<li><a href="/send-invites/view-infant-patient-list?e2eCurrentUserType=infant">Infant list</a></li>
+								<li><a href="/send-invites/view-infant-patient-list-alternative?e2eCurrentUserType=infant">Infant list (alternative view)</a></li>
+							</ul>
+						</td>
+					</tr>
+
+					<tr class="nhsuk-table__row">
+						<td class="nhsuk-table__cell"><strong>Patient tracker</strong></td>
+						<td class="nhsuk-table__cell">
+							<ul class="nhsuk-list nhsuk-list--bullet">
+								<li><a href="/patient-tracker/profile?e2eCurrentUserType=infant&addHistory=&selectVaccine=&chosenReason=&further-information=">Profile</a></li>
+								<li><a href="/patient-tracker/recent-activity?e2eCurrentUserType=infant">Recent activity</a></li>
+							</ul>
+						</td>
+					</tr>
+
+					<tr class="nhsuk-table__row">
+						<td class="nhsuk-table__cell"><strong>Clinic manager's dashboard</strong></td>
+						<td class="nhsuk-table__cell">
+							<a href="/dashboard/index?e2eCurrentUserType=infant">Dashboard</a>
+						</td>
+					</tr>
+
+					<tr class="nhsuk-table__row">
+						<td class="nhsuk-table__cell"><strong>Status/history guided</strong></td>
+						<td class="nhsuk-table__cell">
+							<ul class="nhsuk-list nhsuk-list--bullet">
+								<li><a href="/infant/status-and-history?e2eCurrentUserType=infant">Landing</a></li>
+							</ul>
+							
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+
+	    </div>
+  	</div>
+{% endblock %}

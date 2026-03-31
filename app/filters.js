@@ -1,8 +1,12 @@
+const prototypeFilters = require('@x-govuk/govuk-prototype-filters');
+
+const moment = require('moment');
+
 /**
  * @param {Environment} env
  */
 module.exports = function (env) {
-  const filters = {}
+  const filters = prototypeFilters;
 
   /* ------------------------------------------------------------------
     add your methods to the filters obj below this comment block:
@@ -34,6 +38,229 @@ module.exports = function (env) {
     documentation.
 
   ------------------------------------------------------------------ */
+
+  /**
+   * Find an object by ID in an array
+   * @param {Array} array - Array to search
+   * @param {string} id - ID to find
+   * @returns {Object} Found object or undefined
+  */
+  const findById = (array, id) => {
+    if (!array || !Array.isArray(array)) return undefined
+    return array.find(item => item.id === id)
+  }
+  
+  filters.findById = findById
+
+  filters.dayName = function(isoDate) {
+    const date = new Date(Date.parse(isoDate))
+    const dateFormatter = new Intl.DateTimeFormat('en-GB', {weekday: 'short'});
+  
+    return dateFormatter.format(date)
+  }
+  
+  filters.pluck = function(array, attribute) {
+    return array.map((item) => item[attribute])
+  }
+  
+  filters.capitaliseFirstLetter = function(string) {
+    if (string) {
+      return string.charAt(0) .toUpperCase() + string.slice(1)
+    } else {
+      return null
+    }
+  }
+
+  /**
+   * Returns the name of a month, eg 'November', when
+   * given the number of the month, eg 11.
+   *
+   * Note that the month number should start from 1 for
+   * January, rather than 0 (which is the default for
+   * JavaScript date objects).
+   *
+   * @param {Integer, string} monthNumber - number of the month
+   * @returns {String} Full name of the month in English
+  */
+  filters.monthName = function(monthNumber) {
+  
+    try {
+      monthNumber = parseInt(monthNumber)
+  
+      if (!monthNumber || (monthNumber < 1) || (monthNumber > 12)) {
+        throw new Error('Invalid monthNumber - must be between 1 and 12')
+      }
+  
+      const date = new Date(Date.UTC(2000, (monthNumber - 1), 1, 0, 0, 0));
+      const dateFormatter = new Intl.DateTimeFormat('en-GB', {month: 'long'});
+  
+      return dateFormatter.format(date)
+  
+    } catch (error) {
+      return error.message.split(':')[0]
+    }
+  }
+
+  // Helper function to get a proper moment object from various inputs
+  const getMomentObject = function(timestamp) {
+    if (!timestamp) return moment(); // Default to now
+    
+    // Handle string date representations
+    if (typeof timestamp === 'string') {
+      // Handle special date terms
+      var lowerTimestamp = timestamp.toLowerCase();
+      if (lowerTimestamp === 'now') return moment();
+      if (lowerTimestamp === 'today') return moment();
+      if (lowerTimestamp === 'tomorrow') return moment().add(1, 'days');
+      if (lowerTimestamp === 'yesterday') return moment().subtract(1, 'days');
+      
+      // Check if it's a valid ISO or RFC2822 format
+      var date = moment(timestamp);
+      if (date.isValid()) return date;
+      
+      // If we can't parse it, return current date
+      return moment();
+    }
+    
+    // Handle moment objects
+    if (moment.isMoment(timestamp)) return timestamp;
+    
+    // Handle Date objects and other inputs
+    var date = moment(timestamp);
+    return date.isValid() ? date : moment(); // Return now if invalid
+  }
+
+  /* ------------------------------------------------------------------
+    Date formatting filters
+  ------------------------------------------------------------------ */
+
+  // Format a date in the standard NHS date format (1 January 2023)
+  filters.nhsDate = function(timestamp) {
+    var date = getMomentObject(timestamp);
+    return date.format('D MMMM YYYY');
+  }
+
+  // Format a date in a shorter format (1 Jan 2023)
+  filters.nhsShortDate = function(timestamp) {
+    var date = getMomentObject(timestamp);
+    return date.format('D MMM YYYY');
+  }
+
+  // Format a date in numeric format (01/01/2023)
+  filters.nhsNumericDate = function(timestamp) {
+    var date = getMomentObject(timestamp);
+    return date.format('DD/MM/YYYY');
+  }
+
+  // Format a date with day name (Monday 1 January 2023)
+  filters.nhsDateWithDay = function(timestamp) {
+    var date = getMomentObject(timestamp);
+    return date.format('dddd D MMMM YYYY');
+  }
+
+  // Format a date with time (1 January 2023 at 14:30)
+  filters.nhsDateTime = function(timestamp) {
+    var date = getMomentObject(timestamp);
+    return date.format('D MMMM YYYY [at] HH:mm');
+  }
+
+  // Format just the time (14:30)
+  filters.nhsTime = function(timestamp) {
+    var date = getMomentObject(timestamp);
+    return date.format('HH:mm');
+  }
+
+  // Format time with am/pm (2:30pm)
+  filters.nhsTime12Hour = function(timestamp) {
+    var date = getMomentObject(timestamp);
+    return date.format('h:mma').toLowerCase();
+  }
+
+  // Format a date as relative time (today, yesterday, 2 days ago)
+  filters.nhsRelativeDate = function(timestamp) {
+    var date = getMomentObject(timestamp);
+    var now = moment();
+    
+    if (date.isSame(now, 'day')) {
+      return 'Today';
+    } else if (date.isSame(now.clone().subtract(1, 'days'), 'day')) {
+      return 'Yesterday';
+    } else if (date.isAfter(now.clone().subtract(7, 'days'))) {
+      return date.from(now);
+    } else {
+      return date.format('D MMMM YYYY');
+    }
+  }
+
+  // Format a duration in hours and minutes (1 hour 30 minutes)
+  filters.nhsDuration = function(minutes) {
+    // Handle non-numeric inputs
+    if (minutes === undefined || minutes === null || isNaN(parseInt(minutes))) {
+      return '0 minutes';
+    }
+    
+    // Convert to a number if it's a string
+    var mins = parseInt(minutes);
+    
+    var hours = Math.floor(mins / 60);
+    var remainingMins = mins % 60;
+    
+    var result = '';
+    if (hours > 0) {
+      result += hours + ' ' + (hours === 1 ? 'hour' : 'hours');
+    }
+    
+    if (remainingMins > 0) {
+      if (result.length > 0) result += ' ';
+      result += remainingMins + ' ' + (remainingMins === 1 ? 'minute' : 'minutes');
+    }
+    
+    if (result.length === 0) {
+      result = '0 minutes';
+    }
+    
+    return result;
+  }
+  
+  // Return date for NHS appointment lists (Today, Tomorrow, or formatted date)
+  filters.nhsAppointmentDate = function(timestamp) {
+    var date = getMomentObject(timestamp);
+    var now = moment();
+    
+    if (date.isSame(now, 'day')) {
+      return 'Today';
+    } else if (date.isSame(now.clone().add(1, 'days'), 'day')) {
+      return 'Tomorrow';
+    } else {
+      return date.format('dddd D MMMM');
+    }
+  }
+
+  // Add days to a date
+  filters.addDays = function(timestamp, days) {
+    // If days is not provided or not a number, default to 0
+    var daysToAdd = (!days || isNaN(parseInt(days))) ? 0 : parseInt(days);
+    
+    // Get a moment object from the timestamp
+    var date = getMomentObject(timestamp);
+    
+    // Add the specified number of days and return the moment object
+    return date.add(daysToAdd, 'days');
+  }
+
+  // Helper for padding strings (for date formatting)
+  filters.padStart = function(value, length, char) {
+    var val = String(value);
+    var padChar = char || '0';
+    var pad = '';
+    
+    // Create padding
+    for (var i = 0; i < length - val.length; i++) {
+      pad += padChar;
+    }
+    
+    return pad + val;
+  }
 
   /* keep the following line to return your filters to the app  */
   return filters

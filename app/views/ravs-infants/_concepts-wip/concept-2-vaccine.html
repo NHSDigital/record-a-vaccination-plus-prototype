@@ -1,0 +1,154 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Which vaccine are you giving?" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% set organisationSetting = currentUser.organisations | findById(data.currentOrganisationId) %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "/index-infant" }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      {% if (errors | length) > 0 %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: errors
+        }) }}
+      {% endif %}
+    </div>
+  </div>
+  
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-one-third">
+
+      {% set vaccinesHTML %}
+        <form method="post" novalidate>
+          {{ radios({
+            idPrefix: "filterVaccines",
+            name: "filterVaccines",
+            fieldset: {
+              legend: {
+                html: '<span class="nhsuk-u-visually-hidden">Filter vaccines</span>'
+              }
+            },
+            classes: "nhsuk-radios--small",
+            items: [
+              {
+                value: "All vaccines",
+                text: "All vaccines"
+              },
+              {
+                value: "0 to 5 years",
+                text: "0 to 5 years",
+                checked: true
+              },
+              {
+                value: "6 to 24 years",
+                text: "6 to 24 years"
+              },
+              {
+                value: "Adult",
+                text: "Adult"
+              },
+              {
+                value: "Maternity",
+                text: "Maternity"
+              }
+            ]
+          }) }}
+          {{ button({
+            text: "Apply",
+            classes: "nhsuk-button--secondary nhsuk-button--small nhsuk-u-margin-bottom-2 app-card--filters"
+          }) }}
+        </form>
+      {% endset %}
+
+      {{ card({
+        classes: "nhsuk-u-margin-top-4 app-card--filters",
+        heading: "Filter vaccines",
+        feature: true,
+        descriptionHtml: vaccinesHTML
+      }) }}
+    
+    </div>
+
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l nhsuk-u-padding-bottom-4">Which vaccines are you giving?</h1>
+
+      <h2 class="nhsuk-heading-s">Choose all <span class="nhsuk-u-visually-hidden">0 to 5 years vaccines </span>that apply</h2>
+      <form method="post" novalidate>
+        {{ checkboxes({
+          idPrefix: "ZeroToFiveYearsSeasonal",
+          name: "ZeroToFiveYearsSeasonal",
+          fieldset: {
+            legend: {
+              text: "Seasonal",
+              size: "m"
+            }
+          },
+          items: [
+            {
+              value: "ZeroToFiveYearsCovid",
+              text: "COVID-19"
+            },
+            {
+              value: "ZeroToFiveYearsFlu",
+              text: "Flu"
+            }
+          ]
+        }) }}
+
+        {{ checkboxes({
+          idPrefix: "ZeroToFiveYearsNonseasonal",
+          name: "ZeroToFiveYearsNonseasonal",
+          fieldset: {
+            legend: {
+              text: "Non-seasonal",
+              size: "m"
+            }
+          },
+          items: [
+            {
+              value: "ZeroToFiveYearsDTaP/IPV/Hib/HepB (6-in-1)",
+              text: "DTaP/IPV/Hib/HepB (6-in-1)"
+            },
+            {
+              value: "ZeroToFiveYearsDTaP/IPV (4-in-1)",
+              text: "DTaP/IPV (4-in-1)"
+            },
+            {
+              value: "ZeroToFiveYearsMenB",
+              text: "MenB"
+            },
+            {
+              value: "ZeroToFiveYearsMMR",
+              text: "MMR"
+            },
+            {
+              value: "ZeroToFiveYearsMMRV",
+              text: "MMRV"
+            },
+            {
+              value: "ZeroToFiveYearsPneumococcal",
+              text: "Pneumococcal"
+            },
+            {
+              value: "ZeroToFiveYearsRotavirus",
+              text: "Rotavirus"
+            }
+          ]
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        })}}
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

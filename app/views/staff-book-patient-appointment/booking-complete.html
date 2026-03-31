@@ -1,0 +1,134 @@
+<!-- Use this page as the index for your project -->
+
+<!-- ADDING CUSTOM CSS - Add your custom CSS or Sass in /app/assets/sass/main.scss -->
+
+<!-- Extends the layout from /views/layout.html -->
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+<!-- Set the page title -->
+{% block pageTitle %}
+Book vaccinations prototype
+{% endblock %}
+
+<!-- For adding a breadcrumb -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/breadcrumbs -->
+{% block beforeContent %}
+{#
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Manage clinics</li>
+      <li class="nhsuk-breadcrumb__list-item">BREADCRUMB TBC</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+
+
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+#}
+{% endblock %}
+
+<!-- For adding a back link -->
+<!-- Code examples can be found at https://service-manual.nhs.uk/design-system/components/back-link -->
+{% block outerContent %}
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <!-- Change the page title here -->
+    <h1 class="nhsuk-heading-l">Jodie Brown's appointment</h1>
+
+    <!-- Add your content here -->
+    <!-- Styles and components can be found at https://service-manual.nhs.uk/design-system -->
+
+    {#<a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>#}
+
+    <div class="nhsuk-panel">
+      <h2 class="nhsuk-panel__title">
+        Booking complete
+      </h2>
+      <div class="nhsuk-panel__body">
+        Patient reference number<br><strong>1583033</strong>
+      </div>
+    </div>
+
+    <div class="nhsuk-inset-text">
+      <span class="nhsuk-u-visually-hidden">Information: </span>
+      <p class="nhsuk-card__description nhsuk-u-margin-top-0">Encourage the patient to make a note of their booking reference number if they haven't an email or mobile number. They will need it to view or cancel their appointment.</p>
+    </div>
+
+    <h3 class="nhsuk-heading-l">
+      Appointment details
+    </h3>
+    <dl class="nhsuk-summary-list">
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">
+          Site location
+        </dt>
+        <dd class="nhsuk-summary-list__value">
+          Birmingham Women's Hospital
+        </dd>
+      </div>
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">
+          Date
+        </dt>
+        <dd class="nhsuk-summary-list__value">
+          {% if data['chosenDate'] == 'choose' %}
+            Saturday 15 November
+          {% else %}
+            {{data['chosenDate']}}
+          {% endif %}
+           at 
+          <!--{{data['chosenDate']}} at {{data['chosenAppointmentTime'] }}-->
+          {% if data['date'] == 'slotOne' and data['chosenAppointmentTime1'] != 'choose' %}
+            {{ data['chosenAppointmentTime1'] }}
+          {% elif data['date'] == 'slotTwo' and data['chosenAppointmentTime2'] != 'choose' %}
+            {{ data['chosenAppointmentTime2'] }}
+          {% elif data['date'] == 'slotThree' and data['chosenAppointmentTime3'] != 'choose' %}
+            {{ data['chosenAppointmentTime3'] }}
+          {% elif data['date'] == 'slotFour' and data['chosenAppointmentTime4'] != 'choose' %}
+            {{ data['chosenAppointmentTime4'] }}
+          {% elif data['date'] == 'slotFive' and data['chosenAppointmentTime5'] != 'choose' %}
+            {{ data['chosenAppointmentTime5'] }}
+          {% else %}
+            6:40pm
+          {% endif %}
+        </dd>
+      </div>
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">
+          Vaccination type
+        </dt>
+        <dd class="nhsuk-summary-list__value">
+          RSV
+        </dd>
+      </div>
+    </dl>
+
+    {#
+    <h3 class="nhsuk-heading-m nhsuk-u-padding-top-5">
+      What would you like to do next?
+    </h3>
+    <ul class="nhsuk-list">
+      <li><a href="#/">Where to next... link(s)</a></li>
+      <!--<li><a href="/staff-book-patient-appointment/book-patient-sites">Book another appointment for Jodie Brown</a></li>
+      <li><a href="/e2e-record-vaccinations/walk-in/">Enter a vaccination for someone else</a></li>
+      <li><a href="/e2e-record-vaccinations/site-overview">Return to clinic details</a></li>-->
+    </ul>
+    #}
+
+    <!-- End of content -->
+
+  </div>
+</div>
+{% endblock %}

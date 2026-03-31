@@ -1,0 +1,82 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Engage patient - Review and send
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+  <!--<nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Engage patients</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>-->
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      <!--<span class="nhsuk-caption-l">Engage patients</span>-->
+      Review and send
+    </h1>
+
+    <p class="nhsuk-body">
+      Review communications summary before sending.
+    </p>
+
+    <table class="nhsuk-table nhsuk-u-margin-bottom-6">
+      <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">Communication tracks</caption>
+      <thead class="nhsuk-table__head">
+        <tr>
+          <th scope="col" class="nhsuk-table__header">Communications focus</th>
+          <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric">Patient count</th>
+        </tr>
+      </thead>
+      <tbody class="nhsuk-table__body">
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Pertussis focus</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" style="text-align: right">97</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">RSV focus</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" style="text-align: right">106</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Seasonal focus</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" style="text-align: right">0</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Mop up - last chance</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" style="text-align: right">52</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Routine</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" style="text-align: right">79</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!--<p class="nhsuk-body nhsuk-u-margin-bottom-8">
+      <a href="#" class="nhsuk-link">View names and contact details of recipients</a>.
+    </p>-->
+
+    <form class="form" action="success-confirmation" method="post" class="submit">
+      <button class="nhsuk-button" data-module="nhsuk-button" type="submit">
+        Confirm and send
+      </button>
+    </form>
+
+  </div>
+</div>
+{% endblock %}

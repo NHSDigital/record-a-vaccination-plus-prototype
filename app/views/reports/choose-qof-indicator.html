@@ -1,0 +1,65 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Choose QOF indicator groups" %}
+
+{% set currentSection = "monitor" %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      
+      <form action="/reports/choose-site" method="post">
+
+        {{ checkboxes({
+          idPrefix: "reportChosenQOFindicator",
+          name: "reportChosenQOFindicator",
+          fieldset: {
+            legend: {
+              text: "Choose QOF indicator (optional)",
+              isPageHeading: true,
+              classes: "nhsuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+              value: "VI001 (3rd dose of 6-in-1 given before 8 months)",
+              text: "VI001",
+              hint: {
+                text: "3rd dose of 6-in-1 given before 8 months"
+              }
+            },
+            {
+              value: "VI002 (1st dose of MMR/MMRV given 12 - 18 months)",
+              text: "VI002",
+              hint: {
+                text: "1st dose of MMR/MMRV given 12 - 18 months"
+              }
+            },
+            {
+              value: "VI003 (ged 1 - 5 with 2 doses of MMR and 4-in-1 booster)",
+              text: "VI003",
+              hint: {
+                text: "Aged 1 - 5 with 2 doses of MMR and 4-in-1 booster"
+              }
+            }
+          ]
+        }) }}
+
+        {{ button({
+          text: "Continue",
+          classes: "nhsuk-u-margin-top-4"
+        }) }}
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,170 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Check and confirm" %}
+{% set currentSection = "run" %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{# ------- Helpers reused from your existing file ------- #}
+{% set consentHtml %}
+  {% if data.consent == "patient" %}
+    Patient
+  {% elseif data.consent == "Clinician acting in the patient’s best interests" %}
+    {{ data.consentClinicianName }}
+    <br>Clinician
+  {% elseif data.consent == "Person with lasting power of attorney for health and welfare" %}
+    {{ data.consentAttorneyName }}
+    <br>{{ data.consentAttorneyRelationship }}
+    <br>Power of attorney
+  {% elseif data.consent == "Parent or guardian" %}
+    {{ data.consentParentName }}
+    <br>Parent or guardian
+  {% elseif data.consent == "Independent mental capacity advocate" %}
+    {{ data.consentAdvocateName }}
+    <br>Independent mental capacity advocate
+  {% elseif data.consent == "Court appointed deputy" %}
+    {{ data.consentDeputyName }}
+    <br>{{ data.consentDeputyRelationship }}
+    <br>Court appointed deputy
+  {% endif %}
+{% endset %}
+
+{% set locationHtml %}
+  {% if  data.locationType == "Care home" %}
+    {% for careHome in data.careHomes %}
+      {% if data.careHome == careHome.code %}
+        {{ careHome.name }}<br>
+        {{ careHome.address1 }}<br>
+        {{ careHome.town }}<br>
+        {{ careHome.postcode }}
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    {{ data.locationType }}
+  {% endif %}
+{% endset %}
+
+{# Build a simple map of Week 4 vaccines chosen earlier #}
+{% set v4 = data.vaccinesVisitFour %}
+{% set v4 = data.vaccinesVisitFour %}
+{% set chosen = {
+  'mmr': v4 and ('mmrVisitFour' in v4),
+  'hibmenc': v4 and ('hibmencVisitFour' in v4),
+  'menb': v4 and ('menbVisitFour' in v4),
+  'pcv': v4 and ('pcvVisitFour' in v4)
+} %}
+
+{# Compose full labels (e.g. "MMR (1st dose) (Priorix)") mirroring batch-infant.html #}
+{% set label_full = {
+  'mmr':    (data.label_v4_mmr_full or ((data.label_v4_mmr or data.mmrLabel or data.label_mmr or 'MMR (1st dose)') ~ (data.mmrProduct  and (' (' ~ data.mmrProduct ~ ')') or '') )),
+  'hibmenc':(data.label_v4_hibmenc_full or ((data.label_v4_hibmenc or data.hibmencLabel or data.label_hibmenc or 'Hib/Men C (1st dose)') ~ (data.hibMenCProduct  and (' (' ~ data.hibMenCProduct ~ ')') or '') )),
+  'menb':   (data.label_v4_menb_full or ((data.label_v4_menb or data.menbLabel or data.label_menb or 'Men B (3rd dose)') ~ (data.menBProduct  and (' (' ~ data.menBProduct ~ ')') or '') )),
+  'pcv':    (data.label_v4_pcv_full or ((data.label_v4_pcv or data.pcvLabel or data.label_pcv or 'PCV (2nd dose)') ~ (data.pcvProduct  and (' (' ~ data.pcvProduct ~ ')') or '') )),
+
+  'mmr': ('MMR (1st dose)' ~ ' (' ~ data.mmrProduct ~ ')'),
+  'hibmenc': ('Hib/Men C (1st dose)' ~ ' (' ~ data.hibMenCProduct ~ ')'),
+  'menb': ('Men B (3rd dose)' ~ ' (' ~ data.menBProduct ~ ')'),
+  'pcv': ('PCV (2nd dose)' ~ ' (' ~ data.pcvProduct ~ ')')
+
+} %}
+
+{# Utility to render one vaccination summary block #}
+{% macro vaccinationSummary(key) -%}
+  {% set dateToday = data['vaccinationToday_' ~ key] == 'yes' %}
+  {% set dateValue = (dateToday and (("now" | date("d MMMM yyyy"))) or (data['vaccinationDate_' ~ key] | isoDateFromDateInput | govukDate)) %}
+  {% set batchVal = data['vaccineBatch_' ~ key] %}
+  {% set inj = data['injectionSite_' ~ key] %}
+  {% set injOther = data['otherInjectionSite_' ~ key] %}
+
+  <h2 class="nhsuk-heading-m">{{ label_full[key] }}</h2>
+  {{ summaryList({
+    rows: [
+      {
+        key: { text: 'Date' },
+        value: { html: '<span class="js-today-date"></span>' },
+        actions: { items: [ { href: '#/', text: 'Change', visuallyHiddenText: 'date' } ] }
+      },
+      {
+        key: { text: 'Vaccine' },
+        value: { html: label_full[key] },
+        actions: { items: [ { href: '#/', text: 'Change', visuallyHiddenText: 'vaccine' } ] }
+      },
+      {
+        key: { text: 'Batch' },
+        value: { text: batchVal },
+        actions: { items: [ { href: '#/', text: 'Change', visuallyHiddenText: 'batch' } ] }
+      },
+      {
+        key: { text: 'Injection site' },
+        value: { html: (injOther if inj == 'other' else inj) },
+        actions: { items: [ { href: '#/', text: 'Change', visuallyHiddenText: 'injection site' } ] }
+      }
+    ]
+  }) }}
+
+  {# Optional note per vaccination block #}
+  {{ textarea({
+    name: 'notes_' ~ key,
+    id: 'notes_' ~ key,
+    label: { text: 'Optional note' },
+    hint: { text: 'This note will not be sent to the patient\'s GP. Only your organisation will see it.' },
+    rows: 3,
+    classes: 'nhsuk-u-margin-bottom-7'
+  }) }}
+{%- endmacro %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">Check and confirm</h1>
+
+      {# --- Patient section (restored) --- #}
+      {% set nameVal = data.patientName or data.patientFullName or data.childName or data.name %}
+      {% set dobVal = data.patientDob or (data.dobDay and data.dobMonth and data.dobYear and (data.dobDay ~ '/' ~ data.dobMonth ~ '/' ~ data.dobYear)) %}
+      {% set nhsVal = data.nhsNumber or data.patientNhsNumber %}
+
+      <h2 class="nhsuk-heading-m">Patient</h2>
+      {{ summaryList({
+        rows: [
+          { key: { text: 'Name' }, value: { text: nameVal or 'Sam Brown' }, actions: { items: [ { href: '#', text: 'Change', visuallyHiddenText: 'name' } ] } },
+          { key: { text: 'Date of birth' }, value: { html: dobVal or '26 June 2024<br>(aged 1 year 4 months)' }, actions: { items: [ { href: '#', text: 'Change', visuallyHiddenText: 'date of birth' } ] } },
+          { key: { text: 'NHS number' }, value: { text: nhsVal or '9434765919' }, actions: { items: [ { href: '#', text: 'Change', visuallyHiddenText: 'NHS number' } ] } },
+          { key: { text: 'Consent' }, value: { html: consentHtml }, actions: { items: [ { href: '#', text: 'Change', visuallyHiddenText: 'consent' } ] } },
+          { key: { text: 'Location' }, value: { html: locationHtml }, actions: { items: [ { href: '#', text: 'Change', visuallyHiddenText: 'location' } ] } }
+        ]
+      }) }}
+
+      {# --- One Vaccination section per vaccine chosen --- #}
+      {% if chosen.mmr %}{{ vaccinationSummary('mmr') }}{% endif %}
+      {% if chosen.hibmenc %}{{ vaccinationSummary('hibmenc') }}{% endif %}
+      {% if chosen.menb %}{{ vaccinationSummary('menb') }}{% endif %}
+      {% if chosen.pcv %}{{ vaccinationSummary('pcv') }}{% endif %}
+
+      <form action="done" method="post" novalidate>
+        {{ button({ text: 'Confirm and save' })}}
+      </form>
+
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // Simple array of month names
+      var months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+      var d = new Date();
+      // Format day without leading zero
+      var formatted = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+      // Fill every .js-today-date element
+      document.querySelectorAll('.js-today-date').forEach(function(el) {
+        el.textContent = formatted;
+      });
+    })();
+  </script>
+
+{% endblock %}

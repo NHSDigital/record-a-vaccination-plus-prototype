@@ -1,0 +1,46 @@
+{{ header({
+  classes: "nhsuk-header--left",
+  "service": {
+      "name": "Maternity Vaccinations",
+      "href": "/iteration-1/"
+    },
+    "showNav": "true",
+    "showSearch": "false",
+    "primaryLinks": [
+      {
+        url  : "/iteration-1/",
+        label : "Home",
+        classes: ("app-header__navigation-item--current" if currentSection == "home")
+      },
+      {
+        url  : "/iteration-1/prepare",
+        label : "Prepare" | safe,
+        classes: ("app-header__navigation-item--current" if currentSection == "prepare")
+      },
+      {
+        url  : "/iteration-1/organise-clinics",
+        label : "Organise clinics",
+        classes: ("app-header__navigation-item--current" if currentSection == "organise")
+      },
+      {
+        url  : "/iteration-1/run-clinics",
+        label: "Run clinics",
+        classes: ("app-header__navigation-item--current" if currentSection == "run")
+      },
+      {
+        url: "#/",
+        label: "Monitor",
+        classes: ("app-header__navigation-item--current" if currentSection == "monitor")
+      },
+      {
+        url: "/user-profile/",
+        label: "jane.smith@nhs.net",
+        classes: "app-header__navigation-item--right-aligned " + ("app-header__navigation-item--current" if currentSection == "user-profile")
+      },
+      {
+        url: '#/',
+        label: 'Log out'
+      }
+    ]
+  })
+}}

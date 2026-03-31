@@ -1,0 +1,142 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Organise clinics" %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Organise clinics
+{% endblock %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Organise clinics</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if data['invitesSent'] == 'show' %}
+        <div class="nhsuk-notification-banner nhsuk-notification-banner--success" role="alert" aria-labelledby="nhsuk-notification-banner-title" data-module="nhsuk-notification-banner">
+          <div class="nhsuk-notification-banner__header">
+            <h2 class="nhsuk-notification-banner__title" id="nhsuk-notification-banner-title">
+              Confirmation
+            </h2>
+          </div>
+          <div class="nhsuk-notification-banner__content">
+            <h3 class="nhsuk-notification-banner__heading">
+              276 {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}RSV{% endif %} SMS invites have been sent
+            </h3>
+          </div>
+        </div>
+      {% endif %}
+
+      <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-4">
+        Organise clinics
+      </h1>
+
+      <p class="nhsuk-body">Plan your vaccination clinics</p>
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">    
+
+      {# PREPARE #}
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/mya/manage-sites">Manage clinics</a> </h3>
+              <!--{% if data['e2eCurrentUserType'] == 'infant' %}
+                <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/infant/add-services-to-your-session-by-vaccine">Manage clinics</a> </h3>
+              {% else %}
+                <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/mya/manage-sites">Manage clinics</a> </h3>
+              {% endif %}-->
+              <p class="nhsuk-card__description">Create availability, assign batches to sessions</p>
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/send-invites/send-invites?invitesSent=">Send invites</a> </h3>
+              {#<h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/send-invites/choose-task?taskChoice">Send invites</a> </h3>#}
+              <p class="nhsuk-card__description">Create and send invitations</p>
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+            </div>
+          </div>
+        </li>
+        
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h2 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/send-invites/patient-upload?uploadedList">Provide your patient list{#Upload new patient list#}</a></h2>
+              <p class="nhsuk-card__description">View, manage, and update patient lists<br>
+                <span class="nhsuk-body-s nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-0">
+                  {% if data['uploadedList'] == 'true' %}
+                    Last updated {{ date({day: 'numeric', month: 'long', year: 'numeric'}) }}
+                  {% else %}
+                    Last updated 22 August 2025
+                  {% endif %}
+                </span>
+              </p>
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+            </div>
+          </div>
+        </li>
+
+        {# START: MATERNITY UR W/C 10TH NOVEMBER
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/send-invites/view-patient-list">Patient list</a> </h3>
+              <p class="nhsuk-card__description">View and edit your patient list</p>
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+            </div>
+          </div>
+        </li>
+        #}
+
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-card__content--primary">
+              <h3 class="nhsuk-card__heading nhsuk-heading-s"> <a class="nhsuk-card__link" href="/send-invites/mvp-choose-cohort">Patient list view{#Patient cohort list#}</a> </h3>
+              <p class="nhsuk-card__description">View and edit your patient cohort list</p>
+              <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-.3 5.8a1 1 0 1 0-1.5 1.4l2.9 2.8-2.9 2.8a1 1 0 0 0 1.5 1.4l3.5-3.5c.4-.4.4-1 0-1.4Z"></path>
+              </svg>
+            </div>
+          </div>
+        </li>
+        {# END: MATERNITY UR W/C 10TH NOVEMBER #}
+     
+      </ul>
+
+    </div>
+
+  </div>
+
+{% endblock %}

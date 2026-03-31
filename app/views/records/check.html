@@ -1,0 +1,285 @@
+{% extends 'layout.html' %}
+
+{% set pageName = "Patient’s " +  vaccination.vaccine + " vaccination record – Records" %}
+
+{% set currentSection = "records" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/records/patient-history",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+    {% if data.changedField %}
+      {{ panel({
+        titleText: "Changes saved",
+        text: (data.changedField + " has been updated."),
+        classes: "nhsuk-u-margin-bottom-8"
+      }) }}
+    {% endif %}
+
+      <h1 class="nhsuk-heading-l">{{ vaccination.patient.name }}’s {{vaccination.vaccine}} vaccination record</h1>
+
+      {{ summaryList({
+        rows: [
+        {
+          key: {
+            text: "Recorder"
+          },
+          value: {
+            text: vaccination.patient.name
+          },
+          actions: {
+            items: [
+              {
+                href: "/records/choose-dates",
+                text: "",
+                visuallyHiddenText: "vaccination date"
+              }
+            ]
+          }
+        },
+        {
+            key: {
+              text: "Date"
+            },
+            value: {
+              text: (vaccination.date | isoDateFromDateInput | govukDate)
+            },
+            actions: {
+              items: [
+                {
+                  href: "/records/records/" + vaccination.id + "/choose-dates",
+                  text: "Change",
+                  visuallyHiddenText: "vaccination date"
+                }
+              ]
+            }
+          },
+
+          {
+            key: {
+              text: "Team"
+            },
+            value: {
+              text: vaccination.deliveryTeam
+            },
+            actions: {
+              items: [
+                {
+                  href: "/records/records/" + vaccination.id + "/delivery-team",
+                  text: "Change",
+                  visuallyHiddenText: "name"
+                }
+              ]
+            }
+          },
+
+
+
+          {
+            key: {
+              text: "Vaccine"
+            },
+            value: {
+              html: vaccination.vaccine
+            },
+            actions: {
+              items: [
+                {
+                  href: "/records/records/" + vaccination.id + "/choose-vaccines",
+                  text: "",
+                  visuallyHiddenText: "vaccine"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Product"
+            },
+            value: {
+              html: vaccination.vaccineProduct
+            },
+            actions: {
+              items: [
+                {
+                  href: "/records/records/" + vaccination.id + "/choose-product",
+                  text: "Change",
+                  visuallyHiddenText: "product"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: ("  Batch" if from == to else "From")
+            },
+            value: {
+              html: vaccination.batchNumber + "<br> Expires " + (vaccination.batchExpiryDate | govukDate)
+            },
+            actions: {
+              items: [
+                {
+                  href: "/records/records/" + vaccination.id + "/batch",
+                  text: "Change",
+                  visuallyHiddenText: "name"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Vaccinator"
+            },
+            value: {
+              text: vaccination.vaccinator
+            },
+            actions: {
+              items: [
+                {
+                  href: "/records/records/" + vaccination.id + "/vaccinator",
+                  text: "Change",
+                  visuallyHiddenText: "contact information"
+                }
+              ]
+            }
+          },
+
+
+
+          {
+            key: {
+              text: "Location"
+            },
+            value: {
+              html: vaccination.locationType
+            },
+            actions: {
+              items: [
+                {
+                  href: "/records/records/" + vaccination.id + "/location",
+                  text: "Change",
+                  visuallyHiddenText: "contact information"
+                }
+              ]
+            }
+          },
+
+
+
+
+
+
+
+
+
+          {
+            key: {
+              text: "Eligibility"
+            },
+            value: {
+              text: (vaccination.eligibility | join("br"))
+            },
+            actions: {
+              items: [
+                {
+                  href: "/records/records/" + vaccination.id + "/eligibility",
+                  text: "Change",
+                  visuallyHiddenText: "contact information"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Pregnancy due date"
+            },
+            value: {
+              text: (vaccination.pregnancyDueDate | isoDateFromDateInput | govukDate)
+            },
+            actions: {
+              items: [
+                {
+                  href: "/records/records/" + vaccination.id + "/patient-estimated-due-date",
+                  text: "Change",
+                  visuallyHiddenText: "pregnancy due date"
+                }
+              ]
+            }
+          } if vaccination.pregnancyDueDate,
+          {
+            key: {
+              text: "Consent given by"
+            },
+            value: {
+              text: vaccination.consent
+            },
+            actions: {
+              items: [
+                {
+                  href: "/records/records/" + vaccination.id + "/consent",
+                  text: "Change",
+                  visuallyHiddenText: "consent"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Injection site"
+            },
+            value: {
+              text: vaccination.injectionSite
+            },
+            actions: {
+              items: [
+                {
+                  href: "/records/records/" + vaccination.id + "/injection-site",
+                  text: "Change",
+                  visuallyHiddenText: "contact details"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Optional note"
+            },
+            value: {
+              text: vaccination.notes
+            },
+            actions: {
+              items: [
+                {
+                  href: "/records/records/" + vaccination.id + "/notes",
+                  text: "Change",
+                  visuallyHiddenText: "contact details"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+
+      <p class="nhsuk-body"><a class="nhsuk-link"
+      href="/records/records/{{ vaccination.id }}/delete">Delete this record</a></p>
+
+      {% if data.changedField %}
+        <form action="/records" method="get">
+          {{ button({
+            "text": "Find another record"
+          }) }}
+        </form>
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}
+
+

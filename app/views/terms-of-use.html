@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% set pageName = "Agree to the terms of use" %}
+
+{% block header %}
+  {% include "includes/header-logged-out.html" %}
+{% endblock %}
+
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      <ul class="nhsuk-list nhsuk-list--bullet">
+        <li>Only use the service to record NHS vaccinations.</li>
+        <li>Always use your own details to log in.</li>
+        <li>Never allow anyone else to use your details to log in.</li>
+      </ul>
+
+      <p><a href="/terms-of-use1" target="_blank">Read the full terms of use (opens in new tab)</a> </p>
+
+      <p>By continuing, you agree to the full terms of use.</p>
+
+      {{ button({
+        text: "Accept and continue",
+        href: "/home",
+        classes: "nhsuk-u-margin-top-5"
+      }) }}
+
+    </div>
+  </div>
+{% endblock %}

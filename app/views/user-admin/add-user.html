@@ -1,0 +1,311 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Add user" %}
+
+{% set currentSection = "prepare" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/user-admin/",
+    text: "Go back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <!--{% if (firstNameError or lastNameError or emailError or roleError or clinicianError) %}
+        {{ errorSummary({
+          "titleText": "There is a problem",
+          "errorList": [
+            {
+              "text": clinicianError,
+              "href": "#clinician"
+            } if clinicianError,
+            {
+              "text": firstNameError,
+              "href": "#first-name"
+            } if firstNameError,
+            {
+              "text": lastNameError,
+              "href": "#last-name"
+            } if lastNameError,
+            {
+              "text": emailError,
+              "href": "#email"
+            } if emailError,
+
+            {
+              "text": e2ePermissionLevelError,
+              "href": "#e2e-permission-level-1"
+            } if e2ePermissionLevelError
+          ]
+        }) }}
+      {% endif %}-->
+
+      <h1 class="nhsuk-heading-l">Add user</h1>
+
+      <!--<p>Users must have an NHS-approved email address. See the <a href="https://digital.nhs.uk/services/care-identity-service/applications-and-services/apply-for-care-id/care-identity-email-domain-allow-list" target="_blank">list of approved email domains (opens in new tab)</a>.</p>-->
+
+      <!--<form action="/user-admin/check-answers" method="post" novalidate="true">-->
+      <form class="form" action="check" method="post" class="submit">
+      <!--<form class="form" method="post" class="submit">-->
+
+        {{ radios({
+          "name": "clinician",
+          "fieldset": {
+            "legend": {
+              "text": "Are they a clinician?"
+            }
+          },
+          "items": [
+            {
+              "value": "yes",
+              "text": "Yes",
+              id: "clinician",
+              checked: (data.clinician == "yes")
+            },
+            {
+              "value": "no",
+              "text": "No",
+              checked: (data.clinician == "no")
+            }
+          ]
+        }) }}
+
+        {{ input({
+          "label": {
+            "text": "First name"
+          },
+          "id": "first-name",
+          "name": "firstName",
+          classes: "nhsuk-input--width-20",
+          value: userFirstName
+        }) }}
+
+        {{ input({
+          "label": {
+            "text": "Last name"
+          },
+          "id": "last-name",
+          "name": "lastName",
+          classes: "nhsuk-input--width-20",
+          value: userLastName
+        }) }}
+
+        {{ input({
+          "label": {
+            "text": "NHS-approved email address"
+          },
+          "id": "email",
+          "name": "email",
+          type: "email",
+          value: userEmail
+        }) }}
+
+        {# Start date #}
+        {% set startDateCustomHtml %}
+          {{ dateInput({
+            id: "customStartDate",
+            namePrefix: "customStartDate",
+            fieldset: {
+              legend: {
+                text: "Enter start date",
+                classes: "nhsuk-label",
+                isPageHeading: false
+              }
+            },
+            hint: {
+              text: "For example, 15 3 2025"
+            },
+            items: [
+              {
+                name: "day",
+                classes: "nhsuk-input--width-2"
+              },
+              {
+                name: "month",
+                classes: "nhsuk-input--width-2"
+              },
+              {
+                name: "year",
+                classes: "nhsuk-input--width-4"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {{ radios({
+          idPrefix: "startDate",
+          name: "startDate",
+          fieldset: {
+            legend: {
+              text: "Start date",
+              classes: "nhsuk-fieldset__legend",
+              isPageHeading: "false"
+            }
+          },
+          items: [
+            {
+              value: "startDateToday",
+              text: "Today"
+            },
+            {
+              value: "startDateCustom",
+              text: "Specified start date",
+              conditional: {
+                html: startDateCustomHtml
+              }
+            }
+          ]
+        }) }}
+
+        {# End date #}
+        {% set endDateCustomHtml %}
+          {{ dateInput({
+            id: "customEndDate",
+            namePrefix: "customEndDate",
+            fieldset: {
+              legend: {
+                text: "Enter end date",
+                classes: "nhsuk-label",
+                isPageHeading: false
+              }
+            },
+            hint: {
+              text: "For example, 15 3 2025"
+            },
+            items: [
+              {
+                name: "day",
+                classes: "nhsuk-input--width-2"
+              },
+              {
+                name: "month",
+                classes: "nhsuk-input--width-2"
+              },
+              {
+                name: "year",
+                classes: "nhsuk-input--width-4"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {{ radios({
+          idPrefix: "endDate",
+          name: "endDate",
+          fieldset: {
+            legend: {
+              text: "End date",
+              classes: "nhsuk-fieldset__legend",
+              isPageHeading: "false"
+            }
+          },
+          items: [
+            {
+              value: "endDateToday",
+              text: "No end date"
+            },
+            {
+              value: "endDateCustom",
+              text: "Specified end date",
+              conditional: {
+                html: endDateCustomHtml
+              }
+            }
+          ]
+        }) }}
+
+        {{ checkboxes({
+          "name": "e2ePermissionLevel",
+          idPrefix: "e2e-permission-level",
+          "fieldset": {
+            "legend": {
+              "text": "Permission level"
+            }
+          },
+          value: data.e2ePermissionLevel,
+          "items": [
+            {
+              "value": "userGroup1",
+              "text": "Manage clinics and sessions",
+              "hint": {
+                "text": "Create vaccination clinics and set availability limits"
+              },
+              id: userGroup1
+            },
+            {
+              "value": "userGroup2",
+              "text": "Manage vaccines",
+              "hint": {
+                "text": "Add vaccine types to clinics, add batches to clinics"
+              }
+            },
+            {
+              "value": "userGroup3",
+              "text": "Create invite templates",
+              "hint": {
+                "text": "Create the content templates that will be sent to patients"
+              }
+            },
+            {
+              "value": "userGroup4",
+              "text": "Send invites",
+              "hint": {
+                "text": "Decide when invites are sent, be accountable for uploading accurate patient list"
+              }
+            },
+            {
+              "value": "userGroup5",
+              "text": "Record Vaccinations",
+              "hint": {
+                "text": "Create new and edit existing vaccine records, record sentiment, declines and non attendance. Add batches to clinics. View clinic lists"
+              }
+            },
+            {
+              "value": "userGroup6",
+              "text": "Manage users",
+              "hint": {
+                "text": "Add and remove users, change access rights for users"
+              }
+            },
+            {
+              "value": "userGroup7",
+              "text": "Reporting",
+              "hint": {
+                "text": "Run reports on vaccine uptake and bookings"
+              }
+            },
+            {
+              "value": "userGroup8",
+              "text": "View clinic manager's dashboard",
+              "hint": {
+                "text": "Access to live information about non attendance, disengaged patients, stock estimates and other insights"
+              }
+            },
+            {
+              "value": "userGroup9",
+              "text": "Publish information in service",
+              "hint": {
+                "text": "Create new and edit content in the guidance, updates and contact sections"
+              }
+            }
+          ],
+          "errorMessage": {
+            "text": e2ePermissionLevelError
+          } if e2ePermissionLevelError
+        }) }}
+
+
+        {{ button({
+          "text": "Continue"
+      }) }}
+      </form>
+
+
+    </div>
+  </div>
+
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Why are you giving them the vaccine?" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "batch" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if (errors | length) > 0 %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: errors
+        }) }}
+      {% endif %}
+
+      <form method="post" novalidate>
+
+        {% set eligibilityOptions = [
+          "Care home",
+          "Home visit",
+          "Staff vaccination",
+          "Infant 0 - 1",
+          "Infant 2 - 10",
+          "Maternity",
+          "70 - 80",
+          "Patient is immunosuppressed"
+        ] %}
+
+        {% set items = [] %}
+        {% for option in eligibilityOptions %}
+          {% set items = (items.push({
+            text: option,
+            value: option,
+            checked: (data.eligibility == option)
+            }), items) %}
+        {% endfor %}
+
+        {{ radios({
+          idPrefix: "eligibility",
+          name: "eligibility",
+          errorMessage: {
+            text: (errors | first).text
+          } if (errors | length) > 0,
+          fieldset: {
+            legend: {
+              text: "What type of vaccination is this?",
+              classes: "nhsuk-fieldset__legend--l",
+              isPageHeading: true
+            }
+          },
+          items: items
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        })}}
+      </form>
+
+    </div>
+
+    {#
+    <div class="nhsuk-grid-column-one-third">
+      {% set contentHTML %}
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Name</span><br>{{ data.firstName }} {{ data.lastName }}</p>
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Date of birth</span><br>{{ data.dobFormatted }}<br>({{ data.ageLabel }})</p>
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">NHS number</span><br>{{ data.nhsNumberFormatted }}</p>
+      {% endset %}
+
+      {{ card({
+        heading: "Patient",
+        feature: true,
+        descriptionHtml: contentHTML
+      }) }}
+    </div>
+    #}
+
+  </div>
+
+{% endblock %}

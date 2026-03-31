@@ -1,0 +1,210 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  {% if (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'bright') %}
+    Site overview Bright Beginnings Health Team
+  {% elif (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'strouts') %}
+    Site overview Strouts Place Medical Centre
+  {% else %}
+    Site overview Birmingham Women's Hospital
+  {% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/mya/manage-sites">Manage clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">
+        {% if (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'bright') %}
+          Bright Beginnings Health Team
+        {% elif (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'strouts') %}
+          Strouts Place Medical Centre
+        {% else %}
+          Birmingham Women's Hospital
+        {% endif %}
+      </li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+{% block outerContent %}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      {% if data ['availability-created'] == 'yes' %}
+        <div class="nhsuk-notification-banner nhsuk-notification-banner--success" role="region" aria-labelledby="nhsuk-notification-banner-title" data-module="nhsuk-notification-banner">
+          <div class="nhsuk-notification-banner__header">
+            <h2 class="nhsuk-notification-banner__title" id="nhsuk-notification-banner-title">
+            Success
+            </h2>
+          </div>
+          <div class="nhsuk-notification-banner__content">
+            <h3 class="nhsuk-heading-m">
+              You have created new availability for this site.
+            </h3>
+            <p><a class="nhsuk-notification-banner__link" href="#">Close this message</a>.</p>
+          </div>
+        </div>
+      {% endif %}
+
+      <h1 class="nhsuk-heading-xl">
+        {% if (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'bright') %}
+          Bright Beginnings Health Team
+        {% elif (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'strouts') %}
+          Strouts Place Medical Centre
+        {% else %}
+          Birmingham Women's Hospital
+        {% endif %}
+      </h1>
+
+      {# MOJ Navigation START #}
+      <nav class="moj-sub-navigation nhsuk-u-padding-bottom-2" aria-label="Sub navigation">
+        <ul class="moj-sub-navigation__list">
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" aria-current="page">Site details</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="/mya/availability-overview">Create availability</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="/mya/week?addedBatch=">Sessions</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="/staff-book-patient-appointment/patients-nhs-number?nhsNumberKnown&journey=BookPatient">Book patient</a>
+          </li>
+        </ul>
+      </nav>
+      {# MOJ Navigation END #}
+
+      <dl class="nhsuk-summary-list">
+
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Address
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            {% if (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'bright') %}
+              Tower Hamlets GP Care Group CIC, <br>Island Health, <br>145 East Ferry Road, <br>London, <br>E14 3BQ
+            {% elif (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'strouts') %}
+              3 Strouts Place, <br>London, <br>E2 7QU
+            {% else %}
+              Steelhouse Lane, <br>Birmingham, <br>West Midlands, <br>B4 6NH
+            {% endif %}
+          </dd>
+        </div>
+
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Phone number
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            {% if (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'bright') %}
+              0208 148 3952
+            {% elif (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'strouts') %}
+              020 8187 2000
+            {% else %}
+              0121 333 9999
+            {% endif %}
+          </dd>
+        </div>
+
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            ODS code
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            {% if (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'bright') %}
+              F84710
+            {% elif (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'strouts') %}
+              F84051
+            {% else %}
+              FA1234
+            {% endif %}
+          </dd>
+        </div>
+
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            ICB
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            {% if (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'bright') %}
+              North East London
+            {% elif (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'strouts') %}
+              North East London
+            {% else %}
+              Birmingham Women's and Children's NHS Foundation Trust
+            {% endif %}
+          </dd>
+        </div>
+
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Region
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            {% if (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'bright') %}
+              London
+            {% elif (data['e2eCurrentUserType'] == 'infant') and (data['provider'] == 'strouts') %}
+              London
+            {% else %}
+              Midlands
+            {% endif %}
+          </dd>
+        </div>
+
+        {% if (data['e2eCurrentUserType'] != 'infant') and (data['e2eCurrentUserType'] != 'OH') %}
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">
+              Pathways offered
+            </dt>
+            <dd class="nhsuk-summary-list__value">
+              Seasonal, Maternity, Occupational Health
+            </dd>
+          </div>
+        {% endif %}
+
+        </div>
+
+      </dl>
+
+    </div>
+  </div>
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+  // Wait for the DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    // Find the close link
+    const closeLink = document.querySelector('.nhsuk-notification-banner__link');
+    
+    // Find the entire notification banner
+    const notificationBanner = document.querySelector('.nhsuk-notification-banner');
+    
+    // Add click event listener to the close link
+    if (closeLink && notificationBanner) {
+      closeLink.addEventListener('click', function(event) {
+        // Prevent the default link behavior
+        event.preventDefault();
+        
+        // Hide the notification banner
+        notificationBanner.style.display = 'none';
+        
+        // Alternative: remove the element completely from the DOM
+        // notificationBanner.remove();
+      });
+    }
+  });
+</script>
+{% endblock %}

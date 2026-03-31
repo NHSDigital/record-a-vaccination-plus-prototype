@@ -1,0 +1,138 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% set exportType = data['export-type'] %}
+{% set columnsChoice = data['contact'] %}
+{% set chosenColumns = data['choose-columns-to-export'] %}
+
+{% if chosenColumns and (chosenColumns is string) %}
+  {% set chosenColumns = [chosenColumns] %}
+{% endif %}
+
+{% set columnLabelMap = {
+  "custom-export-Patient name": "Patient name",
+  "custom-export-NHS number": "NHS number",
+  "custom-export-DOB": "DOB",
+  "custom-export-Due date": "Due date",
+  "custom-export-Address Line 1": "Address Line 1",
+  "custom-export-Address Line 2": "Address Line 2",
+  "custom-export-Town": "Town or city",
+  "custom-export-Postcode": "Postcode",
+  "custom-export-Pertussis eligible (16 weeks)": "Pertussis eligible (16 weeks)",
+  "custom-export-RSV eligible (28 weeks)": "RSV eligible (28 weeks)",
+  "custom-export-COVID-19 & Flu eligible": "COVID-19 & Flu eligible",
+  "custom-export-Pertussis explained and offered": "Pertussis explained and offered",
+  "custom-export-Pertussis side effects discussed": "Pertussis side effects discussed",
+  "custom-export-RSV explained and offered": "RSV explained and offered",
+  "custom-export-RSV side effects discussed": "RSV side effects discussed",
+  "custom-export-Flu explained and offered": "Flu explained and offered",
+  "custom-export-Flu side effects discussed": "Flu side effects discussed",
+  "custom-export-Contactable": "Contactable",
+  "custom-export-Phone number": "Phone number",
+  "custom-export-Date of last Pertussis vaccination": "Date of last Pertussis vaccination",
+  "custom-export-Date of last RSV vaccination": "Date of last RSV vaccination",
+  "custom-export-Date of last Flu vaccination": "Date of last Flu vaccination",
+  "custom-export-Date of last COVID vaccination": "Date of last COVID vaccination",
+  "custom-export-Date of Pertussis vaccination booking": "Date of Pertussis vaccination booking",
+  "custom-export-Date of RSV vaccination booking": "Date of RSV vaccination booking",
+  "custom-export-Date of Flu vaccination booking": "Date of Flu vaccination booking",
+  "custom-export-Date of COVID vaccination booking": "Date of COVID vaccination booking",
+  "custom-export-Date of last Pertussis invite": "Date of last Pertussis invite",
+  "custom-export-Date of last RSV invite": "Date of last RSV invite",
+  "custom-export-Date of last Flu invite": "Date of last Flu invite",
+  "custom-export-Date of last COVID invite": "Date of last COVID invite"
+} %}
+
+{% block pageTitle %}
+  Check and confirm CSV export
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      Check and confirm CSV export
+    </h1>
+
+    {% set exportTypeLabel = "Not chosen" %}
+    {% if exportType == "entire-list" %}
+      {% set exportTypeLabel = "Current list with no filters applied" %}
+    {% elif exportType == "filtered-list" %}
+      {% set exportTypeLabel = "Current list with chosen filters applied" %}
+    {% endif %}
+
+    {% set chosenColumnLabels = [] %}
+
+    {% if chosenColumns and chosenColumns.length %}
+      {% for v in chosenColumns %}
+        {% set chosenColumnLabels = (chosenColumnLabels.push(columnLabelMap[v] or v), chosenColumnLabels) %}
+      {% endfor %}
+    {% endif %}
+
+    {% set exportColumnsValue = { text: "Not chosen" } %}
+
+    {% if columnsChoice == "all-columns" %}
+      {% set exportColumnsValue = { text: "All columns" } %}
+    {% elif columnsChoice == "custom-columns" %}
+      {% if chosenColumns and chosenColumns.length %}
+        {% set listHtml %}
+          <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-0">
+            {% for v in chosenColumns %}
+              <li>{{ columnLabelMap[v] or v }}</li>
+            {% endfor %}
+          </ul>
+        {% endset %}
+
+        {% set exportColumnsValue = { html: listHtml } %}
+      {% else %}
+        {% set exportColumnsValue = { text: "No columns selected" } %}
+      {% endif %}
+    {% endif %}
+
+    {% if columnsChoice == "all-columns" %}
+      {% set columnsChoiceLabel = "All columns" %}
+    {% elif columnsChoice == "custom-columns" %}
+      {% set columnsChoiceLabel = "Custom columns" %}
+    {% endif %}
+
+    {{ summaryList({
+      rows: [
+        {
+          key: { text: "Export view" },
+          value: { text: exportTypeLabel },
+          actions: { items: [{ href: "mvp-export-patient-list", text: "Change", visuallyHiddenText: "export view" }] }
+        },
+        {
+          key: { text: "Export columns" },
+          value: exportColumnsValue,
+          actions: {
+            items: [
+              {
+                href: "mvp-export-patient-list",
+                text: "Change",
+                visuallyHiddenText: "export columns"
+              }
+            ]
+          }
+        }
+      ]
+    }) }}
+
+    <form class="form" action="mvp-generating-export" method="post" class="submit">
+      <div class="govuk-button-group">
+        <button class="nhsuk-button" data-module="nhsuk-button" type="submit">
+          Confirm and create export
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

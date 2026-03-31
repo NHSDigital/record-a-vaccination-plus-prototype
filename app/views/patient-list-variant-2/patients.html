@@ -1,0 +1,597 @@
+{% extends 'e2e-layout3.html' %}
+
+{% block pageTitle %}Patients{% endblock %}
+
+{% block content %}
+<style>
+  /* details: remove native markers and NHS marker */
+  details summary::-webkit-details-marker { display: none; }
+  details summary::marker { content: ""; }
+  .nhsuk-details__summary { list-style: none; }
+  .nhsuk-details__summary::before { content: none !important; }
+
+  /* outer details */
+  .nhsuk-details.app-filter { margin: 0 !important; }
+
+  /* “Filter and sort” link */
+  .app-filter__summary {
+    margin: 0 0 12px 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #1d70b8;
+    font-weight: 700;
+    border: 0;
+    background: transparent;
+  }
+  .nhsuk-details.app-filter .nhsuk-details__summary .nhsuk-details__summary-text { text-decoration: none !important; }
+  .app-filter__summary:hover .nhsuk-details__summary-text,
+  .app-filter__summary:focus .nhsuk-details__summary-text { text-decoration: underline !important; }
+
+  /* chevrons */
+  .app-caret,
+  .app-caret--inner {
+    width: 10px; height: 10px; margin-top: 2px;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+    transition: transform .15s ease;
+    display: inline-block;
+  }
+  .app-caret { transform: rotate(-135deg); }
+  .app-filter:not([open]) .app-caret { transform: rotate(45deg); }
+  .app-caret--inner { transform: rotate(45deg); }
+  .app-section[open] .app-caret--inner { transform: rotate(-135deg); }
+
+  /* panel */
+  .app-filter__panel,
+  .app-filter .nhsuk-details__text { background: #D8DDE0 !important; }
+  .app-filter__panel {
+    border: 1px solid #b1b4b6;
+    padding: 16px;
+  }
+  .app-filter .nhsuk-details__text { border: 0 !important; padding-top: 0; }
+
+  /* sections */
+  .nhsuk-details.app-section { margin-bottom: 0 !important; }
+  .app-section { padding: 16px 0; background: #D8DDE0; }
+  .app-section + .app-section { border-top: 1px solid #b1b4b6; }
+
+  .app-section__summary {
+    margin: 0 0 8px 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: #0b0c0c;
+    background: transparent;
+    border: 0;
+  }
+  .nhsuk-details.app-section .nhsuk-details__summary .nhsuk-details__summary-text { text-decoration: none !important; }
+  .app-section__summary:hover .nhsuk-details__summary-text,
+  .app-section__summary:focus .nhsuk-details__summary-text { text-decoration: underline !important; }
+
+  .app-section__body { margin: 0; padding: 0; background: #D8DDE0 !important; }
+
+  /* NHS field spacing */
+  .nhsuk-radios__item, .nhsuk-checkboxes__item { margin-bottom: 8px; }
+
+  /* actions */
+  .app-actions {
+    display: flex;
+    align-items: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #b1b4b6;
+    background: #D8DDE0;
+    width: 100%;
+  }
+
+  @media (max-width: 40.0625em) {
+    .app-filter__panel { padding: 12px; }
+    .app-actions { flex-wrap: wrap; gap: 12px; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var filter = document.querySelector('.app-filter');
+    if (filter) {
+      filter.addEventListener('toggle', function () {
+        if (filter.open) {
+          var first = filter.querySelector('select, input, button, a[href]');
+          if (first) first.focus({ preventScroll: true });
+        }
+      });
+    }
+  });
+</script>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      Patients
+    </h1>
+
+    <p class="nhsuk-body">This list was last updated on {{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -5 }) }}.</p>
+
+    <div class="nhsuk-u-margin-bottom-6" id="filterByPatient">
+      <form action="" method="get" novalidate="">
+        <div class="app-form-group--inline">
+          {{ input({
+            type: "search",
+            name: "nameOrNhsNumber",
+            value: data.nameOrNhsNumber,
+            label: {
+              text: "Patient name or NHS number",
+              classes: "nhsuk-u-font-weight-bold"
+            }
+          }) }}
+          {{ button({
+            classes: "nhsuk-button nhsuk-button--secondary nhsuk-button--small",
+            text: "Find"
+          }) }}
+        </div>
+      </form>
+    </div>
+
+    <details class="nhsuk-details app-filter" data-module="app-filter">
+      <summary class="nhsuk-details__summary app-filter__summary">
+        <span class="app-caret" aria-hidden="true"></span>
+        <span class="nhsuk-details__summary-text">Filter and sort</span>
+      </summary>
+
+      <div class="nhsuk-details__text app-filter__panel">
+        <form action="#/" method="post" novalidate>
+
+          {# Personal details #}
+          <details class="nhsuk-details app-section">
+            <summary class="nhsuk-details__summary app-section__summary">
+              <span class="app-caret--inner" aria-hidden="true"></span>
+              <span class="nhsuk-details__summary-text">Personal details</span>
+            </summary>
+            <div class="nhsuk-details__text app-section__body">
+              {{ input({
+                label: {
+                  text: "Postcode",
+                  classes: "nhsuk-u-font-weight-bold"
+                },
+                classes: "nhsuk-input--width-10",
+                id: "patient-postcode",
+                name: "patientPostcode"
+              }) }}
+              {{ checkboxes({
+                idPrefix: "contact-preferences",
+                name: "contactPreferences",
+                fieldset: { 
+                  legend: { 
+                    text: "Contact preferences", 
+                    classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" 
+                  } 
+                },
+                classes: "nhsuk-checkboxes--small",
+                items: [
+                  { value: "contactPreferencesPhone", text: "Phone" },
+                  { value: "contactPreferencesEmail", text: "Email" },
+                  { value: "contactPreferencesPost", text: "Post" }
+                ]
+              }) }}
+            </div>
+          </details>
+
+          {# Vaccination status #}
+          <details class="nhsuk-details app-section">
+            <summary class="nhsuk-details__summary app-section__summary">
+              <span class="app-caret--inner" aria-hidden="true"></span>
+              <span class="nhsuk-details__summary-text">Vaccination status</span>
+            </summary>
+            <div class="nhsuk-details__text app-section__body">
+              {{ checkboxes({
+                idPrefix: "current-status",
+                name: "currentStatus",
+                fieldset: { legend: { text: "Current Status", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+                classes: "nhsuk-checkboxes--small",
+                items: [
+                  { value: "statusVaccinsted", text: "Vaccinated" },
+                  { value: "statusEligibleForVaccination", text: "Eligible for vaccination" },
+                  { value: "statusNotYetElligible", text: "Not yet eligible" },
+                  { value: "statusDeclinedVaccination", text: "Declined vaccination" }
+                ]
+              }) }}
+              {{ checkboxes({
+                idPrefix: "information-shared",
+                name: "informationShared",
+                fieldset: { legend: { text: "Information shared", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+                classes: "nhsuk-checkboxes--small",
+                items: [
+                  { value: "sharedVaccineExplaind", text: "Vaccine explained" },
+                  { value: "sharedVaccineOffered", text: "Vaccine offered" },
+                  { value: "sharedSideEffectsDiscussed", text: "Side effects discussed" }
+                ]
+              }) }}
+            </div>
+          </details>
+
+          {# Dates and invitations #}
+          <details class="nhsuk-details app-section">
+            <summary class="nhsuk-details__summary app-section__summary">
+              <span class="app-caret--inner" aria-hidden="true"></span>
+              <span class="nhsuk-details__summary-text">Vaccine invitations and bookings</span>
+            </summary>
+            <div class="nhsuk-details__text app-section__body">
+              {% set conditionalPregnancyDueDate %}
+                {{ dateInput({
+                  id: "due-date-frame",
+                  namePrefix: "dueDateFrom",
+                  fieldset: {
+                    legend: {
+                      text: "From date"
+                    }
+                  },
+                  hint: {
+                    text: "For example, 15 3 2026"
+                  },
+                  items: [
+                    {
+                      name: "Day",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Month",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Year",
+                      classes: "nhsuk-input--width-4"
+                    }
+                  ]
+                }) }}
+                {{ dateInput({
+                  id: "due-date-to",
+                  namePrefix: "dueDateTo",
+                  fieldset: {
+                    legend: {
+                      text: "To date"
+                    }
+                  },
+                  hint: {
+                    text: "For example, 13 12 2026"
+                  },
+                  items: [
+                    {
+                      name: "Day",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Month",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Year",
+                      classes: "nhsuk-input--width-4"
+                    }
+                  ]
+                }) }}
+              {% endset %}
+
+              {% set conditionalRSVvaccinationDate %}
+                {{ dateInput({
+                  id: "rsv-vaccination-from-date",
+                  namePrefix: "RSVvaccinationFromDate",
+                  fieldset: {
+                    legend: {
+                      text: "From date"
+                    }
+                  },
+                  hint: {
+                    text: "For example, 15 3 2026"
+                  },
+                  items: [
+                    {
+                      name: "Day",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Month",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Year",
+                      classes: "nhsuk-input--width-4"
+                    }
+                  ]
+                }) }}
+                {{ dateInput({
+                  id: "rsv-vaccination-to-date",
+                  namePrefix: "RSVvaccinationToDate",
+                  fieldset: {
+                    legend: {
+                      text: "To date"
+                    }
+                  },
+                  hint: {
+                    text: "For example, 13 12 2026"
+                  },
+                  items: [
+                    {
+                      name: "Day",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Month",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Year",
+                      classes: "nhsuk-input--width-4"
+                    }
+                  ]
+                }) }}
+              {% endset %}
+
+              {% set conditionalPertussisVaccinationDate %}
+                {{ dateInput({
+                  id: "pertussis-vaccination-from-date",
+                  namePrefix: "pertussisVaccinationFromDate",
+                  fieldset: {
+                    legend: {
+                      text: "From date"
+                    }
+                  },
+                  hint: {
+                    text: "For example, 15 3 2026"
+                  },
+                  items: [
+                    {
+                      name: "Day",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Month",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Year",
+                      classes: "nhsuk-input--width-4"
+                    }
+                  ]
+                }) }}
+                {{ dateInput({
+                  id: "pertussis-vaccination-to-date",
+                  namePrefix: "pertussisVaccinationToDate",
+                  fieldset: {
+                    legend: {
+                      text: "To date"
+                    }
+                  },
+                  hint: {
+                    text: "For example, 15 3 2026"
+                  },
+                  items: [
+                    {
+                      name: "Day",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Month",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Year",
+                      classes: "nhsuk-input--width-4"
+                    }
+                  ]
+                }) }}
+              {% endset %}
+
+              {{ checkboxes({
+                idPrefix: "key-dates",
+                name: "keyDates",
+                fieldset: { legend: { text: "Key dates", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+                classes: "nhsuk-checkboxes--small",
+                items: [
+                  { value: "keydatePregnancy", text: "Pregnancy due date", conditional: { html: conditionalPregnancyDueDate } },
+                  { value: "keydatePertussisvaccination", text: "Date of pertussis vaccination", conditional: { html: conditionalPertussisVaccinationDate } },
+                  { value: "keydateRSVvaccination", text: "Date of RSV vaccination", conditional: { html: conditionalRSVvaccinationDate } }
+                ]
+              }) }}
+
+              {% set conditionalPertussisInvitationDate %}
+                {{ dateInput({
+                  id: "pertussis-invitation-from-date",
+                  namePrefix: "pertussisInvitationFromDate",
+                  fieldset: {
+                    legend: {
+                      text: "From date"
+                    }
+                  },
+                  hint: {
+                    text: "For example, 15 3 2026"
+                  },
+                  items: [
+                    {
+                      name: "Day",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Month",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Year",
+                      classes: "nhsuk-input--width-4"
+                    }
+                  ]
+                }) }}
+                {{ dateInput({
+                  id: "pertussis-invitation-to-date",
+                  namePrefix: "pertussisInvitationToDate",
+                  fieldset: {
+                    legend: {
+                      text: "To date"
+                    }
+                  },
+                  hint: {
+                    text: "For example, 15 3 2026"
+                  },
+                  items: [
+                    {
+                      name: "Day",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Month",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Year",
+                      classes: "nhsuk-input--width-4"
+                    }
+                  ]
+                }) }}
+              {% endset %}
+
+              {% set conditionalRSVinvitationDate %}
+                {{ dateInput({
+                  id: "rsv-invitation-from-date",
+                  namePrefix: "rsvInvitationFromDate",
+                  fieldset: {
+                    legend: {
+                      text: "From date"
+                    }
+                  },
+                  hint: {
+                    text: "For example, 15 3 2026"
+                  },
+                  items: [
+                    {
+                      name: "Day",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Month",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Year",
+                      classes: "nhsuk-input--width-4"
+                    }
+                  ]
+                }) }}
+                {{ dateInput({
+                  id: "rsv-invitation-to-date",
+                  namePrefix: "rsvInvitationToDate",
+                  fieldset: {
+                    legend: {
+                      text: "To date"
+                    }
+                  },
+                  hint: {
+                    text: "For example, 15 3 2026"
+                  },
+                  items: [
+                    {
+                      name: "Day",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Month",
+                      classes: "nhsuk-input--width-2"
+                    },
+                    {
+                      name: "Year",
+                      classes: "nhsuk-input--width-4"
+                    }
+                  ]
+                }) }}
+              {% endset %}
+
+              {{ checkboxes({
+                idPrefix: "invitations",
+                name: "invitations",
+                fieldset: { legend: { text: "Invitations", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+                classes: "nhsuk-checkboxes--small",
+                items: [
+                  { value: "keydatePertussisvaccination", text: "Date invited for pertussis vaccination", conditional: { html: conditionalPertussisInvitationDate } },
+                  { value: "keydateRSVvaccination", text: "Date invited for RSV vaccination", conditional: { html: conditionalRSVinvitationDate } }
+                ]
+              }) }}
+            </div>
+          </details>
+
+          <div class="app-actions" style="display: flex; align-items: center; gap: 1rem; margin-top: 0; margin-bottom: 0;">
+            <button type="submit" class="nhsuk-button nhsuk-button--small" data-module="nhsuk-button">
+              Apply
+            </button>
+            <button type="submit" class="nhsuk-button nhsuk-button--secondary nhsuk-button--small" data-module="nhsuk-button">
+              Clear filters
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </details>
+
+    {# I AM A TABLE OF THINGS #}
+    <table class="nhsuk-table nhsuk-u-margin-top-4" data-module="moj-sortable-table">
+      <caption class="nhsuk-table__caption">Patient list table</caption>
+      <thead class="nhsuk-table__head">
+        <tr class="nhsuk-table__row">
+          <th scope="col" class="nhsuk-table__header" aria-sort="ascending">Name</th>
+          <th scope="col" class="nhsuk-table__header" aria-sort="none">Elevation</th>
+          <th scope="col" class="nhsuk-table__header" aria-sort="none">Continent</th>
+          <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">First summit</th>
+        </tr>
+      </thead>
+      <tbody class="nhsuk-table__body">
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Aconcagua</td>
+          <td class="nhsuk-table__cell" data-sort-value="6961">6,961 meters</td>
+          <td class="nhsuk-table__cell">South America</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1897">1897</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Denali</td>
+          <td class="nhsuk-table__cell" data-sort-value="6194">6,194 meters</td>
+          <td class="nhsuk-table__cell">North America</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1913">1913</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Elbrus</td>
+          <td class="nhsuk-table__cell" data-sort-value="5642">5,642 meters</td>
+          <td class="nhsuk-table__cell">Europe</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1874">1874</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Everest</td>
+          <td class="nhsuk-table__cell" data-sort-value="8850">8,850 meters</td>
+          <td class="nhsuk-table__cell">Asia</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1953">1953</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Kilimanjaro</td>
+          <td class="nhsuk-table__cell" data-sort-value="5895">5,895 meters</td>
+          <td class="nhsuk-table__cell">Africa</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1889">1889</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Puncak Jaya</td>
+          <td class="nhsuk-table__cell" data-sort-value="4884">4,884 meters</td>
+          <td class="nhsuk-table__cell">Australia</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1962">1962</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Vinson</td>
+          <td class="nhsuk-table__cell" data-sort-value="4897">4,897 meters</td>
+          <td class="nhsuk-table__cell">Antarctica</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1966">1966</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+  </div>
+</div>
+{% endblock %}

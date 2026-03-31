@@ -1,0 +1,85 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Who is the vaccinator?" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% set organisationSetting = currentUser.organisations | findById(data.currentOrganisationId) %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "delivery-team" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if vaccinatorError %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: vaccinatorError,
+              href: "#vaccinator-1"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <form action="vaccinator" method="post" novalidate>
+
+        {% set items = [] %}
+
+        {% if organisationSetting.clinician %}
+          {% set items = (items.push({
+            value: data.currentUserId,
+            text: "Me (" + currentUser.firstName + " " + currentUser.lastName + ")"
+          }), items) %}
+        {% endif %}
+
+        {% for user in otherVaccinators %}
+          {% set items = (items.push({
+            value: user.id,
+            text: user.firstName + " " + user.lastName + " (" + user.email + ")"
+          }), items) %}
+        {% endfor %}
+
+        {{ radios({
+          idPrefix: "vaccinator",
+          name: "vaccinatorId",
+          fieldset: {
+            legend: {
+              text: ("Who is the vaccinator?" if data.vaccinationToday == 'yes' else "Who is the vaccinator?"),
+              classes: "nhsuk-fieldset__legend--l",
+              isPageHeading: "true"
+            }
+          },
+          errorMessage: {
+            text: vaccinatorError
+          } if vaccinatorError,
+            items: [
+              {
+                value: "vaccinatorA",
+                text: "Me (Jane Smith)"
+              },
+              {
+                value: "vaccinatorB",
+                text: "Daisy Rice (daisy.rice@nhs.net)"
+              }
+            ]
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        })}}
+      </form>
+
+      {{ details({
+        summaryText: "If the vaccinator is not listed",
+        html: "Make sure they are added in <a href=\"#/\">Manage users</a> as a clinician."
+      }) }}
+
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "You are not recording " + vaccineName %}
+{% set currentSection = "vaccinate" %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% set panelHtml %}
+        <p>You are about to continue without recording this vaccination.</p>
+
+        <p>
+          If this was a mistake, you can go back and record {{ vaccineName }} instead.
+        </p>
+
+        <form method="post" action="/ravs-infants/confirm-not-recorded">
+          <input type="hidden" name="index" value="{{ index }}">
+
+          <div class="nhsuk-button-group nhsuk-u-margin-bottom-0">
+            {{ button({
+              text: "Confirm not recorded",
+              classes: "nhsuk-button--reverse"
+            }) }}
+
+            <a href="#" class="nhsuk-link" onclick="history.back(); return false;">
+              Go back and record vaccination
+            </a>
+          </div>
+        </form>
+      {% endset %}
+
+      {{ panel({
+        titleText: "You have chosen not to record " + vaccineName,
+        titleSize: "l",
+        classes: "nhsuk-panel--interruption",
+        html: panelHtml
+      }) }}
+
+    </div>
+  </div>
+{% endblock %}

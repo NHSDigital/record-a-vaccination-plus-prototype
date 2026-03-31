@@ -1,0 +1,136 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Manage eligibility criteria" %}
+
+{% set currentSection = "vaccinate" %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "batch" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">Manage eligibility criteria</h1>
+
+      {{ table({
+        caption: "Current eligibility criteria options",
+        head: [
+          {
+            text: "Eligibility option"
+          },
+          {
+            text: "Action"          }
+        ],
+        rows: [
+          [
+            {
+              text: "Care home"
+            },
+            {
+              html: '<a class="nhsuk-link" href="#">Change</a>'
+            }
+          ],
+          [
+            {
+              text: "Home visit"
+            },
+            {
+              html: '<a class="nhsuk-link" href="#">Change</a>'
+            }
+          ],
+          [
+            {
+              text: "Staff vaccination"
+            },
+            {
+              html: '<a class="nhsuk-link" href="#">Change</a>'
+            }
+          ],
+          [
+            {
+              text: "Infant 0 - 1"
+            },
+            {
+              html: '<a class="nhsuk-link" href="#">Change</a>'
+            }
+          ],
+          [
+            {
+              text: "Infant 2 - 10"
+            },
+            {
+              html: '<a class="nhsuk-link" href="#">Change</a>'
+            }
+          ],
+          [
+            {
+              text: "Maternity"
+            },
+            {
+              html: '<a class="nhsuk-link" href="#">Change</a>'
+            }
+          ],
+          [
+            {
+              text: "70 - 80"
+            },
+            {
+              html: '<a class="nhsuk-link" href="#">Change</a>'
+            }
+          ],
+          [
+            {
+              text: "Patient is immunosuppressed"
+            },
+            {
+              html: '<a class="nhsuk-link" href="#">Change</a>'
+            }
+          ]
+        ]
+      }) }}
+
+      <form method="post" novalidate>
+
+        {{ input({
+          label: {
+            text: "Add eligibility criteria option",
+            size: "m"
+          },
+          classes: "nhsuk-input--width-30",
+          hint: {
+            text: "Enter description of eligibility criteria"
+          },
+          id: "eligibility-option",
+          name: "eligibility-option",
+          inputmode: "text",
+          spellcheck: false
+        }) }}
+
+        {{ button({
+          text: "Add option"
+        })}}
+      </form>
+
+    </div>
+
+    {#
+    <div class="nhsuk-grid-column-one-third">
+      {% set contentHTML %}
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Name</span><br>{{ data.firstName }} {{ data.lastName }}</p>
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">Date of birth</span><br>{{ data.dobFormatted }}<br>({{ data.ageLabel }})</p>
+        <p class="nhsuk-body"><span class="nhsuk-u-font-weight-bold">NHS number</span><br>{{ data.nhsNumberFormatted }}</p>
+      {% endset %}
+
+      {{ card({
+        heading: "Patient",
+        feature: true,
+        descriptionHtml: contentHTML
+      }) }}
+    </div>
+    #}
+
+  </div>
+
+{% endblock %}

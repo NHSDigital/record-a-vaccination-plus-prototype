@@ -1,0 +1,240 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Sortable table
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-l">Sortable table</h1>
+
+      <div class="moj-scrollable-pane">
+
+        <table class="nhsuk-table moj-sortable-table" data-module="moj-sortable-table">
+          <caption class="nhsuk-table__caption">Historic rainfall in June</caption>
+          <thead class="nhsuk-table__head">
+            <tr class="nhsuk-table__row">
+              <th scope="col" class="nhsuk-table__header" aria-sort="ascending">
+                <button type="button" class="nhsuk-link" data-index="0">Station</button>
+              </th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+                <button type="button" class="nhsuk-link" data-index="1">2022</button>
+              </th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+                <button type="button" class="nhsuk-link" data-index="2">2021</button>
+              </th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+                <button type="button" class="nhsuk-link" data-index="3">2020</button>
+              </th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+                <button type="button" class="nhsuk-link" data-index="4">2019</button>
+              </th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+                <button type="button" class="nhsuk-link" data-index="5">2018</button>
+              </th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+                <button type="button" class="nhsuk-link" data-index="6">2017</button>
+              </th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+                <button type="button" class="nhsuk-link" data-index="7">2016</button>
+              </th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+                <button type="button" class="nhsuk-link" data-index="8">2015</button>
+              </th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+                <button type="button" class="nhsuk-link" data-index="9">2014</button>
+              </th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+                <button type="button" class="nhsuk-link" data-index="10">2013</button>
+              </th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+                <button type="button" class="nhsuk-link" data-index="11">2012</button>
+              </th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+                <button type="button" class="nhsuk-link" data-index="12">2011</button>
+              </th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+                <button type="button" class="nhsuk-link" data-index="13">2010</button>
+              </th>
+              <th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+                <button type="button" class="nhsuk-link" data-index="14">2009</button>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">Lerwick</td>
+              <td class="nhsuk-table__cell">13.7mm</td>
+              <td class="nhsuk-table__cell">13.8mm</td>
+              <td class="nhsuk-table__cell">13.9mm</td>
+              <td class="nhsuk-table__cell">12.7mm</td>
+              <td class="nhsuk-table__cell">13.3mm</td>
+              <td class="nhsuk-table__cell">13.3mm</td>
+              <td class="nhsuk-table__cell">12.9mm</td>
+              <td class="nhsuk-table__cell">11.2mm</td>
+              <td class="nhsuk-table__cell">13.3mm</td>
+              <td class="nhsuk-table__cell">12.7mm</td>
+              <td class="nhsuk-table__cell">12.9mm</td>
+              <td class="nhsuk-table__cell">11.2mm</td>
+              <td class="nhsuk-table__cell">13.3mm</td>
+              <td class="nhsuk-table__cell">12.7mm</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">Eskdalemuir</td>
+              <td class="nhsuk-table__cell">17.0mm</td>
+              <td class="nhsuk-table__cell">17.9mm</td>
+              <td class="nhsuk-table__cell">17.2mm</td>
+              <td class="nhsuk-table__cell">16.2mm</td>
+              <td class="nhsuk-table__cell">19.7mm</td>
+              <td class="nhsuk-table__cell">16.4mm</td>
+              <td class="nhsuk-table__cell">17.6mm</td>
+              <td class="nhsuk-table__cell">15.7mm</td>
+              <td class="nhsuk-table__cell">17.8mm</td>
+              <td class="nhsuk-table__cell">16.9mm</td>
+              <td class="nhsuk-table__cell">17.6mm</td>
+              <td class="nhsuk-table__cell">15.7mm</td>
+              <td class="nhsuk-table__cell">17.8mm</td>
+              <td class="nhsuk-table__cell">16.9mm</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">Valley</td>
+              <td class="nhsuk-table__cell">17.5mm</td>
+              <td class="nhsuk-table__cell">17.4mm</td>
+              <td class="nhsuk-table__cell">17.9mm</td>
+              <td class="nhsuk-table__cell">17.1mm</td>
+              <td class="nhsuk-table__cell">20.2mm</td>
+              <td class="nhsuk-table__cell">17.6mm</td>
+              <td class="nhsuk-table__cell">18.0mm</td>
+              <td class="nhsuk-table__cell">16.6mm</td>
+              <td class="nhsuk-table__cell">18.0mm</td>
+              <td class="nhsuk-table__cell">17.5mm</td>
+              <td class="nhsuk-table__cell">18.0mm</td>
+              <td class="nhsuk-table__cell">16.6mm</td>
+              <td class="nhsuk-table__cell">18.0mm</td>
+              <td class="nhsuk-table__cell">17.5mm</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">Heathrow</td>
+              <td class="nhsuk-table__cell">23.2mm</td>
+              <td class="nhsuk-table__cell">22.5mm</td>
+              <td class="nhsuk-table__cell">22.5mm</td>
+              <td class="nhsuk-table__cell">21.8mm</td>
+              <td class="nhsuk-table__cell">24.2mm</td>
+              <td class="nhsuk-table__cell">24.0mm</td>
+              <td class="nhsuk-table__cell">20.7mm</td>
+              <td class="nhsuk-table__cell">22.2mm</td>
+              <td class="nhsuk-table__cell">22.1mm</td>
+              <td class="nhsuk-table__cell">20.3mm</td>
+              <td class="nhsuk-table__cell">20.7mm</td>
+              <td class="nhsuk-table__cell">22.2mm</td>
+              <td class="nhsuk-table__cell">22.1mm</td>
+              <td class="nhsuk-table__cell">20.3mm</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">Hurn</td>
+              <td class="nhsuk-table__cell">21.0mm</td>
+              <td class="nhsuk-table__cell">20.7mm</td>
+              <td class="nhsuk-table__cell">20.7mm</td>
+              <td class="nhsuk-table__cell">19.9mm</td>
+              <td class="nhsuk-table__cell">22.9mm</td>
+              <td class="nhsuk-table__cell">21.9mm</td>
+              <td class="nhsuk-table__cell">19.6mm</td>
+              <td class="nhsuk-table__cell">20.5mm</td>
+              <td class="nhsuk-table__cell">21.1mm</td>
+              <td class="nhsuk-table__cell">19.6mm</td>
+              <td class="nhsuk-table__cell">19.6mm</td>
+              <td class="nhsuk-table__cell">20.5mm</td>
+              <td class="nhsuk-table__cell">21.1mm</td>
+              <td class="nhsuk-table__cell">19.6mm</td>
+            </tr>
+            <tr class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">Camborne</td>
+              <td class="nhsuk-table__cell">17.9mm</td>
+              <td class="nhsuk-table__cell">17.4mm</td>
+              <td class="nhsuk-table__cell">17.1mm</td>
+              <td class="nhsuk-table__cell">16.5mm</td>
+              <td class="nhsuk-table__cell">19.7mm</td>
+              <td class="nhsuk-table__cell">18.0mm</td>
+              <td class="nhsuk-table__cell">17.0mm</td>
+              <td class="nhsuk-table__cell">16.8mm</td>
+              <td class="nhsuk-table__cell">17.8mm</td>
+              <td class="nhsuk-table__cell">15.9mm</td>
+              <td class="nhsuk-table__cell">17.0mm</td>
+              <td class="nhsuk-table__cell">16.8mm</td>
+              <td class="nhsuk-table__cell">17.8mm</td>
+              <td class="nhsuk-table__cell">15.9mm</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <nav class="nhsuk-pagination nhsuk-pagination--numbered" role="navigation" aria-label="Pagination">
+        <a href="#" class="nhsuk-pagination__previous" rel="prev">
+          <svg class="nhsuk-icon nhsuk-icon--arrow-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+            <path d="M10.7 6.3c.4.4.4 1 0 1.4L7.4 11H19a1 1 0 0 1 0 2H7.4l3.3 3.3c.4.4.4 1 0 1.4a1 1 0 0 1-1.4 0l-5-5A1 1 0 0 1 4 12c0-.3.1-.5.3-.7l5-5a1 1 0 0 1 1.4 0Z" />
+          </svg>
+          <span class="nhsuk-pagination__title">
+            Previous<span class="nhsuk-u-visually-hidden"> page</span>
+          </span>
+        </a>
+        <ul class="nhsuk-pagination__list">
+          <li class="nhsuk-pagination__item">
+            <a class="nhsuk-pagination__link" href="#" aria-label="Page 1">
+              1
+            </a>
+          </li>
+          <li class="nhsuk-pagination__item nhsuk-pagination__item--ellipsis">
+            &ctdot;
+          </li>
+          <li class="nhsuk-pagination__item">
+            <a class="nhsuk-pagination__link" href="#" aria-label="Page 8">
+              8
+            </a>
+          </li>
+          <li class="nhsuk-pagination__item">
+            <a class="nhsuk-pagination__link" href="#" aria-label="Page 9">
+              9
+            </a>
+          </li>
+          <li class="nhsuk-pagination__item nhsuk-pagination__item--current">
+            <a class="nhsuk-pagination__link" href="#" aria-label="Page 10" aria-current="page">
+              10
+            </a>
+          </li>
+          <li class="nhsuk-pagination__item">
+            <a class="nhsuk-pagination__link" href="#" aria-label="Page 11">
+              11
+            </a>
+          </li>
+          <li class="nhsuk-pagination__item">
+            <a class="nhsuk-pagination__link" href="#" aria-label="Page 12">
+              12
+            </a>
+          </li>
+          <li class="nhsuk-pagination__item nhsuk-pagination__item--ellipsis">
+            &ctdot;
+          </li>
+          <li class="nhsuk-pagination__item">
+            <a class="nhsuk-pagination__link" href="#" aria-label="Page 42">
+              42
+            </a>
+          </li>
+        </ul>
+        <a href="#" class="nhsuk-pagination__next" rel="next">
+          <span class="nhsuk-pagination__title">
+            Next<span class="nhsuk-u-visually-hidden"> page</span>
+          </span>
+          <svg class="nhsuk-icon nhsuk-icon--arrow-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+            <path d="m14.7 6.3 5 5c.2.2.3.4.3.7 0 .3-.1.5-.3.7l-5 5a1 1 0 0 1-1.4-1.4l3.3-3.3H5a1 1 0 0 1 0-2h11.6l-3.3-3.3a1 1 0 1 1 1.4-1.4Z" />
+          </svg>
+        </a>
+      </nav>
+
+
+    </div>
+  </div>
+{% endblock %}

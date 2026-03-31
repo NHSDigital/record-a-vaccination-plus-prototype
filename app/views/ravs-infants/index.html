@@ -1,0 +1,292 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% if currentOrganisation %}
+  {% set pageName = currentOrganisation.name + " - Home" %}
+{% else %}
+  {% set pageName = "Home" %}
+{% endif %}
+{% set currentSection = "home" %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-6">{% if currentOrganisation %}{{ currentOrganisation.name }}{% else %}Overview{% endif %}</h1>
+
+
+      {% set insetTextHtml %}
+        <p>Find out about the latest updates to the service:
+        <br><a href="#/" title="External website">What's new (opens in new tab)</a></p>
+      {% endset %}
+
+      {{ insetText({
+        html: insetTextHtml
+      }) }}
+
+      <h2 class="nhsuk-heading-m">All vaccinations</h2>
+
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">0 <span class="nhsuk-u-visually-hidden">Today</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19"> Today</span>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">0 <span class="nhsuk-u-visually-hidden">Past 7 days</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19"> Past 7 days</span>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">0 <span class="nhsuk-u-visually-hidden">{{ date({month: 'long'}) }} to date</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19"> {{ date({month: 'long'}) }} to date</span>
+            </div>
+          </div>
+        </li>
+        <li class="nhsuk-grid-column-one-quarter nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <p class="nhsuk-heading-xl nhsuk-u-font-size-64 nhsuk-u-margin-bottom-1">7 <span class="nhsuk-u-visually-hidden"> Total</span></p><span class="nhsuk-u-font-weight-normal nhsuk-u-font-size-19"> Total</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      {% set byDayHtml %}
+        <table class="nhsuk-table">
+          <caption class="nhsuk-table__caption nhsuk-table__caption--m">By day</caption>
+          <thead role="rowgroup" class="nhsuk-table__head">
+            <tr role="row">
+              <th role="columnheader" class="" scope="col">
+                Date
+              </th>
+              <th role="columnheader" class="nhsuk-table__header--numeric" scope="col">
+                Total
+              </th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr role="row" class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">
+                Today
+              </th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+            </tr>
+            <tr role="row" class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">
+                {{ date({weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'}, {'day': -1}) }} (yesterday)
+              </th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+            </tr>
+            <tr role="row" class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">
+                {{ date({weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'}, {'day': -2}) }}
+              </th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+            </tr>
+            <tr role="row" class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">
+                {{ date({weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'}, {'day': -3}) }}
+              </th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+            </tr>
+            <tr role="row" class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">
+                {{ date({weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'}, {'day': -4}) }}
+              </th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+            </tr>
+            <tr role="row" class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">
+                {{ date({weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'}, {'day': -5}) }}
+              </th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+            </tr>
+            <tr role="row" class="nhsuk-table__row">
+              <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row">
+                {{ date({weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'}, {'day': -6}) }}
+              </th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      {% endset %}
+
+      {% set byVaccinationHtml %}
+        <table class="nhsuk-table">
+          <caption class="nhsuk-table__caption nhsuk-table__caption--m">By vaccination</caption>
+          <thead role="rowgroup" class="nhsuk-table__head">
+            <tr role="row">
+              <th role="columnheader" class="" scope="col">
+                Vaccination
+              </th>
+              <th role="columnheader" class="nhsuk-table__header is-right-aligned" scope="col">
+                Today
+              </th>
+              <th role="columnheader" class="nhsuk-table__header is-right-aligned" scope="col">
+                Past 7 days
+              </th>
+              <th role="columnheader" class="nhsuk-table__header is-right-aligned" scope="col">
+                {{ date({month: 'long'}) }} to date
+              </th>
+              <th role="columnheader" class="nhsuk-table__header is-right-aligned" scope="col">
+                Total
+              </th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr role="row" class="nhsuk-table__row">
+              <th class="nhsuk-table__header  nhsuk-u-font-weight-normal" scope="row">
+                COVID-19
+              </th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                1
+              </td>
+            </tr>
+            <tr role="row" class="nhsuk-table__row">
+              <th class="nhsuk-table__header  nhsuk-u-font-weight-normal" scope="row">
+                Flu
+              </th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                6
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      {% endset %}
+
+      {% set bySiteHtml %}
+        <table class="nhsuk-table">
+          <caption class="nhsuk-table__caption nhsuk-table__caption--m">By site</caption>
+          <thead role="rowgroup" class="nhsuk-table__head">
+            <tr role="row">
+              <th role="columnheader" class="" scope="col">
+                Site
+              </th>
+              <th role="columnheader" class="nhsuk-table__header is-right-aligned" scope="col">
+                Today
+              </th>
+              <th role="columnheader" class="nhsuk-table__header is-right-aligned" scope="col">
+                Past 7 days
+              </th>
+              <th role="columnheader" class="nhsuk-table__header is-right-aligned" scope="col">
+                {{ date({month: 'long'}) }} to date
+              </th>
+              <th role="columnheader" class="nhsuk-table__header is-right-aligned" scope="col">
+                Total
+              </th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr role="row" class="nhsuk-table__row">
+              <th class="nhsuk-table__header  nhsuk-u-font-weight-normal" scope="row">
+                Heaton Moor Health Centre (RW3HT)
+              </th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                1
+              </td>
+            </tr>
+            <tr role="row" class="nhsuk-table__row">
+              <th class="nhsuk-table__header  nhsuk-u-font-weight-normal" scope="row">
+                North Manchester General Hospital (RW3NM)
+              </th>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                0
+              </td>
+              <td class="nhsuk-table__cell nhsuk-table__cell--numeric is-right-aligned">
+                1
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      {% endset %}
+      
+      {{ tabs({
+        items: [
+        {
+          label: "By day",
+          id: "past-7-days",
+          panel: {
+            html: byDayHtml
+            }
+          },
+          {
+            label: "By vaccination",
+            id: "by-vaccination",
+            panel: {
+              html: byVaccinationHtml
+            }
+          },
+          {
+            label: "By site",
+            id: "by-site",
+            panel: {
+              html: bySiteHtml
+            }
+          }
+        ]
+      }) }}
+
+      <p>For a more detailed breakdown, <a href="/reports">create a report</a>.</p>
+
+    </div>
+  </div>
+
+{% endblock %}

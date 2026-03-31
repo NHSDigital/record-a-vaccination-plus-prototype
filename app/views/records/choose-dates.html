@@ -1,0 +1,102 @@
+{% extends 'layout.html' %}
+
+{% set pageName = "When was the vaccination? – Records" %}
+
+{% set currentSection = "records" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/records/records/" + vaccination.id,
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if vaccinationTodayError %}
+        {{ errorSummary({
+          titleText: "There is a problem",
+          errorList: [
+            {
+              text: vaccinationTodayError,
+              href: "#vaccinationToday-1"
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      <form action="/records/records/{{ vaccination.id }}" method="post">
+        <input type="hidden" name="changedField" value="Date">
+
+        {% set otherDateHtml %}
+
+          {{ dateInput({
+            id: "vaccinationDate",
+            namePrefix: "vaccinationDate",
+            fieldset: {
+              legend: {
+                text: "Vaccination date",
+                classes: "nhsuk-label--s"
+              }
+            },
+            hint: {
+              text: "For example, 15 3 2024"
+            },
+            items: [
+              {
+                name: "day",
+                classes: "nhsuk-input--width-2"
+              },
+              {
+                name: "month",
+                classes: "nhsuk-input--width-2"
+              },
+              {
+                name: "year",
+                classes: "nhsuk-input--width-4"
+              }
+            ]
+          }) }}
+        {% endset -%}
+
+        {{ radios({
+          idPrefix: "vaccination-date-changed",
+          name: "vaccinationDateChanged",
+          fieldset: {
+            legend: {
+              text: "When was the vaccination?",
+              classes: "nhsuk-fieldset__legend--l",
+              isPageHeading: "true"
+            }
+          },
+          errorMessage: {
+            text: vaccinationTodayError
+          } if vaccinationTodayError,
+          items: [
+            {
+              value: "no",
+              text: (vaccination.date | isoDateFromDateInput | govukDate),
+              checked: true
+            },
+            {
+              value: "yes",
+              text: "Choose another date",
+              conditional: {
+                html: otherDateHtml
+              }
+            }
+          ]
+        }) }}
+
+        {{ button({
+          text: "Save"
+        })}}
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
+

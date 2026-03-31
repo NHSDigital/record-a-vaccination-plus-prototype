@@ -1,0 +1,33 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "CSV export is ready" %}
+
+{% set currentSection = "organise" %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      <a href="mvp-export-patient-list" id="download" value="download" role="button" draggable="false" class="nhsuk-button" data-module="nhsuk-button">
+        Download CSV export
+      </a>
+
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    var button = document.getElementById('download');
+    button.onclick = downloadReport;
+    function downloadReport() {
+      window.open("/download/download-csv-export.csv");
+    }
+  </script>
+{% endblock %}

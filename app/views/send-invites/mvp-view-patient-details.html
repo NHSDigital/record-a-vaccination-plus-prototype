@@ -1,0 +1,229 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  View patient details
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% set dateOfBirthHtml %}{% endset %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-4">
+        <span id="js-heading-name">Patient</span>'s record
+      </h1>
+
+      <p class="nhsuk-body">NHS number <strong><span id="js-nhs-number">—</span></strong></p>
+
+      {#<p class="nhsuk-body">PID = <strong id="js-pid">—</strong></p>#}
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      {# MOJ Navigation START #}
+      <nav class="moj-sub-navigation nhsuk-u-padding-bottom-2" aria-label="Sub navigation">
+        <ul class="moj-sub-navigation__list">
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" aria-current="page">Profile</a>
+          </li>
+          {#<li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="recent-activity">Recent activity</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="status-and-history">Status and history</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="bookings">Bookings</a>
+          </li>#}
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="/e2e-record-vaccinations/entry-from-mvp-patient-list">Record vaccination</a>
+          </li>
+        </ul>
+      </nav>
+      {# MOJ Navigation END #}
+
+{#
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+#}
+
+      {{ summaryList({
+        rows: [
+          {
+            key: { text: "Name" },
+            value: { html: '<span id="js-name">—</span>' }
+          },
+          {
+            key: { text: "Date of birth" },
+            value: { html: '<span id="js-dob">—</span>' }
+          },
+          {
+            key: { text: "Address" },
+            value: { html: '<span id="js-address">—</span>' }
+          },
+          {
+            key: { text: "NHS number" },
+            value: { html: '<span id="js-nhs">—</span>' }
+          },
+          {
+            key: { text: "Pregnancy due date" },
+            value: { html: '<span id="js-due">—</span>' }
+          }
+        ]
+      }) }}
+
+      <div id="js-error"></div>
+
+    </div>
+  </div>
+
+  <!-- make sure this file includes Address Line1, Town, Postcode -->
+  <script src="/js/send-invite-data/patient-data-v2.js"></script>
+
+  <script>
+  (function(){
+    function onReady(fn){ if(document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+    function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function qs(name){ var v=new URLSearchParams(location.search).get(name); return v?String(v):''; }
+
+    function errorBox(msg){
+      var html = '<div class="nhsuk-error-summary nhsuk-u-margin-top-4" aria-labelledby="error-summary-title" role="alert" tabindex="-1">'
+               +   '<h2 class="nhsuk-error-summary__title" id="error-summary-title">There is a problem</h2>'
+               +   '<div class="nhsuk-error-summary__body"><p>'+esc(msg)+'</p></div>'
+               + '</div>';
+      document.getElementById('js-error').innerHTML = html;
+    }
+
+    onReady(function(){
+      var pid = qs('pid');
+
+      // Only touch #js-pid if it's present
+      var pidEl = document.getElementById('js-pid');
+      if (pidEl) pidEl.textContent = pid || '—';
+
+      if(!pid){
+        errorBox('No PID provided. Try appending <code>?pid=P001</code> to the URL.');
+        return;
+      }
+
+      // Expect window.patientData from patient-data-v2-with-address.js
+      var data = (window && window.patientData) ? window.patientData : null;
+      if(!data || !Array.isArray(data.columns) || !Array.isArray(data.rows)){
+        errorBox('Could not read data from <code>patient-data-v2-with-address.js</code>.');
+        return;
+      }
+
+      // Column index (case-insensitive)
+      var idx = {};
+      data.columns.forEach(function(c,i){ idx[String(c).toLowerCase()] = i; });
+
+      // Find the matching row by Patient ID
+      var needle = String(pid).trim().toLowerCase();
+      var row = null;
+      for(var r=0; r<data.rows.length; r++){
+        var v = data.rows[r][idx['patient id']];
+        if(v != null && String(v).trim().toLowerCase() === needle){
+          row = data.rows[r];
+          break;
+        }
+      }
+      if(!row){
+        errorBox('No record found for PID <strong>'+esc(pid)+'</strong>.');
+        return;
+      }
+
+      // Safely get values
+      function get(colName, fallback){
+        var i = idx[String(colName).toLowerCase()];
+        if(typeof i !== 'number') return fallback || '';
+        var val = row[i];
+        return (val==null ? '' : String(val));
+      }
+
+      var nameRaw   = get('Patient name');
+      var nhs       = get('NHS number');
+      var dob       = get('DOB');
+      var due       = get('Due date');
+      var line1     = get('Address Line 1');
+      var line2     = get('Address Line 2');
+      var town      = get('Town');
+      var postcode  = get('Postcode');
+
+      // Swap "Last, First" → "First Last"
+      function formatName(nameStr) {
+        if (!nameStr) return '';
+        if (nameStr.includes(',')) {
+          var parts = nameStr.split(',');
+          var last = parts[0].trim();
+          var first = parts[1].trim();
+          return first + " " + last;
+        }
+        return nameStr;
+      }
+
+      var name = formatName(nameRaw);
+
+      // Generic: dd/mm/yyyy → "11 June 1993"
+      function formatLongDate(dmy) {
+        if (!dmy) return '—';
+        var parts = dmy.split('/');
+        if (parts.length !== 3) return dmy;
+        var day = parts[0], month = parts[1], year = parts[2];
+        var d = new Date(year, month - 1, day);
+        return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      }
+
+      // DOB: long date + newline + "(aged N)"
+      function formatDob(dobStr) {
+        if (!dobStr) return '—';
+        var parts = dobStr.split('/');
+        if (parts.length !== 3) return dobStr;
+        var day = parts[0], month = parts[1], year = parts[2];
+        var parsedDate = new Date(year, month - 1, day);
+
+        var longDate = parsedDate.toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+
+        var today = new Date();
+        var age = today.getFullYear() - parsedDate.getFullYear();
+        var m = today.getMonth() - parsedDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < parsedDate.getDate())) age--;
+
+        return longDate + "<br>(aged " + age + ")";
+      }
+
+      // Build address string with line breaks
+      function formatAddress(line1, line2, town, postcode) {
+        if (!line1 && !line2 && !town && !postcode) return '—';
+        return esc(line1) + "<br>" + esc(line2) + "<br>" + esc(town) + "<br>" + esc(postcode);
+      }
+
+      // Populate the page
+      document.getElementById('js-heading-name').textContent  = name || 'Patient';
+      document.getElementById('js-name').textContent          = name || '—';
+      document.getElementById('js-nhs').textContent           = nhs  || '—';
+      document.getElementById('js-nhs-number').textContent    = nhs  || '—';
+      document.getElementById('js-dob').innerHTML             = formatDob(dob);
+      document.getElementById('js-due').textContent           = formatLongDate(due);
+      document.getElementById('js-address').innerHTML         = formatAddress(line1, line2, town, postcode);
+    });
+  })();
+  </script>
+
+{% endblock %}

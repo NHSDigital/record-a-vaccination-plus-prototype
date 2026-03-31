@@ -1,0 +1,156 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Check and confirm" %}
+
+{% set currentSection = "monitor" %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      {{ summaryList({
+        rows: [
+          {
+            key: {
+              text: ("Date" if from == to else "From")
+            },
+            value: {
+              text: (from | govukDate) if from
+            },
+            actions: {
+              items: [
+                {
+                  href: "/reports/choose-dates",
+                  text: "Change",
+                  visuallyHiddenText: "name"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              classes: "nhsuk-u-visually-hidden" if from == to,
+              text: "To"
+            },
+            value: {
+              classes: "nhsuk-u-visually-hidden"  if from == to,
+              text: (to | govukDate) if to
+            },
+            actions: {
+              classes: "nhsuk-u-visually-hidden" if from == to,
+              items: [
+                {
+                  href: "/reports/choose-dates",
+                  text: "Change",
+                  visuallyHiddenText: "name"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: ("Vaccines" if (data.reportChosenVaccines | length) > 1 else "Vaccine")
+            },
+            value: {
+              html: (data.reportChosenVaccines | join(", <br>")) if data.reportChosenVaccines
+            },
+            actions: {
+              items: [
+                {
+                  href: "/reports/choose-vaccines",
+                  text: "Change",
+                  visuallyHiddenText: "change vaccines"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: ("Age groups" if (data.reportChosenAgeGroups | length) > 1 else "Age group")
+            },
+            value: {
+              html: (data.reportChosenAgeGroups | join(", <br>")) if data.reportChosenAgeGroups
+            },
+            actions: {
+              items: [
+                {
+                  href: "/reports/choose-age-groups",
+                  text: "Change",
+                  visuallyHiddenText: "change age groups"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: ("QOF indicators" if (data.reportChosenQOFindicator | length) > 1 else "QOF indicator")
+            },
+            value: {
+              html: (data.reportChosenQOFindicator | join(", <br>")) if data.reportChosenQOFindicator
+            },
+            actions: {
+              items: [
+                {
+                  href: "/reports/choose-qof-indicator",
+                  text: "Change",
+                  visuallyHiddenText: "change QOF indicators"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: ("Sites" if (data.reportSites | length) > 1 else "Site")
+            },
+            value: {
+              html: (data.reportSites | join(", <br>")) if data.reportSites
+            },
+            actions: {
+              items: [
+              {
+                href: "/reports/choose-site",
+                text: "Change",
+                visuallyHiddenText: "change sites"
+              }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Data"
+            },
+            value: {
+              html: (data.data | join(", <br>")) if data.data
+            },
+            actions: {
+              items: [
+                {
+                  href: "/reports/choose-data",
+                  text: "Change",
+                  visuallyHiddenText: "change data"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+
+      <form action="/reports/generating" method="post">
+        {{ button({
+          "text": "Confirm and create report"
+        }) }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

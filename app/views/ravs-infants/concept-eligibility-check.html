@@ -1,0 +1,61 @@
+{% extends 'layout-ravs-infants.html' %}
+
+{% set pageName = "Confirm eligibility options" %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "concept-eligibility-choose" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">Confirm eligibility options</h1>
+
+      <h2 class="nhsuk-heading-m">Eligibility options selected</h2>
+
+      <ul class="nhsuk-list nhsuk-list--bullet">
+        {% for option in data.eligibility or [] %}
+          <li>{{ option }}</li>
+        {% endfor %}
+      </ul>
+
+      <form action="concept-eligibility-check" method="post" novalidate>
+
+        {{ radios({
+          idPrefix: "confirm-eligibility",
+          name: "confirmEligibility",
+          fieldset: {
+            legend: {
+              text: "Are these eligibility options correct?",
+              classes: "nhsuk-fieldset__legend--m nhsuk-u-padding-top-2"
+            }
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No, change the options"
+            },
+            {
+              divider: "or"
+            },
+            {
+              value: "cancel",
+              text: "Cancel"
+            }
+          ]
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        })}}
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

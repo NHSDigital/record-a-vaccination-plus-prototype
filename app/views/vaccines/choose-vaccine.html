@@ -1,0 +1,90 @@
+{# extends 'layout.html' #}
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Choose vaccine" %}
+
+{# set currentSection = "vaccines" #}
+{% set currentSection = "organise" %}
+
+{% block header %}
+  {% include "includes/e2e-header-v3.html" %}
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <!-- Change the page title here -->
+      <span class="nhsuk-caption-l">Birmingham Women's Hospital</span>
+      <h1 class="nhsuk-heading-l">Thursday 1 August, session 09:00 - 17:00</h1>
+
+      <form action="/vaccines/add-batch" method="post" novalidate="true">
+
+        {% set items = [] %}
+
+        {% for vaccine in (data.vaccines) %}
+          {% if vaccine.products %}
+            {% set productItems = [] %}
+            {% for vaccineProduct in (vaccine.products) %}
+              {% set productItems = (productItems.push({
+                value: vaccineProduct.name,
+                text: vaccineProduct.name
+              }), productItems) %}
+            {% endfor %}
+
+            {% set conditionalHtml %}
+              {{ radios({
+                "idPrefix": "vaccineProduct" + vaccine.name,
+                "name": "vaccineProduct",
+                "fieldset": {
+                  "legend": {
+                    "text": "Vaccine product"
+                  }
+                },
+                "items": productItems,
+                value: data.vaccineProduct
+              }) }}
+            {% endset %}
+          {% endif %}
+
+          {% set items = (items.push({
+            value: vaccine.name,
+            text: vaccine.name,
+            conditional: {
+              html: conditionalHtml
+            } if vaccine.products
+          }), items) %}
+        {% endfor %}
+
+        {{ radios({
+          "idPrefix": "vaccine",
+          "name": "vaccine",
+          "fieldset": {
+          "legend": {
+              "html": 'Choose vaccines',
+              "isPageHeading": false,
+              "classes": "nhsuk-fieldset__legend--m"
+            }
+          },
+          hint: {
+            text: "Only add vaccines that NHS England has commissioned you to deliver."
+          },
+          value: data.vaccine,
+          errorMessage: {
+            text: vaccineError
+          } if vaccineError,
+          "items": items
+        }) }}
+
+        {{ button({
+          "text": "Continue"
+        }) }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

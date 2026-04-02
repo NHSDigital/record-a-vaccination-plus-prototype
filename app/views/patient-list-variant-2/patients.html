@@ -633,9 +633,12 @@
             <th scope="col" class="nhsuk-table__header" aria-sort="none">Date of birth</th>
             <th scope="col" class="nhsuk-table__header" aria-sort="none">Due date</th>
             <th scope="col" class="nhsuk-table__header" aria-sort="none">Postcode</th>
-            <th scope="col" class="nhsuk-table__header" aria-sort="none">COVID and flu eligibility</th>
             <th scope="col" class="nhsuk-table__header" aria-sort="none">Pertussis eligibility</th>
             <th scope="col" class="nhsuk-table__header" aria-sort="none">RSV eligibility</th>
+            <th scope="col" class="nhsuk-table__header" aria-sort="none">GP</th>
+            <th scope="col" class="nhsuk-table__header" aria-sort="none">Phone</th>
+            <th scope="col" class="nhsuk-table__header" aria-sort="none">Last pertussis vaccination</th>
+            <th scope="col" class="nhsuk-table__header" aria-sort="none">Last RSV vaccination</th>
           </tr>
         </thead>
         <tbody id="removable-table-body"></tbody>
@@ -673,7 +676,10 @@ document.addEventListener('DOMContentLoaded', function () {
     "Date of birth": "DOB",
     "COVID and flu eligibility": "COVID-19 & Flu eligible",
     "Pertussis eligibility": "Pertussis eligible (16 weeks)",
-    "RSV eligibility": "RSV eligible (28 weeks)"
+    "RSV eligibility": "RSV eligible (28 weeks)",
+    "Phone": "Phone number",
+    "Last pertussis vaccination": "Date of last Pertussis vaccination",
+    "Last RSV vaccination": "Date of last RSV vaccination"
   };
 
   // Build header → data index map
@@ -751,7 +757,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
 
           // FORMAT DATES (toggle via ?dateFormat=long | numeric)
-          if (["DOB", "Due date", "COVID-19 & Flu eligible", "Pertussis eligible (16 weeks)", "RSV eligible (28 weeks)"].includes(columns[index])) {
+          if (["DOB", "Due date", "COVID-19 & Flu eligible", "Pertussis eligible (16 weeks)", "RSV eligible (28 weeks)", "Date of last Pertussis vaccination", "Date of last RSV vaccination"].includes(columns[index])) {
             if (/\b\d{2}\/\d{2}\/\d{4}\b/.test(value)) {
               const [day, month, year] = value.split('/');
 

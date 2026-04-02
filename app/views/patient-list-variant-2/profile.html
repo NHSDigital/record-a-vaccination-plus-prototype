@@ -1,0 +1,380 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "run" %}
+
+{% block pageTitle %}
+  {% if data['e2eCurrentUserType'] == "infant" %}Patient details - Sam Brown{% else %}Patient details{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% if data['fromPatientList'] == "true" %}
+    <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+  {% else %}
+    <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+      <ol class="nhsuk-breadcrumb__list">
+        <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+        <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-run-clinics">Run clinics</a></li>
+        <li class="nhsuk-breadcrumb__list-item">Patient tracker</li>
+      </ol>
+      <a class="nhsuk-back-link" href="javascript:history.back()">
+        Go back
+      </a>
+    </nav>
+  {% endif %}
+{% endblock %}
+
+{% block outerContent %}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if data['addHistory'] == 'show' %}
+        <div class="nhsuk-notification-banner nhsuk-notification-banner--success" role="region" aria-labelledby="nhsuk-notification-banner-title" data-module="nhsuk-notification-banner">
+          <div class="nhsuk-notification-banner__header">
+            <h2 class="nhsuk-notification-banner__title" id="nhsuk-notification-banner-title">
+              Update
+            </h2>
+          </div>
+          <div class="nhsuk-notification-banner__content">
+            <h3 class="nhsuk-notification-banner__heading">
+              Jodie's history has been updated.
+              <a class="nhsuk-notification-banner__link" href="history?addHistory=viewedUpdate">View history</a>.
+            </h3>
+            <p class="nhsuk-body"><a class="nhsuk-notification-banner__link" href="/staff-book-patient-appointment/book-patient-sites?journey=">Book another appointment for Jodie Brown</a></p>
+          </div>
+        </div>
+      {% endif %}
+
+      <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-4">{% if data['e2eCurrentUserType'] == "infant" %}Sam Brown{% else %}<span id="js-heading-name"></span>{% endif %}</h1>
+
+      <p class="nhsuk-body">NHS number <strong>{% if data['e2eCurrentUserType'] == "infant" %}9434765919{% else %}<span id="js-nhs-number">—</span>{% endif %}</strong></p>
+
+      {% if data['e2eCurrentUserType'] == "infant" %}
+        <p class="nhsuk-body">Date of birth <strong>26 June 2024 (aged 13 weeks 5 days)</strong></p>
+      {% endif %}
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      {# MOJ Navigation START #}
+      <nav class="moj-sub-navigation nhsuk-u-padding-bottom-2" aria-label="Sub navigation">
+        <ul class="moj-sub-navigation__list">
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" aria-current="page">Profile</a>
+          </li>
+
+          {% if data['fromPatientList'] == "true" %}
+            {% if data['pid'] == "P298" %}
+              <li class="moj-sub-navigation__item">
+                <a class="moj-sub-navigation__link" href="recent-activity">Recent activity</a>
+              </li>
+              <li class="moj-sub-navigation__item">
+                <a class="moj-sub-navigation__link" href="status-and-history">Status and history</a>
+              </li>
+              <li class="moj-sub-navigation__item">
+                <a class="moj-sub-navigation__link" href="bookings">Bookings</a>
+              </li>
+            {% endif %}
+          {% else %}
+            <li class="moj-sub-navigation__item">
+              <a class="moj-sub-navigation__link" href="recent-activity">Recent activity</a>
+            </li>
+            <li class="moj-sub-navigation__item">
+              <a class="moj-sub-navigation__link" href="status-and-history">Status and history</a>
+            </li>
+            <li class="moj-sub-navigation__item">
+              <a class="moj-sub-navigation__link" href="bookings">Bookings</a>
+            </li>
+          {% endif %}
+
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="/e2e-record-vaccinations/entry-from-patient-tracker">Record vaccination</a>
+          </li>
+        </ul>
+      </nav>
+      {# MOJ Navigation END #}
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if data['fromPatientList'] == "true" %}
+        {% if data['pid'] == "P298" %}
+          {# Eligibilty panel #}
+          <div class="nhsuk-warning-callout nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-5">
+            <h3 class="nhsuk-warning-callout__label"> <span role="text">
+              <span class="nhsuk-u-visually-hidden">Important: </span>
+                Eligibility
+              </span>
+            </h3>
+            {% if data['e2eCurrentUserType'] == "infant" %}
+              <p>Delayed for Visit 1 - 6-in-1 (dose 1), Men B (dose 1), Rotavirus (dose 1).</p>
+              <p>Eligible to receive Rotavirus (dose 1) up until the end of <strong>2&nbsp;November&nbsp;2025</strong>.</p>
+            {% else %}
+              <p>Eligible for RSV vaccination from <strong>Saturday&nbsp;31&nbsp;January&nbsp;2026</strong>.</p>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% else %}
+        {# Eligibilty panel #}
+        <div class="nhsuk-warning-callout nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-5">
+          <h3 class="nhsuk-warning-callout__label"> <span role="text">
+            <span class="nhsuk-u-visually-hidden">Important: </span>
+              Eligibility
+            </span>
+          </h3>
+          {% if data['e2eCurrentUserType'] == "infant" %}
+            <p>Delayed for Visit 1 - 6-in-1 (dose 1), Men B (dose 1), Rotavirus (dose 1).</p>
+            <p>Eligible to receive Rotavirus (dose 1) up until the end of <strong>2&nbsp;November&nbsp;2025</strong>.</p>
+          {% else %}
+            <p>Eligible for RSV vaccination from <strong>Saturday&nbsp;31&nbsp;January&nbsp;2026</strong>.</p>
+          {% endif %}
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <dl class="nhsuk-summary-list">
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Name
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            {% if data['e2eCurrentUserType'] == "infant" %}Sam Brown{% else %}<span id="js-name">—</span>{% endif %}
+          </dd>
+        </div>
+        {% if data['e2eCurrentUserType'] == "infant" %}
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">
+              Parents / legal&nbsp;guardians
+            </dt>
+            <dd class="nhsuk-summary-list__value">
+              <ul class="nhsuk-list">
+                <li><a href="#/">Jodie Brown</a></li>
+                <li><a href="#/">Samual Johnson</a></li>
+              </ul>
+            </dd>
+          </div>
+        {% endif %}
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Date of birth
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            {% if data['e2eCurrentUserType'] == "infant" %}
+              26 June 2024<br>(aged 13 weeks 5 days)
+              <p id="sinceDate"></p>
+            {% else %}
+              <span id="js-dob">—</span>
+            {% endif %}
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Address
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            {% if data['e2eCurrentUserType'] == "infant" %}
+              20 Greenfield Road<br>Harborne<br>Birmingham<br>B17 0EE
+            {% else %}
+              <span id="js-address">—</span>
+            {% endif %}
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            NHS number
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            {% if data['e2eCurrentUserType'] == "infant" %}9434765919{% else %}<span id="js-nhs">—</span>{% endif %}
+          </dd>
+        </div>
+        {% if data['e2eCurrentUserType'] == "infant" %}
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">
+              Next vaccines due 
+            </dt>
+            <dd class="nhsuk-summary-list__value">
+              Visit 1 - 6 in 1 (dose 1), Meningococcal B (dose 1), Rotavirus vaccine (dose 1)<br>
+              <strong class="nhsuk-tag nhsuk-tag--red">Delayed by 4 weeks</strong>
+            </dd>
+          </div>
+        {% else %}
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">
+              Pregnancy due date
+            </dt>
+            <dd class="nhsuk-summary-list__value">
+              <span id="js-due">—</span>
+            </dd>
+          </div>
+        {% endif %}
+
+      </dl>
+
+    </div>
+
+    <div id="js-error"></div>
+
+  </div>
+
+  <!-- make sure this file includes Address Line1, Town, Postcode -->
+  <script src="/js/send-invite-data/patient-data-v2.js"></script>
+
+  <script>
+  (function(){
+    function onReady(fn){
+      if (document.readyState !== 'loading') fn();
+      else document.addEventListener('DOMContentLoaded', fn);
+    }
+
+    function esc(s){
+      return String(s == null ? '' : s)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;');
+    }
+
+    function qs(name){
+      var v = new URLSearchParams(location.search).get(name);
+      return v ? String(v) : '';
+    }
+
+    function errorBox(msg){
+      var html =
+        '<div class="nhsuk-error-summary nhsuk-u-margin-top-4" role="alert" tabindex="-1">' +
+          '<h2 class="nhsuk-error-summary__title">There is a problem</h2>' +
+          '<div class="nhsuk-error-summary__body"><p>' + esc(msg) + '</p></div>' +
+        '</div>';
+      document.getElementById('js-error').innerHTML = html;
+    }
+
+    onReady(function(){
+
+      var isInfant = (window.e2eCurrentUserType === 'infant');
+
+      if (isInfant) {
+        return;
+      }
+
+      {% if data['e2eCurrentUserType'] != 'infant' %}
+        var pid = qs('pid');
+
+        if (!pid) {
+          errorBox('No PID provided. Try appending <code>?pid=P001</code> to the URL.');
+          return;
+        }
+      {% endif %}
+
+      var data = (window && window.patientData) ? window.patientData : null;
+      if (!data || !Array.isArray(data.columns) || !Array.isArray(data.rows)) {
+        errorBox('Could not read patient data.');
+        return;
+      }
+
+      var idx = {};
+      data.columns.forEach(function(c, i){
+        idx[String(c).toLowerCase()] = i;
+      });
+
+      var needle = String(pid).trim().toLowerCase();
+      var row = null;
+
+      for (var r = 0; r < data.rows.length; r++) {
+        var v = data.rows[r][idx['patient id']];
+        if (v != null && String(v).trim().toLowerCase() === needle) {
+          row = data.rows[r];
+          break;
+        }
+      }
+
+      if (!row) {
+        errorBox('No record found for PID <strong>' + esc(pid) + '</strong>.');
+        return;
+      }
+
+      function get(col, fallback){
+        var i = idx[col.toLowerCase()];
+        if (typeof i !== 'number') return fallback || '';
+        var val = row[i];
+        return (val == null ? '' : String(val));
+      }
+
+      function formatName(name){
+        if (!name) return '';
+        if (name.includes(',')) {
+          var parts = name.split(',');
+          return parts[1].trim() + ' ' + parts[0].trim();
+        }
+        return name;
+      }
+
+      function formatLongDate(dmy){
+        if (!dmy) return '—';
+        var p = dmy.split('/');
+        if (p.length !== 3) return dmy;
+        var d = new Date(p[2], p[1] - 1, p[0]);
+        return d.toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+      }
+
+      function formatDob(dmy){
+        if (!dmy) return '—';
+        var p = dmy.split('/');
+        if (p.length !== 3) return dmy;
+
+        var dob = new Date(p[2], p[1] - 1, p[0]);
+        var today = new Date();
+        var age = today.getFullYear() - dob.getFullYear();
+        var m = today.getMonth() - dob.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+
+        return formatLongDate(dmy) + '<br>(aged ' + age + ')';
+      }
+
+      function formatAddress(a, b, c, d){
+        if (!a && !b && !c && !d) return '—';
+        return esc(a) + '<br>' + esc(b) + '<br>' + esc(c) + '<br>' + esc(d);
+      }
+
+      var name = formatName(get('Patient name'));
+      var nhs  = get('NHS number');
+      var dob  = get('DOB');
+      var due  = get('Due date');
+
+      if (name) {
+        document.title = 'Patient details - ' + name;
+      }
+
+      document.getElementById('js-heading-name').textContent = name || 'Patient';
+      document.getElementById('js-name').textContent = name || '—';
+      document.getElementById('js-nhs').textContent = nhs || '—';
+      document.getElementById('js-nhs-number').textContent = nhs || '—';
+      document.getElementById('js-dob').innerHTML = formatDob(dob);
+      document.getElementById('js-due').textContent = formatLongDate(due);
+      document.getElementById('js-address').innerHTML = formatAddress(
+        get('Address Line 1'),
+        get('Address Line 2'),
+        get('Town'),
+        get('Postcode')
+      );
+
+    });
+  })();
+  </script>
+
+{% endblock %}

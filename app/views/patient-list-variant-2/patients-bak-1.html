@@ -145,29 +145,6 @@
     .app-filter__panel { padding: 12px; }
     .app-actions { flex-wrap: wrap; gap: 12px; }
   }
-
-  /* Prevent wrapping + tighten table */
-  .nhsuk-table {
-    table-layout: auto;
-  }
-
-  .nhsuk-table th, .nhsuk-table td {
-    white-space: nowrap;
-    padding: 8px 12px;
-    vertical-align: top;
-    font-size: 16px;
-  }
-
-  /*.nhsuk-table th, .nhsuk-table td {
-    padding: 6px 10px;
-    font-size: 16px;
-  }*/
-
-  /* Allow horizontal scroll for wide tables */
-  .moj-scrollable-pane {
-    overflow-x: auto;
-  }
-
 </style>
 
 <script>
@@ -610,154 +587,67 @@
       </div>
     </details>
 
-
-
     {# PATIENT LIST TABLE #}
-    <!--<div class="moj-scrollable-pane" role="region" aria-label="Historic rainfall in June" tabindex="0">-->
-      <table class="nhsuk-table nhsuk-u-margin-top-4" data-module="moj-sortable-table">
-        <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">
-          Patient list
-        </caption>
-        <thead class="nhsuk-table__head">
-          <tr class="nhsuk-table__row">
-            <th scope="col" class="nhsuk-table__header" aria-sort="ascending">Name</th>
-            <th scope="col" class="nhsuk-table__header" aria-sort="ascending">PID</th>
-            <th scope="col" class="nhsuk-table__header" aria-sort="none">NHS number</th>
-            <th scope="col" class="nhsuk-table__header" aria-sort="none">Date of birth</th>
-            <th scope="col" class="nhsuk-table__header" aria-sort="none">Due date</th>
-            <th scope="col" class="nhsuk-table__header" aria-sort="none">Postcode</th>
-            <th scope="col" class="nhsuk-table__header" aria-sort="none">COVID and flu eligibility</th>
-            <th scope="col" class="nhsuk-table__header" aria-sort="none">Pertussis eligibility</th>
-            <th scope="col" class="nhsuk-table__header" aria-sort="none">RSV eligibility</th>
-          </tr>
-        </thead>
-        <tbody id="removable-table-body"></tbody>
-      </table>
-    <!--</div>-->
+    <table class="nhsuk-table nhsuk-u-margin-top-4" data-module="moj-sortable-table">
+      <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">Patient list</caption>
+      <thead class="nhsuk-table__head">
+        <tr class="nhsuk-table__row">
+          <th scope="col" class="nhsuk-table__header" aria-sort="ascending">Name</th>
+          <th scope="col" class="nhsuk-table__header" aria-sort="none">NHS number</th>
+          <th scope="col" class="nhsuk-table__header" aria-sort="none">Date of birth</th>
+          <th scope="col" class="nhsuk-table__header" aria-sort="none">Due date</th>
+          <th scope="col" class="nhsuk-table__header" aria-sort="none">Postcode</th>
+          <th scope="col" class="nhsuk-table__header" aria-sort="none">COVID-19 and flu eligibility date</th>
+          <th scope="col" class="nhsuk-table__header" aria-sort="none">Pertussis eligibility date</th>
+          <th scope="col" class="nhsuk-table__header" aria-sort="none">RSV eligibility date</th>
+        </tr>
+      </thead>
+      <tbody class="nhsuk-table__body">
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Aconcagua</td>
+          <td class="nhsuk-table__cell" data-sort-value="6961">6,961 meters</td>
+          <td class="nhsuk-table__cell">South America</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1897">1897</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Denali</td>
+          <td class="nhsuk-table__cell" data-sort-value="6194">6,194 meters</td>
+          <td class="nhsuk-table__cell">North America</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1913">1913</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Elbrus</td>
+          <td class="nhsuk-table__cell" data-sort-value="5642">5,642 meters</td>
+          <td class="nhsuk-table__cell">Europe</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1874">1874</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Everest</td>
+          <td class="nhsuk-table__cell" data-sort-value="8850">8,850 meters</td>
+          <td class="nhsuk-table__cell">Asia</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1953">1953</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Kilimanjaro</td>
+          <td class="nhsuk-table__cell" data-sort-value="5895">5,895 meters</td>
+          <td class="nhsuk-table__cell">Africa</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1889">1889</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Puncak Jaya</td>
+          <td class="nhsuk-table__cell" data-sort-value="4884">4,884 meters</td>
+          <td class="nhsuk-table__cell">Australia</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1962">1962</td>
+        </tr>
+        <tr class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">Vinson</td>
+          <td class="nhsuk-table__cell" data-sort-value="4897">4,897 meters</td>
+          <td class="nhsuk-table__cell">Antarctica</td>
+          <td class="nhsuk-table__cell nhsuk-table__cell--numeric" data-sort-value="1966">1966</td>
+        </tr>
+      </tbody>
+    </table>
 
   </div>
 </div>
-
-<script src="/js/patient-data-v2.js"></script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const data = window.patientData;
-  if (!data) return;
-
-  const columns = data.columns;
-  const rows = data.rows;
-
-  const headers = Array.from(document.querySelectorAll('thead th'));
-  const tbody = document.getElementById('removable-table-body');
-
-  // Optional mapping
-  const HEADER_MAP = {
-    "Name": "Patient name",
-    "PID": "Patient ID",
-    "Date of birth": "DOB",
-    "COVID and flu eligibility": "COVID-19 & Flu eligible",
-    "Pertussis eligibility": "Pertussis eligible (16 weeks)",
-    "RSV eligibility": "RSV eligible (28 weeks)"
-  };
-
-  // Build header → data index map
-  const columnIndexMap = headers.map(th => {
-    const headerText = th.textContent.trim();
-    const lookup = HEADER_MAP[headerText] || headerText;
-
-    return columns.findIndex(col =>
-      col.toLowerCase().trim() === lookup.toLowerCase()
-    );
-  });
-
-  // 👉 Find indexes we care about
-  const pidIndex = columns.findIndex(c => c === "Patient ID");
-  const nameIndex = columns.findIndex(c => c === "Patient name");
-
-  headers.forEach((th, i) => {
-    if (columnIndexMap[i] === pidIndex) {
-      th.style.display = 'none';
-    }
-  });
-
-  tbody.innerHTML = '';
-
-  rows.forEach(row => {
-    const tr = document.createElement('tr');
-    const pid = row[pidIndex]; // 👈 grab PID once per row
-
-    columnIndexMap.forEach(index => {
-      const td = document.createElement('td');
-
-      // Hide PID column cells
-      if (index === pidIndex) {
-        td.style.display = 'none';
-      }
-
-      //if (index > -1) {
-      //  let value = row[index] || '';
-
-      //  if (index === nameIndex) {
-      //    const a = document.createElement('a');
-      //    a.href = `profile?pid=${encodeURIComponent(pid)}`;
-      //    a.textContent = value;
-      //    a.classList.add('nhsuk-link');
-      //    td.appendChild(a);
-      //  } else {
-      //    // Format NHS number
-      //    if (columns[index] === "NHS number") {
-      //      value = value.replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3");
-      //    }
-
-      //    td.textContent = value;
-      //  }
-      //}
-
-      if (index > -1) {
-        let value = row[index] || '';
-
-        if (index === nameIndex) {
-          const a = document.createElement('a');
-          a.href = `profile?pid=${encodeURIComponent(pid)}`;
-          a.textContent = value;
-          a.classList.add('nhsuk-link');
-          td.appendChild(a);
-        } else {
-
-          // FORMAT DATES (display long form, sort by YYYY-MM-DD)
-          if (["DOB", "Due date", "COVID-19 & Flu eligible", "Pertussis eligible (16 weeks)", "RSV eligible (28 weeks)"].includes(columns[index])) {
-            if (/\b\d{2}\/\d{2}\/\d{4}\b/.test(value)) {
-              const [day, month, year] = value.split('/');
-
-              // machine-sortable value for the sortable table
-              td.setAttribute('data-sort-value', `${year}-${month}-${day}`);
-
-              // human-readable display value
-              const date = new Date(`${year}-${month}-${day}`);
-              value = date.toLocaleDateString('en-GB', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-              });
-            }
-          }
-
-          // Format NHS number
-          if (columns[index] === "NHS number") {
-            value = value.replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3");
-          }
-
-          td.textContent = value;
-        }
-      }
-
-      tr.appendChild(td);
-    });
-
-    tbody.appendChild(tr);
-  });
-});
-</script>
-
 {% endblock %}

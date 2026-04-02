@@ -152,7 +152,6 @@
   }
 
   .nhsuk-table th, .nhsuk-table td {
-    white-space: nowrap;
     padding: 8px 12px;
     vertical-align: top;
     font-size: 16px;
@@ -192,6 +191,14 @@
     </h1>
 
     <p class="nhsuk-body">This list was last updated on {{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -5 }) }}.</p>
+
+    <p class="nhsuk-body">
+      <strong>
+        Date format (temporary):<br>
+        <a href="?dateFormat=long&wrap=nowrap">Long</a> | <a href="?dateFormat=numeric&wrap=nowrap">Numeric</a> | 
+        <a href="?dateFormat=long&wrap=wrap">Long + wrapped</a> | <a href="?dateFormat=numeric&wrap=wrap">Numeric + wrapped</a>
+      </strong>
+    </p>
 
     <div class="nhsuk-u-margin-bottom-6" id="filterByPatient">
       <form action="" method="get" novalidate="">
@@ -645,6 +652,14 @@ document.addEventListener('DOMContentLoaded', function () {
   const data = window.patientData;
   if (!data) return;
 
+  // DATE FORMAT FROM QUERY STRING
+  const params = new URLSearchParams(window.location.search);
+  const dateFormat = params.get('dateFormat');
+  const USE_LONG_DATE = dateFormat !== 'numeric'; // default = long
+
+  const wrapMode = params.get('wrap');
+  const USE_NOWRAP = wrapMode === 'nowrap'; // default = wrapping
+
   const columns = data.columns;
   const rows = data.rows;
 
@@ -676,8 +691,14 @@ document.addEventListener('DOMContentLoaded', function () {
   const nameIndex = columns.findIndex(c => c === "Patient name");
 
   headers.forEach((th, i) => {
+    // Hide PID column
     if (columnIndexMap[i] === pidIndex) {
       th.style.display = 'none';
+    }
+
+    // Apply nowrap if enabled
+    if (USE_NOWRAP) {
+      th.style.whiteSpace = 'nowrap';
     }
   });
 
@@ -689,6 +710,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     columnIndexMap.forEach(index => {
       const td = document.createElement('td');
+
+      if (USE_NOWRAP) {
+        td.style.whiteSpace = 'nowrap';
+      }
 
       // Hide PID column cells
       if (index === pidIndex) {
@@ -725,21 +750,26 @@ document.addEventListener('DOMContentLoaded', function () {
           td.appendChild(a);
         } else {
 
-          // FORMAT DATES (display long form, sort by YYYY-MM-DD)
+          // FORMAT DATES (toggle via ?dateFormat=long | numeric)
           if (["DOB", "Due date", "COVID-19 & Flu eligible", "Pertussis eligible (16 weeks)", "RSV eligible (28 weeks)"].includes(columns[index])) {
             if (/\b\d{2}\/\d{2}\/\d{4}\b/.test(value)) {
               const [day, month, year] = value.split('/');
 
-              // machine-sortable value for the sortable table
+              // always correct sorting
               td.setAttribute('data-sort-value', `${year}-${month}-${day}`);
 
-              // human-readable display value
-              const date = new Date(`${year}-${month}-${day}`);
-              value = date.toLocaleDateString('en-GB', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-              });
+              if (USE_LONG_DATE) {
+                // Long: 21 April 1983
+                const date = new Date(`${year}-${month}-${day}`);
+                value = date.toLocaleDateString('en-GB', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric'
+                });
+              } else {
+                // Numeric: 21/04/1983
+                value = `${day}/${month}/${year}`;
+              }
             }
           }
 

@@ -220,7 +220,7 @@
       </form>
     </div>
 
-    <details class="nhsuk-details app-filter" data-module="app-filter">
+    <details class="nhsuk-details app-filter nhsuk-u-padding-bottom-4" data-module="app-filter">
       <summary class="nhsuk-details__summary app-filter__summary">
         <span class="app-caret" aria-hidden="true"></span>
         <span class="nhsuk-details__summary-text">Filter and sort</span>
@@ -617,11 +617,18 @@
       </div>
     </details>
 
+<!-- COMMENT THE FOLLOWING OUT TO REMOVE THE SCROLLABLE PANE -->
+<!--
+  </div>
+</div>
 
+{# PATIENT LIST TABLE #}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
 
-    {# PATIENT LIST TABLE #}
-    <!--<div class="moj-scrollable-pane" role="region" aria-label="Historic rainfall in June" tabindex="0">-->
-      <table class="nhsuk-table nhsuk-u-margin-top-4" data-module="moj-sortable-table">
+    <div class="moj-scrollable-pane" role="region" aria-label="Patient list" tabindex="0">
+-->
+      <table class="nhsuk-table" data-module="moj-sortable-table">
         <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">
           Patient list
         </caption>
@@ -643,6 +650,7 @@
         </thead>
         <tbody id="removable-table-body"></tbody>
       </table>
+    <!-- ... AND ALSO COMMENT OUT THE BELOW TO REMOVE THE SCROLLABLE PANE -->
     <!--</div>-->
 
   </div>

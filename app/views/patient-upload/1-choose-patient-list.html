@@ -1,0 +1,75 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Upload patient list
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="#/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Upload patient list</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+  {#<a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>#}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">
+        Upload patient list
+      </h1>
+
+      <p class="nhsuk-body">
+        It is important to make sure that you are handling data in line with your organisation's Information Governance rules.
+      </p>
+
+      <details class="nhsuk-details nhsuk-expander">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">
+            Guidance on how structure inputted data
+          </span>
+        </summary>
+        <div class="nhsuk-details__text">
+          <p>Structure of input data:</p>
+          <ul>
+            <li>All patients where: pregnancy status = yes AND week 10+ into pregnancy</li>
+            <li>Name</li>
+            <li>NHS No</li>
+            <li>Pregnancy status = yes</li>
+            <li>Due date</li>
+            <li>Email address/ phone number</li>
+            <li>Contact preferences</li>
+          </ul>
+        </div>
+      </details>
+
+      <form class="form" action="2-patient-list-uploaded-success" method="post" class="submit">
+        <div class="nhsuk-form-group nhsuk-file-upload" data-module="nhsuk-file-upload">
+        <!--<div class="nhsuk-form-group nhsuk-form-group--error nhsuk-file-upload" data-module="nhsuk-file-upload">-->
+          <label class="nhsuk-label nhsuk-u-visually-hidden" for="file-hint">
+            Upload patient list file
+          </label>
+          <!--<span class="nhsuk-error-message" id="file-hint-error">
+            <span class="nhsuk-u-visually-hidden">Error:</span> The CSV must be smaller than 2MB
+          </span>-->
+          <input class="nhsuk-file-upload__input" id="file-hint" name="file-hint" type="file" aria-describedby="file-hint-error">
+        </div>
+
+        <div class="govuk-button-group">
+          <button type="submit" class="nhsuk-button nhsuk-u-margin-right-3" data-module="nhsuk-button">
+            Upload file
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

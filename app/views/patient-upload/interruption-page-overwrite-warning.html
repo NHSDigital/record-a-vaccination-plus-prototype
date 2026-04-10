@@ -1,0 +1,32 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Confirm you want to replace your list of patients
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <div class="nhsuk-panel nhsuk-panel--interruption">
+        <h1 class="nhsuk-panel__title nhsuk-panel__title--l">
+          Confirm you want to replace your list of patients
+        </h1>
+        <div class="nhsuk-panel__body">
+          <p>The patient records in your new CSV file will overwrite your current information.</p>
+          <p>Replacing your list of patients cannot be undone.</p>
+          <div class="nhsuk-button-group">
+            <a class="nhsuk-button nhsuk-button--reverse" data-module="nhsuk-button" href="upload-complete" role="button" draggable="false">
+              Confirm file upload
+            </a>
+
+            <a href="#" onclick="window.history.back(); return false;">Cancel</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

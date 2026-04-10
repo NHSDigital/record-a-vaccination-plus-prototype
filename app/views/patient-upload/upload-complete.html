@@ -1,0 +1,35 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Upload complete
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <div class="nhsuk-panel nhsuk-panel--interruption">
+        <h1 class="nhsuk-panel__title">
+          Upload complete
+        </h1>
+      </div>
+
+      <p class="nhsuk-body">
+        We are checking the records you uploaded match the vaccination information we hold about your patients. This could take up to 30 minutes.  
+      </p>
+      <p class="nhsuk-body">
+        You cannot view your list of patients during this time. 
+      </p>
+      <p class="nhsuk-body">
+        You will get an email when the check is complete.
+      </p>
+      
+    </div>
+  </div>
+{% endblock %}

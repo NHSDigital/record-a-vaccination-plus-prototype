@@ -1,0 +1,75 @@
+{% extends 'layout-index-only.html' %}
+
+{% set pageName = "NHS Record a vaccination prototypes" %}
+
+{% block beforeContent %}
+	{{ backLink({
+	href: "/", text: "Back"
+	}) }}
+{% endblock %}
+
+{% block content %}
+	<div class="nhsuk-grid-row">
+		<div class="nhsuk-grid-column-two-thirds">
+
+			<h1 class="nhsuk-heading-l">
+				Upload patient list
+			</h1>
+			
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Description</h2>
+			<p class="nhsuk-body">
+				Facilitate a logged in user to upload their patient list data (CSV) into the serivce for the data to then be processed and enriched by the service.
+			</p>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Upload page (single page, multi-state)</h2>
+			<ul>
+				<li><a href="add-patients?scenario=firstUpload">Add patients (1st upload)</a></li>
+				<li><a href="add-patients?scenario=updateExisting">Add patients (update existing list)</a></li>
+			</ul>
+			<p class="nhsuk-body nhsuk-u-margin-bottom-2">In-line error states:</p>
+			<ul>
+				<li><a href="add-patients?scenario=invalidFileType">Invalid file type</a></li>
+				<li><a href="add-patients?scenario=fileTooLarge">File too large</a></li>
+				<li><a href="add-patients?scenario=fileIsEmpty">File is empty</a></li>
+				<li><a href="add-patients?scenario=fileContainsAvirus">File contains a virus</a></li>
+				<li><a href="add-patients?scenario=fileIsPasswordProtected">File is password protected</a></li>
+				<li><a href="add-patients?scenario=fileNotUploaded">File not uploaded - try again</a></li>
+			</ul>
+			<p class="nhsuk-body nhsuk-u-margin-bottom-2">Enrichment processing in-flight:</p>
+			<ul>
+				<li><a href="add-patients?scenario=processing">Add patients (processing in-flight)</a></li>
+			</ul>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">System behaviour</h2>
+			<ul>
+				<li><a href="/patient-upload/interruption-page-overwrite-warning">Interruption page (overwrite warning)</a></li>
+			</ul>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Upload success</h2>
+			<ul>
+				<li><a href="/patient-upload/patient-list-uploaded-success">Patient list uploaded, proceccesing to begin</a></li>
+			</ul>
+			<p class="nhsuk-body nhsuk-u-margin-bottom-2">Error state:</li>
+			<ul>
+				<li><a href="error-patients-not-added">Patient list uploaded, issues detected in CSV</a></li>
+			</ul>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Processing outcomes</h2>
+			<p class="nhsuk-body nhsuk-u-margin-bottom-2">Emails:</li>
+			<ul>
+				<li><a href="email-success?firstName=Jodie&lastName=Brown">Success and ready to view</a></li>
+				<li><a href="email-failed?firstName=Jodie&lastName=Brown">Error, patients not added, old list restored</a></li>
+			</ul>
+			{#<ul>
+				<li><a href="#/">NOT PROGRESS BUT CURRENT STATE</li>
+			</ul>#}
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Patient list</h2>
+			<ul>
+				<li><a href="patients?scenario=firstUpload">Patient list: no patients have been processed</a></li>
+				<li><a href="patients?scenario=processing">Patient list: processing in-flight</a></li>
+			</ul>
+
+		</div>
+	</div>
+{% endblock %}

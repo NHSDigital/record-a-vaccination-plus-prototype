@@ -1,0 +1,170 @@
+{% extends 'ravs-plus-layout-1.html' %}
+
+{% set currentSection = "plus" %}
+
+{% set errorMessages = {
+  invalidFileType: "The selected file must be a CSV",
+  fileTooLarge: "The CSV must be smaller than 2MB",
+  fileIsEmpty: "The selected file is empty",
+  fileContainsAvirus: "The selected file contains a virus",
+  fileIsPasswordProtected: "The selected file is password protected",
+  fileNotUploaded: "The selected file could not be uploaded - try again"
+} %}
+
+{% set errorMessage = errorMessages[data.scenario] %}
+{% set hasError = errorMessage %}
+
+{% block pageTitle %}
+  {% if hasError %}Error: {% endif %}Add patients
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item">
+        <a class="nhsuk-breadcrumb__link" href="/patient-upload/index">Home</a>
+      </li>
+      <li class="nhsuk-breadcrumb__list-item">Add patients</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if hasError %}
+        <div class="nhsuk-error-summary" data-module="nhsuk-error-summary">
+          <div role="alert">
+            <h2 class="nhsuk-error-summary__title">
+              There is a problem
+            </h2>
+            <div class="nhsuk-error-summary__body">
+              <ul class="nhsuk-list nhsuk-error-summary__list">
+                <li>
+                  <a href="#file-hint">{{ errorMessage }}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <h1 class="nhsuk-heading-l">
+        Add patients
+      </h1>
+
+      {% if data.scenario == "processing" %}
+        <p class="nhsuk-body">
+          You cannot update your patient list because we are processing patient information from a recent file upload.
+        </p>
+        <p class="nhsuk-body">
+          If you are the person who uploaded that file, you will get an email when the process is complete.
+        </p>
+      {% else %}
+        {% if data.scenario == "updateExisting" %}
+          <p class="nhsuk-body">
+            Upload a CSV file to replace your list of patients.
+          </p>
+          <p class="nhsuk-body">
+            There are currently <strong>768</strong> patients for your organisation.
+            The most recent upload was by <strong>Chloe Liu</strong> on
+            <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -5 }) }}</strong>.
+          </p>
+        {% else %}
+          <p class="nhsuk-body">
+            Upload a CSV file to add patients for your organisation.
+          </p>
+        {% endif %}
+
+        <details class="nhsuk-details nhsuk-expander">
+          <summary class="nhsuk-details__summary">
+            <span class="nhsuk-details__summary-text">
+              How to prepare and upload a CSV file
+            </span>
+          </summary>
+          <div class="nhsuk-details__text">
+            <h2 class="nhsuk-heading-s">
+              Preparing a CSV file
+            </h2>
+
+            <p class="nhsuk-body">
+              First, export patient information from the system that you use to store and manage patient records.
+              You must export the information as a CSV file.
+            </p>
+
+            <p class="nhsuk-body">
+              For each patient, include their:
+            </p>
+
+            <ul>
+              <li>name</li>
+              <li>NHS number</li>
+              <li>pregnancy due date</li>
+            </ul>
+
+            <p class="nhsuk-body">
+              Do not edit the CSV file before you upload it.
+            </p>
+
+            <p class="nhsuk-body">
+              It is your responsibility to make sure the patient information is accurate.
+            </p>
+
+            <h2 class="nhsuk-heading-s">
+              Uploading a CSV file
+            </h2>
+
+            <p class="nhsuk-body">
+              When you upload a CSV file, we check to see what vaccination information we currently hold about your patients.
+            </p>
+
+            <div class="nhsuk-inset-text">
+              <span class="nhsuk-u-visually-hidden">Information: </span>
+              <p>It may take up to 30 minutes to carry out this check.</p>
+              <p>You will not be able to view your existing list of patients during this time.</p>
+              <p>You will receive an email when the check is complete.</p>
+            </div>
+
+            <p class="nhsuk-body">
+              If the upload is successful, you will be able to view a list of all your patients that show their personal details alongside their vaccination history.
+            </p>
+          </div>
+        </details>
+
+
+      {% if data.scenario == "updateExisting" %}
+        <form class="form" action="interruption-page-overwrite-warning" method="post">
+      {% else %}
+        <form class="form" action="upload-complete" method="post">
+      {% endif %}
+          <div class="nhsuk-form-group {% if hasError %}nhsuk-form-group--error {% endif %}nhsuk-file-upload" data-module="nhsuk-file-upload">
+
+            <label class="nhsuk-label nhsuk-u-visually-hidden" for="file-hint">
+              Upload patient list file
+            </label>
+
+            {% if hasError %}
+              <span class="nhsuk-error-message" id="file-hint-error">
+                <span class="nhsuk-u-visually-hidden">Error:</span> {{ errorMessage }}
+              </span>
+            {% endif %}
+
+            <input class="nhsuk-file-upload__input" id="file-hint" name="file-hint" type="file" {% if hasError %}aria-describedby="file-hint-error"{% endif %}>
+          </div>
+
+          <div class="govuk-button-group">
+            <button type="submit" class="nhsuk-button nhsuk-u-margin-right-3" data-module="nhsuk-button">
+              Upload file
+            </button>
+          </div>
+        </form>
+
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}

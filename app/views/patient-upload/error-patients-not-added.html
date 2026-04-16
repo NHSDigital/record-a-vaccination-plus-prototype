@@ -3,36 +3,30 @@
 {% set currentSection = "plus" %}
 
 {% block pageTitle %}
-  Error, patients not added
+  There was a problem with your upload
 {% endblock %}
 
 {% block content %}
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
-      <h1 class="nhsuk-heading-l">Error, patients not added</h1>
+      <h1 class="nhsuk-heading-l">There was a problem with your upload</h1>
 
-      <p class="nhsuk-body">There is a problem adding patients for your organisation.</p>
+      <p class="nhsuk-body">Your list of patients has not been updated.</p>
+      <p class="nhsuk-body">This could be because the data structure in the CSV file is not in the right format.</p>
 
-      <p class="nhsuk-body">This could be because the:</p>
+      <p class="nhsuk-body">For each patient, the file must include their:
       <ul>
-        <li>file format is not CSV </li>
-        <li>file is empty</li>
-        <li>data structure is incorrect</li>
+        <li>name</li>
+        <li>NHS number</li>
+        <li>pregnancy due date</li>
       </ul>
-
-      <p class="nhsuk-body">
-        Check for these common problems and upload the file again.  
-      </p>
-
-      <p class="nhsuk-body">
-        If you still have a problem, export a new CSV file from your existing system and try uploading that again. 
-      </p>
+        
+      <p class="nhsuk-body">Make sure your file contains this information and <a href="add-patients" class="nhsuk-link">upload the file again</a>.</p>
+      <p class="nhsuk-body">If you still have a problem, export a new CSV file from your existing system and try uploading that new file.</p>
 
       <h2 class="nhsuk-heading-m">Get support</p>
-      <p class="nhsuk-body">
-        Email <a href="#" class="nhsuk-link">xxxxxxxxxx@nhs.net</a> or call XXXX XXX XXX if you continue to have problems or need help with this service.  
-      </p>
+      <p class="nhsuk-body">If you continue to have problems or need help with this service, email <a href="#" class="nhsuk-link">xxxxxxxxxx@nhs.net</a> or call XXXX XXX XXX.</p>
       
     </div>
   </div>

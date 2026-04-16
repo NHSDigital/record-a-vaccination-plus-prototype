@@ -25,10 +25,10 @@
 		</div>
 
 		<div class="nhsuk-grid-column-one-half">
-			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Upload page<br>(single page, multi-state)</h2>
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Upload page</h2>
 			<ol>
-				<li><a href="add-patients?scenario=firstUpload">Add patients (1st upload)</a></li>
-				<li><a href="add-patients?scenario=updateExisting">Add patients (update existing list)</a></li>
+				<li><a href="add-patients?scenario=firstUpload">Add patients (first time upload)</a></li>
+				<li><a href="add-patients?scenario=updateExisting">Add patients (overwrite existing list)</a></li>
 			</ol>
 			<p class="nhsuk-body nhsuk-u-margin-bottom-2">In-line error states:</p>
 			<ol start="3">
@@ -49,23 +49,24 @@
 
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">System behaviour</h2>
 			<ol start="10">
-				<li><a href="/patient-upload/interruption-page-overwrite-warning">Interruption page (overwrite warning)</a></li>
+				<li><a href="/patient-upload/interruption-page-overwrite-warning">Overwrite existing list warning</a></li>
 			</ol>
 
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Upload success</h2>
 			<ol start="11">
-				<li><a href="/patient-upload/patient-list-uploaded-success">Patient list uploaded, proceccesing to begin</a></li>
+				<li><a href="/patient-upload/patient-list-uploaded-success">Patient list uploaded: proceccesing to begin</a></li>
 			</ol>
 			<p class="nhsuk-body nhsuk-u-margin-bottom-2">Error state:</li>
 			<ol start="12">
-				<li><a href="error-patients-not-added">Patient list uploaded, issues detected in CSV</a></li>
+				<li><a href="error-patients-not-added">Patient list uploaded: issues detected in CSV</a></li>
 			</ol>
 
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Processing outcomes</h2>
 			<p class="nhsuk-body nhsuk-u-margin-bottom-2">Emails:</li>
 			<ol start="13">
-				<li><a href="email-success?firstName=Jodie&lastName=Brown">Success and ready to view</a></li>
-				<li><a href="email-failed?firstName=Jodie&lastName=Brown">Error, patients not added, old list restored</a></li>
+				<li><a href="email-success?firstName=Jodie&lastName=Brown">Processing success and patient list ready to view</a></li>
+				<li><a href="email-failed?firstName=Jodie&lastName=Brown">Processing failed; previous patient list restored</a></li>
+				{#<li><a href="email-failed?firstName=Jodie&lastName=Brown">Processing failed; first time upload, no patient list</a></li>#}
 			</ol>
 			{#<ol>
 				<li><a href="#/">NOT PROGRESS BUT CURRENT STATE</li>
@@ -73,7 +74,7 @@
 
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Patient list</h2>
 			<ol start="15">
-				<li><a href="patients?scenario=firstUpload">Patient list: no patients have been processed</a></li>
+				<li><a href="patients?scenario=firstUpload">Patient list: no patients have been added</a></li>
 				<li><a href="patients?scenario=processing">Patient list: processing in-flight</a></li>
 			</ol>
 

@@ -26,6 +26,8 @@
       <h1 class="nhsuk-heading-xl">
         Change log
       </h1>
+
+{% if data['uploadedList'] != 'noPatients' %}
     </div>
   </div>
 
@@ -117,5 +119,11 @@
 
     </div>
   </div>
+{% else %}
+      <p class="nhsuk-body">No patients have been added for your organisation yet.</p>
+      <a href="add-patients?scenario=firstUpload" class="nhsuk-button" data-module="nhsuk-button">Add patients</a>
+    </div>
+  </div>
+{% endif %}
 
 {% endblock %}

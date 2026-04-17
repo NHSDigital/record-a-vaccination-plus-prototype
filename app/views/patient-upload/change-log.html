@@ -3,7 +3,7 @@
 {% set currentSection = "plus" %}
 
 {% block pageTitle %}
-  Change log
+  Patient upload history
 {% endblock %}
 
 {% block beforeContent %}
@@ -12,7 +12,7 @@
       <li class="nhsuk-breadcrumb__list-item">
         <a class="nhsuk-breadcrumb__link" href="landing">Maternity</a>
       </li>
-      <li class="nhsuk-breadcrumb__list-item">Change log</li>
+      <li class="nhsuk-breadcrumb__list-item">Patient upload history</li>
     </ol>
     <a class="nhsuk-back-link" href="javascript:history.back()">
       Go back
@@ -24,7 +24,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <h1 class="nhsuk-heading-xl">
-        Change log
+        Patient upload history
       </h1>
 
 {% if data['uploadedList'] != 'noPatients' %}

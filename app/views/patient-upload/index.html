@@ -72,11 +72,11 @@
 			<ol start="14">
 				<li><a href="email-success?firstName=Jodie&lastName=Brown">Processing success and patient list ready to view</a></li>
 				<li><a href="email-failed?firstName=Jodie&lastName=Brown">Processing failed; previous patient list restored</a></li>
-				{#<li><a href="email-failed?firstName=Jodie&lastName=Brown">Processing failed; first time upload, no patient list</a></li>#}
+				<li><a href="email-failed-first-upload?firstName=Jodie&lastName=Brown">Processing failed; first time upload, no patient list</a></li>
 			</ol>
 
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Patient upload history</h2>
-			<ol start="16">
+			<ol start="17">
 				<li><a href="change-log?uploadedList=noPatients">No patients have been added</a></li>
 				<li><a href="change-log?uploadedList=false">Current list, Failed, and Processed status examples</a></li>
 				<li><a href="change-log?uploadedList=processing">Successful upload being processed</a></li>
@@ -84,7 +84,7 @@
 			</ol>
 
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Patient list</h2>
-			<ol start="20">
+			<ol start="21">
 				<li><a href="patients?scenario=firstUpload">Patient list: no patients have been added</a></li>
 				<li><a href="patients?scenario=processing">Patient list: processing in-flight</a></li>
 			</ol>

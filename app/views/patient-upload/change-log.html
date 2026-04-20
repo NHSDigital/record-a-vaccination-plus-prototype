@@ -28,6 +28,8 @@
       </h1>
 
 {% if data['uploadedList'] != 'noPatients' %}
+      <p class="nhsuk-body">All patient list file uploads for your organisation.</p>
+
     </div>
   </div>
 
@@ -59,7 +61,7 @@
               {% endif %}
             </dt>
             <dd class="nhsuk-summary-list__value">
-              {{ date({day: 'numeric', month: 'long', year: 'numeric'}) }}<br>Alex Smith
+              {{ date({day: 'numeric', month: 'long', year: 'numeric'}) }} at 11:57am,<br>Alex Smith
             </dd>
             <dd class="nhsuk-summary-list__value">
               {% if data['uploadedList'] == 'true' %}
@@ -80,7 +82,7 @@
             {% endif %}
           </dt>
           <dd class="nhsuk-summary-list__value">
-            {{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { day: -7 }) }}<br>Chloe Liu
+            {{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { day: -7 }) }} at 10:13am,<br>Chloe Liu
           </dd>
           <dd class="nhsuk-summary-list__value">
             {% if data['uploadedList'] == 'true' %}
@@ -96,7 +98,7 @@
             dataset-{{ date({ year: 'numeric' }, { day: -14 }) }}-{{ date({ month: '2-digit' }, { day: -14 }) }}-{{ date({ day: '2-digit' }, { day: -14 }) }}.csv&nbsp;(9.6MB)
           </dt>
           <dd class="nhsuk-summary-list__value">
-            {{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { day: -14 }) }}<br>Katie Elliot
+            {{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { day: -14 }) }} at 5:47pm,<br>Katie Elliot
           </dd>
           <dd class="nhsuk-summary-list__value">
             <strong class="nhsuk-tag nhsuk-tag--red">Failed</strong>
@@ -108,7 +110,7 @@
             dataset-{{ date({ year: 'numeric' }, { day: -21 }) }}-{{ date({ month: '2-digit' }, { day: -21 }) }}-{{ date({ day: '2-digit' }, { day: -21 }) }}.csv&nbsp;(14.8MB)
           </dt>
           <dd class="nhsuk-summary-list__value">
-            {{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { day: -21 }) }}<br>Nadiya Thomas
+            {{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { day: -21 }) }} at 2:04pm,<br>Nadiya Thomas
           </dd>
           <dd class="nhsuk-summary-list__value">
             <strong class="nhsuk-tag nhsuk-tag--grey">Processed</strong>

@@ -9,23 +9,11 @@
 {% block content %}
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <h1 class="nhsuk-heading-l">There was a problem with your upload</h1>
-
-      <p class="nhsuk-body">Your list of patients has not been updated.</p>
-      <p class="nhsuk-body">This could be because the data structure in the CSV file is not in the right format. For each patient, the file must include their:
-      <ul>
-        <li>name</li>
-        <li>NHS number</li>
-        <li>pregnancy due date</li>
-      </ul>
-        
-      <p class="nhsuk-body">Make sure your file contains this information and <a href="add-patients" class="nhsuk-link">upload the file again</a>.</p>
-      <p class="nhsuk-body">If you still have a problem, export a new CSV file from your existing system and try uploading that new file.</p>
-
-      <h2 class="nhsuk-heading-m">Get support</p>
-      <p class="nhsuk-body">If you continue to have problems or need help with this service, contact our helpdesk by emailing <a href="#" class="nhsuk-link">ravs.support@england.nhs.uk</a>.</p>
-      
+      <p class="nhsuk-body">You need to fix issues for XX patients in your CSV file.</p>
+      <p class="nhsuk-body">The CSV file must include a header row with two columns: NHS number, due date.</p>
+      <p class="nhsuk-body">Fix the issues and upload a new CSV file.</p>
+      <p class="nhsuk-body"><a href="add-patients?scenario=firstUpload" class="nhsuk-button" data-module="nhsuk-button">Add patients</a></p>
     </div>
   </div>
 {% endblock %}

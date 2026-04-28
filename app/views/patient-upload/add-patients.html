@@ -88,23 +88,21 @@
             <h2 class="nhsuk-heading-s">
               Preparing a CSV file
             </h2>
-
             <p class="nhsuk-body">
               First, export patient information from the system that you use to store and manage patient records. You must export the information as a CSV file.
             </p>
-
             <p class="nhsuk-body">
-              The CSV file must include a header row with two columns:
+              The CSV file should include a header row followed by data rows. The header row must include two columns: NHS number, Due date.
             </p>
-            <ul>
-              <li>NHS number</li>
-              <li>due date</li>
-            </ul>
-
-            <p class="nhsuk-body">
+            <p class="nhsuk-body nhsuk-u-margin-bottom-2">
+              For example:
+            </p>
+            <code class="" data-line="">
+              NHS number, Due date<br>1234567890, 2026-04-27<br>0987654321, 2026-11-12  
+            </code>
+            <p class="nhsuk-body nhsuk-u-padding-top-4">
               You do not need to include any other patient information in your exported file.
             </p>
-
             <p class="nhsuk-body">
               It is your responsibility to make sure the patient information is accurate.
             </p>
@@ -112,18 +110,15 @@
             <h2 class="nhsuk-heading-s">
               Uploading a CSV file
             </h2>
-
             <p class="nhsuk-body">
               When you upload a CSV file, we check to see what vaccination information we currently hold about your patients.
             </p>
-
             <div class="nhsuk-inset-text">
               <span class="nhsuk-u-visually-hidden">Information:</span>
-              <p>It may take up to 30 minutes to carry out this check.</p>
-              <p>If you are replacing a list of patients, you will not be able to view your previous 	list of patients during this time.</p>
+              <p>It may take up to 30 minutes to carry out this check.  
+              <p>If you are replacing a list of patients, you will not be able to view your previous list of patients during this time.</p>
               <p>You will receive an email when the check is complete.</p>
             </div>
-
             <p class="nhsuk-body">
               If the upload is successful, you will be able to view a list of patients that combines their personal details and vaccination information.
             </p>

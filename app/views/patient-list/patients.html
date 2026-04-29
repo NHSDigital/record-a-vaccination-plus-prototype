@@ -168,7 +168,7 @@
           </tr>
           <tr role="row">
             {#<td>P015</td>#}
-            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"<a href="#/" class="nhsuk-link">>O'Sullivan, Francesca<br>9057312843</a></th>
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"<a href="#/" class="nhsuk-link">O'Sullivan, Francesca<br>9057312843</a></th>
             <td class="nhsuk-table__cell">11 November 2026</td>
             <td class="nhsuk-table__cell">B13 9RI</td>
             <td class="nhsuk-table__cell">20 August 2026</td>
@@ -219,139 +219,180 @@
     {% endset -%}
 
     {% set contentRSV %}
-      {{ table({
-        caption: "RSV",
-        head: [
-          {
-            text: "Patient"
-          },
-          {
-            text: "Due date"
-          },
-          {
-            text: "Postcode"
-          },
-          {
-            text: "RSV eligibility"
-          },
-          {
-            text: "Pertussis eligibility"
-          }
-        ],
-        rows: [
-          [
-            {
-              html: "Bailey, Sarah<br>123 456 789"
-            },
-            {
-              text: "13 July 2026"
-            },
-            {
-              text: "B36 3YQ"
-            },
-            {
-              text: "13 July 2026"
-            },
-            {
-              text: "13 July 2026"
-            }
-          ],
-          [
-            {
-              html: "Edwards, Janet<br>123 456 789"
-            },
-            {
-              text: "1 Aug 2026"
-            },
-            {
-              text: "B98 4VS"
-            },
-            {
-              text: "1 Aug 2026"
-            },
-            {
-              text: "1 Aug 2026"
-            }
-          ],
-          [
-            {
-              html: "Patel, Rita<br>123 456 789"
-            },
-            {
-              text: "10 Oct 2026"
-            },
-            {
-              text: "B38 1CB"
-            },
-            {
-              text: "10 Oct 2026"
-            },
-            {
-              text: "10 Oct 2026"
-            }
-          ]
-        ]
-      }) }}
-    {% endset -%}
-
-    {% set contentPertussis %}
-      {{ table({
-        caption: "Pertussis",
-        head: [
-          {
-            text: "Case manager"
-          },
-          {
-            text: "Cases opened",
-            format: "numeric"
-          },
-          {
-            text: "Cases closed",
-            format: "numeric"
-          }
-        ],
-        rows: [
-          [
-            {
-              text: "David Francis"
-            },
-            {
-              text: "98",
-              format: "numeric"
-            },
-            {
-              text: "95",
-              format: "numeric"
-            }
-          ],
-          [
-            {
-              text: "Paul Farmer"
-            },
-            {
-              text: "122",
-              format: "numeric"
-            },
-            {
-              text: "131",
-              format: "numeric"
-            }
-          ],
-          [
-            {
-              text: "Rita Patel"
-            },
-            {
-              text: "126",
-              format: "numeric"
-            },
-            {
-              text: "142",
-              format: "numeric"
-            }
-          ]
-        ]
-      }) }}
+      <table class="nhsuk-table" data-module="nhsuk-table">
+        <caption class="nhsuk-table__caption nhsuk-table__caption--m">RSV</caption>
+        <thead role="rowgroup" class="nhsuk-table__head">
+          <tr role="row">
+            <th role="columnheader" class="nhsuk-table__header" scope="col" aria-sort="ascending">Patient</th>
+            <th role="columnheader" class="nhsuk-table__header" scope="col" aria-sort="none">Due date</th>
+            <th role="columnheader" class="nhsuk-table__header" scope="col" aria-sort="none">Postcode</th>
+            <th role="columnheader" class="nhsuk-table__header" scope="col" aria-sort="none">RSV eligibility</th>
+            <th role="columnheader" class="nhsuk-table__header" scope="col" aria-sort="none">Pertussis eligibility</th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          <tr role="row">
+            {#<td>P001</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="row"><a href="#/" class="nhsuk-link">Bailey, Sarah<br>1048327715</a></th>
+            <td class="nhsuk-table__cell">6 May 2026</td>
+            <td class="nhsuk-table__cell">B36 3YQ</td>
+            <td class="nhsuk-table__cell">11 February 2026</td>
+            <td class="nhsuk-table__cell">18 November 2025</td>
+          </tr>
+          <tr role="row">
+            {#<td>P002</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Edwards, Janet<br>5892046632</a></th>
+            <td class="nhsuk-table__cell">18 May 2026</td>
+            <td class="nhsuk-table__cell">B98 4VS</td>
+            <td class="nhsuk-table__cell">23 February 2026</td>
+            <td class="nhsuk-table__cell">30 November 2025</td>
+          </tr>
+          <tr role="row">
+            {#<td>P003</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Barnes, Carole<br>7713950284</a></th>
+            <td class="nhsuk-table__cell">2 June 2026</td>
+            <td class="nhsuk-table__cell">B38 1CB</td>
+            <td class="nhsuk-table__cell">10 March 2026</td>
+            <td class="nhsuk-table__cell">16 December 2025</td>
+          </tr>
+          <tr role="row">
+            {#<td>P004</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Stevenson, Maureen<br>2368809147</a></th>
+            <td class="nhsuk-table__cell">15 June 2026</td>
+            <td class="nhsuk-table__cell">B78 3YQ</td>
+            <td class="nhsuk-table__cell">23 March 2026</td>
+            <td class="nhsuk-table__cell">29 December 2025</td>
+          </tr>
+          <tr role="row">
+            {#<td>P005</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Burns, Anne<br>9154473026</a></th>
+            <td class="nhsuk-table__cell">29 June 2026</td>
+            <td class="nhsuk-table__cell">B2 8UE</td>
+            <td class="nhsuk-table__cell">6 April 2026</td>
+            <td class="nhsuk-table__cell">12 January 2026</td>
+          </tr>
+          <tr role="row">
+            {#<td>P006</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Williams, Natasha<br>3481297753</a></th>
+            <td class="nhsuk-table__cell">10 July 2026</td>
+            <td class="nhsuk-table__cell">B1 5BW</td>
+            <td class="nhsuk-table__cell">17 April 2026</td>
+            <td class="nhsuk-table__cell">23 January 2026</td>
+          </tr>
+          <tr role="row">
+            {#<td>P007</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Davison, Joyce<br>6625401988</a></th>
+            <td class="nhsuk-table__cell">24 July 2026</td>
+            <td class="nhsuk-table__cell">B93 9PX</td>
+            <td class="nhsuk-table__cell">1 May 2026</td>
+            <td class="nhsuk-table__cell">6 February 2026</td>
+          </tr>
+          <tr role="row">
+            {#<td>P008</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Bennett, Jenna<br>7032164591</a></th>
+            <td class="nhsuk-table__cell">6 August 2026</td>
+            <td class="nhsuk-table__cell">B98 6CB</td>
+            <td class="nhsuk-table__cell">14 May 2026</td>
+            <td class="nhsuk-table__cell">19 February 2026</td>
+          </tr>
+          <tr role="row">
+            {#<td>P009</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Davison, Michelle<br>8297710346</a></th>
+            <td class="nhsuk-table__cell">20 August 2026</td>
+            <td class="nhsuk-table__cell">B4 2LP</td>
+            <td class="nhsuk-table__cell">28 May 2026</td>
+            <td class="nhsuk-table__cell">5 March 2026</td>
+          </tr>
+          <tr role="row">
+            {#<td>P010</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Begum, Nicola<br>4519032287</a></th>
+            <td class="nhsuk-table__cell">3 September 2026</td>
+            <td class="nhsuk-table__cell">B31 5GD</td>
+            <td class="nhsuk-table__cell">12 June 2026</td>
+            <td class="nhsuk-table__cell">19 March 2026</td>
+          </tr>
+          <tr role="row">
+            {#<td>P011</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">King, Charlene<br>6671185902</a></th>
+            <td class="nhsuk-table__cell">17 September 2026</td>
+            <td class="nhsuk-table__cell">B94 9JL</td>
+            <td class="nhsuk-table__cell">26 June 2026</td>
+            <td class="nhsuk-table__cell">2 April 2026</td>
+          </tr>
+          <tr role="row">
+            {#<td>P012</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Chambers, Katherine<br>2946608735</a></th>
+            <td class="nhsuk-table__cell">30 September 2026</td>
+            <td class="nhsuk-table__cell">B46 9ZE</td>
+            <td class="nhsuk-table__cell">9 July 2026</td>
+            <td class="nhsuk-table__cell">15 April 2026</td>
+          </tr>
+          <tr role="row">
+            {#<td>P013</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Shaw, Joyce<br>8305521494</a></th>
+            <td class="nhsuk-table__cell">14 October 2026</td>
+            <td class="nhsuk-table__cell">B34 6FA</td>
+            <td class="nhsuk-table__cell">23 July 2026</td>
+            <td class="nhsuk-table__cell">29 April 2026</td>
+          </tr>
+          <tr role="row">
+            {#<td>P014</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Hobbs, Molly<br>1724496008</a></th>
+            <td class="nhsuk-table__cell">28 October 2026</td>
+            <td class="nhsuk-table__cell">B8 3QL</td>
+            <td class="nhsuk-table__cell">6 August 2026</td>
+            <td class="nhsuk-table__cell">13 May 2026</td>
+          </tr>
+          <tr role="row">
+            {#<td>P015</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"<a href="#/" class="nhsuk-link">O'Sullivan, Francesca<br>9057312843</a></th>
+            <td class="nhsuk-table__cell">11 November 2026</td>
+            <td class="nhsuk-table__cell">B13 9RI</td>
+            <td class="nhsuk-table__cell">20 August 2026</td>
+            <td class="nhsuk-table__cell">27 May 2026</td>
+          </tr>
+          <tr role="row">
+            {#<td>P016</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Power, Elaine<br>3180675592</a></th>
+            <td class="nhsuk-table__cell">25 November 2026</td>
+            <td class="nhsuk-table__cell">B46 2CZ</td>
+            <td class="nhsuk-table__cell">3 September 2026</td>
+            <td class="nhsuk-table__cell">10 June 2026</td>
+          </tr>
+          <tr role="row">
+            {#<td>P017</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Phillips, Maureen<br>7468821307</a></th>
+            <td class="nhsuk-table__cell">9 December 2026</td>
+            <td class="nhsuk-table__cell">B13 4EE</td>
+            <td class="nhsuk-table__cell">17 September 2026</td>
+            <td class="nhsuk-table__cell">24 June 2026</td>
+          </tr>
+          <tr role="row">
+            {#<td>P018</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Brown, Sally<br>5293047716</a></th>
+            <td class="nhsuk-table__cell">23 December 2026</td>
+            <td class="nhsuk-table__cell">B48 5RF</td>
+            <td class="nhsuk-table__cell">30 September 2026</td>
+            <td class="nhsuk-table__cell">8 July 2026</td>
+          </tr>
+          <tr role="row">
+            {#td>P019</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Brown, Sharon<br>6812204985</a></th>
+            <td class="nhsuk-table__cell">6 January 2027</td>
+            <td class="nhsuk-table__cell">B72 1VM</td>
+            <td class="nhsuk-table__cell">14 October 2026</td>
+            <td class="nhsuk-table__cell">22 July 2026</td>
+          </tr>
+          <tr role="row">
+            {#<td>P020</td>#}
+            <th class="nhsuk-table__header nhsuk-u-font-weight-normal" scope="col"><a href="#/" class="nhsuk-link">Page, Michelle<br>4079931562</a></th>
+            <td class="nhsuk-table__cell">20 January 2027</td>
+            <td class="nhsuk-table__cell">B18 6CK</td>
+            <td class="nhsuk-table__cell">28 October 2026</td>
+            <td class="nhsuk-table__cell">5 August 2026</td>
+          </tr>
+        </tbody>
+      </table>
     {% endset -%}
 
     {% set contentIssues %}

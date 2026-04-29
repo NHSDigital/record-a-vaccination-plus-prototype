@@ -46,7 +46,7 @@
     "hmrc-frontend": "^6.81.0",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
-    "nhsuk-frontend": "^10.4.2",
+    "nhsuk-frontend": "github:nhsuk/nhsuk-frontend#0e310c29a",
     "nhsuk-prototype-kit": "^8.2.0",
     "nunjucks": "^3.2.4",
     "path": "^0.12.7",

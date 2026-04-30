@@ -164,6 +164,28 @@
     font-size: 16px;
   }
 
+  /* Pagination overrides */
+  .nhsuk-pagination-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* keeps pagination + "Showing..." on same line */
+    margin-top: 8px;     /* tighten gap from table */
+  }
+
+  .nhsuk-pagination {
+    margin-top: 0;       /* remove default big gap */
+    margin-bottom: 0;
+  }
+
+  .nhsuk-table {
+    margin-bottom: 8px;  /* tighten space above pagination */
+  }
+
+  .nhsuk-pagination-wrapper__results {
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
 </style>
 
 <div class="nhsuk-grid-row">
@@ -174,7 +196,7 @@
     </h1>
 
     <p class="nhsuk-body">
-      Last upload: <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong> at 11:57am by <strong>Chloe Liu</strong>.
+      This list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
     </p>
 
     {{ input({
@@ -221,28 +243,28 @@
     {{ tabs({
       items: [
       {
-        label: "All vaccinations",
+        label: "All vaccinations (1,993)",
         id: "tab-all-vaccinations",
         panel: {
           html: contentAllVaccinations
           }
         },
         {
-          label: "RSV",
+          label: "RSV (1,254)",
           id: "tab-rsv",
           panel: {
             html: contentRSV
           }
         },
         {
-          label: "Pertussis",
+          label: "Pertussi (739)",
           id: "tab-pertussis",
           panel: {
             html: contentPertussis
           }
         },
         {
-          label: "Data quality issues",
+          label: "Data quality issues (7)",
           id: "tab-data-quality-issues",
           panel: {
             html: contentIssues

@@ -1,0 +1,396 @@
+<details class="nhsuk-details app-filter nhsuk-u-padding-bottom-4" data-module="app-filter">
+  <summary class="nhsuk-details__summary app-filter__summary">
+    <span class="app-caret" aria-hidden="true"></span>
+    <span class="nhsuk-details__summary-text">Filter and sort</span>
+  </summary>
+
+  <div class="nhsuk-details__text app-filter__panel">
+    <form action="#/" method="post" novalidate>
+
+      {# Personal details #}
+      <details class="nhsuk-details app-section">
+        <summary class="nhsuk-details__summary app-section__summary">
+          <span class="app-caret--inner" aria-hidden="true"></span>
+          <span class="nhsuk-details__summary-text">Personal details</span>
+        </summary>
+        <div class="nhsuk-details__text app-section__body">
+          {{ input({
+            label: {
+              text: "Postcode",
+              classes: "nhsuk-u-font-weight-bold"
+            },
+            classes: "nhsuk-input--width-10",
+            id: "patient-postcode",
+            name: "patientPostcode"
+          }) }}
+          {{ checkboxes({
+            idPrefix: "contact-preferences",
+            name: "contactPreferences",
+            fieldset: { 
+              legend: { 
+                text: "Contact preferences", 
+                classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" 
+              } 
+            },
+            classes: "nhsuk-checkboxes--small",
+            items: [
+              { value: "contactPreferencesPhone", text: "Phone" },
+              { value: "contactPreferencesEmail", text: "Email" },
+              { value: "contactPreferencesPost", text: "Post" }
+            ]
+          }) }}
+        </div>
+      </details>
+
+      {# Vaccination status #}
+      <details class="nhsuk-details app-section">
+        <summary class="nhsuk-details__summary app-section__summary">
+          <span class="app-caret--inner" aria-hidden="true"></span>
+          <span class="nhsuk-details__summary-text">Vaccination status</span>
+        </summary>
+        <div class="nhsuk-details__text app-section__body">
+          {{ checkboxes({
+            idPrefix: "current-status",
+            name: "currentStatus",
+            fieldset: { legend: { text: "Current Status", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+            classes: "nhsuk-checkboxes--small",
+            items: [
+              { value: "statusVaccinsted", text: "Vaccinated" },
+              { value: "statusEligibleForVaccination", text: "Eligible for vaccination" },
+              { value: "statusNotYetElligible", text: "Not yet eligible" },
+              { value: "statusDeclinedVaccination", text: "Declined vaccination" }
+            ]
+          }) }}
+          {{ checkboxes({
+            idPrefix: "information-shared",
+            name: "informationShared",
+            fieldset: { legend: { text: "Information shared", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+            classes: "nhsuk-checkboxes--small",
+            items: [
+              { value: "sharedVaccineExplaind", text: "Vaccine explained" },
+              { value: "sharedVaccineOffered", text: "Vaccine offered" },
+              { value: "sharedSideEffectsDiscussed", text: "Side effects discussed" }
+            ]
+          }) }}
+        </div>
+      </details>
+
+      {# Dates and invitations #}
+      <details class="nhsuk-details app-section">
+        <summary class="nhsuk-details__summary app-section__summary">
+          <span class="app-caret--inner" aria-hidden="true"></span>
+          <span class="nhsuk-details__summary-text">Vaccine invitations and bookings</span>
+        </summary>
+        <div class="nhsuk-details__text app-section__body">
+          {% set conditionalPregnancyDueDate %}
+            {{ dateInput({
+              id: "due-date-frame",
+              namePrefix: "dueDateFrom",
+              fieldset: {
+                legend: {
+                  text: "From date"
+                }
+              },
+              hint: {
+                text: "For example, 15 3 2026"
+              },
+              items: [
+                {
+                  name: "Day",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Month",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Year",
+                  classes: "nhsuk-input--width-4"
+                }
+              ]
+            }) }}
+            {{ dateInput({
+              id: "due-date-to",
+              namePrefix: "dueDateTo",
+              fieldset: {
+                legend: {
+                  text: "To date"
+                }
+              },
+              hint: {
+                text: "For example, 13 12 2026"
+              },
+              items: [
+                {
+                  name: "Day",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Month",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Year",
+                  classes: "nhsuk-input--width-4"
+                }
+              ]
+            }) }}
+          {% endset %}
+
+          {% set conditionalRSVvaccinationDate %}
+            {{ dateInput({
+              id: "rsv-vaccination-from-date",
+              namePrefix: "RSVvaccinationFromDate",
+              fieldset: {
+                legend: {
+                  text: "From date"
+                }
+              },
+              hint: {
+                text: "For example, 15 3 2026"
+              },
+              items: [
+                {
+                  name: "Day",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Month",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Year",
+                  classes: "nhsuk-input--width-4"
+                }
+              ]
+            }) }}
+            {{ dateInput({
+              id: "rsv-vaccination-to-date",
+              namePrefix: "RSVvaccinationToDate",
+              fieldset: {
+                legend: {
+                  text: "To date"
+                }
+              },
+              hint: {
+                text: "For example, 13 12 2026"
+              },
+              items: [
+                {
+                  name: "Day",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Month",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Year",
+                  classes: "nhsuk-input--width-4"
+                }
+              ]
+            }) }}
+          {% endset %}
+
+          {% set conditionalPertussisVaccinationDate %}
+            {{ dateInput({
+              id: "pertussis-vaccination-from-date",
+              namePrefix: "pertussisVaccinationFromDate",
+              fieldset: {
+                legend: {
+                  text: "From date"
+                }
+              },
+              hint: {
+                text: "For example, 15 3 2026"
+              },
+              items: [
+                {
+                  name: "Day",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Month",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Year",
+                  classes: "nhsuk-input--width-4"
+                }
+              ]
+            }) }}
+            {{ dateInput({
+              id: "pertussis-vaccination-to-date",
+              namePrefix: "pertussisVaccinationToDate",
+              fieldset: {
+                legend: {
+                  text: "To date"
+                }
+              },
+              hint: {
+                text: "For example, 15 3 2026"
+              },
+              items: [
+                {
+                  name: "Day",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Month",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Year",
+                  classes: "nhsuk-input--width-4"
+                }
+              ]
+            }) }}
+          {% endset %}
+
+          {{ checkboxes({
+            idPrefix: "key-dates",
+            name: "keyDates",
+            fieldset: { legend: { text: "Key dates", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+            classes: "nhsuk-checkboxes--small",
+            items: [
+              { value: "keydatePregnancy", text: "Pregnancy due date", conditional: { html: conditionalPregnancyDueDate } },
+              { value: "keydatePertussisvaccination", text: "Date of pertussis vaccination", conditional: { html: conditionalPertussisVaccinationDate } },
+              { value: "keydateRSVvaccination", text: "Date of RSV vaccination", conditional: { html: conditionalRSVvaccinationDate } }
+            ]
+          }) }}
+
+          {% set conditionalPertussisInvitationDate %}
+            {{ dateInput({
+              id: "pertussis-invitation-from-date",
+              namePrefix: "pertussisInvitationFromDate",
+              fieldset: {
+                legend: {
+                  text: "From date"
+                }
+              },
+              hint: {
+                text: "For example, 15 3 2026"
+              },
+              items: [
+                {
+                  name: "Day",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Month",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Year",
+                  classes: "nhsuk-input--width-4"
+                }
+              ]
+            }) }}
+            {{ dateInput({
+              id: "pertussis-invitation-to-date",
+              namePrefix: "pertussisInvitationToDate",
+              fieldset: {
+                legend: {
+                  text: "To date"
+                }
+              },
+              hint: {
+                text: "For example, 15 3 2026"
+              },
+              items: [
+                {
+                  name: "Day",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Month",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Year",
+                  classes: "nhsuk-input--width-4"
+                }
+              ]
+            }) }}
+          {% endset %}
+
+          {% set conditionalRSVinvitationDate %}
+            {{ dateInput({
+              id: "rsv-invitation-from-date",
+              namePrefix: "rsvInvitationFromDate",
+              fieldset: {
+                legend: {
+                  text: "From date"
+                }
+              },
+              hint: {
+                text: "For example, 15 3 2026"
+              },
+              items: [
+                {
+                  name: "Day",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Month",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Year",
+                  classes: "nhsuk-input--width-4"
+                }
+              ]
+            }) }}
+            {{ dateInput({
+              id: "rsv-invitation-to-date",
+              namePrefix: "rsvInvitationToDate",
+              fieldset: {
+                legend: {
+                  text: "To date"
+                }
+              },
+              hint: {
+                text: "For example, 15 3 2026"
+              },
+              items: [
+                {
+                  name: "Day",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Month",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Year",
+                  classes: "nhsuk-input--width-4"
+                }
+              ]
+            }) }}
+          {% endset %}
+
+          {{ checkboxes({
+            idPrefix: "invitations",
+            name: "invitations",
+            fieldset: { legend: { text: "Invitations", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+            classes: "nhsuk-checkboxes--small",
+            items: [
+              { value: "keydatePertussisvaccination", text: "Date invited for pertussis vaccination", conditional: { html: conditionalPertussisInvitationDate } },
+              { value: "keydateRSVvaccination", text: "Date invited for RSV vaccination", conditional: { html: conditionalRSVinvitationDate } }
+            ]
+          }) }}
+        </div>
+      </details>
+
+      <div class="app-actions" style="display: flex; align-items: center; gap: 1rem; margin-top: 0; margin-bottom: 0;">
+        <button type="submit" class="nhsuk-button nhsuk-button--small" data-module="nhsuk-button">
+          Apply
+        </button>
+        <button type="submit" class="nhsuk-button nhsuk-button--secondary nhsuk-button--small" data-module="nhsuk-button">
+          Clear filters
+        </button>
+      </div>
+
+    </form>
+  </div>
+</details>

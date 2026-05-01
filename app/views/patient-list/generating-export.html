@@ -1,0 +1,33 @@
+{% extends 'ravs-plus-layout-1.html' %}
+
+{% set currentSection = "plus" %}
+
+{% set pageName = "Generating export" %}
+
+{% block beforeContent %}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l nhsuk-u-padding-bottom-2">
+        {{ pageName }}
+      </h1>
+
+      <div aria-live="polite" class="nhsuk-body">
+        <div class="spinner spinner--extra-large" aria-hidden="true"></div>
+        <p class="nhsuk-body nhsuk-u-padding-top-5">Please wait, generating export...</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Wait 1.5 seconds, then move on...
+    setTimeout(function() {
+      window.location.href = "download-export";
+    }, 1500);
+  </script>
+
+{% endblock %}

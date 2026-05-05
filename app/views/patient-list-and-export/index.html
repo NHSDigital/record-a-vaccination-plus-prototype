@@ -1,0 +1,81 @@
+{% extends 'layout-index-only.html' %}
+
+{% set pageName = "NHS Record a vaccination prototypes" %}
+
+{% block beforeContent %}
+	{{ backLink({
+	href: "/", text: "Back"
+	}) }}
+{% endblock %}
+
+{% block content %}
+	<div class="nhsuk-grid-row">
+		<div class="nhsuk-grid-column-two-thirds">
+			<h1 class="nhsuk-heading-l">
+				Patient list and export
+			</h1>
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Description</h2>
+			<p class="nhsuk-body">
+				Facilitate a logged in user to view their successfully uploaded and enriched patient list.
+			</p>
+			<p class="nhsuk-body">
+				The patient list allows for filtering to be applied, as well issues being noted with problematic patient records that 
+				were part of the enrichment process.
+			</p>
+			<p class="nhsuk-body nhsuk-u-margin-bottom-0">
+				 As part of the patient view, the user will also be able to export the enriched data with (if applicable) filters applied.
+			</p>
+		</div>
+
+		<div class="nhsuk-grid-column-full">
+			<hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+		</div>
+
+		<div class="nhsuk-grid-column-one-half">
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Entry point</h2>
+			<ol>
+				<li><a href="landing">Maternity landing page</a></li>
+			</ol>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Patient list</h2>
+			<ol start="2">
+				<li><a href="patients">Patient list</a></li>
+			</ol>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Export patient list</h2>
+			<ol start="3">
+				<li><a href="export-list">Export patient list</a></li>
+			</ol>
+
+		</div>
+
+		<div class="nhsuk-grid-column-one-half">
+<!--
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Upload success</h2>
+			<ol start="12">
+				<li><a href="/patient-upload/upload-complete">Patient list uploaded: processing to begin</a></li>
+			</ol>
+			<p class="nhsuk-body nhsuk-u-margin-bottom-2">Error state:</li>
+			<ol start="13">
+				<li><a href="error-patients-not-added">Patient list uploaded: issues detected in CSV</a></li>
+			</ol>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Processing outcomes</h2>
+			<p class="nhsuk-body nhsuk-u-margin-bottom-2">Email:</p>
+			<ol start="14">
+				<li><a href="email-success?firstName=Jodie&lastName=Brown">Processing success and patient list ready to view</a></li>
+				{#<li><a href="email-failed?firstName=Jodie&lastName=Brown">Processing failed; previous patient list restored</a></li>#}
+				{#<li><a href="email-failed-first-upload?firstName=Jodie&lastName=Brown">Processing failed; first time upload, no patient list</a></li>#}
+			</ol>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Patient upload history</h2>
+			<ol start="15">
+				<li><a href="change-log?uploadedList=noPatients">No patients have been added</a></li>
+				<li><a href="change-log?uploadedList=false">Current list, Failed, and Processed status examples</a></li>
+				<li><a href="change-log?uploadedList=processing">Successful upload being processed</a></li>
+				<li><a href="change-log?uploadedList=true">Successfully processed upload now available</a></li>
+			</ol>
+!-->
+		</div>
+	</div>
+{% endblock %}

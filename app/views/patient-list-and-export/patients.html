@@ -216,7 +216,7 @@
       }
     }) }}
 
-    {% include "patient-list/_FilterAndSort.html" %}
+    {% include "patient-list-and-export/_FilterAndSort.html" %}
 
   </div>
 </div>
@@ -225,19 +225,19 @@
   <div class="nhsuk-grid-column-full">
 
     {% set contentAllVaccinations %}
-       {% include "patient-list/_contentAllVaccinations.html" %}
+       {% include "patient-list-and-export/_contentAllVaccinations.html" %}
     {% endset -%}
 
     {% set contentRSV %}
-       {% include "patient-list/_contentRSV.html" %}
+       {% include "patient-list-and-export/_contentRSV.html" %}
     {% endset -%}
 
     {% set contentPertussis %}
-       {% include "patient-list/_contentPertussis.html" %}
+       {% include "patient-list-and-export/_contentPertussis.html" %}
     {% endset -%}
 
     {% set contentIssues %}
-       {% include "patient-list/_contentDataQualityIssues.html" %}
+       {% include "patient-list-and-export/_contentDataQualityIssues.html" %}
     {% endset -%}
 
     {{ tabs({

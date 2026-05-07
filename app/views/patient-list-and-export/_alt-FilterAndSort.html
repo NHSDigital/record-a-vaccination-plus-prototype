@@ -23,53 +23,119 @@
             id: "patient-postcode",
             name: "patientPostcode"
           }) }}
-          {{ checkboxes({
-            idPrefix: "contact-preferences",
-            name: "contactPreferences",
-            fieldset: { 
-              legend: { 
-                text: "Contact preferences", 
-                classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" 
-              } 
-            },
-            classes: "nhsuk-checkboxes--small",
-            items: [
-              { value: "contactPreferencesPhone", text: "Phone" },
-              { value: "contactPreferencesEmail", text: "Email" },
-              { value: "contactPreferencesPost", text: "Post" }
-            ]
-          }) }}
         </div>
       </details>
 
-      {# Vaccination status #}
+      {# Eligibility #}
       <details class="nhsuk-details app-section">
         <summary class="nhsuk-details__summary app-section__summary">
           <span class="app-caret--inner" aria-hidden="true"></span>
-          <span class="nhsuk-details__summary-text">Vaccination status</span>
+          <span class="nhsuk-details__summary-text">Eligibility</span>
         </summary>
         <div class="nhsuk-details__text app-section__body">
           {{ checkboxes({
-            idPrefix: "current-status",
-            name: "currentStatus",
-            fieldset: { legend: { text: "Current Status", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+            idPrefix: "current-rsv-status",
+            name: "currentRSVstatus",
+            fieldset: { legend: { text: "RAV status", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
             classes: "nhsuk-checkboxes--small",
             items: [
-              { value: "statusVaccinsted", text: "Vaccinated" },
-              { value: "statusEligibleForVaccination", text: "Eligible for vaccination" },
-              { value: "statusNotYetElligible", text: "Not yet eligible" },
-              { value: "statusDeclinedVaccination", text: "Declined vaccination" }
+              { value: "statusRSVvaccinated", text: "Vaccinated" },
+              { value: "statusRSVpriority", text: "Priority" },
+              { value: "statusRSVeligible", text: "Eligible" },
+              { value: "statusRSVnotYetElligible", text: "Not yet eligible" },
+              { value: "statusRSVdeclinedVaccination", text: "Declined" }
             ]
           }) }}
           {{ checkboxes({
-            idPrefix: "information-shared",
-            name: "informationShared",
-            fieldset: { legend: { text: "Information shared", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+            idPrefix: "current-pertussis-status",
+            name: "currentPertussisStatus",
+            fieldset: { legend: { text: "Pertussis status", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
             classes: "nhsuk-checkboxes--small",
             items: [
-              { value: "sharedVaccineExplaind", text: "Vaccine explained" },
-              { value: "sharedVaccineOffered", text: "Vaccine offered" },
-              { value: "sharedSideEffectsDiscussed", text: "Side effects discussed" }
+              { value: "statusPertussisVaccinated", text: "Vaccinated" },
+              { value: "statusPertussisPriority", text: "Priority" },
+              { value: "statusPertussisEligible", text: "Eligible" },
+              { value: "statusPertussisNotYetElligible", text: "Not yet eligible" },
+              { value: "statuPertussisDeclinedVaccination", text: "Declined" }
+            ]
+          }) }}
+          {{ checkboxes({
+            idPrefix: "weeks-pregnant",
+            name: "weeksPregnant",
+            fieldset: { legend: { text: "Weeks pregnant", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+            classes: "nhsuk-checkboxes--small",
+            items: [
+              { value: "weeksPregnant28to31", text: "28 to 31 weeks" },
+              { value: "weeksPregnant32to35", text: "32 to 35 weeks" },
+              { value: "weeksPregnantMoreThan36", text: "More than 36 weeks" },
+              { value: "weeksPregnantUpTo27", text: "Up to 27 weeks" }
+            ]
+          }) }}
+          {% set conditionalBeforeDueDate %}
+            {{ dateInput({
+              id: "before-due-date",
+              namePrefix: "beforeDueDate",
+              fieldset: {
+                legend: {
+                  text: "Show dates before"
+                }
+              },
+              hint: {
+                text: "For example, 15 3 2026"
+              },
+              items: [
+                {
+                  name: "Day",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Month",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Year",
+                  classes: "nhsuk-input--width-4"
+                }
+              ]
+            }) }}
+          {% endset %}
+          {% set conditionalFromDueDate %}
+            {{ dateInput({
+              id: "from-due-date",
+              namePrefix: "fromDueDate",
+              fieldset: {
+                legend: {
+                  text: "Show dates from"
+                }
+              },
+              hint: {
+                text: "For example, 15 3 2026"
+              },
+              items: [
+                {
+                  name: "Day",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Month",
+                  classes: "nhsuk-input--width-2"
+                },
+                {
+                  name: "Year",
+                  classes: "nhsuk-input--width-4"
+                }
+              ]
+            }) }}
+          {% endset %}
+
+          {{ checkboxes({
+            idPrefix: "estimate-due-dates",
+            name: "keyDates",
+            fieldset: { legend: { text: "Estimated d dates", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+            classes: "nhsuk-checkboxes--small",
+            items: [
+              { value: "keydateBeforeDueDate", text: "Pregnancy due dates before", conditional: { html: conditionalBeforeDueDate } },
+              { value: "keydateFromDueDate", text: "Pregnancy due dates from", conditional: { html: conditionalFromDueDate } }
             ]
           }) }}
         </div>
@@ -79,46 +145,20 @@
       <details class="nhsuk-details app-section">
         <summary class="nhsuk-details__summary app-section__summary">
           <span class="app-caret--inner" aria-hidden="true"></span>
-          <span class="nhsuk-details__summary-text">Vaccine invitations and bookings</span>
+          <span class="nhsuk-details__summary-text">Dates and invitations</span>
         </summary>
         <div class="nhsuk-details__text app-section__body">
-          {% set conditionalPregnancyDueDate %}
+          {% set conditionalLastRSVbeforeVaccinationDate %}
             {{ dateInput({
-              id: "due-date-frame",
-              namePrefix: "dueDateFrom",
+              id: "last-rsv-vaccination-from-date",
+              namePrefix: "lastRSVvaccinationBeforeDate",
               fieldset: {
                 legend: {
-                  text: "From date"
+                  text: "Show dates to"
                 }
               },
               hint: {
                 text: "For example, 15 3 2026"
-              },
-              items: [
-                {
-                  name: "Day",
-                  classes: "nhsuk-input--width-2"
-                },
-                {
-                  name: "Month",
-                  classes: "nhsuk-input--width-2"
-                },
-                {
-                  name: "Year",
-                  classes: "nhsuk-input--width-4"
-                }
-              ]
-            }) }}
-            {{ dateInput({
-              id: "due-date-to",
-              namePrefix: "dueDateTo",
-              fieldset: {
-                legend: {
-                  text: "To date"
-                }
-              },
-              hint: {
-                text: "For example, 13 12 2026"
               },
               items: [
                 {
@@ -136,95 +176,13 @@
               ]
             }) }}
           {% endset %}
-
-          {% set conditionalRSVvaccinationDate %}
+          {% set conditionalLastRSVfromVaccinationDate %}
             {{ dateInput({
-              id: "rsv-vaccination-from-date",
-              namePrefix: "RSVvaccinationFromDate",
+              id: "last-rsv-vaccination-from-date",
+              namePrefix: "lastRSVvaccinatioFromDate",
               fieldset: {
                 legend: {
-                  text: "From date"
-                }
-              },
-              hint: {
-                text: "For example, 15 3 2026"
-              },
-              items: [
-                {
-                  name: "Day",
-                  classes: "nhsuk-input--width-2"
-                },
-                {
-                  name: "Month",
-                  classes: "nhsuk-input--width-2"
-                },
-                {
-                  name: "Year",
-                  classes: "nhsuk-input--width-4"
-                }
-              ]
-            }) }}
-            {{ dateInput({
-              id: "rsv-vaccination-to-date",
-              namePrefix: "RSVvaccinationToDate",
-              fieldset: {
-                legend: {
-                  text: "To date"
-                }
-              },
-              hint: {
-                text: "For example, 13 12 2026"
-              },
-              items: [
-                {
-                  name: "Day",
-                  classes: "nhsuk-input--width-2"
-                },
-                {
-                  name: "Month",
-                  classes: "nhsuk-input--width-2"
-                },
-                {
-                  name: "Year",
-                  classes: "nhsuk-input--width-4"
-                }
-              ]
-            }) }}
-          {% endset %}
-
-          {% set conditionalPertussisVaccinationDate %}
-            {{ dateInput({
-              id: "pertussis-vaccination-from-date",
-              namePrefix: "pertussisVaccinationFromDate",
-              fieldset: {
-                legend: {
-                  text: "From date"
-                }
-              },
-              hint: {
-                text: "For example, 15 3 2026"
-              },
-              items: [
-                {
-                  name: "Day",
-                  classes: "nhsuk-input--width-2"
-                },
-                {
-                  name: "Month",
-                  classes: "nhsuk-input--width-2"
-                },
-                {
-                  name: "Year",
-                  classes: "nhsuk-input--width-4"
-                }
-              ]
-            }) }}
-            {{ dateInput({
-              id: "pertussis-vaccination-to-date",
-              namePrefix: "pertussisVaccinationToDate",
-              fieldset: {
-                legend: {
-                  text: "To date"
+                  text: "Show dates from"
                 }
               },
               hint: {
@@ -248,50 +206,23 @@
           {% endset %}
 
           {{ checkboxes({
-            idPrefix: "key-dates",
-            name: "keyDates",
-            fieldset: { legend: { text: "Key dates", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+            idPrefix: "vaccinationsLastRSV",
+            name: "vaccinationsLastRSV",
+            fieldset: { legend: { text: "RSV vaccinations", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
             classes: "nhsuk-checkboxes--small",
             items: [
-              { value: "keydatePregnancy", text: "Pregnancy due date", conditional: { html: conditionalPregnancyDueDate } },
-              { value: "keydatePertussisvaccination", text: "Date of pertussis vaccination", conditional: { html: conditionalPertussisVaccinationDate } },
-              { value: "keydateRSVvaccination", text: "Date of RSV vaccination", conditional: { html: conditionalRSVvaccinationDate } }
+              { value: "keydateRSVtoVaccinationDate", text: "Last RSV vaccination to", conditional: { html: conditionalLastRSVbeforeVaccinationDate } },
+              { value: "keydateRSVfromVaccinationDate", text: "Last RSV vaccination from", conditional: { html: conditionalLastRSVfromVaccinationDate } }
             ]
           }) }}
 
-          {% set conditionalPertussisInvitationDate %}
+          {% set conditionalLastPertussisBeforeVaccinationDate %}
             {{ dateInput({
-              id: "pertussis-invitation-from-date",
-              namePrefix: "pertussisInvitationFromDate",
+              id: "last-pertussis-vaccination-from-date",
+              namePrefix: "lastPertussisVaccinationBeforeDate",
               fieldset: {
                 legend: {
-                  text: "From date"
-                }
-              },
-              hint: {
-                text: "For example, 15 3 2026"
-              },
-              items: [
-                {
-                  name: "Day",
-                  classes: "nhsuk-input--width-2"
-                },
-                {
-                  name: "Month",
-                  classes: "nhsuk-input--width-2"
-                },
-                {
-                  name: "Year",
-                  classes: "nhsuk-input--width-4"
-                }
-              ]
-            }) }}
-            {{ dateInput({
-              id: "pertussis-invitation-to-date",
-              namePrefix: "pertussisInvitationToDate",
-              fieldset: {
-                legend: {
-                  text: "To date"
+                  text: "Show dates to"
                 }
               },
               hint: {
@@ -313,40 +244,13 @@
               ]
             }) }}
           {% endset %}
-
-          {% set conditionalRSVinvitationDate %}
+          {% set conditionalLastPertussisFromVaccinationDate %}
             {{ dateInput({
-              id: "rsv-invitation-from-date",
-              namePrefix: "rsvInvitationFromDate",
+              id: "last-pertussis-vaccination-from-date",
+              namePrefix: "lastPertussisVaccinatioFromDate",
               fieldset: {
                 legend: {
-                  text: "From date"
-                }
-              },
-              hint: {
-                text: "For example, 15 3 2026"
-              },
-              items: [
-                {
-                  name: "Day",
-                  classes: "nhsuk-input--width-2"
-                },
-                {
-                  name: "Month",
-                  classes: "nhsuk-input--width-2"
-                },
-                {
-                  name: "Year",
-                  classes: "nhsuk-input--width-4"
-                }
-              ]
-            }) }}
-            {{ dateInput({
-              id: "rsv-invitation-to-date",
-              namePrefix: "rsvInvitationToDate",
-              fieldset: {
-                legend: {
-                  text: "To date"
+                  text: "Show dates from"
                 }
               },
               hint: {
@@ -370,13 +274,13 @@
           {% endset %}
 
           {{ checkboxes({
-            idPrefix: "invitations",
-            name: "invitations",
-            fieldset: { legend: { text: "Invitations", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+            idPrefix: "vaccinationsLastPertussis",
+            name: "vaccinationsLastPertussis",
+            fieldset: { legend: { text: "Pertussis vaccinations", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
             classes: "nhsuk-checkboxes--small",
             items: [
-              { value: "keydatePertussisvaccination", text: "Date invited for pertussis vaccination", conditional: { html: conditionalPertussisInvitationDate } },
-              { value: "keydateRSVvaccination", text: "Date invited for RSV vaccination", conditional: { html: conditionalRSVinvitationDate } }
+              { value: "keydatePertussisToVaccinationDate", text: "Last Pertussis vaccination to", conditional: { html: conditionalLastPertussisBeforeVaccinationDate } },
+              { value: "keydatePertussisFromVaccinationDate", text: "Last Pertussis vaccination from", conditional: { html: conditionalLastPertussisFromVaccinationDate } }
             ]
           }) }}
         </div>

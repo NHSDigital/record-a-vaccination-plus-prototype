@@ -225,7 +225,11 @@
   <div class="nhsuk-grid-column-full">
 
     {% set contentAllVaccinations %}
-       {% include "patient-list-and-export/_alt-contentAllVaccinations.html" %}
+      {% if data.showData == "dueDate" %}
+        {% include "patient-list-and-export/_alt-contentAllVaccinations-due-date.html" %}
+      {% else %}
+        {% include "patient-list-and-export/_alt-contentAllVaccinations.html" %}
+      {% endif %}
     {% endset -%}
 
     {% set contentIssues %}

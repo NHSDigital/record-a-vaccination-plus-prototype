@@ -1,17 +1,38 @@
-<details class="nhsuk-details app-filter nhsuk-u-padding-bottom-4" data-module="app-filter">
-  <summary class="nhsuk-details__summary app-filter__summary">
-    <span class="app-caret" aria-hidden="true"></span>
-    <span class="nhsuk-details__summary-text">Filter and sort</span>
+<details class="nhsuk-details app-filter" data-module="app-filter">
+
+  <summary class="nhsuk-details__summary app-filter__summary" style="display:block; width:100%;">
+    <div style="display:flex; align-items:baseline; width:100%;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="app-caret" aria-hidden="true"></span>
+        <span class="nhsuk-details__summary-text">
+          Filter and sort
+        </span>
+      </div>
+      <div style="margin-left:auto; text-align:right; color:#505a5f; font-size:16px; font-weight:400; white-space:nowrap;">
+        {% if data.filtersApplied == "true" %}
+          238 results
+        {% else %}
+          1,993 results
+        {% endif %}
+      </div>
+    </div>
   </summary>
 
   <div class="nhsuk-details__text app-filter__panel">
+
     <form action="#/" method="post" novalidate>
 
       {# Personal details #}
       <details class="nhsuk-details app-section">
         <summary class="nhsuk-details__summary app-section__summary">
-          <span class="app-caret--inner" aria-hidden="true"></span>
-          <span class="nhsuk-details__summary-text">Personal details</span>
+          <div class="app-section__summary-row">
+            <span class="app-section__summary-left">
+              <span class="app-caret--inner" aria-hidden="true"></span>
+              <span class="nhsuk-details__summary-text">
+                Personal details
+              </span>
+            </span>
+          </div>
         </summary>
         <div class="nhsuk-details__text app-section__body">
           {{ input({
@@ -28,10 +49,22 @@
 
       {# Eligibility #}
       <details class="nhsuk-details app-section">
-        <summary class="nhsuk-details__summary app-section__summary">
-          <span class="app-caret--inner" aria-hidden="true"></span>
-          <span class="nhsuk-details__summary-text">Eligibility</span>
+        <summary class="nhsuk-details__summary app-section__summary" style="display:block; width:100%;">
+          <div style="display:flex; align-items:baseline; width:100%;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="app-caret--inner" aria-hidden="true"></span>
+              <span class="nhsuk-details__summary-text">
+                Eligibility
+              </span>
+            </div>
+            {% if data.filtersApplied == "true" %}
+              <div style="margin-left:auto; text-align:right; color:#505a5f; font-size:16px; font-weight:400; white-space:nowrap;">
+                2 selected
+              </div>
+            {% endif %}
+          </div>
         </summary>
+
         <div class="nhsuk-details__text app-section__body">
 
           {% set conditionalRSVstatus %}
@@ -160,9 +193,20 @@
 
       {# Dates and invitations #}
       <details class="nhsuk-details app-section">
-        <summary class="nhsuk-details__summary app-section__summary">
-          <span class="app-caret--inner" aria-hidden="true"></span>
-          <span class="nhsuk-details__summary-text">Previous vaccinations</span>
+        <summary class="nhsuk-details__summary app-section__summary" style="display:block; width:100%;">
+          <div style="display:flex; align-items:baseline; width:100%;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="app-caret--inner" aria-hidden="true"></span>
+              <span class="nhsuk-details__summary-text">
+                Previous vaccinations
+              </span>
+            </div>
+            {% if data.filtersApplied == "true" %}
+              <div style="margin-left:auto; text-align:right; color:#505a5f; font-size:16px; font-weight:400; white-space:nowrap;">
+                2 selected
+              </div>
+            {% endif %}
+          </div>
         </summary>
         <div class="nhsuk-details__text app-section__body">
           
@@ -300,14 +344,15 @@
       </details>
 
       <div class="app-actions" style="display: flex; align-items: center; gap: 1rem; margin-top: 0; margin-bottom: 0;">
-        <button type="submit" class="nhsuk-button nhsuk-button--small" data-module="nhsuk-button">
+        <button type="button" class="nhsuk-button nhsuk-button--small" data-module="nhsuk-button" onclick="window.location.href = window.location.pathname + '?filtersApplied=true'">
           Apply
         </button>
-        <button type="submit" class="nhsuk-button nhsuk-button--secondary nhsuk-button--small" data-module="nhsuk-button">
-          Clear filters
+        <button type="button" class="nhsuk-button nhsuk-button--secondary nhsuk-button--small" data-module="nhsuk-button" onclick="window.location.href = window.location.pathname + '?filtersApplied'">
+          Clear all
         </button>
       </div>
 
     </form>
+
   </div>
 </details>

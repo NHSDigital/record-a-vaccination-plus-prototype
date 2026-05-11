@@ -43,9 +43,15 @@
 
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Patient list</h2>
 			<ol start="2">
-				<li><a href="patients">Patient list</a></li>
-				<li><a href="alt-patients?showData">Patient list [working alternative] </a></li>
-				<li><a href="alt-patients?showData=dueDate">Patient list [working alternative &amp; adjusted data]</a></li>
+				<li><a href="patients?filtersApplied">Patient list [no filters]</a></li>
+				<li><a href="patients?filtersApplied=true">Patient list [filters applied]</a></li>
+				<li>Single data and error tab:</li>
+				<ul class="nhsuk-u-margin-bottom-2">
+					<li><a href="alt-patients?showData">Patient list [no filters] </a></li>
+					<li><a href="alt-patients?showData&filtersApplied=true">Patient list [filters applied]</a></li>
+					<li><a href="alt-patients?showData=dueDate">Patient list [adjusted data, no filters]</a></li>
+					<li><a href="alt-patients?showData=dueDate&filtersApplied=true">Patient list [adjusted data, filters applied]</a></li>
+				</ul>
 			</ol>
 
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Row level errors</h2>

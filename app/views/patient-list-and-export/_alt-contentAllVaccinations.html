@@ -179,53 +179,97 @@
 
 <div class="nhsuk-pagination-wrapper nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
   <div class="nhsuk-pagination-wrapper__pagination">
-    {{ pagination({
-      next: {
-        href: "#"
-      },
-      items: [
-        {
-          number: 1,
-          href: "#",
-          current: true
-        },
-        {
-          ellipsis: true
-        },
-        {
-          number: 8,
+    {% if data.filtersApplied == "true" %}
+      {{ pagination({
+        next: {
           href: "#"
         },
-        {
-          number: 9,
+        items: [
+          {
+            number: 1,
+            href: "#",
+            current: true
+          },
+          {
+            ellipsis: true
+          },
+          {
+            number: 8,
+            href: "#"
+          },
+          {
+            number: 9,
+            href: "#"
+          },
+          {
+            number: 10,
+            href: "#"
+          },
+          {
+            number: 11,
+            href: "#"
+          },
+          {
+            number: 12,
+            href: "#"
+          }
+        ]
+      }) }}
+    {% else %}
+      {{ pagination({
+        next: {
           href: "#"
         },
-        {
-          number: 10,
-          href: "#"
-        },
-        {
-          number: 11,
-          href: "#"
-        },
-        {
-          number: 12,
-          href: "#"
-        },
-        {
-          ellipsis: true
-        },
-        {
-          number: 42,
-          href: "#"
-        }
-      ]
-    }) }}
+        items: [
+          {
+            number: 1,
+            href: "#",
+            current: true
+          },
+          {
+            ellipsis: true
+          },
+          {
+            number: 8,
+            href: "#"
+          },
+          {
+            number: 9,
+            href: "#"
+          },
+          {
+            number: 10,
+            href: "#"
+          },
+          {
+            number: 11,
+            href: "#"
+          },
+          {
+            number: 12,
+            href: "#"
+          },
+          {
+            ellipsis: true
+          },
+          {
+            number: 42,
+            href: "#"
+          }
+        ]
+      }) }}
+    {% endif %}
   </div>
 
-  <div class="nhsuk-pagination-wrapper__results">
-    Showing 1 to 20 of 1,993 patients
-  </div>
+  {% if data.filtersApplied == "true" %}
+    <div class="nhsuk-pagination-wrapper__results">
+      Showing 1 to 20 of 238 patients
+    </div>
+  {% else %}
+    <div class="nhsuk-pagination-wrapper__results">
+      Showing 1 to 20 of 1,993 patients
+    </div>
+  {% endif %}
 </div>
 
 <a class="nhsuk-button" data-module="nhsuk-button" href="export-list">Export list as a CSV</a>

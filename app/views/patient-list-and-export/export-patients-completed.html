@@ -1,0 +1,29 @@
+{% extends 'ravs-plus-layout-1.html' %}
+
+{% set currentSection = "plus" %}
+
+{% block pageTitle %}
+  Export partients
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <div class="nhsuk-panel">
+        <h1 class="nhsuk-panel__title">
+          Export completed
+        </h1>
+        <div class="nhsuk-panel__body">
+          {% if data.filtersApplied == "true" %}
+            238 patients have been exported
+          {% else %}
+            1,993 patients have been exported
+          {% endif %}
+        </div>
+      </div>
+      <h2 class="nhsuk-heading-m">CSV export helper text</h2>
+      <p class="nhsuk-body">Additional content.</p>
+      <p class="nhsuk-body"><a href="#/">[Link back to patient list]</a></p>
+    </div>
+  </div>
+{% endblock %}

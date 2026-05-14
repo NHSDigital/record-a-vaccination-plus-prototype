@@ -1,0 +1,19 @@
+{% extends 'ravs-plus-layout-1.html' %}
+
+{% set currentSection = "plus" %}
+
+{% block pageTitle %}
+  There was a problem with your upload
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">There was a problem with your upload</h1>
+      <p class="nhsuk-body">You need to fix issues for XX patients in your CSV file.</p>
+      <p class="nhsuk-body">The CSV file must include a header row with two columns: NHS number, due date.</p>
+      <p class="nhsuk-body">Fix the issues and upload a new CSV file.</p>
+      <p class="nhsuk-body"><a href="add-patients?scenario=firstUpload" class="nhsuk-button" data-module="nhsuk-button">Add patients</a></p>
+    </div>
+  </div>
+{% endblock %}

@@ -29,6 +29,17 @@ require('./routes/ravs-infants')(router)
 
 require('./routes/playground')(router)
 
+// mvp-patient-list-and-export/export-patients
+router.post('/mvp-patient-list-and-export/export-patients', function (req, res) {
+  const choice = req.session.data['exportPatients']; 
+  if (choice === 'filteredPatients') {
+    res.redirect('/mvp-patient-list-and-export/export-patients-completed?filtersApplied=true')
+  } else {
+    res.redirect('/mvp-patient-list-and-export/export-patients-completed?filtersApplied')
+  }
+});
+
+
 /////////////////////////////////////////////////////////
 // START: Research entry routes
 

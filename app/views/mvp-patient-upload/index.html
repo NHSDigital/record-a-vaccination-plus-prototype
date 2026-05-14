@@ -12,22 +12,11 @@
 	<div class="nhsuk-grid-row">
 		<div class="nhsuk-grid-column-two-thirds">
 			<h1 class="nhsuk-heading-l">
-				Patient list and export
+				Upload patient list
 			</h1>
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Description</h2>
-			<p class="nhsuk-body">
-				Facilitate a logged in user to view their successfully uploaded and enriched patient list.
-			</p>
-			<p class="nhsuk-body">
-				The patient list allows for filtering to be applied, as well as issues being noted with problematic patient records that 
-				were part of the enrichment process.
-			</p>
-			<p class="nhsuk-body">
-				Enriched patient list row level errors will be played back to the logged in user in a different view to the successfully 
-				enriched patient list.
-			</p>
 			<p class="nhsuk-body nhsuk-u-margin-bottom-0">
-				 As part of the patient view, the user will also be able to export the enriched data with, or without, filters applied.
+				Facilitate a logged in user to upload their patient list data (CSV) into the service for the data to then be processed and enriched.
 			</p>
 		</div>
 
@@ -41,37 +30,34 @@
 				<li><a href="landing">Maternity landing page</a></li>
 			</ol>
 
-			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Patient list</h2>
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Upload page</h2>
 			<ol start="2">
-				<li><a href="patients?filtersApplied">Patient list [no filters]</a></li>
-				<li><a href="patients?filtersApplied=true">Patient list [filters applied]</a></li>
-				<li>Single data and error tab:
-					<ul>
-						<li><a href="alt-patients?showData&filtersApplied">Patient list [no filters] </a></li>
-						<li><a href="alt-patients?showData&filtersApplied=true">Patient list [filters applied]</a></li>
-						<li><a href="alt-patients?showData=dueDate">Patient list [adjusted data, no filters]</a></li>
-						<li><a href="alt-patients?showData=dueDate&filtersApplied=true">Patient list [adjusted data, filters applied]</a></li>
-					</ul>
-				</li>
+				<li><a href="add-patients?scenario=firstUpload">Add patients (first time upload)</a></li>
+				<li><a href="add-patients?scenario=updateExisting">Add patients (overwrite existing list)</a></li>
+			</ol>
+			<p class="nhsuk-body nhsuk-u-margin-bottom-2">In-line error states:</p>
+			<ol start="4">
+				<li><a href="add-patients?scenario=invalidFileType">Invalid file type</a></li>
+				<li><a href="add-patients?scenario=fileTooLarge">File too large</a></li>
+				<li><a href="add-patients?scenario=fileIsEmpty">File is empty</a></li>
+				<li><a href="add-patients?scenario=fileContainsAvirus">File contains a virus</a></li>
+				<li><a href="add-patients?scenario=fileIsPasswordProtected">File is password protected</a></li>
+				<li><a href="add-patients?scenario=fileNotUploaded">File not uploaded - try again</a></li>
+			</ol>
+			<p class="nhsuk-body nhsuk-u-margin-bottom-2">Enrichment processing in-flight:</p>
+			<ol start="10">
+				<li><a href="add-patients?scenario=processing">Add patients (processing in-flight)</a></li>
 			</ol>
 
-			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Row level errors</h2>
-			<ol start="5">
-				<li><a href="patients#tab-data-quality-issues">Row level errors</a></li>
-			</ol>
-
-			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Export patient list</h2>
-			<ol start="6">
-				<li><a href="export-patients?filtersApplied">Export patients (no filters)</a></li>
-				<li><a href="export-patients?filtersApplied=true">Export patients (filters)</a></li>
-				<li><a href="export-patients-completed?filtersApplied">Export patients completed (no filters)</a></li>
-				<li><a href="export-patients-completed?filtersApplied=true">Export patients completed (filters)</a></li>
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">System behaviour</h2>
+			<ol start="11">
+				<li><a href="/patient-upload/interruption-page-overwrite-warning">Overwrite existing list warning</a></li>
 			</ol>
 
 		</div>
 
 		<div class="nhsuk-grid-column-one-half">
-<!--
+
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Upload success</h2>
 			<ol start="12">
 				<li><a href="/patient-upload/upload-complete">Patient list uploaded: processing to begin</a></li>
@@ -96,7 +82,13 @@
 				<li><a href="change-log?uploadedList=processing">Successful upload being processed</a></li>
 				<li><a href="change-log?uploadedList=true">Successfully processed upload now available</a></li>
 			</ol>
-!-->
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Patient list</h2>
+			<ol start="19">
+				<li><a href="patients?scenario=firstUpload">Patient list: no patients have been added</a></li>
+				<li><a href="patients?scenario=processing">Patient list: processing in-flight</a></li>
+			</ol>
+
 		</div>
 	</div>
 {% endblock %}

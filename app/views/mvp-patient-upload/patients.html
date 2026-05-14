@@ -1,0 +1,42 @@
+{% extends 'ravs-plus-layout-1.html' %}
+
+{% set currentSection = "plus" %}
+
+{% block pageTitle %}
+  Patients
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item">
+        <a class="nhsuk-breadcrumb__link" href="landing">Maternity</a>
+      </li>
+      <li class="nhsuk-breadcrumb__list-item">Patients</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">
+        Patients
+      </h1>
+
+      {% if data.scenario == "processing" %}
+        <p class="nhsuk-body">Your list of patients is currently unavailable because we are processing patient information from a recent file upload.</p>
+        <p class="nhsuk-body">You will get an email when this is complete.</p>
+        <p class="nhsuk-body"><a href="change-log?uploadedList=processing">View patient upload history</a>.</p>
+      {% else %}
+        <p class="nhsuk-body">No patients have been added for your organisation.</p>
+        <a href="add-patients?scenario=firstUpload" class="nhsuk-button" data-module="nhsuk-button">Add patients</a>
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}

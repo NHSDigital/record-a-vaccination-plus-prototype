@@ -1,21 +1,9 @@
-<details class="nhsuk-details app-filter" data-module="app-filter">
+<details class="nhsuk-details">
 
-  <summary class="nhsuk-details__summary app-filter__summary" style="display:block; width:100%;">
-    <div style="display:flex; align-items:baseline; width:100%;">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <span class="app-caret" aria-hidden="true"></span>
-        <span class="nhsuk-details__summary-text">
-          Filter and sort
-        </span>
-      </div>
-      <div style="margin-left:auto; text-align:right; color:#505a5f; font-size:16px; font-weight:400; white-space:nowrap;">
-        {% if data.filtersApplied == "true" %}
-          238 results
-        {% else %}
-          1,993 results
-        {% endif %}
-      </div>
-    </div>
+  <summary class="nhsuk-details__summary">
+      <span class="nhsuk-details__summary-text">
+        Filter and sort
+      </span>
   </summary>
 
   <div class="nhsuk-details__text app-filter__panel">
@@ -23,104 +11,64 @@
     <form action="#/" method="post" novalidate>
 
       {# Status #}
-      <details class="nhsuk-details app-section">
-        <summary class="nhsuk-details__summary app-section__summary" style="display:block; width:100%;">
-          <div style="display:flex; align-items:baseline; width:100%;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span class="app-caret--inner" aria-hidden="true"></span>
-              <span class="nhsuk-details__summary-text">
-                Status
-              </span>
-            </div>
-            {% if data.filtersApplied == "true" %}
-              <div style="margin-left:auto; text-align:right; color:#505a5f; font-size:16px; font-weight:400; white-space:nowrap;">
-                1 selected
-              </div>
-            {% endif %}
-          </div>
-        </summary>
+      {% set conditionalRSVstatus %}
+        {{ checkboxes({
+          idPrefix: "current-rsv-status",
+          name: "currentRSVstatus",
+          fieldset: { legend: { text: "RSV status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          classes: "nhsuk-checkboxes--small",
+          items: [
+            { value: "statusRSVvaccinated", text: "Vaccinated" },
+            { value: "statusRSVpriority", text: "Priority" },
+            { value: "statusRSVeligible", text: "Eligible" },
+            { value: "statusRSVnotYetElligible", text: "Not yet eligible" }
+          ]
+        }) }}
+      {% endset %}
 
-        <div class="nhsuk-details__text app-section__body">
+      {% set conditionalPertussisStatus %}
+        {{ checkboxes({
+          idPrefix: "current-pertussis-status",
+          name: "currentPertussisStatus",
+          fieldset: { legend: { text: "Pertussis status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          classes: "nhsuk-checkboxes--small",
+          items: [
+            { value: "statusPertussisVaccinated", text: "Vaccinated" },
+            { value: "statusPertussisPriority", text: "Priority" },
+            { value: "statusPertussisEligible", text: "Eligible" },
+            { value: "statusPertussisNotYetElligible", text: "Not yet eligible" }
+          ]
+        }) }}
+      {% endset %}
 
-          {% set conditionalRSVstatus %}
-            {{ checkboxes({
-              idPrefix: "current-rsv-status",
-              name: "currentRSVstatus",
-              fieldset: { legend: { text: "RSV status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
-              classes: "nhsuk-checkboxes--small",
-              items: [
-                { value: "statusRSVvaccinated", text: "Vaccinated" },
-                { value: "statusRSVpriority", text: "Priority" },
-                { value: "statusRSVeligible", text: "Eligible" },
-                { value: "statusRSVnotYetElligible", text: "Not yet eligible" }
-              ]
-            }) }}
-          {% endset %}
-
-          {% set conditionalPertussisStatus %}
-            {{ checkboxes({
-              idPrefix: "current-pertussis-status",
-              name: "currentPertussisStatus",
-              fieldset: { legend: { text: "Pertussis status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
-              classes: "nhsuk-checkboxes--small",
-              items: [
-                { value: "statusPertussisVaccinated", text: "Vaccinated" },
-                { value: "statusPertussisPriority", text: "Priority" },
-                { value: "statusPertussisEligible", text: "Eligible" },
-                { value: "statusPertussisNotYetElligible", text: "Not yet eligible" }
-              ]
-            }) }}
-          {% endset %}
-
-          {{ checkboxes({
-            idPrefix: "eligibilityStatus",
-            name: "eligibilityStatus",
-            fieldset: { legend: { text: "Status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
-            classes: "nhsuk-checkboxes--small",
-            items: [
-              { value: "rsvStatus", text: "RSV status", conditional: { html: conditionalRSVstatus } },
-              { value: "pertussisStatus", text: "Pertussis status", conditional: { html: conditionalPertussisStatus } }
-            ]
-          }) }}
-        </div>
-      </details>
+      {{ checkboxes({
+        idPrefix: "eligibilityStatus",
+        name: "eligibilityStatus",
+        fieldset: { legend: { text: "Status", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+        classes: "nhsuk-checkboxes--small",
+        items: [
+          { value: "rsvStatus", text: "RSV status", conditional: { html: conditionalRSVstatus } },
+          { value: "pertussisStatus", text: "Pertussis status", conditional: { html: conditionalPertussisStatus } }
+        ]
+      }) }}
 
       {# Weeks pregnant #}
-      <details class="nhsuk-details app-section">
-        <summary class="nhsuk-details__summary app-section__summary" style="display:block; width:100%;">
-          <div style="display:flex; align-items:baseline; width:100%;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span class="app-caret--inner" aria-hidden="true"></span>
-              <span class="nhsuk-details__summary-text">
-                Weeks pregnant
-              </span>
-            </div>
-            {% if data.filtersApplied == "true" %}
-              <div style="margin-left:auto; text-align:right; color:#505a5f; font-size:16px; font-weight:400; white-space:nowrap;">
-                1 selected
-              </div>
-            {% endif %}
-          </div>
-        </summary>
+      {{ checkboxes({
+        idPrefix: "weeks-pregnant",
+        name: "weeksPregnant",
+        fieldset: { legend: { text: "Weeks pregnant", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+        classes: "nhsuk-checkboxes--small",
+        items: [
+          { value: "weeksPregnantUpTo20", text: "Up to 20 weeks" },
+          { value: "weeksPregnant20to23", text: "20 to 23 weeks" },
+          { value: "weeksPregnant24to27", text: "24 to 27 weeks" },
+          { value: "weeksPregnant28to31", text: "28 to 31 weeks" },
+          { value: "weeksPregnant32to35", text: "32 to 35 weeks" },
+          { value: "weeksPregnant36orMore", text: "36 weeks or more" }
+        ]
+      }) }}
 
-        <div class="nhsuk-details__text app-section__body">
-          {{ checkboxes({
-            idPrefix: "weeks-pregnant",
-            name: "weeksPregnant",
-            fieldset: { legend: { text: "Weeks pregnant", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
-            classes: "nhsuk-checkboxes--small",
-            items: [
-              { value: "weeksPregnantUpTo20", text: "Up to 20 weeks" },
-              { value: "weeksPregnant20to23", text: "20 to 23 weeks" },
-              { value: "weeksPregnant24to27", text: "24 to 27 weeks" },
-              { value: "weeksPregnant28to31", text: "28 to 31 weeks" },
-              { value: "weeksPregnant32to35", text: "32 to 35 weeks" },
-              { value: "weeksPregnant36orMore", text: "36 weeks or more" }
-            ]
-          }) }}
-        </div>
-      </details>
-
+      {# Form submit #}
       <div class="app-actions" style="display: flex; align-items: center; gap: 1rem; margin-top: 0; margin-bottom: 0;">
         <button type="button" class="nhsuk-button nhsuk-button--small" data-module="nhsuk-button" onclick="window.location.href = window.location.pathname + '?filtersApplied=true'">
           Apply

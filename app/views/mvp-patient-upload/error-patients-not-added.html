@@ -9,11 +9,28 @@
 {% block content %}
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-      <h1 class="nhsuk-heading-l">There was a problem with your upload</h1>
-      <p class="nhsuk-body">You need to fix issues for XX patients in your CSV file.</p>
-      <p class="nhsuk-body">The CSV file must include a header row with two columns: NHS number, due date.</p>
-      <p class="nhsuk-body">Fix the issues and upload a new CSV file.</p>
-      <p class="nhsuk-body"><a href="add-patients?scenario=firstUpload" class="nhsuk-button" data-module="nhsuk-button">Add patients</a></p>
+      <h1 class="nhsuk-heading-l">
+        There was a problem with your upload
+      </h1>
+      <p class="nhsuk-body">
+        There were issues with the data in the CSV file you uploaded.
+      </p>
+      <p class="nhsuk-body">
+        The CSV file should include a header row followed by data rows. The header row must include two columns: NHS number, Due date. 
+        Every row must include this information.
+      </p>
+      <p class="nhsuk-body nhsuk-u-margin-bottom-2">
+        For example:
+      </p>
+      <code class="nhsuk-body" data-line="">
+        NHS number, Due date<br>1234567890, 2026-04-27<br>0987654321, 2026-11-12  
+      </code>
+      <p class="nhsuk-body">
+        Check the data and upload a new CSV file. 
+      </p>
+      <p class="nhsuk-body">
+        <a href="add-patients?scenario=firstUpload" class="nhsuk-button" data-module="nhsuk-button">Add patients</a>
+      </p>
     </div>
   </div>
 {% endblock %}

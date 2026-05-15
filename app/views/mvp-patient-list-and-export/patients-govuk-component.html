@@ -57,6 +57,148 @@
     margin-top: -1px;
   }
 
+  /* details: remove native markers and NHS marker */
+  details summary::-webkit-details-marker { display: none; }
+  details summary::marker { content: ""; }
+  .nhsuk-details__summary { list-style: none; }
+  .nhsuk-details__summary::before { content: none !important; }
+
+  /* outer details */
+  .nhsuk-details.app-filter { margin: 0 !important; }
+
+  /* “Filter and sort” link */
+  .app-filter__summary {
+    margin: 0 0 12px 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #1d70b8;
+    font-weight: 700;
+    border: 0;
+    background: transparent;
+  }
+  .nhsuk-details.app-filter .nhsuk-details__summary .nhsuk-details__summary-text { text-decoration: none !important; }
+  .app-filter__summary:hover .nhsuk-details__summary-text,
+  .app-filter__summary:focus .nhsuk-details__summary-text { text-decoration: underline !important; }
+
+  /* chevrons */
+  .app-caret,
+  .app-caret--inner {
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    display: inline-block;
+    position: relative;
+    transition: transform .15s ease, top .15s ease;
+  }
+
+  /* FILTER (top-level) chevron */
+  .app-caret {
+    transform: rotate(-135deg);
+    top: 2px; /* open (up) */
+  }
+
+  .app-filter:not([open]) .app-caret {
+    transform: rotate(45deg);
+    top: -4px; /* closed (down) */
+  }
+
+  /* INNER section chevrons */
+  .app-caret--inner {
+    transform: rotate(45deg);
+    top: -4px; /* closed (down) */
+  }
+
+  .app-section[open] .app-caret--inner {
+    transform: rotate(-135deg);
+    top: 2px; /* open (up) */
+  }
+
+  /* panel */
+  .app-filter__panel,
+  .app-filter .nhsuk-details__text { background: #D8DDE0 !important; }
+  .app-filter__panel {
+    border: 1px solid #b1b4b6;
+    padding: 16px 16px 0 16px;
+  }
+  .app-filter .nhsuk-details__text { border: 0 !important; padding-top: 0; }
+
+  /* sections */
+  .nhsuk-details.app-section { 
+    margin-bottom: 4px !important; 
+  }
+
+  /* default (OPEN) */
+  .app-section { 
+    padding: 16px 0; 
+    background: #D8DDE0; 
+  }
+
+  /* tighter when CLOSED */
+  .app-section:not([open]) {
+    padding: 16px 0 10px 0;
+  }
+
+  /* divider + tighter vertical rhythm */
+  .app-section + .app-section { 
+    border-top: 1px solid #b1b4b6; 
+    margin-top: 4px;
+  }
+
+  .app-section__summary {
+    margin: 0 0 8px 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: #0b0c0c;
+    background: transparent;
+    border: 0;
+  }
+
+  .nhsuk-details.app-section .nhsuk-details__summary .nhsuk-details__summary-text { 
+    text-decoration: none !important; 
+  }
+
+  .app-section__summary:hover .nhsuk-details__summary-text,
+  .app-section__summary:focus .nhsuk-details__summary-text { 
+    text-decoration: underline !important; 
+  }
+
+  /* remove extra space under summary when CLOSED */
+  .app-section:not([open]) .app-section__summary {
+    margin-bottom: 0;
+  }
+
+  .app-section__body { 
+    margin: 0; 
+    padding: 0; 
+    background: #D8DDE0 !important; 
+  }
+
+  /* NHS field spacing */
+  /*.nhsuk-radios__item, .nhsuk-checkboxes__item { margin-bottom: 8px; }*/
+
+  /* actions */
+  .app-actions {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    padding: 20px 0 0 0;
+    margin-bottom: 0;
+    border-top: 1px solid #b1b4b6;
+    background: #D8DDE0;
+    width: 100%;
+  }
+
+  @media (max-width: 40.0625em) {
+    .app-filter__panel { padding: 12px; }
+    .app-actions { flex-wrap: wrap; gap: 12px; }
+  }
+
   /* Table overrides */
 
   /* Prevent wrapping + tighten table */
@@ -69,16 +211,6 @@
     padding: 8px 12px 8px 0;
     vertical-align: top;
     font-size: 16px;
-  }
-
-  .nhsuk-table__header--wrap {
-    white-space: normal;
-    line-height: 1.2;
-    max-width: 150px;
-  }
-
-  .nhsuk-table__header--wrap span {
-    display: block;
   }
 
   /* Pagination overrides */
@@ -103,6 +235,30 @@
     white-space: nowrap;
   }
 
+  /*********************
+
+  .app-filter__summary-row {
+    display: flex;
+    align-items: baseline;
+    width: 100%;
+  }
+
+  .app-filter__summary-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .app-filter__summary-results {
+    margin-left: auto;
+    color: #505a5f;
+    font-size: 19px;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  /*********************
+
 </style>
 
 <div class="nhsuk-grid-row">
@@ -116,7 +272,7 @@
       This list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
     </p>
 
-    {% include "mvp-patient-list-and-export/_minimal-FilterAndSort.html" %}
+    {% include "mvp-patient-list-and-export/_FilterAndSort-govuk-component.html" %}
 
     {% if data.filtersApplied == "true" %}
       <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3">

@@ -70,7 +70,7 @@
           </p>
           <p class="nhsuk-body">
             There are currently <strong>768</strong> patients for your organisation. 
-             The most recent upload was by <strong>Chloe Liu</strong> on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>. 
+            The most recent upload was by <strong>Chloe Liu</strong> on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>. 
           </p>
         {% else %}
           <p class="nhsuk-body">
@@ -88,6 +88,9 @@
             <h2 class="nhsuk-heading-s">
               Preparing a CSV file
             </h2>
+            <p class="nhsuk-body">
+              A CSV file is a plain-text format that makes it easy to transfer table-based data from one system to another.
+            </p>
             <p class="nhsuk-body">
               First, export patient information from the system that you use to store and manage patient records. You must export the information as a CSV file.
             </p>
@@ -115,8 +118,9 @@
             </p>
             <div class="nhsuk-inset-text">
               <span class="nhsuk-u-visually-hidden">Information:</span>
-              <p>It may take up to 30 minutes to carry out this check.  
-              <p>If you are replacing a list of patients, you will not be able to view your previous list of patients during this time.</p>
+              <p>It may take several hours to carry out this check.</p>
+              <p>If you are replacing a list of patients, you will not be able to view your previous 	list of patients during this time.</p>
+              <p>We recommend uploading at the end of the day, so your list is ready to view in the morning.</p>
               <p>You will receive an email when the check is complete.</p>
             </div>
             <p class="nhsuk-body">

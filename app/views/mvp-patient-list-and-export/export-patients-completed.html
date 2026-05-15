@@ -11,7 +11,7 @@
     <div class="nhsuk-grid-column-two-thirds">
       <div class="nhsuk-panel">
         <h1 class="nhsuk-panel__title">
-          Export completed
+          Export ready
         </h1>
         <div class="nhsuk-panel__body">
           {% if data.filtersApplied == "true" %}
@@ -21,9 +21,17 @@
           {% endif %}
         </div>
       </div>
-      <h2 class="nhsuk-heading-m">CSV export helper text</h2>
-      <p class="nhsuk-body">Additional content.</p>
-      <p class="nhsuk-body"><a href="#/">[Link back to patient list]</a></p>
+
+      <p class="nhsuk-body">Your exported CSV file should be downloading.</p>
+      <p class="nhsuk-body">If the download has not started, go back and export the file again.</p>
+      <p class="nhsuk-body">If you cannot find your exported file, check the <strong>Downloads</strong> folder on your device.</p>
+
+      {% if data.filtersApplied == "true" %}
+        <p class="nhsuk-body"><a href="patients?filtersApplied=true">View list of patients</a></p>
+      {% else %}
+        <p class="nhsuk-body"><a href="patients?filtersApplied">View list of patients</a></p>
+      {% endif %}
+
     </div>
   </div>
 {% endblock %}

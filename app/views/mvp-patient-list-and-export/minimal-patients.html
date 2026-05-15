@@ -56,6 +56,43 @@
     line-height: 1;
     margin-top: -1px;
   }
+
+  /* Table overrides */
+
+  /* Prevent wrapping + tighten table */
+  .nhsuk-table {
+    table-layout: auto;
+  }
+
+  .nhsuk-table th, .nhsuk-table td {
+    /*padding: 8px 12px;*/
+    padding: 8px 12px 8px 0;
+    vertical-align: top;
+    font-size: 16px;
+  }
+
+  /* Pagination overrides */
+  .nhsuk-pagination-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* keeps pagination + "Showing..." on same line */
+    margin-top: 8px;     /* tighten gap from table */
+  }
+
+  .nhsuk-pagination {
+    margin-top: 0;       /* remove default big gap */
+    margin-bottom: 0;
+  }
+
+  .nhsuk-table {
+    margin-bottom: 8px;  /* tighten space above pagination */
+  }
+
+  .nhsuk-pagination-wrapper__results {
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
 </style>
 
 <div class="nhsuk-grid-row">

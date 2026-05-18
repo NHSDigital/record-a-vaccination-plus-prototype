@@ -4,12 +4,41 @@
 
 {% set errorMessages = {
   invalidFileType: "The selected file must be a CSV",
-  fileTooLarge: "The CSV must be smaller than 2MB",
-  fileIsEmpty: "The selected file is empty",
+  fileTooLarge: "The CSV must be smaller than 10MB",
+  fileIsEmpty: "The CSV must contain a header and at least one row",
+  tooManyRows: "Too many rows. Maximum allowed is 10,000",
+  fileNotUploaded: "The selected file could not be uploaded - try again",
   fileContainsAvirus: "The selected file contains a virus",
-  fileIsPasswordProtected: "The selected file is password protected",
-  fileNotUploaded: "The selected file could not be uploaded - try again"
+  fileIsPasswordProtected: "The selected file is password protected"
 } %}
+
+{#
+
+DONE
+1. Validate file type
+Prototype: "The selected file must be a CSV"
+FE: "The file must be a CSV"
+
+DONE
+2. Validate file size
+Prototype: "The CSV must be smaller than 10MB"
+FE: "File must be smaller than 10MB"
+
+DONE
+3. Validate content
+Prototype: "The selected file is empty"
+FE: "The CSV must contain a header and at least one row"
+
+DONE
+5. Validate row count
+FE: "Too many rows. Maximum allowed is 10000"
+
+DONE
+9. Unknown error
+Prototype: "The selected file could not be uploaded - try again"
+
+#}
+
 
 {% set errorMessage = errorMessages[data.scenario] %}
 {% set hasError = errorMessage %}

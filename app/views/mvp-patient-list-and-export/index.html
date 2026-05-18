@@ -11,9 +11,8 @@
 {% block content %}
 	<div class="nhsuk-grid-row">
 		<div class="nhsuk-grid-column-two-thirds">
-			<h1 class="nhsuk-heading-l">
-				Patient list and export
-			</h1>
+			<span class="nhsuk-caption-l">MVP release feature</span>
+			<h1 class="nhsuk-heading-l">Patient list and export</h1>
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Description</h2>
 			<p class="nhsuk-body">
 				Facilitate a logged in user to view their successfully uploaded and enriched patient list.
@@ -41,56 +40,26 @@
 				<li><a href="landing">Maternity landing page</a></li>
 			</ol>
 
-			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Patient list</h2>
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">View patient list</h2>
 			<ol start="2">
 				{#<li><a href="patients-govuk-component?showData&filtersApplied">Patient list [no filters] </a></li>#}
 				{#<li><a href="patients-govuk-component?showData&filtersApplied=true">Patient list [filters applied]</a></li>#}
-				<li><a href="patients?showData&filtersApplied">Patient list [no filters]</a></li>
-				<li><a href="patients?showData&filtersApplied=true">Patient list [filters applied]</a></li>
-			</ol>
-
-			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Row level errors</h2>
-			<ol start="4">
+				<li><a href="patients?showData&filtersApplied">No filters</a></li>
+				<li><a href="patients?showData&filtersApplied=true">Filters applied</a></li>
 				<li><a href="patients#tab-data-quality-issues">Row level errors</a></li>
 			</ol>
-
-			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Export patient list</h2>
-			<ol start="6">
-				<li><a href="export-patients?filtersApplied">Export patients (no filters)</a></li>
-				<li><a href="export-patients?filtersApplied=true">Export patients (filters)</a></li>
-				<li><a href="export-patients-completed?filtersApplied">Export patients completed (no filters)</a></li>
-				<li><a href="export-patients-completed?filtersApplied=true">Export patients completed (filters)</a></li>
-			</ol>
-
 		</div>
 
 		<div class="nhsuk-grid-column-one-half">
-<!--
-			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Upload success</h2>
-			<ol start="12">
-				<li><a href="/patient-upload/upload-complete">Patient list uploaded: processing to begin</a></li>
-			</ol>
-			<p class="nhsuk-body nhsuk-u-margin-bottom-2">Error state:</li>
-			<ol start="13">
-				<li><a href="error-patients-not-added">Patient list uploaded: issues detected in CSV</a></li>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Export patient list</h2>
+			<ol start="5">
+				<li><a href="export-patients?filtersApplied">Export (no filters)</a></li>
+				<li><a href="export-patients?filtersApplied=true">Export (filters applied)</a></li>
+				<li><a href="export-patients-completed?filtersApplied">Export completed (no filters)</a></li>
+				<li><a href="export-patients-completed?filtersApplied=true">Export completed (filters applied)</a></li>
 			</ol>
 
-			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Processing outcomes</h2>
-			<p class="nhsuk-body nhsuk-u-margin-bottom-2">Email:</p>
-			<ol start="14">
-				<li><a href="email-success?firstName=Jodie&lastName=Brown">Processing success and patient list ready to view</a></li>
-				{#<li><a href="email-failed?firstName=Jodie&lastName=Brown">Processing failed; previous patient list restored</a></li>#}
-				{#<li><a href="email-failed-first-upload?firstName=Jodie&lastName=Brown">Processing failed; first time upload, no patient list</a></li>#}
-			</ol>
-
-			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Patient upload history</h2>
-			<ol start="15">
-				<li><a href="change-log?uploadedList=noPatients">No patients have been added</a></li>
-				<li><a href="change-log?uploadedList=false">Current list, Failed, and Processed status examples</a></li>
-				<li><a href="change-log?uploadedList=processing">Successful upload being processed</a></li>
-				<li><a href="change-log?uploadedList=true">Successfully processed upload now available</a></li>
-			</ol>
-!-->
 		</div>
 	</div>
 {% endblock %}

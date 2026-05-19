@@ -13,37 +13,6 @@
   fileIsPasswordProtected: "The selected file is password protected"
 } %}
 
-{#
-
-DONE
-1. Validate file type
-Prototype: "The selected file must be a CSV"
-FE: "The file must be a CSV"
-
-DONE
-2. Validate file size
-Prototype: "The CSV must be smaller than 10MB"
-FE: "File must be smaller than 10MB"
-
-DONE
-3. Validate content
-Prototype: "The selected file is empty"
-FE: "The CSV must contain a header and at least one row"
-
-4. Validate header
-FE: "Missing required headers: NHS Number, Due Date"
-
-DONE
-5. Validate row count
-FE: "Too many rows. Maximum allowed is 10,000"
-
-DONE
-9. Unknown error
-Prototype: "The selected file could not be uploaded - try again"
-
-#}
-
-
 {% set errorMessage = errorMessages[data.scenario] %}
 {% set hasError = errorMessage %}
 
@@ -140,9 +109,12 @@ Prototype: "The selected file could not be uploaded - try again"
               You do not need to include any other patient information in your exported file.
             </p>
             <p class="nhsuk-body">
+              We cannot find and match a patient's vaccination information without an NHS number. Patients in your CSV file that do not have an NHS number 
+              will not appear in your list of maternity patients in RAVS.
+            </p>
+            <p class="nhsuk-body">
               It is your responsibility to make sure the patient information is accurate.
             </p>
-
             <h2 class="nhsuk-heading-s">
               Uploading a CSV file
             </h2>

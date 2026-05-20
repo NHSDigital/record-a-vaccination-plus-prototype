@@ -3,7 +3,7 @@
 {% set currentSection = "plus" %}
 
 {% block pageTitle %}
-  Patients
+  Patients data errors
 {% endblock %}
 
 {% block content %}
@@ -126,7 +126,7 @@
   <div class="nhsuk-grid-column-two-thirds">
 
     <h1 class="nhsuk-heading-l">
-      Patients
+      Patients data errors
     </h1>
 
     <p class="nhsuk-body">
@@ -203,18 +203,18 @@
       <ul class="moj-sub-navigation__list">
         <li class="moj-sub-navigation__item">
           {% if data.filtersApplied == "true" %}
-            <a class="moj-sub-navigation__link" aria-current="page" href="#/">Patients (238)</a>
+            <a class="moj-sub-navigation__link" href="patients">Patients (238)</a>
           {% else %}
-            <a class="moj-sub-navigation__link" aria-current="page" href="#/">Patients (1,995)</a>
+            <a class="moj-sub-navigation__link" href="patients">Patients (1,995)</a>
           {% endif %}
         </li>
         <li class="moj-sub-navigation__item">
-          <a class="moj-sub-navigation__link" href="patients-data-errors">Data errors (5)</a>
+          <a class="moj-sub-navigation__link" aria-current="page" href="patients-data-errors">Data errors (5)</a>
         </li>
       </ul>
     </nav>
 
-    {% include "mvp-patient-list-and-export/_secondayNavContentAllVaccinations.html" %}
+    {% include "mvp-patient-list-and-export/_secondayNavContentDataQualityIssues.html" %}
 
   </div>
 </div>

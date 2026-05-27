@@ -95,7 +95,11 @@
               A CSV file is a plain-text format that makes it easy to transfer table-based data from one system to another.
             </p>
             <p class="nhsuk-body">
-              First, export patient information from the system that you use to store and manage patient records. You must export the information as a CSV file.
+              First, export patient information from the system that you use to store and manage patient records. 
+              Do not export patients who have died, had a miscarriage or have a sensitive flag.
+            </p>
+            <p class="nhsuk-body">
+              You must export the information as a CSV file.
             </p>
             <p class="nhsuk-body">
               The CSV file should include a header row followed by data rows. The header row must include two columns: NHS number, Due date.
@@ -125,7 +129,7 @@
             <div class="nhsuk-inset-text">
               <span class="nhsuk-u-visually-hidden">Information:</span>
               <p>It may take several hours to carry out this check.</p>
-              <p>If you are replacing a list of patients, you will not be able to view your previous 	list of patients during this time.</p>
+              <p>If you are replacing a list of patients, you will not be able to view your previous list of patients during this time.</p>
               <p>We recommend uploading at the end of the day, so your list is ready to view in the morning.</p>
               <p>You will receive an email when the check is complete.</p>
             </div>
@@ -135,34 +139,33 @@
           </div>
         </details>
 
-      {% if data.scenario == "updateExisting" %}
-        <form class="form" action="interruption-page-overwrite-warning" method="post">
-      {% else %}
-        <form class="form" action="upload-complete" method="post">
-      {% endif %}
-          <div class="nhsuk-form-group {% if hasError %}nhsuk-form-group--error {% endif %}nhsuk-file-upload" data-module="nhsuk-file-upload">
+        {% if data.scenario == "updateExisting" %}
+          <form class="form" action="interruption-page-overwrite-warning" method="post">
+        {% else %}
+          <form class="form" action="upload-complete" method="post">
+        {% endif %}
+            <div class="nhsuk-form-group {% if hasError %}nhsuk-form-group--error {% endif %}nhsuk-file-upload" data-module="nhsuk-file-upload">
 
-            <label class="nhsuk-label nhsuk-u-visually-hidden" for="file-hint">
-              Upload patient list file
-            </label>
+              <label class="nhsuk-label nhsuk-u-visually-hidden" for="file-hint">
+                Upload patient list file
+              </label>
 
-            {% if hasError %}
-              <span class="nhsuk-error-message" id="file-hint-error">
-                <span class="nhsuk-u-visually-hidden">Error:</span> {{ errorMessage }}
-              </span>
-            {% endif %}
+              {% if hasError %}
+                <span class="nhsuk-error-message" id="file-hint-error">
+                  <span class="nhsuk-u-visually-hidden">Error:</span> {{ errorMessage }}
+                </span>
+              {% endif %}
 
-            <input class="nhsuk-file-upload__input" id="file-hint" name="file-hint" type="file" {% if hasError %}aria-describedby="file-hint-error"{% endif %}>
-          </div>
+              <input class="nhsuk-file-upload__input" id="file-hint" name="file-hint" type="file" {% if hasError %}aria-describedby="file-hint-error"{% endif %}>
+            </div>
 
-          <div class="govuk-button-group">
-            <button type="submit" class="nhsuk-button nhsuk-u-margin-right-3" data-module="nhsuk-button">
-              Upload file
-            </button>
-          </div>
-        </form>
-
-      {% endif %}
+            <div class="govuk-button-group">
+              <button type="submit" class="nhsuk-button nhsuk-u-margin-right-3" data-module="nhsuk-button">
+                Upload file
+              </button>
+            </div>
+          </form>
+        {% endif %}
 
     </div>
   </div>

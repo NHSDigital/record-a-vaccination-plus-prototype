@@ -40,7 +40,7 @@
       <dl class="nhsuk-summary-list">
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">
-            Filename
+            File name
           </dt>
           <dt class="nhsuk-summary-list__key">
             Uploaded
@@ -55,9 +55,9 @@
           <div class="nhsuk-summary-list__row">
             <dd class="nhsuk-summary-list__value">
               {% if data['uploadedList'] == 'true' %}
-                <a href="patients"><span class="nhsuk-u-visually-hidden">View </span>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv</a>&nbsp;(13.7MB)
+                <a href="#/"><span class="nhsuk-u-visually-hidden">View </span>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv</a>&nbsp;(9.7MB)
               {% else %}
-                dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv&nbsp;(13.7MB)
+                dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv&nbsp;(9.7MB)
               {% endif %}
             </dt>
             <dd class="nhsuk-summary-list__value">
@@ -76,9 +76,9 @@
         <div class="nhsuk-summary-list__row">
           <dd class="nhsuk-summary-list__value">
             {% if data['uploadedList'] == 'false' %}
-              <a href="patients"><span class="nhsuk-u-visually-hidden">View </span>dataset-{{ date({ year: 'numeric' }, { day: -7 }) }}-{{ date({ month: '2-digit' }, { day: -7 }) }}-{{ date({ day: '2-digit' }, { day: -7 }) }}.csv</a>&nbsp;(12.1MB)
+              <a href="#/"><span class="nhsuk-u-visually-hidden">View </span>dataset-{{ date({ year: 'numeric' }, { day: -7 }) }}-{{ date({ month: '2-digit' }, { day: -7 }) }}-{{ date({ day: '2-digit' }, { day: -7 }) }}.csv</a>&nbsp;(9.1MB)
             {% else %}
-              dataset-{{ date({ year: 'numeric' }, { day: -7 }) }}-{{ date({ month: '2-digit' }, { day: -7 }) }}-{{ date({ day: '2-digit' }, { day: -7 }) }}.csv&nbsp;(12.1MB)
+              dataset-{{ date({ year: 'numeric' }, { day: -7 }) }}-{{ date({ month: '2-digit' }, { day: -7 }) }}-{{ date({ day: '2-digit' }, { day: -7 }) }}.csv&nbsp;(9.1MB)
             {% endif %}
           </dt>
           <dd class="nhsuk-summary-list__value">
@@ -107,7 +107,7 @@
 
         <div class="nhsuk-summary-list__row">
           <dd class="nhsuk-summary-list__value">
-            dataset-{{ date({ year: 'numeric' }, { day: -21 }) }}-{{ date({ month: '2-digit' }, { day: -21 }) }}-{{ date({ day: '2-digit' }, { day: -21 }) }}.csv&nbsp;(14.8MB)
+            dataset-{{ date({ year: 'numeric' }, { day: -21 }) }}-{{ date({ month: '2-digit' }, { day: -21 }) }}-{{ date({ day: '2-digit' }, { day: -21 }) }}.csv&nbsp;(4.8MB)
           </dt>
           <dd class="nhsuk-summary-list__value">
             {{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { day: -21 }) }} at 2:04pm,<br>Nadiya Thomas

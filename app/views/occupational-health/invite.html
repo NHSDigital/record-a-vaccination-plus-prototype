@@ -1,0 +1,84 @@
+{% extends 'ravs-plus-layout-1-oh.html' %}
+
+{% set currentSection = "plus" %}
+
+{% block pageTitle %}
+  Invite message
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Back</a>
+{% endblock %}
+
+<!-- For adding page content -->
+<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      Invite message
+    </h1>
+
+{% set defaultMessage %}
+Hello [First name],
+
+You are invited to book an appointment for a flu vaccination as you are eligible. Follow this link for further information on the flu vaccine.
+
+If you would like to make an appointment, please book using our online tool or call us on 0121 472 1377.
+
+If you have already contacted us, please accept our apologies and ignore this reminder.
+
+Kind regards,
+BWC Trust 
+{% endset %}
+
+    {{ textarea({
+      name: "messageInvite",
+      id: "messageInvite",
+      rows: "15",
+      value: defaultMessage,
+      label: {
+        text: "This is the message the patients on your send list will receive."
+      },
+      hint: {
+        text: "Hint text explaining other aspects"
+      }
+    }) }}
+
+    {{ radios({
+      idPrefix: "filter",
+      name: "filter",
+      fieldset: {
+        legend: {
+          text: "Confirm you're happy to send the above? [Wording TBC]",
+          size: "m",
+          isPageHeading: false
+        }
+      },
+      classes: "nhsuk-radios--small",
+      items: [
+        {
+          value: "yes",
+          text: "Yes I am"
+        },
+        {
+          value: "no",
+          text: "No I'm not"
+        }
+      ]
+    }) }}
+
+    <form class="form" action="review-and-send" method="post" class="submit">
+      <div class="govuk-button-group">
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-right-3" data-module="nhsuk-button">
+          Confirm
+        </button>
+        {#<p class="nhsuk-body"><a class="nhsuk-link" href="/send-invites/choose-task?taskChoice">Cancel</a></p>#}
+      </div>
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

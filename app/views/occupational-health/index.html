@@ -1,0 +1,28 @@
+{% extends 'layout-index-only.html' %}
+
+{% set pageName = "NHS Record a vaccination prototypes" %}
+
+{% block beforeContent %}
+	{{ backLink({
+	href: "/", text: "Back"
+	}) }}
+{% endblock %}
+
+{% block content %}
+	<div class="nhsuk-grid-row">
+		<div class="nhsuk-grid-column-two-thirds">
+
+			<p class="nhsuk-body">
+				<ul>
+					<li><a href="add-patients?scenario=firstUpload">Add patients (first time upload)</a></li>
+					<li><a href="add-patients?scenario=updateExisting">Add patients (overwrite existing list)</a></li>
+					<li><a href="upload-type">Upload type</a></li>
+					<li><a href="oh-patients">Occupational health patient list (populated)</a></li>
+				</ul>
+			</p>
+
+			<hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+
+		</div>
+	</div>
+{% endblock %}

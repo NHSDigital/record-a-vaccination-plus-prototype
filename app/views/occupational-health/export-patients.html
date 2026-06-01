@@ -1,0 +1,73 @@
+{% extends 'ravs-plus-layout-1.html' %}
+
+{% set currentSection = "plus" %}
+
+{% block pageTitle %}
+  Export partients
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <form method="post" action="export-patients">
+
+        <div class="nhsuk-form-group">
+          <fieldset class="nhsuk-fieldset" aria-describedby="export-patients-hint">
+            <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+              <h1 class="nhsuk-fieldset__heading">
+                Export patients
+              </h1>
+            </legend>
+            {% if data.filtersApplied == "true" %}
+              <p class="nhsuk-hint" id="export-patients-hint">
+                Your current list of patients was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+              </p>
+              <p class="nhsuk-body nhsuk-u-margin-bottom-4">
+                There are 238 patients in your list with 2 filters applied.
+              </p>
+              <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">
+                Active filters
+              </h2>
+              <ul class="nhsuk-list nhsuk-list--bullet">
+                <li>RSV status: Eligible</li>
+                <li>Weeks pregnant: 28 to 31 weeks</li>
+                {#<li>Last pertussis vaccination: From 1 February 2023 to 10 May 2026</li>#}
+              </ul>
+            {% else %}
+              <p class="nhsuk-hint" id="export-patients-hint">
+              <p class="nhsuk-hint" id="export-patients-hint">
+                Your current list of patients was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+              </p>
+              <p class="nhsuk-body nhsuk-u-margin-bottom-4">
+                There are 1,995 patients in your list and no filters applied.
+              </p>
+            {% endif %}
+            {% if data.filtersApplied == "true" %}
+              <div class="nhsuk-radios" data-module="nhsuk-radios">
+                <div class="nhsuk-radios__item">
+                  <input class="nhsuk-radios__input" id="export-patients" name="exportPatients" type="radio" value="filteredPatients">
+                  <label class="nhsuk-label nhsuk-radios__label" for="export-patients">
+                    Export filtered list of patients
+                  </label>
+                </div>
+                <div class="nhsuk-radios__item">
+                  <input class="nhsuk-radios__input" id="export-patients-2" name="exportPatients" type="radio" value="allPatients">
+                  <label class="nhsuk-label nhsuk-radios__label" for="export-patients-2">
+                    Export all patients
+                  </label>
+                </div>
+              </div>
+            {% endif %}
+          </fieldset>
+        </div>
+        <div class="nhsuk-button-group">
+          <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Download CSV file</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

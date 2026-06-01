@@ -1,0 +1,152 @@
+<details class="nhsuk-details">
+
+  <summary class="nhsuk-details__summary">
+    <span class="nhsuk-details__summary-text">
+      Filter and sort
+    </span>
+  </summary>
+
+  <div class="nhsuk-details__text app-filter__panel">
+
+    <form action="#/" method="post" novalidate>
+
+      {# Status #}
+      {% set conditionalFluStatus %}
+        {{ checkboxes({
+          idPrefix: "current-flu-status",
+          name: "currentFluStatus",
+          fieldset: { legend: { text: "Flu status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          classes: "nhsuk-checkboxes--small",
+          items: [
+            { value: "statusFluVaccinated", text: "Vaccinated" },
+            { value: "statusFluUnvaccinated", text: "Unvaccinated" },
+            { value: "statusFluOptedOut", text: "Opted out" }
+          ]
+        }) }}
+      {% endset %}
+
+      {{ checkboxes({
+        idPrefix: "eligibilityStatus",
+        name: "eligibilityStatus",
+        fieldset: { legend: { text: "Status", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+        classes: "nhsuk-checkboxes--small",
+        items: [
+          { value: "fluStatus", text: "Flu status", conditional: { html: conditionalFluStatus } }
+        ]
+      }) }}
+
+      {# Area #}
+      {% set conditionalArea %}
+        {{ checkboxes({
+          idPrefix: "areaChoice",
+          name: "areaChoice",
+          fieldset: { legend: { text: "Area", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          classes: "nhsuk-checkboxes--small",
+          items: [
+            { value: "areaA", text: "[Area A]" },
+            { value: "areaB", text: "[Area B]" },
+            { value: "areaC", text: "[Area C]" },
+            { value: "areaD", text: "[Area D]" },
+            { value: "areaE", text: "[Area E]" },
+            { value: "areaF", text: "[Area F]" },
+            { value: "areaG", text: "[Area G]" },
+            { value: "areaH", text: "[Area H]" },
+            { value: "areaI", text: "[Area I]" },
+            { value: "areaJ", text: "[Area J]" }
+          ]
+        }) }}
+      {% endset %}
+
+      {# Division #}
+      {% set conditionalDivision %}
+        {{ checkboxes({
+          idPrefix: "divisionChoice",
+          name: "divisionChoice",
+          fieldset: { legend: { text: "Division", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          classes: "nhsuk-checkboxes--small",
+          items: [
+            { value: "divisionA", text: "[Division A]" },
+            { value: "divisionB", text: "[Division B]" },
+            { value: "divisionC", text: "[Division C]" },
+            { value: "divisionD", text: "[Division D]" },
+            { value: "divisionE", text: "[Division E]" },
+            { value: "divisionF", text: "[Division F]" },
+            { value: "divisionG", text: "[Division G]" },
+            { value: "divisionH", text: "[Division H]" },
+            { value: "divisionI", text: "[Division I]" },
+            { value: "divisionJ", text: "[Division J]" }
+          ]
+        }) }}
+      {% endset %}
+
+      {# Directorate #}
+      {% set conditionalDirectorate %}
+        {{ checkboxes({
+          idPrefix: "directorateChoice",
+          name: "directorateChoice",
+          fieldset: { legend: { text: "Directorate", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          classes: "nhsuk-checkboxes--small",
+          items: [
+            { value: "directorateA", text: "[Directorate A]" },
+            { value: "directorateB", text: "[Directorate B]" },
+            { value: "directorateC", text: "[Directorate C]" },
+            { value: "directorateD", text: "[Directorate D]" },
+            { value: "directorateE", text: "[Directorate E]" },
+            { value: "directorateF", text: "[Directorate F]" },
+            { value: "directorateG", text: "[Directorate G]" },
+            { value: "directorateH", text: "[Directorate H]" },
+            { value: "directorateI", text: "[Directorate I]" },
+            { value: "directorateJ", text: "[Directorate J]" }
+          ]
+        }) }}
+      {% endset %}
+
+      {# Ward #}
+      {% set conditionalWard %}
+        {{ checkboxes({
+          idPrefix: "wardChoice",
+          name: "wardChoice",
+          fieldset: { legend: { text: "Ward", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          classes: "nhsuk-checkboxes--small",
+          items: [
+            { value: "wardA", text: "[Ward A]" },
+            { value: "wardB", text: "[Ward B]" },
+            { value: "wardC", text: "[Ward C]" },
+            { value: "wardD", text: "[Ward D]" },
+            { value: "wardE", text: "[Ward E]" },
+            { value: "wardF", text: "[Ward F]" },
+            { value: "wardG", text: "[Ward G]" },
+            { value: "wardH", text: "[Ward H]" },
+            { value: "wardI", text: "[Ward I]" },
+            { value: "wardJ", text: "[Ward J]" }
+          ]
+        }) }}
+      {% endset %}
+
+      {{ checkboxes({
+        idPrefix: "organisation",
+        name: "organisation",
+        fieldset: { legend: { text: "Organisation", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+        classes: "nhsuk-checkboxes--small",
+        items: [
+          { value: "conditionalArea", text: "Area", conditional: { html: conditionalArea } },
+          { value: "conditionalDivision", text: "Division", conditional: { html: conditionalDivision } },
+          { value: "conditionalDirectorate", text: "Directorate", conditional: { html: conditionalDirectorate } },
+          { value: "conditionalWard", text: "Ward", conditional: { html: conditionalWard } }
+        ]
+      }) }}
+
+      {# Form submit #}
+      <div class="app-actions">
+        <button type="button" class="nhsuk-button nhsuk-button--small" data-module="nhsuk-button" onclick="window.location.href = window.location.pathname + '?filtersApplied=true'">
+          Apply
+        </button>
+        <button type="button" class="nhsuk-button nhsuk-button--secondary nhsuk-button--small" data-module="nhsuk-button" onclick="window.location.href = window.location.pathname + '?filtersApplied'">
+          Clear all
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</details>

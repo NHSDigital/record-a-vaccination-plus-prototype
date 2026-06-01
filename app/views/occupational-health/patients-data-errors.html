@@ -1,0 +1,222 @@
+{% extends 'ravs-plus-layout-1-oh.html' %}
+
+{% set currentSection = "plus" %}
+
+{% block pageTitle %}
+  Data errors
+{% endblock %}
+
+{% block content %}
+<style>
+  .govuk-applied-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 14px;
+    margin-bottom: 20px;
+  }
+
+  .govuk-applied-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    min-height: 38px;
+    padding: 0 14px;
+
+    border: 2px solid #b1b4b6;
+    border-radius: 8px;
+    background: #f3f2f1;
+
+    color: #0b0c0c;
+    text-decoration: none;
+
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 400;
+  }
+
+  .govuk-applied-filter:hover {
+    background: #e8e8e8;
+    border-color: #6f777b;
+    text-decoration: none;
+  }
+
+  .govuk-applied-filter:focus {
+    background: #ffdd00;
+    border-color: #0b0c0c;
+    box-shadow: none;
+  }
+
+  .govuk-applied-filter__label {
+    display: inline-block;
+  }
+
+  .govuk-applied-filter__remove {
+    font-size: 24px;
+    line-height: 1;
+    margin-top: -1px;
+  }
+
+  /* Table overrides */
+
+  /* Prevent wrapping + tighten table */
+  .nhsuk-table {
+    table-layout: auto;
+  }
+
+  .nhsuk-table th, .nhsuk-table td {
+    /*padding: 8px 12px;*/
+    padding: 8px 12px 8px 0;
+    vertical-align: top;
+    font-size: 16px;
+  }
+
+  .nhsuk-table__header--wrap {
+    white-space: normal;
+    line-height: 1.2;
+    max-width: 150px;
+  }
+
+  .nhsuk-table__header--wrap span {
+    display: block;
+  }
+
+  /* Pagination overrides */
+  .nhsuk-pagination-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* keeps pagination + "Showing..." on same line */
+    margin-top: 8px; /* tighten gap from table */
+  }
+
+  .nhsuk-pagination {
+    margin-top: 0; /* remove default big gap */
+    margin-bottom: 0;
+  }
+
+  .nhsuk-table {
+    margin-bottom: 8px; /* tighten space above pagination */
+  }
+
+  .nhsuk-pagination-wrapper__results {
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  
+  /* Eligibility Expander table */
+  .eligibility-table .nhsuk-list--bullet li {
+    font-size: 16px;
+  }
+
+  .eligibility-table .nhsuk-list--bullet {
+    margin-bottom: 0;
+  }
+
+  .eligibility-table .nhsuk-list--bullet:last-child {
+    margin-bottom: 0;
+  }
+
+  .eligibility-table .nhsuk-list--bullet li:last-child {
+    margin-bottom: 0;
+  }
+
+</style>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      Data errors
+    </h1>
+
+    <p class="nhsuk-body">
+      This list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+    </p>
+
+    {% include "./_ohFilterAndSort.html" %}
+
+    {% if data.filtersApplied == "true" %}
+      <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3">
+
+      <p class="nhsuk-body nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-3">Active filters</p>
+
+      <div class="govuk-applied-filters">
+        <a href="#/" class="govuk-applied-filter">
+          <span class="govuk-applied-filter__remove" aria-hidden="true">
+            ×
+          </span>
+          <span class="govuk-applied-filter__label">
+            RSV status: Eligible
+          </span>
+          <span class="nhsuk-u-visually-hidden">
+            Remove filter RSV status Eligible
+          </span>
+        </a>
+        <a href="#/" class="govuk-applied-filter">
+          <span class="govuk-applied-filter__remove" aria-hidden="true">
+            ×
+          </span>
+          <span class="govuk-applied-filter__label">
+            Weeks pregnant: 28 to 31 weeks
+          </span>
+          <span class="nhsuk-u-visually-hidden">
+            Remove filter Weeks pregnant 28 to 31 weeks
+          </span>
+        </a>
+        {#<a href="#/" class="govuk-applied-filter">
+          <span class="govuk-applied-filter__remove" aria-hidden="true">
+            ×
+          </span>
+          <span class="govuk-applied-filter__label">
+            Last pertussis vaccination: From 1 February 2023
+          </span>
+          <span class="govuk-visually-hidden">
+            Remove filter Last pertussis vaccination from 1 February 2023
+          </span>
+        </a>
+        <a href="#/" class="govuk-applied-filter">
+          <span class="govuk-applied-filter__remove" aria-hidden="true">
+            ×
+          </span>
+          <span class="govuk-applied-filter__label">
+            Last pertussis vaccination: To 10 May 2026
+          </span>
+          <span class="govuk-visually-hidden">
+            Remove filter Last pertussis vaccination to 10 May 2026
+          </span>
+        </a>#}
+      </div>
+
+      <p class="nhsuk-body"><a href="?filtersApplied=false" class="nhsuk-link">Clear all filters and sorting</a></p>
+
+    {% endif %}
+
+    <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    <nav class="moj-sub-navigation" aria-label="Sub navigation">
+      <ul class="moj-sub-navigation__list">
+        <li class="moj-sub-navigation__item">
+          {% if data.filtersApplied == "true" %}
+            <a class="moj-sub-navigation__link" href="patients">Patients (238)</a>
+          {% else %}
+            <a class="moj-sub-navigation__link" href="patients">Patients (1,995)</a>
+          {% endif %}
+        </li>
+        <li class="moj-sub-navigation__item">
+          <a class="moj-sub-navigation__link" aria-current="page" href="#/">Data errors (5)</a>
+        </li>
+      </ul>
+    </nav>
+
+    {% include "./_ohSecondayNavContentDataQualityIssues.html" %}
+
+  </div>
+</div>
+
+{% endblock %}

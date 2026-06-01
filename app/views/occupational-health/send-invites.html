@@ -1,0 +1,57 @@
+{% extends 'ravs-plus-layout-1-oh.html' %}
+
+{% set currentSection = "plus" %}
+
+{% block pageTitle %}
+  Send invites
+{% endblock %}
+
+{% block beforeContent %}
+  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      Send invites
+    </h1>
+
+    <p class="nhsuk-body">
+      This list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+    </p>
+
+    <form method="post" action="warning">
+
+      {# CHOOSE INVITE TYPES #}
+      <fieldset class="nhsuk-fieldset">
+        <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--m">
+          <h2 class="nhsuk-fieldset__heading">
+            Choose invite type
+          </h2>
+        </legend>
+        <div class="nhsuk-radios nhsuk-u-margin-bottom-6" data-module="nhsuk-radios">
+          <div class="nhsuk-radios__item">
+            <input class="nhsuk-radios__input" id="invite-flu" name="invite-type" type="radio" value="invite-flu">
+            <label class="nhsuk-label nhsuk-radios__label" for="invite-flu">
+              Flu
+            </label>
+          </div>
+          <div class="nhsuk-radios__item">
+            <input class="nhsuk-radios__input" id="invite-general" name="invite-type" type="radio" value="invite-general">
+            <label class="nhsuk-label nhsuk-radios__label" for="invite-general">
+              General vaccines
+            </label>
+          </div>
+        </div>
+
+        <div class="nhsuk-button-group">
+          <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Confirm</button>
+        </div>
+      </fieldset>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

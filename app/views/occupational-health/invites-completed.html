@@ -1,9 +1,9 @@
-{% extends 'ravs-plus-layout-1.html' %}
+{% extends 'ravs-plus-layout-1-oh.html' %}
 
 {% set currentSection = "plus" %}
 
 {% block pageTitle %}
-  Export patients
+  Invitations sent
 {% endblock %}
 
 {% block content %}
@@ -11,20 +11,18 @@
     <div class="nhsuk-grid-column-two-thirds">
       <div class="nhsuk-panel">
         <h1 class="nhsuk-panel__title">
-          Export ready
+          Invitations sent
         </h1>
         <div class="nhsuk-panel__body">
           {% if data.filtersApplied == "true" %}
-            238 patients have been exported
+            238 patient invitations have been sent
           {% else %}
-            1,995 patients have been exported
+            1,995 patient invitations have been sent
           {% endif %}
         </div>
       </div>
 
-      <p class="nhsuk-body">Your exported CSV file should be downloading.</p>
-      <p class="nhsuk-body">If the download has not started, go back and export the file again.</p>
-      <p class="nhsuk-body">If you cannot find your exported file, check the <strong>Downloads</strong> folder on your device.</p>
+      <p class="nhsuk-body">[Confirmation messaging, etc.]</p>
 
       {% if data.filtersApplied == "true" %}
         <p class="nhsuk-body"><a href="patients?filtersApplied=true">View list of patients</a></p>

@@ -12,24 +12,96 @@
 	<div class="nhsuk-grid-row">
 		<div class="nhsuk-grid-column-two-thirds">
 			<h1 class="nhsuk-heading-l">Occupational health [WIP]</h1>
-			<p class="nhsuk-body">
-				<ol>
-					<li><a href="landing">Landing</a></li>
-					<li><a href="add-patients?scenario=firstUpload">Add patients (first time upload)</a></li>
-					<li><a href="add-patients?scenario=updateExisting">Add patients (overwrite existing list)</a></li>
-					<li><s><a href="upload-type">Upload type</a></s></li>
-					<li><a href="patients">Patient list (filters and data incorrect)</a></li>
-					<li><a href="patients-data-errors">Data errors (filters and data incorrect)</a></li>
-					<li><a href="send-invites">Send invites</a></li>
-					<li><a href="warning">Warning: Vaccine invite doesn't match cohort</a></li>
-					<li><a href="invite">Invite message</a></li>
-					<li><a href="review-and-send">Review and send flu invite [Check your answers]</a></li>
-					<li><a href="invites-completed">Invitations sent</a></li>
-				</ol>
-			</p>
+		</div>
+	</div>
 
-			<hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+	<div class="nhsuk-grid-row">
+		<div class="nhsuk-grid-column-one-half">
 
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Entry point</h2>
+			<ol>
+				<li><a href="landing">Occupational health landing</a></li>
+			</ol>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Upload page</h2>
+			<ol start="2">
+				<li><a href="add-patients?scenario=firstUpload">Add patients (first time upload)</a></li>
+				<li><a href="add-patients?scenario=updateExisting">Add patients (overwrite existing list)</a></li>
+			</ol>
+
+			<p class="nhsuk-body nhsuk-u-margin-bottom-2">In-line error states:</p>
+			<ol start="4">
+				<li><a href="add-patients?scenario=invalidFileType">Invalid file type</a></li>
+				<li><a href="add-patients?scenario=fileTooLarge">File too large</a></li>
+				<li><a href="add-patients?scenario=fileIsEmpty">File is empty</a></li>
+				<li><a href="add-patients?scenario=fileIsMissingHeaders">Missing headers</a></li>
+				<li><a href="add-patients?scenario=tooManyRows">Too many rows</a></li>
+				<li><a href="add-patients?scenario=fileNotUploaded">File not uploaded - try again</a></li>
+				<li><a href="add-patients?scenario=validateSelectedFile">Validate file selected</a></li>
+			</ol>
+			<p class="nhsuk-body nhsuk-u-margin-bottom-2">Enrichment processing in-flight:</p>
+			<ol start="11">
+				<li><a href="add-patients?scenario=processing">Add patients (processing in-flight)</a></li>
+			</ol>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">System behaviour</h2>
+			<ol start="12">
+				<li><a href="interruption-page-overwrite-warning">Overwrite existing list warning</a></li>
+			</ol>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Upload success</h2>
+			<ol start="13">
+				<li><a href="upload-complete">Patient list uploaded: processing to begin</a></li>
+			</ol>
+			<p class="nhsuk-body nhsuk-u-margin-bottom-2">Error state:</li>
+			<ol start="14">
+				<li><a href="error-patients-not-added">Patient list uploaded: issues detected in CSV</a></li>
+			</ol>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Processing outcomes</h2>
+			<p class="nhsuk-body nhsuk-u-margin-bottom-2">Email:</p>
+			<ol start="15">
+				<li><a href="email-success?firstName=Jodie&lastName=Brown">Processing success and patient list ready to view</a></li>
+			</ol>
+
+		</div>
+		<div class="nhsuk-grid-column-one-half">
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Patient upload history</h2>
+			<ol start="16">
+				<li><a href="change-log?uploadedList=noPatients">No patients have been added</a></li>
+				<li><a href="change-log?uploadedList=false">Current list, Failed, and Processed status examples</a></li>
+				<li><a href="change-log?uploadedList=processing">Successful upload being processed</a></li>
+				<li><a href="change-log?uploadedList=true">Successfully processed upload now available</a></li>
+			</ol>
+		
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Patient list</h2>
+			<ol start="20">
+				<li><a href="patients?scenario=firstUpload">No patients have been added</a></li>
+				<li><a href="patients?scenario=processing">Processing in-flight</a></li>
+				<li><a href="patients?scenario&filtersApplied">No filters applied</a></li>
+				<li><a href="patients?showData&filtersApplied=true">Filters applied</a></li>
+				<li><a href="patients-data-errors">Row level errors</a></li>
+			</ol>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Export patient list</h2>
+			<ol start="25">
+				<li><a href="export-patients?filtersApplied">Export (no filters)</a></li>
+				<li><a href="export-patients?filtersApplied=true">Export (filters applied)</a></li>
+				<li><a href="export-patients-completed?filtersApplied">Export completed (no filters)</a></li>
+				<li><a href="export-patients-completed?filtersApplied=true">Export completed (filters applied)</a></li>
+			</ol>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Send invites</h2>
+			<ol start="29">
+				<li><a href="send-invites?filtersApplied">Send invite (no filters)</a></li>
+				<li><a href="send-invites?filtersApplied=true">Send invite (filters applied)</a></li>
+				<li><a href="warning">Warning: Vaccine invite doesn't match cohort</a></li>
+				<li><a href="invite">Invite message</a></li>
+				<li><a href="review-and-send">Review and send flu invite [Check your answers]</a></li>
+				<li><a href="invites-completed?filtersApplied">Invitations sent (no filters)</a></li>
+				<li><a href="invites-completed?filtersApplied=true">Invitations sent (filters applied)</a></li>
+			</ol>
 		</div>
 	</div>
 {% endblock %}

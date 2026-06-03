@@ -161,92 +161,102 @@
       Patients
     </h1>
 
-    <p class="nhsuk-body">
-      This list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
-    </p>
+    {% if data.scenario == "processing" %}
+      <p class="nhsuk-body">Your list of patients is currently unavailable because we are processing patient information from a recent file upload.</p>
+      <p class="nhsuk-body">You will get an email when this is complete.</p>
+      <p class="nhsuk-body"><a href="change-log?uploadedList=processing">View patient upload history</a>.</p>
+    {% elif data.scenario == "firstUpload" %}
+      <p class="nhsuk-body">No patients have been added for your organisation.</p>
+      <a href="add-patients?scenario=firstUpload" class="nhsuk-button" data-module="nhsuk-button">Add patients</a>
+    {% else %}
+      <p class="nhsuk-body">
+        This list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+      </p>
 
-    {% include "./_ohFilterAndSort.html" %}
+      {% include "./_ohFilterAndSort.html" %}
 
-    {% if data.filtersApplied == "true" %}
-      <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3">
+      {% if data.filtersApplied == "true" %}
+        <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3">
 
-      <p class="nhsuk-body nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-3">Active filters</p>
+        <p class="nhsuk-body nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-3">Active filters</p>
 
-      <div class="govuk-applied-filters">
-        <a href="#/" class="govuk-applied-filter">
-          <span class="govuk-applied-filter__remove" aria-hidden="true">
-            ×
-          </span>
-          <span class="govuk-applied-filter__label">
-            RSV status: Eligible
-          </span>
-          <span class="nhsuk-u-visually-hidden">
-            Remove filter RSV status Eligible
-          </span>
-        </a>
-        <a href="#/" class="govuk-applied-filter">
-          <span class="govuk-applied-filter__remove" aria-hidden="true">
-            ×
-          </span>
-          <span class="govuk-applied-filter__label">
-            Weeks pregnant: 28 to 31 weeks
-          </span>
-          <span class="nhsuk-u-visually-hidden">
-            Remove filter Weeks pregnant 28 to 31 weeks
-          </span>
-        </a>
-        {#<a href="#/" class="govuk-applied-filter">
-          <span class="govuk-applied-filter__remove" aria-hidden="true">
-            ×
-          </span>
-          <span class="govuk-applied-filter__label">
-            Last pertussis vaccination: From 1 February 2023
-          </span>
-          <span class="govuk-visually-hidden">
-            Remove filter Last pertussis vaccination from 1 February 2023
-          </span>
-        </a>
-        <a href="#/" class="govuk-applied-filter">
-          <span class="govuk-applied-filter__remove" aria-hidden="true">
-            ×
-          </span>
-          <span class="govuk-applied-filter__label">
-            Last pertussis vaccination: To 10 May 2026
-          </span>
-          <span class="govuk-visually-hidden">
-            Remove filter Last pertussis vaccination to 10 May 2026
-          </span>
-        </a>#}
-      </div>
+        <div class="govuk-applied-filters">
+          <a href="#/" class="govuk-applied-filter">
+            <span class="govuk-applied-filter__remove" aria-hidden="true">
+              ×
+            </span>
+            <span class="govuk-applied-filter__label">
+              RSV status: Eligible
+            </span>
+            <span class="nhsuk-u-visually-hidden">
+              Remove filter RSV status Eligible
+            </span>
+          </a>
+          <a href="#/" class="govuk-applied-filter">
+            <span class="govuk-applied-filter__remove" aria-hidden="true">
+              ×
+            </span>
+            <span class="govuk-applied-filter__label">
+              Weeks pregnant: 28 to 31 weeks
+            </span>
+            <span class="nhsuk-u-visually-hidden">
+              Remove filter Weeks pregnant 28 to 31 weeks
+            </span>
+          </a>
+          {#<a href="#/" class="govuk-applied-filter">
+            <span class="govuk-applied-filter__remove" aria-hidden="true">
+              ×
+            </span>
+            <span class="govuk-applied-filter__label">
+              Last pertussis vaccination: From 1 February 2023
+            </span>
+            <span class="govuk-visually-hidden">
+              Remove filter Last pertussis vaccination from 1 February 2023
+            </span>
+          </a>
+          <a href="#/" class="govuk-applied-filter">
+            <span class="govuk-applied-filter__remove" aria-hidden="true">
+              ×
+            </span>
+            <span class="govuk-applied-filter__label">
+              Last pertussis vaccination: To 10 May 2026
+            </span>
+            <span class="govuk-visually-hidden">
+              Remove filter Last pertussis vaccination to 10 May 2026
+            </span>
+          </a>#}
+        </div>
 
-      <p class="nhsuk-body"><a href="?filtersApplied=false" class="nhsuk-link">Clear all filters and sorting</a></p>
+        <p class="nhsuk-body"><a href="?filtersApplied=false" class="nhsuk-link">Clear all filters and sorting</a></p>
 
-    {% endif %}
+      {% endif %}
 
-    <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+      <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
 
+    </div>
   </div>
-</div>
 
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
 
-    <nav class="moj-sub-navigation" aria-label="Sub navigation">
-      <ul class="moj-sub-navigation__list">
-        <li class="moj-sub-navigation__item">
-          {% if data.filtersApplied == "true" %}
-            <a class="moj-sub-navigation__link" aria-current="page" href="#/">Patients (238)</a>
-          {% else %}
-            <a class="moj-sub-navigation__link" aria-current="page" href="#/">Patients (1,995)</a>
-          {% endif %}
-        </li>
-        <li class="moj-sub-navigation__item">
-          <a class="moj-sub-navigation__link" href="patients-data-errors">Data errors (5)</a>
-        </li>
-      </ul>
-    </nav>
+      <nav class="moj-sub-navigation" aria-label="Sub navigation">
+        <ul class="moj-sub-navigation__list">
+          <li class="moj-sub-navigation__item">
+            {% if data.filtersApplied == "true" %}
+              <a class="moj-sub-navigation__link" aria-current="page" href="#/">Patients (238)</a>
+            {% else %}
+              <a class="moj-sub-navigation__link" aria-current="page" href="#/">Patients (1,995)</a>
+            {% endif %}
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="patients-data-errors">Data errors (5)</a>
+          </li>
+        </ul>
+      </nav>
 
-    {% include "./_ohSecondayNavContentAllVaccinations.html" %}
+      {% include "./_ohSecondayNavContentAllVaccinations.html" %}
+    
+    {% endif %}
 
   </div>
 </div>

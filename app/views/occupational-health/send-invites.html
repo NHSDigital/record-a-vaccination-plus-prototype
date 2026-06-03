@@ -3,7 +3,7 @@
 {% set currentSection = "plus" %}
 
 {% block pageTitle %}
-  Send invites
+  Send flu invite
 {% endblock %}
 
 {% block beforeContent %}
@@ -11,47 +11,62 @@
 {% endblock %}
 
 {% block content %}
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-two-thirds">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <form method="post" action="warning">
 
-    <h1 class="nhsuk-heading-l">
-      Send invites
-    </h1>
-
-    <p class="nhsuk-body">
-      This list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
-    </p>
-
-    <form method="post" action="warning">
-
-      {# CHOOSE INVITE TYPES #}
-      <fieldset class="nhsuk-fieldset">
-        <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--m">
-          <h2 class="nhsuk-fieldset__heading">
-            Choose invite type
-          </h2>
-        </legend>
-        <div class="nhsuk-radios nhsuk-u-margin-bottom-6" data-module="nhsuk-radios">
-          <div class="nhsuk-radios__item">
-            <input class="nhsuk-radios__input" id="invite-flu" name="invite-type" type="radio" value="invite-flu">
-            <label class="nhsuk-label nhsuk-radios__label" for="invite-flu">
-              Flu
-            </label>
-          </div>
-          <div class="nhsuk-radios__item">
-            <input class="nhsuk-radios__input" id="invite-general" name="invite-type" type="radio" value="invite-general">
-            <label class="nhsuk-label nhsuk-radios__label" for="invite-general">
-              General vaccines
-            </label>
-          </div>
+        <div class="nhsuk-form-group">
+          <fieldset class="nhsuk-fieldset" aria-describedby="export-patients-hint">
+            <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+              <h1 class="nhsuk-fieldset__heading">
+                Send flu invite
+              </h1>
+            </legend>
+            {% if data.filtersApplied == "true" %}
+              <p class="nhsuk-hint" id="invite-patients-hint">
+                Your current list of patients was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+              </p>
+              <p class="nhsuk-body nhsuk-u-margin-bottom-4">
+                There are 238 patients in your list with 2 filters applied.
+              </p>
+              <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">
+                Active filters
+              </h2>
+              <ul class="nhsuk-list nhsuk-list--bullet">
+                <li>RSV status: Eligible</li>
+                <li>Weeks pregnant: 28 to 31 weeks</li>
+                {#<li>Last pertussis vaccination: From 1 February 2023 to 10 May 2026</li>#}
+              </ul>
+            {% else %}
+              <p class="nhsuk-hint" id="invite-patients-hint">
+                Your current list of patients was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+              </p>
+              <p class="nhsuk-body nhsuk-u-margin-bottom-4">
+                There are 1,995 patients in your list and no filters applied.
+              </p>
+            {% endif %}
+            {% if data.filtersApplied == "true" %}
+              <div class="nhsuk-radios" data-module="nhsuk-radios">
+                <div class="nhsuk-radios__item">
+                  <input class="nhsuk-radios__input" id="invite-patients" name="invitePatients" type="radio" value="inviteFilteredPatients">
+                  <label class="nhsuk-label nhsuk-radios__label" for="invite-patients">
+                    Send invite to filtered list of patients
+                  </label>
+                </div>
+                <div class="nhsuk-radios__item">
+                  <input class="nhsuk-radios__input" id="invite-patients-2" name="invitePatients" type="radio" value="inviteAllPatients">
+                  <label class="nhsuk-label nhsuk-radios__label" for="invite-patients-2">
+                    Send invite to all patients
+                  </label>
+                </div>
+              </div>
+            {% endif %}
+          </fieldset>
         </div>
-
         <div class="nhsuk-button-group">
           <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Confirm</button>
         </div>
-      </fieldset>
-
-    </form>
+      </form>
+    </div>
   </div>
-</div>
 {% endblock %}

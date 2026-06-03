@@ -39,6 +39,15 @@ router.post('/mvp-patient-list-and-export/export-patients', function (req, res) 
   }
 });
 
+// occupational-health/send-invites
+router.post('/occupational-health/send-invites', function (req, res) {
+  const choice = req.session.data['exportPatients']; 
+  if (choice === 'inviteFilteredPatients') {
+    res.redirect('/mvp-patient-list-and-export/export-patients-completed?filtersApplied=true')
+  } else {
+    res.redirect('/mvp-patient-list-and-export/export-patients-completed?filtersApplied')
+  }
+});
 
 /////////////////////////////////////////////////////////
 // START: Research entry routes

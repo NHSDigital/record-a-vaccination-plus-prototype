@@ -25,7 +25,7 @@
   <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
     <ol class="nhsuk-breadcrumb__list">
       <li class="nhsuk-breadcrumb__list-item">
-        <a class="nhsuk-breadcrumb__link" href="landing">Occupational health</a>
+        <a class="nhsuk-breadcrumb__link" href="landing">Staff vaccinations</a>
       </li>
       <li class="nhsuk-breadcrumb__list-item">Add patients</li>
     </ol>
@@ -95,24 +95,31 @@
               A CSV file is a plain-text format that makes it easy to transfer table-based data from one system to another.
             </p>
             <p class="nhsuk-body">
-              First, export patient information from the system that you use to store and manage patient records. 
-              Do not export patients who have died, had a miscarriage or have a sensitive flag.
+              First, export patient information from the Electronic Staff Record (ESR) or the system that you use to store and manage patient records.
             </p>
             <p class="nhsuk-body">
               You must export the information as a CSV file.
             </p>
             <p class="nhsuk-body">
-              The CSV file should include a header row followed by data rows. The header row must include the following columns: NHS number, Site, Team.
+              The CSV file should include a header row followed by data rows. The header row must include one mandatory column: Name.
             </p>
             <p class="nhsuk-body nhsuk-u-margin-bottom-2">
-              For example:
+              For example, your header row could include:
             </p>
-            <code class="" data-line="">
-              NHS number, Site, Team<br>1234567890, City Hospital, Wellbeing Team<br>0987654321, Pilgrim Hospital, Immunisation Team
-            </code>
-            <p class="nhsuk-body nhsuk-u-padding-top-4">
-              We cannot find and match a patient's vaccination information without an NHS number. Patients in your CSV file that do not have an NHS number 
-              will not appear in your list of maternity patients in RAVS.
+            <ul class="nhsuk-list nhsuk-list--bullet">
+              <li>Name 
+              <li>NHS number</li>
+              <li>Email address</li>
+              <li>Internal identifier</li>
+              <li>Team</li>
+              <li>Profession</li>
+              <li>Site</li>
+            </ul>
+            <p class="nhsuk-body">
+              You do not need to include any other patient information in your exported file.
+            </p>
+            <p class="nhsuk-body">
+              Patients in your CSV file that do not have an NHS number will appear in your list, but they will not have any vaccination information. We cannot find and match a patient's vaccination information without an NHS number.
             </p>
             <p class="nhsuk-body">
               It is your responsibility to make sure the patient information is accurate.

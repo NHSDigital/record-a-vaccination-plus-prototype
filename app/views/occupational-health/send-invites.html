@@ -3,7 +3,7 @@
 {% set currentSection = "plus" %}
 
 {% block pageTitle %}
-  Send flu invite
+  Send invitations
 {% endblock %}
 
 {% block beforeContent %}
@@ -19,15 +19,15 @@
           <fieldset class="nhsuk-fieldset" aria-describedby="export-patients-hint">
             <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
               <h1 class="nhsuk-fieldset__heading">
-                Send flu invite
+                Send invitations
               </h1>
             </legend>
             {% if data.filtersApplied == "true" %}
               <p class="nhsuk-hint" id="invite-patients-hint">
-                Your current list of patients was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+                The list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
               </p>
               <p class="nhsuk-body nhsuk-u-margin-bottom-4">
-                There are 238 patients in your list with 2 filters applied.
+                There are 238 patients in your list with 2 filters applied. Everyone on your list will receive an invitation to get a flu vaccination. 
               </p>
               <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">
                 Active filters
@@ -39,10 +39,10 @@
               </ul>
             {% else %}
               <p class="nhsuk-hint" id="invite-patients-hint">
-                Your current list of patients was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+                The list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
               </p>
               <p class="nhsuk-body nhsuk-u-margin-bottom-4">
-                There are 1,995 patients in your list and no filters applied.
+                There are 1,995 patients in your list and no filters applied. Everyone on your list will receive an invitation to get a flu vaccination.
               </p>
             {% endif %}
             {% if data.filtersApplied == "true" %}
@@ -50,13 +50,13 @@
                 <div class="nhsuk-radios__item">
                   <input class="nhsuk-radios__input" id="invite-patients" name="invitePatients" type="radio" value="inviteFilteredPatients">
                   <label class="nhsuk-label nhsuk-radios__label" for="invite-patients">
-                    Send invite to filtered list of patients
+                    Send invitations to filtered list of patients
                   </label>
                 </div>
                 <div class="nhsuk-radios__item">
                   <input class="nhsuk-radios__input" id="invite-patients-2" name="invitePatients" type="radio" value="inviteAllPatients">
                   <label class="nhsuk-label nhsuk-radios__label" for="invite-patients-2">
-                    Send invite to all patients
+                    Send invitations to all patients
                   </label>
                 </div>
               </div>
@@ -64,7 +64,7 @@
           </fieldset>
         </div>
         <div class="nhsuk-button-group">
-          <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Confirm</button>
+          <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Continue</button>
         </div>
       </form>
     </div>

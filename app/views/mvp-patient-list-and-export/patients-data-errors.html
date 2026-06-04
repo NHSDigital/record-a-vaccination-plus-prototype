@@ -6,6 +6,23 @@
   Data errors
 {% endblock %}
 
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item">
+        <a class="nhsuk-breadcrumb__link" href="landing">Maternity</a>
+      </li>
+      <li class="nhsuk-breadcrumb__list-item">
+        <a class="nhsuk-breadcrumb__link" href="javascript:history.back()">Patients</a>
+      </li>
+      <li class="nhsuk-breadcrumb__list-item">Data errors</li>
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+{% endblock %}
+
 {% block content %}
 <style>
   .govuk-applied-filters {

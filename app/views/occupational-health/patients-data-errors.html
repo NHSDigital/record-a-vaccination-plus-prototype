@@ -3,7 +3,7 @@
 {% set currentSection = "plus" %}
 
 {% block pageTitle %}
-  Data errors
+  Data issues
 {% endblock %}
 
 {% block beforeContent %}
@@ -15,7 +15,7 @@
       <li class="nhsuk-breadcrumb__list-item">
         <a class="nhsuk-breadcrumb__link" href="javascript:history.back()">Patients</a>
       </li>
-      <li class="nhsuk-breadcrumb__list-item">Data errors</li>
+      <li class="nhsuk-breadcrumb__list-item">Data issues</li>
     </ol>
     <a class="nhsuk-back-link" href="javascript:history.back()">
       Go back
@@ -143,7 +143,7 @@
   <div class="nhsuk-grid-column-two-thirds">
 
     <h1 class="nhsuk-heading-l">
-      Data errors
+      Data issues
     </h1>
 
     <p class="nhsuk-body">
@@ -163,10 +163,10 @@
             ×
           </span>
           <span class="govuk-applied-filter__label">
-            RSV status: Eligible
+            Flu status: Eligible
           </span>
           <span class="nhsuk-u-visually-hidden">
-            Remove filter RSV status Eligible
+            Remove filter Flu status Eligible
           </span>
         </a>
         <a href="#/" class="govuk-applied-filter">
@@ -174,34 +174,12 @@
             ×
           </span>
           <span class="govuk-applied-filter__label">
-            Weeks pregnant: 28 to 31 weeks
+            Location: Northern General Hospital
           </span>
           <span class="nhsuk-u-visually-hidden">
-            Remove filter Weeks pregnant 28 to 31 weeks
+            Remove filter Location Nothern General Hospital
           </span>
         </a>
-        {#<a href="#/" class="govuk-applied-filter">
-          <span class="govuk-applied-filter__remove" aria-hidden="true">
-            ×
-          </span>
-          <span class="govuk-applied-filter__label">
-            Last pertussis vaccination: From 1 February 2023
-          </span>
-          <span class="govuk-visually-hidden">
-            Remove filter Last pertussis vaccination from 1 February 2023
-          </span>
-        </a>
-        <a href="#/" class="govuk-applied-filter">
-          <span class="govuk-applied-filter__remove" aria-hidden="true">
-            ×
-          </span>
-          <span class="govuk-applied-filter__label">
-            Last pertussis vaccination: To 10 May 2026
-          </span>
-          <span class="govuk-visually-hidden">
-            Remove filter Last pertussis vaccination to 10 May 2026
-          </span>
-        </a>#}
       </div>
 
       <p class="nhsuk-body"><a href="?filtersApplied=false" class="nhsuk-link">Clear all filters and sorting</a></p>
@@ -222,11 +200,11 @@
           {% if data.filtersApplied == "true" %}
             <a class="moj-sub-navigation__link" href="patients">Patients (238)</a>
           {% else %}
-            <a class="moj-sub-navigation__link" href="patients">Patients (1,995)</a>
+            <a class="moj-sub-navigation__link" href="patients">Patients (15,995)</a>
           {% endif %}
         </li>
         <li class="moj-sub-navigation__item">
-          <a class="moj-sub-navigation__link" aria-current="page" href="#/">Data errors (5)</a>
+          <a class="moj-sub-navigation__link" aria-current="page" href="#/">Data issues (5)</a>
         </li>
       </ul>
     </nav>

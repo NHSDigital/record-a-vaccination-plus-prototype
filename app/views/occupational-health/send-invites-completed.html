@@ -14,15 +14,15 @@
           Invitations sent
         </h1>
         <div class="nhsuk-panel__body">
-          {% if data.filtersApplied == "true" %}
-            238 patient invitations have been sent
+          {% if data.sendInvites == "sendInvitesToFilteredPatients" %}
+            238 patients have been invited to get a flu vaccination
           {% else %}
-            1,995 patient invitations have been sent
+            15,995 patients have been invited to get a flu vaccination
           {% endif %}
         </div>
       </div>
 
-      <p class="nhsuk-body">[Confirmation messaging, etc.]</p>
+      <p class="nhsuk-body">When a patient receives a flu vaccination, they will show as <strong>'Vaccinated'</strong> in your list of patients.</p>
 
       {% if data.filtersApplied == "true" %}
         <p class="nhsuk-body"><a href="patients?filtersApplied=true">View list of patients</a></p>

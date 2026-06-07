@@ -9,15 +9,16 @@
 {% block content %}
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
+
       <div class="nhsuk-panel">
         <h1 class="nhsuk-panel__title">
           Export ready
         </h1>
         <div class="nhsuk-panel__body">
-          {% if data.filtersApplied == "true" %}
+          {% if data.exportPatientsFilter == "filterAppliedToExport" %}
             238 patients have been exported
           {% else %}
-            1,995 patients have been exported
+            15,995 patients have been exported
           {% endif %}
         </div>
       </div>
@@ -26,8 +27,8 @@
       <p class="nhsuk-body">If the download has not started, go back and export the file again.</p>
       <p class="nhsuk-body">If you cannot find your exported file, check the <strong>Downloads</strong> folder on your device.</p>
 
-      {% if data.filtersApplied == "true" %}
-        <p class="nhsuk-body"><a href="patients?filtersApplied=true">View list of patients</a></p>
+      {% if (data.exportPatientsFilter == "filterAppliedToExport") or (data.exportPatientsFilter == "filterNotAppliedToExport") %}
+        <p class="nhsuk-body"><a href="patients?filtersApplied=true&exportPatientsFilter">View list of patients</a></p>
       {% else %}
         <p class="nhsuk-body"><a href="patients?filtersApplied">View list of patients</a></p>
       {% endif %}

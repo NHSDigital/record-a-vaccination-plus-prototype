@@ -10,7 +10,7 @@
 
     <form action="#/" method="post" novalidate>
 
-      {# Status #}
+      {# START: Eligibility status #}
       {% set conditionalFluStatus %}
         {{ checkboxes({
           idPrefix: "current-flu-status",
@@ -18,9 +18,9 @@
           fieldset: { legend: { text: "Flu status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
           classes: "nhsuk-checkboxes--small",
           items: [
+            { value: "statusFluEligible", text: "Eligible" },
             { value: "statusFluVaccinated", text: "Vaccinated" },
-            { value: "statusFluUnvaccinated", text: "Unvaccinated" },
-            { value: "statusFluOptedOut", text: "Opted out" }
+            { value: "statusFluDeclined", text: "Declined" }
           ]
         }) }}
       {% endset %}
@@ -31,55 +31,198 @@
         fieldset: { legend: { text: "Status", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
         classes: "nhsuk-checkboxes--small",
         items: [
-          { value: "fluStatus", text: "Flu status", conditional: { html: conditionalFluStatus } }
+          { value: "fluStatus", text: "Flu eligibility", conditional: { html: conditionalFluStatus } }
+        ]
+      }) }}
+      {# END: Eligibility status #}
+
+      {# START: Staff groups and Job roles #}
+
+      {# Nursing and Midwifery Registered #}
+      {% set conditionalNursingAndMidwiferyRegistered %}
+        {{ checkboxes({
+          idPrefix: "jobRoleNursing",
+          name: "jobRoleChoice",
+          fieldset: { legend: { text: "Job role", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          classes: "nhsuk-checkboxes--small",
+          items: [
+            { value: "community-staff-nurse", text: "Community Staff Nurse" },
+            { value: "occupational-health-nurse", text: "Occupational Health Nurse" },
+            { value: "practice-nurse", text: "Practice Nurse" },
+            { value: "senior-staff-nurse", text: "Senior Staff Nurse" },
+            { value: "staff-nurse", text: "Staff Nurse" },
+            { value: "specialist-nurse", text: "Specialist Nurse" },
+            { value: "ward-sister-charge-nurse", text: "Ward Sister / Charge Nurse" }
+          ]
+        }) }}
+      {% endset %}
+
+      {# Allied Health Professionals #}
+      {% set conditionalAlliedHealthProfessionals %}
+        {{ checkboxes({
+          idPrefix: "jobRoleAhp",
+          name: "jobRoleChoice",
+          fieldset: { legend: { text: "Job role", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          classes: "nhsuk-checkboxes--small",
+          items: [
+            { value: "dietitian", text: "Dietitian" },
+            { value: "occupational-therapist", text: "Occupational Therapist" },
+            { value: "orthoptist", text: "Orthoptist" },
+            { value: "physiotherapist", text: "Physiotherapist" },
+            { value: "podiatrist", text: "Podiatrist" },
+            { value: "prosthetist-orthotist", text: "Prosthetist / Orthotist" },
+            { value: "radiographer", text: "Radiographer" },
+            { value: "speech-and-language-therapist", text: "Speech and Language Therapist" }
+          ]
+        }) }}
+      {% endset %}
+
+      {# Administrative and Clerical #}
+      {% set conditionalAdministrativeAndClerical %}
+        {{ checkboxes({
+          idPrefix: "jobRoleAdmin",
+          name: "jobRoleChoice",
+          fieldset: { legend: { text: "Job role", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          classes: "nhsuk-checkboxes--small",
+          items: [
+            { value: "administrative-assistant", text: "Administrative Assistant" },
+            { value: "clinical-coder", text: "Clinical Coder" },
+            { value: "executive-assistant", text: "Executive Assistant" },
+            { value: "hr-administrator", text: "HR Administrator" },
+            { value: "medical-records-officer", text: "Medical Records Officer" },
+            { value: "medical-secretary", text: "Medical Secretary" },
+            { value: "payroll-officer", text: "Payroll Officer" },
+            { value: "project-support-officer", text: "Project Support Officer" },
+            { value: "receptionist", text: "Receptionist" },
+            { value: "ward-clerk", text: "Ward Clerk" }
+          ]
+        }) }}
+      {% endset %}
+
+      {# Additional Clinical Services #}
+      {% set conditionalAdditionalClinicalServices %}
+        {{ checkboxes({
+          idPrefix: "jobRoleAcs",
+          name: "jobRoleChoice",
+          fieldset: { legend: { text: "Job role", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          classes: "nhsuk-checkboxes--small",
+          items: [
+            { value: "clinical-support-worker", text: "Clinical Support Worker" },
+            { value: "healthcare-assistant", text: "Healthcare Assistant" },
+            { value: "maternity-support-worker", text: "Maternity Support Worker" },
+            { value: "nursing-assistant", text: "Nursing Assistant" },
+            { value: "senior-healthcare-assistant", text: "Senior Healthcare Assistant" },
+            { value: "theatre-support-worker", text: "Theatre Support Worker" }
+          ]
+        }) }}
+      {% endset %}
+
+      {# Medical and Dental #}
+      {% set conditionalMedicalAndDental %}
+        {{ checkboxes({
+          idPrefix: "jobRoleMedical",
+          name: "jobRoleChoice",
+          fieldset: { legend: { text: "Job role", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          classes: "nhsuk-checkboxes--small",
+          items: [
+            { value: "consultant", text: "Consultant" },
+            { value: "general-practitioner", text: "General Practitioner" },
+            { value: "junior-doctor", text: "Junior Doctor" },
+            { value: "specialty-doctor", text: "Specialty Doctor" }
+          ]
+        }) }}
+      {% endset %}
+
+      {# Healthcare Science and Technical Services #}
+      {% set conditionalHealthcareScienceAndTechnicalServices %}
+        {{ checkboxes({
+          idPrefix: "jobRoleconditionalHealthcareScienceAndTechnicalServices",
+          name: "jobRoleChoice",
+          fieldset: { legend: { text: "Job role", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          classes: "nhsuk-checkboxes--small",
+          items: [
+            { value: "audiologist", text: "Audiologist" },
+            { value: "biomedical-scientist", text: "Biomedical Scientist" },
+            { value: "cardiac-physiologist", text: "Cardiac Physiologist" },
+            { value: "clinical-scientist", text: "Clinical Scientist" },
+            { value: "healthcare-scientist", text: "Healthcare Scientist" },
+            { value: "medical-laboratory-assistant", text: "Medical Laboratory Assistant" },
+            { value: "neurophysiology-technician", text: "Neurophysiology Technician" },
+            { value: "pharmacy-assistant", text: "Pharmacy Assistant" },
+            { value: "pharmacy-technician", text: "Pharmacy Technician" },
+            { value: "sleep-physiologist", text: "Sleep Physiologist" },
+            { value: "sterile-services-technician", text: "Sterile Services Technician" },
+            { value: "technical-instructor", text: "Technical Instructor" }
+          ]
+        }) }}
+      {% endset %}
+
+      {# Estates and Ancillary #}
+      {% set conditionalEstatesAndAncillary %}
+        {{ checkboxes({
+          idPrefix: "jobRoleEstates",
+          name: "jobRoleChoice",
+          fieldset: { legend: { text: "Job role", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          classes: "nhsuk-checkboxes--small",
+          items: [
+            { value: "catering-assistant", text: "Catering Assistant" },
+            { value: "domestic-assistant", text: "Domestic Assistant" },
+            { value: "domestic-supervisor", text: "Domestic Supervisor" },
+            { value: "estates-officer", text: "Estates Officer" },
+            { value: "facilities-assistant", text: "Facilities Assistant" },
+            { value: "maintenance-technician", text: "Maintenance Technician" },
+            { value: "porter", text: "Porter" },
+            { value: "security-officer", text: "Security Officer" }
+          ]
+        }) }}
+      {% endset %}
+
+      {{ checkboxes({
+        idPrefix: "staffGroup",
+        name: "staffGroup",
+        fieldset: { legend: { text: "Staff group and job role", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+        classes: "nhsuk-checkboxes--small",
+        items: [
+          { value: "conditionalAdditionalClinicalServices", text: "Additional Clinical Services", conditional: { html: conditionalAdditionalClinicalServices } },
+          { value: "conditionalAdministrativeAndClerical", text: "Administrative and Clerical", conditional: { html: conditionalAdministrativeAndClerical } },
+          { value: "conditionalAlliedHealthProfessionals", text: "Allied Health Professionals", conditional: { html: conditionalAlliedHealthProfessionals } },
+          { value: "conditionalEstatesAndAncillary", text: "Estates and Ancillary", conditional: { html: conditionalEstatesAndAncillary } },
+          { value: "conditionalHealthcareScienceAndTechnicalServices", text: "Healthcare Science and Technical Services", conditional: { html: conditionalHealthcareScienceAndTechnicalServices } },
+          { value: "conditionalMedicalAndDental", text: "Medical and Dental", conditional: { html: conditionalMedicalAndDental } },
+          { value: "conditionalNursingAndMidwiferyRegistered", text: "Nursing and Midwifery Registered", conditional: { html: conditionalNursingAndMidwiferyRegistered } }
         ]
       }) }}
 
-      {# Area #}
-      {% set conditionalArea %}
+      {# END: Staff groups and Job roles #}
+
+      {# START: Location #}
+      {% set conditionalLocation %}
         {{ checkboxes({
-          idPrefix: "areaChoice",
-          name: "areaChoice",
-          fieldset: { legend: { text: "Area", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          idPrefix: "locationChoice",
+          name: "locationChoice",
+          fieldset: { legend: { text: "Location", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
           classes: "nhsuk-checkboxes--small",
           items: [
-            { value: "areaA", text: "[Area A]" },
-            { value: "areaB", text: "[Area B]" },
-            { value: "areaC", text: "[Area C]" },
-            { value: "areaD", text: "[Area D]" },
-            { value: "areaE", text: "[Area E]" },
-            { value: "areaF", text: "[Area F]" },
-            { value: "areaG", text: "[Area G]" },
-            { value: "areaH", text: "[Area H]" },
-            { value: "areaI", text: "[Area I]" },
-            { value: "areaJ", text: "[Area J]" }
+            { value: "charles-clifford-dental-hospital", text: "Charles Clifford Dental Hospital" },
+            { value: "city-health-centre", text: "City Health Centre" },
+            { value: "community-health-centre-north", text: "Community Health Centre North" },
+            { value: "community-health-centre-south", text: "Community Health Centre South" },
+            { value: "hillsborough-health-centre", text: "Hillsborough Health Centre" },
+            { value: "jessop-wing-maternity-centre", text: "Jessop Wing Maternity Centre" },
+            { value: "manor-clinic", text: "Manor Clinic" },
+            { value: "northern-general-hospital", text: "Northern General Hospital" },
+            { value: "occupational-health-centre", text: "Occupational Health Centre" },
+            { value: "porter-brook-medical-centre", text: "Porter Brook Medical Centre" },
+            { value: "royal-hallamshire-hospital", text: "Royal Hallamshire Hospital" },
+            { value: "trust-headquarters", text: "Trust Headquarters" },
+            { value: "walk-in-centre", text: "Walk-in Centre" },
+            { value: "weston-park-hospital", text: "Weston Park Hospital" }
           ]
         }) }}
       {% endset %}
+      {# END: Location #}
 
-      {# Division #}
-      {% set conditionalDivision %}
-        {{ checkboxes({
-          idPrefix: "divisionChoice",
-          name: "divisionChoice",
-          fieldset: { legend: { text: "Division", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
-          classes: "nhsuk-checkboxes--small",
-          items: [
-            { value: "divisionA", text: "[Division A]" },
-            { value: "divisionB", text: "[Division B]" },
-            { value: "divisionC", text: "[Division C]" },
-            { value: "divisionD", text: "[Division D]" },
-            { value: "divisionE", text: "[Division E]" },
-            { value: "divisionF", text: "[Division F]" },
-            { value: "divisionG", text: "[Division G]" },
-            { value: "divisionH", text: "[Division H]" },
-            { value: "divisionI", text: "[Division I]" },
-            { value: "divisionJ", text: "[Division J]" }
-          ]
-        }) }}
-      {% endset %}
-
-      {# Directorate #}
+      {# START: Directorate #}
       {% set conditionalDirectorate %}
         {{ checkboxes({
           idPrefix: "directorateChoice",
@@ -87,52 +230,29 @@
           fieldset: { legend: { text: "Directorate", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
           classes: "nhsuk-checkboxes--small",
           items: [
-            { value: "directorateA", text: "[Directorate A]" },
-            { value: "directorateB", text: "[Directorate B]" },
-            { value: "directorateC", text: "[Directorate C]" },
-            { value: "directorateD", text: "[Directorate D]" },
-            { value: "directorateE", text: "[Directorate E]" },
-            { value: "directorateF", text: "[Directorate F]" },
-            { value: "directorateG", text: "[Directorate G]" },
-            { value: "directorateH", text: "[Directorate H]" },
-            { value: "directorateI", text: "[Directorate I]" },
-            { value: "directorateJ", text: "[Directorate J]" }
+            { value: "corporate-services", text: "Corporate Services" },
+            { value: "estates-and-facilities", text: "Estates and Facilities" },
+            { value: "medicine", text: "Medicine" },
+            { value: "nursing-and-midwifery", text: "Nursing and Midwifery" },
+            { value: "operations", text: "Operations" },
+            { value: "people-directorate", text: "People Directorate" },
+            { value: "primary-and-community-care", text: "Primary and Community Care" },
+            { value: "surgery-and-cancer-services", text: "Surgery and Cancer Services" },
+            { value: "urgent-and-emergency-care", text: "Urgent and Emergency Care" },
+            { value: "womens-and-childrens-services", text: "Women's and Children's Services" }
           ]
         }) }}
       {% endset %}
-
-      {# Ward #}
-      {% set conditionalWard %}
-        {{ checkboxes({
-          idPrefix: "wardChoice",
-          name: "wardChoice",
-          fieldset: { legend: { text: "Ward", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
-          classes: "nhsuk-checkboxes--small",
-          items: [
-            { value: "wardA", text: "[Ward A]" },
-            { value: "wardB", text: "[Ward B]" },
-            { value: "wardC", text: "[Ward C]" },
-            { value: "wardD", text: "[Ward D]" },
-            { value: "wardE", text: "[Ward E]" },
-            { value: "wardF", text: "[Ward F]" },
-            { value: "wardG", text: "[Ward G]" },
-            { value: "wardH", text: "[Ward H]" },
-            { value: "wardI", text: "[Ward I]" },
-            { value: "wardJ", text: "[Ward J]" }
-          ]
-        }) }}
-      {% endset %}
+      {# END: Directorate #}
 
       {{ checkboxes({
-        idPrefix: "organisation",
-        name: "organisation",
-        fieldset: { legend: { text: "Organisation", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+        idPrefix: "locationAndDirectorate",
+        name: "locationAndDirectorate",
+        fieldset: { legend: { text: "Location and directorate", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
         classes: "nhsuk-checkboxes--small",
         items: [
-          { value: "conditionalArea", text: "Area", conditional: { html: conditionalArea } },
-          { value: "conditionalDivision", text: "Division", conditional: { html: conditionalDivision } },
-          { value: "conditionalDirectorate", text: "Directorate", conditional: { html: conditionalDirectorate } },
-          { value: "conditionalWard", text: "Ward", conditional: { html: conditionalWard } }
+          { value: "conditionalLocation", text: "Location", conditional: { html: conditionalLocation } },
+          { value: "conditionalDirectorate", text: "Directorate", conditional: { html: conditionalDirectorate } }
         ]
       }) }}
 

@@ -31,21 +31,21 @@ require('./routes/playground')(router)
 
 // mvp-patient-list-and-export/export-patients
 router.post('/mvp-patient-list-and-export/export-patients', function (req, res) {
-  const choice = req.session.data['exportPatients']; 
-  if (choice === 'filteredPatients') {
-    res.redirect('/mvp-patient-list-and-export/export-patients-completed?filtersApplied=true')
+  const choice = req.session.data['exportPatientsFilter']; 
+  if (choice === 'filterAppliedToExport') {
+    res.redirect('/mvp-patient-list-and-export/export-patients-completed?exportPatientsFilter=true')
   } else {
     res.redirect('/mvp-patient-list-and-export/export-patients-completed?filtersApplied')
   }
 });
 
-// occupational-health/send-invites
-router.post('/occupational-health/send-invites', function (req, res) {
+//  occupational-health/export-patients
+router.post('/occupational-health/export-patients', function (req, res) {
   const choice = req.session.data['exportPatients']; 
-  if (choice === 'inviteFilteredPatients') {
-    res.redirect('/mvp-patient-list-and-export/export-patients-completed?filtersApplied=true')
+  if (choice === 'filteredPatients') {
+    res.redirect('/occupational-health/export-patients-completed?filtersApplied=true')
   } else {
-    res.redirect('/mvp-patient-list-and-export/export-patients-completed?filtersApplied')
+    res.redirect('/occupational-health/export-patients-completed?filtersApplied')
   }
 });
 

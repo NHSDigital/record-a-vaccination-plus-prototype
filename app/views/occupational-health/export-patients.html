@@ -33,9 +33,8 @@
                 Active filters
               </h2>
               <ul class="nhsuk-list nhsuk-list--bullet">
-                <li>RSV status: Eligible</li>
-                <li>Weeks pregnant: 28 to 31 weeks</li>
-                {#<li>Last pertussis vaccination: From 1 February 2023 to 10 May 2026</li>#}
+                <li>Flu status: Eligible</li>
+                <li>Location: Northern General Hospital</li>
               </ul>
             {% else %}
               <p class="nhsuk-hint" id="export-patients-hint">
@@ -43,19 +42,19 @@
                 Your current list of patients was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
               </p>
               <p class="nhsuk-body nhsuk-u-margin-bottom-4">
-                There are 1,995 patients in your list and no filters applied.
+                There are 15,995 patients in your list and no filters applied.
               </p>
             {% endif %}
             {% if data.filtersApplied == "true" %}
               <div class="nhsuk-radios" data-module="nhsuk-radios">
                 <div class="nhsuk-radios__item">
-                  <input class="nhsuk-radios__input" id="export-patients" name="exportPatients" type="radio" value="filteredPatients">
+                  <input class="nhsuk-radios__input" id="export-patients" name="exportPatientsFilter" type="radio" value="filterAppliedToExport">
                   <label class="nhsuk-label nhsuk-radios__label" for="export-patients">
                     Export filtered list of patients
                   </label>
                 </div>
                 <div class="nhsuk-radios__item">
-                  <input class="nhsuk-radios__input" id="export-patients-2" name="exportPatients" type="radio" value="allPatients">
+                  <input class="nhsuk-radios__input" id="export-patients-2" name="exportPatientsFilter" type="radio" value="filterNotAppliedToExport">
                   <label class="nhsuk-label nhsuk-radios__label" for="export-patients-2">
                     Export all patients
                   </label>

@@ -3,83 +3,81 @@
 {% set currentSection = "plus" %}
 
 {% block pageTitle %}
-  Review and send invite
+  {% if data.filtersApplied == "true" %}
+      Review and send invitations 
+  {% else %}
+      Send invitations 
+  {% endif %}
 {% endblock %}
 
 {% block beforeContent %}
   <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Back</a>
 {% endblock %}
 
-<!-- For adding page content -->
-<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
 {% block content %}
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-two-thirds">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
 
-    <h1 class="nhsuk-heading-l">
-      Review and send {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}flu{% endif %} invite
-    </h1>
+      <form method="post" action="send-invites-completed">
 
-    <p class="nhsuk-body-l">
-      Review communications summary before sending.
-    </p>
-
-    <h2 class="nhsuk-heading-m">
-      Patients selected for {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}flu{% endif %} invite
-    </h2>
-
-    <p class="nhsuk-body">
-      There are 1,995 patients in your invite list and no filters applied.
-    </p>
-
-    <p class="nhsuk-body nhsuk-u-margin-bottom-6">
-      <a href="patients" class="nhsuk-link">Edit patient list</a>
-    </p>
-
-    <h2 class="nhsuk-heading-m">
-      Message being sent to patient list
-    </h2>
-
-    <div class="nhsuk-card nhsuk-u-margin-bottom-4" id="card-rsv-focus">
-      <div class="nhsuk-card__content nhsuk-u-padding-bottom-2">
-        <div id="rsv-editable" aria-label="RSV message content" aria-live="polite">
-          <p class="nhsuk-body">Hello [First name],</p>
-          <p class="nhsuk-body">
-            You are invited to book an appointment for a {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}flu{% endif %} vaccination as you are eligible. Follow
-            <a href="#/" class="nhsuk-link">this link for further information on the {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}flu{% endif %} vaccine</a>.
-          </p>
-          <p class="nhsuk-body">
-            If you would like to make an appointment, please book
-            <a href="#/" class="nhsuk-link">using our online tool</a> or call us on {% if data['e2eCurrentUserType'] == 'OH' %}01209{% else %}0121{% endif %} 472 1377.
-          </p>
-          <p class="nhsuk-body">
-            If you have already contacted us, please accept our apologies and ignore this reminder.
-          </p>
-          <p class="nhsuk-body">
-            {% if data['e2eCurrentUserType'] == 'OH' %}
-              Kind regards,<br />Royal Cornwall Hospitals Occupational Health team
+        <div class="nhsuk-form-group">
+          <fieldset class="nhsuk-fieldset" aria-describedby="export-patients-hint">
+            <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+              {% if data.filtersApplied == "true" %}
+                <h1 class="nhsuk-fieldset__heading">
+                  Review and send invitations 
+                </h1>
+              {% else %}
+                <h1 class="nhsuk-fieldset__heading">
+                  Send invitations 
+                </h1>
+              {% endif %}
+            </legend>
+            {% if data.filtersApplied == "true" %}
+              <p class="nhsuk-hint" id="invite-patients-hint">
+                Your current list of patients was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+              </p>
+              {% if data.sendInvites == "sendInvitesToFilteredPatients" %}
+                <p class="nhsuk-body nhsuk-u-margin-bottom-4">
+                  You have selected a filtered list of 238 patients to invite for a flu vaccination.
+                </p>
+                <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">
+                  Active filters
+                </h2>
+                <ul class="nhsuk-list nhsuk-list--bullet">
+                  <li>Flu status: Eligible</li>
+                  <li>Location: Northern General Hospital</li>
+                </ul>
+              {% else %}
+                <p class="nhsuk-body">Everyone on your list will receive an invitation to get a flu vaccination.</p>
+              {% endif %}
             {% else %}
-              Kind regards,<br />BWC Trust
-            {% endif %}
-          </p>
+              <p class="nhsuk-hint" id="invite-patients-hint">
+                Your current list of patients was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+              </p>
+              <p class="nhsuk-body">
+                There are 15,995 patients on your list and no filters applied. Everyone on your list will receive an invitation to get a flu vaccination.
+              </p>
+              {% endif %}
+              <p class="nhsuk-body">
+                This is the message that will be sent to those patients by email.  
+              </p>
+              <div class="nhsuk-card nhsuk-u-margin-bottom-0">
+                <div class="nhsuk-card__content">
+                  <p class="nhsuk-body">Hello [First name]</p>
+                  <p class="nhsuk-body">You are eligible for a flu vaccination. Visit our website to book an appointment and choose how you want to receive your vaccination.</p>
+                  <p class="nhsuk-body"><a href="#/" class="nhsuk-link">Book a flu vaccination appointment</a>.</p>
+                  <p class="nhsuk-body">If you would like more information first, you can <a href="#/" class="nhsuk-link">learn more about the flu vaccine</a>.</p>
+                  <p class="nhsuk-body">If you have already been contacted about a flu vaccination, sorry for contacting you again and please ignore this message.</p>
+                  <p class="nhsuk-body">Kind regards<br>[Organisation name]</p>
+                </div>
+              </div>
+          </fieldset>
         </div>
-      </div>
+        <div class="nhsuk-button-group">
+          <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Confirm and send</button>
+        </div>
+      </form>
     </div>
-
-    <p class="nhsuk-body nhsuk-u-margin-bottom-6">
-      <a href="invite" class="nhsuk-link">Edit content</a>
-    </p>
-
-    <form class="form" action="invites-completed" method="post" class="submit">
-      <div class="govuk-button-group">
-        <button class="nhsuk-button" data-module="nhsuk-button" type="submit">
-          Confirm and send
-        </button>
-        <p class="nhsuk-body nhsuk-u-padding-left-4"><a class="nhsuk-link" href="/iteration-2/landing-organise-clinics?invitesSent">Cancel</a></p>
-      </div>
-    </form>
-
   </div>
-</div>
-
 {% endblock %}

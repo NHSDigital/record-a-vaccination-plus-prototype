@@ -248,13 +248,23 @@
       {{ checkboxes({
         idPrefix: "locationAndDirectorate",
         name: "locationAndDirectorate",
+        fieldset: { legend: { text: "Location", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+        classes: "nhsuk-checkboxes--small",
+        items: [
+          { value: "conditionalLocation", text: "Location", conditional: { html: conditionalLocation } }
+        ]
+      }) }}
+
+      <!--{{ checkboxes({
+        idPrefix: "locationAndDirectorate",
+        name: "locationAndDirectorate",
         fieldset: { legend: { text: "Location and directorate", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
         classes: "nhsuk-checkboxes--small",
         items: [
           { value: "conditionalLocation", text: "Location", conditional: { html: conditionalLocation } },
           { value: "conditionalDirectorate", text: "Directorate", conditional: { html: conditionalDirectorate } }
         ]
-      }) }}
+      }) }}-->
 
       {# Form submit #}
       <div class="app-actions">

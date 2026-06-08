@@ -15,7 +15,7 @@
         {{ checkboxes({
           idPrefix: "current-flu-status",
           name: "currentFluStatus",
-          fieldset: { legend: { text: "Flu status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          fieldset: { legend: { text: "Eligibility filters", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
           classes: "nhsuk-checkboxes--small",
           items: [
             { value: "statusFluEligible", text: "Eligible" },
@@ -28,10 +28,10 @@
       {{ checkboxes({
         idPrefix: "eligibilityStatus",
         name: "eligibilityStatus",
-        fieldset: { legend: { text: "Status", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+        fieldset: { legend: { text: "Status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
         classes: "nhsuk-checkboxes--small",
         items: [
-          { value: "fluStatus", text: "Flu eligibility", conditional: { html: conditionalFluStatus } }
+          { value: "fluStatus", html: '<span class="nhsuk-u-font-weight-bold">Flu eligibility</span>', conditional: { html: conditionalFluStatus } }
         ]
       }) }}
       {# END: Eligibility status #}
@@ -195,6 +195,29 @@
 
       {# END: Staff groups and Job roles #}
 
+      {# START: Directorate #}
+      {% set conditionalDirectorate %}
+        {{ checkboxes({
+          idPrefix: "directorateChoice",
+          name: "directorateChoice",
+          fieldset: { legend: { text: "Directorate", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+          classes: "nhsuk-checkboxes--small",
+          items: [
+            { value: "corporate-services", text: "Corporate Services" },
+            { value: "estates-and-facilities", text: "Estates and Facilities" },
+            { value: "medicine", text: "Medicine" },
+            { value: "nursing-and-midwifery", text: "Nursing and Midwifery" },
+            { value: "operations", text: "Operations" },
+            { value: "people-directorate", text: "People Directorate" },
+            { value: "primary-and-community-care", text: "Primary and Community Care" },
+            { value: "surgery-and-cancer-services", text: "Surgery and Cancer Services" },
+            { value: "urgent-and-emergency-care", text: "Urgent and Emergency Care" },
+            { value: "womens-and-childrens-services", text: "Women's and Children's Services" }
+          ]
+        }) }}
+      {% endset %}
+      {# END: Directorate #}
+
       {# START: Location #}
       {% set conditionalLocation %}
         {{ checkboxes({
@@ -222,38 +245,16 @@
       {% endset %}
       {# END: Location #}
 
-      {# START: Directorate #}
-      {% set conditionalDirectorate %}
-        {{ checkboxes({
-          idPrefix: "directorateChoice",
-          name: "directorateChoice",
-          fieldset: { legend: { text: "Directorate", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
-          classes: "nhsuk-checkboxes--small",
-          items: [
-            { value: "corporate-services", text: "Corporate Services" },
-            { value: "estates-and-facilities", text: "Estates and Facilities" },
-            { value: "medicine", text: "Medicine" },
-            { value: "nursing-and-midwifery", text: "Nursing and Midwifery" },
-            { value: "operations", text: "Operations" },
-            { value: "people-directorate", text: "People Directorate" },
-            { value: "primary-and-community-care", text: "Primary and Community Care" },
-            { value: "surgery-and-cancer-services", text: "Surgery and Cancer Services" },
-            { value: "urgent-and-emergency-care", text: "Urgent and Emergency Care" },
-            { value: "womens-and-childrens-services", text: "Women's and Children's Services" }
-          ]
-        }) }}
-      {% endset %}
-      {# END: Directorate #}
-
       {{ checkboxes({
         idPrefix: "locationAndDirectorate",
         name: "locationAndDirectorate",
-        fieldset: { legend: { text: "Location", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+        fieldset: { legend: { text: "Select locations", classes: "nhsuk-fieldset__legend  nhsuk-u-visually-hidden" } },
         classes: "nhsuk-checkboxes--small",
         items: [
-          { value: "conditionalLocation", text: "Location", conditional: { html: conditionalLocation } }
+          { value: "conditionalLocation", html: '<span class="nhsuk-u-font-weight-bold">Location</span>', conditional: { html: conditionalLocation } }
         ]
       }) }}
+      {# END: Location #}
 
       <!--{{ checkboxes({
         idPrefix: "locationAndDirectorate",

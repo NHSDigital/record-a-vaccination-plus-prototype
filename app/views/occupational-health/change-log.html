@@ -14,9 +14,12 @@
       </li>
       <li class="nhsuk-breadcrumb__list-item">Patient upload history</li>
     </ol>
-    <a class="nhsuk-back-link" href="javascript:history.back()">
-      Go back
+    <a class="nhsuk-back-link" href="landing">
+      <span class="nhsuk-u-visually-hidden">Back to</span> Staff vaccinations
     </a>
+    <!--<a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>-->
   </nav>
 {% endblock %}
 
@@ -37,6 +40,94 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
+      <table class="nhsuk-table-responsive" role="table">
+        <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">
+          Patient upload history
+        </caption>
+        <thead class="nhsuk-table__head" role="rowgroup">
+          <tr class="nhsuk-table__row" role="row">
+            <th scope="col" class="nhsuk-table__header" role="columnheader">
+              File name
+            </th>
+            <th scope="col" class="nhsuk-table__header" role="columnheader">
+              Uploaded
+            </th>
+            <th scope="col" class="nhsuk-table__header" role="columnheader">
+              Status
+            </th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          {# DYNAMIC ENTRY #}
+          {% if (data['uploadedList'] == 'true') or (data['uploadedList'] == 'processing') %}
+            <tr class="nhsuk-table__row" role="row">
+              <th scope="row" class="nhsuk-table__header" role="rowheader">
+                {% if data['uploadedList'] == 'true' %}
+                  <span class="nhsuk-table-responsive__heading" aria-hidden="true">File name </span><a href="#/"><span class="nhsuk-u-visually-hidden">View </span>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv&nbsp;(9.7MB)</a>
+                {% else %}
+                  <span class="nhsuk-table-responsive__heading" aria-hidden="true">File name </span>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv&nbsp;(9.7MB)
+                {% endif %}
+              </th>
+              <td class="nhsuk-table__cell" role="cell">
+                <span class="nhsuk-table-responsive__heading" aria-hidden="true">Uploaded </span>{{ date({day: 'numeric', month: 'long', year: 'numeric'}) }} at 11:57am,<br>Alex Smith
+              </td>
+              <td class="nhsuk-table__cell" role="cell">
+                {% if data['uploadedList'] == 'true' %}
+                  <span class="nhsuk-table-responsive__heading" aria-hidden="true">Status </span><strong class="nhsuk-tag nhsuk-tag--blue">Current list</strong>
+                {% else %}
+                  <span class="nhsuk-table-responsive__heading" aria-hidden="true">Status </span><strong class="nhsuk-tag nhsuk-tag--white">Processing</strong>
+                {% endif %}
+              </td>
+            </tr>
+          {% endif %}
+
+          <tr class="nhsuk-table__row" role="row">
+            <th scope="row" class="nhsuk-table__header" role="rowheader">
+              {% if data['uploadedList'] == 'false' %}
+                <span class="nhsuk-table-responsive__heading" aria-hidden="true">File name </span><a href="#/"><span class="nhsuk-u-visually-hidden">View </span>dataset-{{ date({ year: 'numeric' }, { day: -7 }) }}-{{ date({ month: '2-digit' }, { day: -7 }) }}-{{ date({ day: '2-digit' }, { day: -7 }) }}.csv&nbsp;(9.1MB)</a>
+              {% else %}
+                <span class="nhsuk-table-responsive__heading" aria-hidden="true">File name </span>dataset-{{ date({ year: 'numeric' }, { day: -7 }) }}-{{ date({ month: '2-digit' }, { day: -7 }) }}-{{ date({ day: '2-digit' }, { day: -7 }) }}.csv&nbsp;(9.1MB)
+              {% endif %}
+            </th>
+            <td class="nhsuk-table__cell" role="cell">
+              <span class="nhsuk-table-responsive__heading" aria-hidden="true">Uploaded </span>{{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { day: -7 }) }} at 10:13am,<br>Chloe Liu
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              {% if data['uploadedList'] == 'true' %}
+                <span class="nhsuk-table-responsive__heading" aria-hidden="true">Status </span><strong class="nhsuk-tag nhsuk-tag--grey">Processed</strong>
+              {% else %}
+                <span class="nhsuk-table-responsive__heading" aria-hidden="true">Status </span><strong class="nhsuk-tag nhsuk-tag--blue">Current list</strong>
+              {% endif %}
+            </td>
+          </tr>
+
+          <tr class="nhsuk-table__row" role="row">
+            <th scope="row" class="nhsuk-table__header" role="rowheader">
+              <span class="nhsuk-table-responsive__heading" aria-hidden="true">File name </span>dataset-{{ date({ year: 'numeric' }, { day: -14 }) }}-{{ date({ month: '2-digit' }, { day: -14 }) }}-{{ date({ day: '2-digit' }, { day: -14 }) }}.csv&nbsp;(9.6MB)
+            </th>
+            <td class="nhsuk-table__cell" role="cell">
+              <span class="nhsuk-table-responsive__heading" aria-hidden="true">Uploaded </span>{{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { day: -14 }) }} at 5:47pm,<br>Katie Elliot
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <span class="nhsuk-table-responsive__heading" aria-hidden="true">Status </span><strong class="nhsuk-tag nhsuk-tag--red">Failed</strong>
+            </td>
+          </tr>
+
+          <tr class="nhsuk-table__row" role="row">
+            <th scope="row" class="nhsuk-table__header" role="rowheader">
+              <span class="nhsuk-table-responsive__heading" aria-hidden="true">File name </span>dataset-{{ date({ year: 'numeric' }, { day: -21 }) }}-{{ date({ month: '2-digit' }, { day: -21 }) }}-{{ date({ day: '2-digit' }, { day: -21 }) }}.csv&nbsp;(4.8MB)
+            </th>
+            <td class="nhsuk-table__cell" role="cell">
+              <span class="nhsuk-table-responsive__heading" aria-hidden="true">Uploaded </span>{{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { day: -21 }) }} at 2:04pm,<br>Nadiya Thomas
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <span class="nhsuk-table-responsive__heading" aria-hidden="true">Status </span><strong class="nhsuk-tag nhsuk-tag--grey">Processed</strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!--
       <dl class="nhsuk-summary-list">
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">
@@ -118,6 +209,7 @@
         </div>
 
       </dl>
+      -->
 
     </div>
   </div>

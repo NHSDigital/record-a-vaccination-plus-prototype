@@ -1,6 +1,10 @@
-{% extends 'layouts/layout-index-only.html' %}
+{% extends 'layout.html' %}
 
 {% set pageName = "NHS Record a vaccination plus prototypes" %}
+
+{% block header %}
+  {% include "includes/header-index-only.html" %}
+{% endblock %}
 
 {% block content %}
 	<div class="nhsuk-grid-row">

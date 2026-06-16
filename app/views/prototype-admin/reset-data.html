@@ -1,7 +1,11 @@
 <!-- Extends the layout from /views/layout.html -->
-{% extends "layout-index-only.html" %}
+{% extends "layout.html" %}
 
 {% set pageName = "Reset data" %}
+
+{% block header %}
+  {% include "includes/header-index-only.html" %}
+{% endblock %}
 
 {% block content %}
   <div class="nhsuk-grid-row">

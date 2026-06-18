@@ -225,11 +225,24 @@ $govuk-brand-colour: $nhsuk-link-colour;
   font-weight: 400;
   height: auto;
   line-height: 1.4;
-  margin: 100px auto 8px;
   min-width: 300px;
   overflow: auto;
   position: relative;
   width: 400px;
+  margin: 0;
+}
+
+#signin-container {
+  min-height: calc(100vh - 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  margin-top: -40px;
+}
+
+#signin-container .auth-container {
+  margin: 0;
 }
 
 .auth-header {

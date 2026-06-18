@@ -17,9 +17,6 @@
     <a class="nhsuk-back-link" href="landing">
       <span class="nhsuk-u-visually-hidden">Back to</span> Maternity
     </a>
-    <!--<a class="nhsuk-back-link" href="javascript:history.back()">
-      Go back
-    </a>-->
   </nav>
 {% endblock %}
 
@@ -32,11 +29,11 @@
       </h1>
 
       {% if data.scenario == "processing" %}
-        <p class="nhsuk-body">Your list of patients is currently unavailable because we are processing patient information from a recent file upload.</p>
+        <p class="nhsuk-body">Your list of pregnant patients is currently unavailable because we are processing information from a recent file upload.</p>
         <p class="nhsuk-body">You will get an email when this is complete.</p>
         <p class="nhsuk-body"><a href="change-log?uploadedList=processing">View patient upload history</a>.</p>
       {% else %}
-        <p class="nhsuk-body">No patients have been added for your organisation.</p>
+        <p class="nhsuk-body">No pregnant patients have been added for your organisation.</p>
         <a href="add-patients?scenario=firstUpload" class="nhsuk-button" data-module="nhsuk-button">Add patients</a>
       {% endif %}
 

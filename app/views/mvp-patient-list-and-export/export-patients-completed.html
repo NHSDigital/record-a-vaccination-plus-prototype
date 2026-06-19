@@ -3,7 +3,7 @@
 {% set currentSection = "plus" %}
 
 {% block pageTitle %}
-  Export patients
+  Export ready
 {% endblock %}
 
 {% block content %}
@@ -15,9 +15,9 @@
         </h1>
         <div class="nhsuk-panel__body">
           {% if data.filtersApplied == "true" %}
-            238 patients have been exported
+            238 patients are on your exported list
           {% else %}
-            1,995 patients have been exported
+            1,995 patients are on your exported list
           {% endif %}
         </div>
       </div>

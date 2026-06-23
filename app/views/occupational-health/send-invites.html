@@ -13,19 +13,22 @@
 {% block content %}
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-      <form method="post" action="review-and-send">
-        <div class="nhsuk-form-group">
+      <form method="post" action="send-invites-completed?sendInvites=sendInvitesToFilteredPatients">
+        <!--<div class="nhsuk-form-group">
           <fieldset class="nhsuk-fieldset" aria-describedby="export-patients-hint">
             <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
               <h1 class="nhsuk-fieldset__heading">
                 Send invitations
               </h1>
-            </legend>
+            </legend>-->
+
+            <h1 class="nhsuk-heading-l">Send invitations</h1>
+
             <p class="nhsuk-hint" id="invite-patients-hint">
               Your current list of patients was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
             </p>
             <p class="nhsuk-body">
-              There are 238 patients in your list with 2 filters applied.
+              There are 238 eligible patients on your list with 2 filters applied.
             </p>
             <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">
               Active filters
@@ -34,7 +37,38 @@
               <li>Flu eligibility: Eligible</li>
               <li>Location: Northern General Hospital</li>
             </ul>
-            <div class="nhsuk-radios" data-module="nhsuk-radios">
+            <div class="nhsuk-inset-text nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
+              <span class="nhsuk-u-visually-hidden">Information: </span>
+              <p>You cannot send invitations to patients who are already vaccinated or who have declined a vaccination.</p>
+            </div>
+
+            <p class="nhsuk-body">
+              This is the message that will be sent to 238 eligible patients by email.  
+            </p>
+
+            <div class="nhsuk-card">
+              <div class="nhsuk-card__content">
+                <p class="nhsuk-body">Hello [First name]</p>
+
+                <p class="nhsuk-body">Your yearly flu vaccination is due and you can now book an appointment.</p>
+
+                <h2 class="nhsuk-heading-s">Why it matters</h2>
+                <p class="nhsuk-body">The vaccination helps protect you against flu, which can be a serious or life-threatening illness.</p> 
+                <p class="nhsuk-body">During the 2024 to 2025 seasonal campaign, 37.8% of eligible frontline healthcare workers received the flu vaccine. This year, we want to increase that number so that more NHS staff are protected.</p> 
+                <p class="nhsuk-body">If you would like more information before you book, you can <a href="#/" class="nhsuk-link">learn more about the flu vaccine</a> and its benefits.</p>
+
+                <h2 class="nhsuk-heading-s">Book an appointment</h2>
+                <p class="nhsuk-body">Visit out Trust's website to book an appointment and choose how you want to receive your vaccination.</p>
+                <p class="nhsuk-body"><a href="#/" class="nhsuk-link">Book a flu vaccination appointment</a>.</p>
+
+                <h2 class="nhsuk-heading-s">If you have been vaccinated</h2>
+                <p class="nhsuk-body">If you have already been vaccinated, booked an appointment or opted out, please ignore this message and sorry for contacting you again.</p>
+                <p class="nhsuk-body">Kind regards<br>[Organisation name]</p>
+              </div>
+            </div>
+
+
+            <!--<div class="nhsuk-radios" data-module="nhsuk-radios">
               <div class="nhsuk-radios__item">
                 <input class="nhsuk-radios__input" id="send-invites" name="sendInvites" type="radio" value="sendInvitesToFilteredPatients">
                 <label class="nhsuk-label nhsuk-radios__label" for="send-invites">
@@ -49,9 +83,9 @@
               </div>
             </div>
           </fieldset>
-        </div>
+        </div>-->
         <div class="nhsuk-button-group">
-          <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Continue</button>
+          <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Confirm and send</button>
         </div>
       </form>
     </div>

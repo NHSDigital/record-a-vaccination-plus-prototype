@@ -48,6 +48,9 @@
                   <li>Flu eligibility: Eligible</li>
                   <li>Location: Northern General Hospital</li>
                 </ul>
+                <p class="nhsuk-body">
+                  This is the message that will be sent to XX,XXX patients by email.  
+                </p>
               {% else %}
                 <p class="nhsuk-body">Everyone on your list will receive an invitation to get a flu vaccination.</p>
               {% endif %}
@@ -56,19 +59,33 @@
                 Your current list of patients was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
               </p>
               <p class="nhsuk-body">
-                There are 15,995 patients on your list and no filters applied. Everyone on your list will receive an invitation to get a flu vaccination.
+                There are 11,655 eligible patients on your list and no filters applied. All eligible patients will receive an invitation to get a flu vaccination.
+              </p>
+              <div class="nhsuk-inset-text nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
+                <span class="nhsuk-u-visually-hidden">Information: </span>
+                <p>You cannot send invitations to patients who are already vaccinated or who have declined a vaccination.</p>
+              </div>
+              <p class="nhsuk-body">
+                This is the message that will be sent to 11,655 patients by email.  
               </p>
               {% endif %}
-              <p class="nhsuk-body">
-                This is the message that will be sent to those patients by email.  
-              </p>
               <div class="nhsuk-card nhsuk-u-margin-bottom-0">
                 <div class="nhsuk-card__content">
                   <p class="nhsuk-body">Hello [First name]</p>
-                  <p class="nhsuk-body">You are eligible for a flu vaccination. Visit our website to book an appointment and choose how you want to receive your vaccination.</p>
+
+                  <p class="nhsuk-body">Your yearly flu vaccination is due and you can now book an appointment.</p>
+
+                  <h2 class="nhsuk-heading-s">Why it matters</h2>
+                  <p class="nhsuk-body">The vaccination helps protect you against flu, which can be a serious or life-threatening illness.</p> 
+                  <p class="nhsuk-body">During the 2024 to 2025 seasonal campaign, 37.8% of eligible frontline healthcare workers received the flu vaccine. This year, we want to increase that number so that more NHS staff are protected.</p> 
+                  <p class="nhsuk-body">If you would like more information before you book, you can <a href="#/" class="nhsuk-link">learn more about the flu vaccine</a> and its benefits.</p>
+
+                  <h2 class="nhsuk-heading-s">Book an appointment</h2>
+                  <p class="nhsuk-body">Visit out Trust's website to book an appointment and choose how you want to receive your vaccination.</p>
                   <p class="nhsuk-body"><a href="#/" class="nhsuk-link">Book a flu vaccination appointment</a>.</p>
-                  <p class="nhsuk-body">If you would like more information first, you can <a href="#/" class="nhsuk-link">learn more about the flu vaccine</a>.</p>
-                  <p class="nhsuk-body">If you have already been contacted about a flu vaccination, sorry for contacting you again and please ignore this message.</p>
+
+                  <h2 class="nhsuk-heading-s">If you have been vaccinated</h2>
+                  <p class="nhsuk-body">If you have already been vaccinated, booked an appointment or opted out, please ignore this message and sorry for contacting you again.</p>
                   <p class="nhsuk-body">Kind regards<br>[Organisation name]</p>
                 </div>
               </div>

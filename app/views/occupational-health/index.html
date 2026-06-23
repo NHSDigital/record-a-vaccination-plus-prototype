@@ -95,23 +95,18 @@
 
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Send invites</h2>
 			<ol start="29">
-				<li><a href="review-and-send?filtersApplied&sendInvites">Send invite "Review and send" (no filters)</a></li>
-				<li><a href="send-invites?filtersApplied=true">Send invitations (filters applied)</a></li>
-				<li><s>Warning: Vaccine invite doesn't match cohort</s></li>
-				<li><s>Invite message</s></li>
-				<li>Filters applied:
-					<div style="margin-left: 0rem;">
-						<a href="review-and-send?filtersApplied=true&sendInvites=sendInvitesToFilteredPatients">33a. No eligible patients on filtered list</a><br>
-						<a href="review-and-send?filtersApplied=true&sendInvites=sendInvitesToAllPatients">33b. Send to filtered list of patients</a>
-					</div>
-				</li>
+				<li><a href="review-and-send?filtersApplied&eligibleIssues">No filters applied</a></li>
+				<li><a href="review-and-send?filtersApplied=true&eligibleIssues">Filters applied</a></li>
+			</ol>
+
+			<ol start="33">
+				<li><a href="review-and-send?filtersApplied=true&eligibleIssues=true">(33a.) Filters applied (no eligible patients)</a></li>
 				<li>Invitations sent
 					<div style="margin-left: 0rem;">
-						<a href="send-invites-completed?filtersApplied=true&sendInvites=sendInvitesToFilteredPatients">34a. Sent to filtered patients</a><br>
-						<a href="send-invites-completed?filtersApplied&sendInvites">34b. Sent to all patients</a>
+						<a href="send-invites-completed?filtersApplied=true&eligibleIssues">34a. Sent to filtered patients</a><br>
+						<a href="send-invites-completed?filtersApplied&eligibleIssues">34b. Sent to all patients</a>
 					</div>
 				</li>
-				<li><s>Invitations sent (filters applied)</s></li>
 			</ol>
 		</div>
 	</div>

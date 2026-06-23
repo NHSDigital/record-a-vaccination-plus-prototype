@@ -3,8 +3,8 @@
 {% set currentSection = "plus" %}
 
 {% block pageTitle %}
-  {% if data.filtersApplied == "true" %}
-      Review and send invitations 
+  {% if (data.filtersApplied == "true") and (data.eligibleIssues == "true") %}
+      There are no eligible patients on your filtered list
   {% else %}
       Send invitations 
   {% endif %}
@@ -18,45 +18,63 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
+      <!--
+      {% if data.filtersApplied == "true" %}
+        <p>filtersApplied = true</p>
+      {% else %}
+        <p>filtersApplied = false</p>
+      {% endif %}
+
+      {% if data.eligibleIssues == "true" %}
+        <p>eligibleIssues = true</p>
+      {% else %}
+        <p>eligibleIssues = false</p>
+      {% endif %}
+      -->
+      
       <form method="post" action="send-invites-completed">
 
         <div class="nhsuk-form-group">
           <fieldset class="nhsuk-fieldset" aria-describedby="export-patients-hint">
             <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
-              {% if data.filtersApplied == "true" %}
-                <h1 class="nhsuk-fieldset__heading">
-                  Review and send invitations 
-                </h1>
-              {% else %}
-                <h1 class="nhsuk-fieldset__heading">
-                  Send invitations 
-                </h1>
-              {% endif %}
+              <h1 class="nhsuk-fieldset__heading">
+                {% if (data.filtersApplied == "true") and (data.eligibleIssues == "true") %}
+                  There are no eligible patients on your filtered list
+                {% else %}
+                  Send invitations
+                {% endif %}
+              </h1>
             </legend>
             {% if data.filtersApplied == "true" %}
               <p class="nhsuk-hint" id="invite-patients-hint">
-                Your current list of patients was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+                Your current list of patients contains 15,995 patients in total. It was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
               </p>
-              {% if data.sendInvites == "sendInvitesToFilteredPatients" %}
-                <p class="nhsuk-body nhsuk-u-margin-bottom-4">
-                  You have selected a filtered list of 238 patients to invite for a flu vaccination.
-                </p>
-                <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">
-                  Active filters
-                </h2>
-                <ul class="nhsuk-list nhsuk-list--bullet">
-                  <li>Flu eligibility: Eligible</li>
-                  <li>Location: Northern General Hospital</li>
-                </ul>
+              <p class="nhsuk-body nhsuk-u-margin-bottom-4">
+                There are 238 eligible patients on your list with 2 filters applied.
+              </p>
+              <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">
+                Active filters
+              </h2>
+              <ul class="nhsuk-list nhsuk-list--bullet">
+                <li>Flu eligibility: Eligible</li>
+                <li>Location: Northern General Hospital</li>
+              </ul>
+              <div class="nhsuk-inset-text nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
+                <span class="nhsuk-u-visually-hidden">Information: </span>
+                <p>You cannot send invitations to patients who are already vaccinated or who have declined a vaccination.</p>
+              </div>
+              {% if data.eligibleIssues !== "true" %}
                 <p class="nhsuk-body">
-                  This is the message that will be sent to XX,XXX patients by email.  
+                  This is the message that will be sent to 238 eligible patients by email.  
                 </p>
               {% else %}
-                <p class="nhsuk-body">Everyone on your list will receive an invitation to get a flu vaccination.</p>
+                <p class="nhsuk-body">
+                  To send invitations to eligible patients, go back to your list of patients and change the filters.
+                </p>
               {% endif %}
             {% else %}
               <p class="nhsuk-hint" id="invite-patients-hint">
-                Your current list of patients was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+                Your current list of patients contains 15,995 patients in total. It was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
               </p>
               <p class="nhsuk-body">
                 There are 11,655 eligible patients on your list and no filters applied. All eligible patients will receive an invitation to get a flu vaccination.
@@ -66,34 +84,40 @@
                 <p>You cannot send invitations to patients who are already vaccinated or who have declined a vaccination.</p>
               </div>
               <p class="nhsuk-body">
-                This is the message that will be sent to 11,655 patients by email.  
+                This is the message that will be sent to 11,655 eligible patients by email.  
               </p>
               {% endif %}
-              <div class="nhsuk-card nhsuk-u-margin-bottom-0">
-                <div class="nhsuk-card__content">
-                  <p class="nhsuk-body">Hello [First name]</p>
+              {% if data.eligibleIssues !== "true" %}
+                <div class="nhsuk-card nhsuk-u-margin-bottom-0">
+                  <div class="nhsuk-card__content">
+                    <p class="nhsuk-body">Hello [First name]</p>
 
-                  <p class="nhsuk-body">Your yearly flu vaccination is due and you can now book an appointment.</p>
+                    <p class="nhsuk-body">Your yearly flu vaccination is due and you can now book an appointment.</p>
 
-                  <h2 class="nhsuk-heading-s">Why it matters</h2>
-                  <p class="nhsuk-body">The vaccination helps protect you against flu, which can be a serious or life-threatening illness.</p> 
-                  <p class="nhsuk-body">During the 2024 to 2025 seasonal campaign, 37.8% of eligible frontline healthcare workers received the flu vaccine. This year, we want to increase that number so that more NHS staff are protected.</p> 
-                  <p class="nhsuk-body">If you would like more information before you book, you can <a href="#/" class="nhsuk-link">learn more about the flu vaccine</a> and its benefits.</p>
+                    <h2 class="nhsuk-heading-s">Why it matters</h2>
+                    <p class="nhsuk-body">The vaccination helps protect you against flu, which can be a serious or life-threatening illness.</p> 
+                    <p class="nhsuk-body">During the 2024 to 2025 seasonal campaign, 37.8% of eligible frontline healthcare workers received the flu vaccine. This year, we want to increase that number so that more NHS staff are protected.</p> 
+                    <p class="nhsuk-body">If you would like more information before you book, you can <a href="#/" class="nhsuk-link">learn more about the flu vaccine</a> and its benefits.</p>
 
-                  <h2 class="nhsuk-heading-s">Book an appointment</h2>
-                  <p class="nhsuk-body">Visit out Trust's website to book an appointment and choose how you want to receive your vaccination.</p>
-                  <p class="nhsuk-body"><a href="#/" class="nhsuk-link">Book a flu vaccination appointment</a>.</p>
+                    <h2 class="nhsuk-heading-s">Book an appointment</h2>
+                    <p class="nhsuk-body">Visit out Trust's website to book an appointment and choose how you want to receive your vaccination.</p>
+                    <p class="nhsuk-body"><a href="#/" class="nhsuk-link">Book a flu vaccination appointment</a>.</p>
 
-                  <h2 class="nhsuk-heading-s">If you have been vaccinated</h2>
-                  <p class="nhsuk-body">If you have already been vaccinated, booked an appointment or opted out, please ignore this message and sorry for contacting you again.</p>
-                  <p class="nhsuk-body">Kind regards<br>[Organisation name]</p>
+                    <h2 class="nhsuk-heading-s">If you have been vaccinated</h2>
+                    <p class="nhsuk-body">If you have already been vaccinated, booked an appointment or opted out, please ignore this message and sorry for contacting you again.</p>
+                    <p class="nhsuk-body">Kind regards<br>[Organisation name]</p>
+                  </div>
                 </div>
-              </div>
+              {% endif %}
           </fieldset>
         </div>
-        <div class="nhsuk-button-group">
-          <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Confirm and send</button>
-        </div>
+        {% if data.eligibleIssues !== "true" %}
+          <div class="nhsuk-button-group">
+            <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Confirm and send</button>
+          </div>
+        {% else %}
+          <p class="nhsuk-body nhsuk-u-margin-top-0"><a href="patients?filtersApplied=true&eligibleIssues">View list of patients</a></p>
+        {% endif %}
       </form>
     </div>
   </div>

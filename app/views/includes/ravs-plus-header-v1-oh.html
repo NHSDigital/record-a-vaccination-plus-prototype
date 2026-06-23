@@ -18,67 +18,125 @@
   {% set prototypeServiceName = 'Record a vaccination' %}
 {% endif %}
 
-{{ header({
-  service: {
-    text: (prototypeServiceName),
-    href: "/"
-  },
-  account: {
-    items: [
-      {
-        href: "#/",
-        icon: true,
-        text: (userName) | safe
-      },
-      { 
-        text: "BWC Trust"
-      },
-      {
-        href: '#/',
-        text: 'Log out'
-      }
-    ]
-  },
-  navigation: {
-    items: [
-      {
-        href: "/",
-        text: "Home",
-        active: (currentSection == "home")
-      },
-      {
-        href: "/",
-        text: "Record vaccinations",
-        active: (currentSection == "record")
-      },
-      {
-        href: "/",
-        text: ("Vaccines") | safe,
-        active: (currentSection == "vaccines")
-      },
-      {
-        href: "/",
-        text: ("Records") | safe,
-        active: (currentSection == "records")
-      },
-      {
-        href: "/",
-        text: "Reports",
-        active: (currentSection == "reports")
-      },
-      {
-        href: "landing",
-        text: "Staff vaccinations",
-        active: (currentSection == "plus")
-      },
-      {
-        href: "/",
-        text: "Manage users",
-        active: (currentSection == "manage")
-      }
-    ]
-  }
-}) }}
+
+{% if data.loggedOutStatus == "true" %}
+  {{ header({
+    service: {
+      text: (prototypeServiceName),
+      href: "/"
+    },
+    account: {
+      items: [
+        {
+          href: '/auth/log-in',
+          text: 'Log in'
+        }
+      ]
+    },
+    navigation: {
+      items: [
+        {
+          href: "/",
+          text: "Home",
+          active: (currentSection == "home")
+        },
+        {
+          href: "/",
+          text: "Record vaccinations",
+          active: (currentSection == "record")
+        },
+        {
+          href: "/",
+          text: ("Vaccines") | safe,
+          active: (currentSection == "vaccines")
+        },
+        {
+          href: "/",
+          text: ("Records") | safe,
+          active: (currentSection == "records")
+        },
+        {
+          href: "/",
+          text: "Reports",
+          active: (currentSection == "reports")
+        },
+        {
+          href: "landing",
+          text: "Staff vaccinations",
+          active: (currentSection == "plus")
+        },
+        {
+          href: "/",
+          text: "Manage users",
+          active: (currentSection == "manage")
+        }
+      ]
+    }
+  }) }}
+{% else %}
+  {{ header({
+    service: {
+      text: (prototypeServiceName),
+      href: "/"
+    },
+    account: {
+      items: [
+        {
+          href: "#/",
+          icon: true,
+          text: (userName) | safe
+        },
+        { 
+          text: "BWC Trust"
+        },
+        {
+          href: '#/',
+          text: 'Log out'
+        }
+      ]
+    },
+    navigation: {
+      items: [
+        {
+          href: "/",
+          text: "Home",
+          active: (currentSection == "home")
+        },
+        {
+          href: "/",
+          text: "Record vaccinations",
+          active: (currentSection == "record")
+        },
+        {
+          href: "/",
+          text: ("Vaccines") | safe,
+          active: (currentSection == "vaccines")
+        },
+        {
+          href: "/",
+          text: ("Records") | safe,
+          active: (currentSection == "records")
+        },
+        {
+          href: "/",
+          text: "Reports",
+          active: (currentSection == "reports")
+        },
+        {
+          href: "landing",
+          text: "Staff vaccinations",
+          active: (currentSection == "plus")
+        },
+        {
+          href: "/",
+          text: "Manage users",
+          active: (currentSection == "manage")
+        }
+      ]
+    }
+  }) }}
+{% endif %}
+
 
 {#
       {

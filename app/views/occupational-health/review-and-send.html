@@ -128,7 +128,7 @@
         </div>
         {% if data.eligibleIssues !== "true" %}
           <div class="nhsuk-button-group">
-            <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Confirm and send</button>
+            <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Confirm and send</button><a href="#" onclick="window.history.back(); return false;">Cancel</a>
           </div>
         {% else %}
           <p class="nhsuk-body nhsuk-u-margin-top-0"><a href="patients?filtersApplied=true&eligibleIssues">View patient list</a></p>

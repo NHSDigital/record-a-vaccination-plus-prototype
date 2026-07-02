@@ -1,0 +1,316 @@
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+
+{% set currentSection = "plus" %}
+
+{% set pageName = "Create and manage clinics" %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <nav class="moj-sub-navigation" aria-label="Sub navigation">
+        <ul class="moj-sub-navigation__list">
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="#/">Day view</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="#/">Week view</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="#/">Month view</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" aria-current="page" href="#/">Create and manage clinics</a>
+          </li>
+        </ul>
+      </nav>
+
+      <h1 class="nhsuk-heading-xl">{{ pageName }}</h1>
+
+      <div class="nhsuk-button-group nhsuk-button-group--small">
+        <a class="nhsuk-button nhsuk-button--small" data-module="nhsuk-button" href="type-of-clinic" role="button" draggable="false">Create clinics</a>
+        <a class="nhsuk-button nhsuk-button--secondary nhsuk-button--small" data-module="nhsuk-button" href="/site/1/cancel-availability/dates" role="button" draggable="false">Cancel all clinics</a>
+      </div>
+
+      <table class="nhsuk-table-responsive" role="table">
+        <thead class="nhsuk-table__head" role="rowgroup">
+          <tr role="row">
+            <th scope="col" class="nhsuk-table__header" role="columnheader">Type</th>
+            <th scope="col" class="nhsuk-table__header" role="columnheader">Days</th>
+            <th scope="col" class="nhsuk-table__header" role="columnheader">Time and date</th>
+            <th scope="col" class="nhsuk-table__header" role="columnheader">Services</th>
+            <th scope="col" class="nhsuk-table__header" role="columnheader">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body" role="rowgroup">
+          <tr class="nhsuk-table__row" role="row">
+            <td class="nhsuk-table__cell" role="cell">
+              <strong class="nhsuk-tag nhsuk-tag--blue">Series</strong>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                <li>Monday</li>
+                <li>Thursday</li>
+              </ul>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <div>10am to 2pm</div>
+              <div class="nhsuk-u-margin-top-2">11 Jun 2026 to 2 Sep 2026</div>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                <li>COVID 18+</li>
+                <li>Flu 65+</li>
+              </ul>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <a href="/site/1/clinics/cancel/b2703146e735399f">Cancel<span class="nhsuk-u-visually-hidden"> clinic on 11 Jun 2026 to 2 Sep 2026 at 10am to 2pm</span></a>
+            </td>
+          </tr>
+          <tr class="nhsuk-table__row" role="row">
+            <td class="nhsuk-table__cell" role="cell">
+              <strong class="nhsuk-tag nhsuk-tag--blue"> Series </strong>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                <li>Monday</li>
+                <li>Tuesday</li>
+                <li>Wednesday</li>
+                <li>Thursday</li>
+                <li>Friday</li>
+              </ul>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <div>11am to 3pm</div>
+              <div class="nhsuk-u-margin-top-2">11 Jun 2026 to 2 Sep 2026</div>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                <li>COVID 18+</li>
+                <li>COVID and Flu 18 to 64</li>
+                <li>COVID and Flu 65+</li>
+                <li>Flu 18 to 64</li>
+                <li>Flu 65+</li>
+              </ul>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <a href="/site/1/clinics/cancel/0dcf91b472bc0f04">Cancel<span class="nhsuk-u-visually-hidden"> clinic on 11 Jun 2026 to 2 Sep 2026 at 11am to 3pm</span></a>
+            </td>
+          </tr>
+          <tr class="nhsuk-table__row" role="row">
+            <td class="nhsuk-table__cell" role="cell">
+              <strong class="nhsuk-tag nhsuk-tag--blue"> Series </strong>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                <li>Monday</li>
+                <li>Tuesday</li>
+                <li>Wednesday</li>
+                <li>Thursday</li>
+                <li>Friday</li>
+                <li>Saturday</li>
+                <li>Sunday</li>
+              </ul>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <div>10am to 2pm</div>
+              <div class="nhsuk-u-margin-top-2">29 Jun 2026 to 29 Jul 2026</div>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                <li>RSV Adult</li>
+              </ul>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <a href="/site/1/clinics/cancel/09ea495dd89414e0">Cancel<span class="nhsuk-u-visually-hidden"> clinic on 29 Jun 2026 to 29 Jul 2026 at 10am to 2pm</span></a>
+            </td>
+          </tr>
+          <tr class="nhsuk-table__row" role="row">
+            <td class="nhsuk-table__cell" role="cell">
+              <strong class="nhsuk-tag nhsuk-tag--grey"> Single </strong>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">Thursday</td>
+            <td class="nhsuk-table__cell" role="cell">
+              <div>10am to 2pm</div>
+              <div class="nhsuk-u-margin-top-2">2 Jul 2026</div>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                <li>COVID 18+</li>
+              </ul>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <a href="" onclick="alert('Existing change journey for single clinics'); return false;">Change</a>
+            </td>
+          </tr>
+          <tr class="nhsuk-table__row" role="row">
+            <td class="nhsuk-table__cell" role="cell">
+              <strong class="nhsuk-tag nhsuk-tag--grey">Single</strong>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">Friday</td>
+            <td class="nhsuk-table__cell" role="cell">
+              <div>10am to 2pm</div>
+              <div class="nhsuk-u-margin-top-2">3 Jul 2026</div>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                <li>COVID 18+</li>
+              </ul>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <a href="" onclick="alert('Existing change journey for single clinics'); return false;">Change</a>
+            </td>
+          </tr>
+          <tr class="nhsuk-table__row" role="row">
+            <td class="nhsuk-table__cell" role="cell">
+              <strong class="nhsuk-tag nhsuk-tag--grey"> Single </strong>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">Saturday</td>
+            <td class="nhsuk-table__cell" role="cell">
+              <div>10am to 2pm</div>
+              <div class="nhsuk-u-margin-top-2">4 Jul 2026</div>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                <li>COVID 18+</li>
+              </ul>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <a href="" onclick="alert('Existing change journey for single clinics'); return false;">Change</a>
+            </td>
+          </tr>
+          <tr class="nhsuk-table__row" role="row">
+            <td class="nhsuk-table__cell" role="cell">
+              <strong class="nhsuk-tag nhsuk-tag--grey">Single</strong>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">Sunday</td>
+            <td class="nhsuk-table__cell" role="cell">
+              <div>10am to 2pm</div>
+              <div class="nhsuk-u-margin-top-2">5 Jul 2026</div>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                <li>COVID 18+</li>
+              </ul>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <a href="" onclick="alert('Existing change journey for single clinics'); return false;">Change</a>
+            </td>
+          </tr>
+          <tr class="nhsuk-table__row" role="row">
+            <td class="nhsuk-table__cell" role="cell">
+              <strong class="nhsuk-tag nhsuk-tag--grey"> Single </strong>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">Sunday</td>
+            <td class="nhsuk-table__cell" role="cell">
+              <div>1pm to 4pm</div>
+              <div class="nhsuk-u-margin-top-2">5 Jul 2026</div>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                <li>RSV Adult</li>
+              </ul>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <a href="" onclick="alert('Existing change journey for single clinics'); return false;">Change</a>
+            </td>
+          </tr>
+          <tr class="nhsuk-table__row" role="row">
+            <td class="nhsuk-table__cell" role="cell">
+              <strong class="nhsuk-tag nhsuk-tag--grey"> Single </strong>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">Monday</td>
+            <td class="nhsuk-table__cell" role="cell">
+              <div>10am to 2pm</div>
+              <div class="nhsuk-u-margin-top-2">6 Jul 2026</div>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                <li>COVID 18+</li>
+              </ul>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <a href="" onclick="alert('Existing change journey for single clinics'); return false;">Change</a>
+            </td>
+          </tr>
+          <tr class="nhsuk-table__row" role="row">
+            <td class="nhsuk-table__cell" role="cell">
+              <strong class="nhsuk-tag nhsuk-tag--grey"> Single </strong>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">Tuesday</td>
+            <td class="nhsuk-table__cell" role="cell">
+              <div>10am to 2pm</div>
+              <div class="nhsuk-u-margin-top-2">7 Jul 2026</div>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                <li>COVID 18+</li>
+              </ul>
+            </td>
+            <td class="nhsuk-table__cell" role="cell">
+              <a href="" onclick="alert('Existing change journey for single clinics'); return false;">Change</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <nav class="nhsuk-pagination nhsuk-pagination--numbered" role="navigation" aria-label="Pagination">
+        <ul class="nhsuk-pagination__list">
+          <li class="nhsuk-pagination__item nhsuk-pagination__item--current">
+            <a class="nhsuk-pagination__link" href="/site/1/clinics" aria-label="Page 1" aria-current="page">1</a>
+          </li>
+          <li class="nhsuk-pagination__item">
+            <a class="nhsuk-pagination__link" href="/site/1/clinics?page=2" aria-label="Page 2">2</a>
+          </li>
+          <li class="nhsuk-pagination__item">
+            <a class="nhsuk-pagination__link" href="/site/1/clinics?page=3" aria-label="Page 3">3</a>
+          </li>
+        </ul>
+        <a href="/site/1/clinics?page=2" class="nhsuk-pagination__next" rel="next"><span class="nhsuk-pagination__title">Next<span class="nhsuk-u-visually-hidden"> page</span></span><svg class="nhsuk-icon nhsuk-icon--arrow-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true"><path d="m14.7 6.3 5 5c.2.2.3.4.3.7 0 .3-.1.5-.3.7l-5 5a1 1 0 0 1-1.4-1.4l3.3-3.3H5a1 1 0 0 1 0-2h11.6l-3.3-3.3a1 1 0 1 1 1.4-1.4Z"/></svg></a>
+      </nav>
+
+      <details class="nhsuk-details">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">
+            Completed clinic series
+          </span>
+        </summary>
+        <div class="nhsuk-details__text">
+          <table class="nhsuk-table-responsive" role="table">
+            <thead class="nhsuk-table__head" role="rowgroup">
+              <tr role="row">
+                <th scope="col" class="nhsuk-table__header" role="columnheader">Type</th>
+                <th scope="col" class="nhsuk-table__header" role="columnheader">Days</th>
+                <th scope="col" class="nhsuk-table__header" role="columnheader">Time and date</th>
+                <th scope="col" class="nhsuk-table__header" role="columnheader">Services</th>
+              </tr>
+            </thead>
+            <tbody class="nhsuk-table__body" role="rowgroup">
+              <tr class="nhsuk-table__row" role="row">
+                <td class="nhsuk-table__cell" role="cell">
+                  <strong class="nhsuk-tag nhsuk-tag--blue"> Series </strong>
+                </td>
+                <td class="nhsuk-table__cell" role="cell">
+                  <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                    <li>Monday</li>
+                    <li>Thursday</li>
+                  </ul>
+                </td>
+                <td class="nhsuk-table__cell" role="cell">
+                  <div>10am to 2pm</div>
+                  <div class="nhsuk-u-margin-top-2">2 Mar 2026 to 2 May 2026</div>
+                </td>
+                <td class="nhsuk-table__cell" role="cell">
+                  <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                    <li>COVID 18+</li>
+                    <li>Flu 65+</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+  </div>
+{% endblock %}

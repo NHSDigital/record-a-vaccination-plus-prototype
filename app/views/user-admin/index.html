@@ -1,0 +1,153 @@
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+
+{% block pageTitle %}
+  Manage users and permissions
+{% endblock %}
+
+{% set currentSection = "manage" %}
+{% set currentSubSection = "active" %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% include "includes/notification.html" %}
+
+    </div>
+  </div>
+
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+
+
+
+      <h1 class="nhsuk-heading-l">Manage users</h1>
+
+      {{ button({
+        "text": "Add user",
+        "href": "/user-admin/add-user"
+      }) }}
+
+      {% include "user-admin/_deactivated-users-notice.html" %}
+      {% include "user-admin/_search-filter.html" %}
+
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+
+          {% include "_secondary-nav.html" %}
+
+      {% if totalUsers > 0 %}
+
+      <table class="nhsuk-table nhsuk-u-margin-top-4">
+        <caption class="nhsuk-table__caption nhsuk-table__caption--m">
+          {% if q %}
+            Showing {{ totalUsers | plural("active user") }} matching {{ q }}
+          {% else %}
+
+            {% if totalPages > 1 %}
+              Showing {{ ((page - 1) * 20) + 1 }} to  {{ ((page - 1) * 20) + (users | length) }} of
+            {% endif %}
+            {{ totalUsers | plural("active user") }}
+          {% endif %}
+        </caption>
+        <thead role="rowgroup" class="nhsuk-table__head">
+          <tr role="row">
+            <th role="columnheader" class="app-table__header--min-width-200" scope="col">
+              Name
+            </th>
+            <th role="columnheader" class="" scope="col">
+              Email
+            </th>
+            <th role="columnheader" class="" scope="col">
+              Vaccinator
+            </th>
+            <th role="columnheader" class="" scope="col">
+              Permission
+            </th>
+            <th role="columnheader" class="" scope="col">
+              Last log in
+            </th>
+            <th role="columnheader" class="app-table__header--min-width-100" scope="col">
+
+            </th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          {% for user in (users | sort(false, true, "firstName")) %}
+
+            {% set userOrganisationSettings = (user.organisations | findById(data.currentOrganisationId)) %}
+
+            <tr class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">
+                {{ user.firstName }} {{ user.lastName }}
+              </td>
+              <td class="nhsuk-table__cell ">{{ user.email }}</td>
+              <td class="nhsuk-table__cell ">
+                {% if userOrganisationSettings.vaccinator %}
+                  Yes
+               {% else %}
+                  No
+                {% endif %}
+              </td>
+              <td class="nhsuk-table__cell ">{{ userOrganisationSettings.permissionLevel }}</td>
+              <td class="nhsuk-table__cell ">Today</td>
+              <td class="nhsuk-table__cell app-table__cell--right-aligned">
+                <a href="/user-admin/users/{{ user.id }}/change-role" class="nhsuk-link">Change <span class="nhsuk-u-visually-hidden">details for {{ user.firstName }} </span></a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {% set items = [] %}
+
+      {% set ellipsisAdded = false %}
+      {% for i in range(1, totalPages + 1) -%}
+        {% if i == 1 or i == (page -1) or (i == page) or (i == page + 1) or (i == totalPages) %}
+          {% set items = (items.push({
+            number: i,
+            href: "/user-admin?page=" + i + "&q=" + (q if q else ""),
+            current: (i === page)
+          }), items) %}
+          {% set ellipsisAdded = false %}
+        {% elif ellipsisAdded == false %}
+          {% set items = (items.push({
+            ellipsis: true
+          }), items) %}
+          {% set ellipsisAdded = true %}
+        {% endif %}
+      {%- endfor %}
+
+      {% if totalPages > 1 %}
+
+
+        {{ pagination({
+          previous: {
+            href: "/user-admin?page=" + (page - 1) + "&q=" + (q if q else "")
+          } if page != 1,
+          next: {
+            href: "/user-admin?page=" + (page + 1) + "&q=" + (q if q else "")
+          } if page != totalPages,
+          items: items
+        }) }}
+      {% endif %}
+
+      {% else %}
+
+        <div class="nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
+          <p>No users matching {{ q }}.</p>
+        </div>
+
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endblock %}
+
+
+
+

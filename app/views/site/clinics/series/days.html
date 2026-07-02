@@ -1,0 +1,88 @@
+{% extends '../../../layouts/layout.html' %}
+
+{% if not pageName %}{% set pageName = "Which days will this clinic series run on?" %}{% endif %}
+{% if not backUrl %}{% set backUrl = '/site/' + site_id + '/clinics/details' %}{% endif %}
+{% if not formAction %}{% set formAction = '/site/' + site_id + '/clinics/clinic-times' %}{% endif %}
+
+{% block beforeContent %}
+{{ backLink({
+  href: backUrl
+}) }}
+{% endblock %}
+
+{% block content %}
+
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form action="{{ formAction }}" method="post">
+
+        {{ checkboxes({
+          idPrefix: "days",
+          name: "newSession[days]",
+          hint: {
+            text: "Select all that apply"
+          },
+          fieldset: {
+            legend: {
+              text: pageName,
+              isPageHeading: true,
+              classes: "nhsuk-fieldset__legend--l"
+            }
+          },
+          items: [
+            {
+              value: "Monday",
+              text: "Monday",
+              exclusiveGroup: "individual-days",
+              checked: true if "Monday" in (data.newSession.days or [])
+            },
+            {
+              value: "Tuesday",
+              text: "Tuesday",
+              exclusiveGroup: "individual-days",
+              checked: true if "Tuesday" in (data.newSession.days or [])
+            },
+            {
+              value: "Wednesday",
+              text: "Wednesday",
+              exclusiveGroup: "individual-days",
+              checked: true if "Wednesday" in (data.newSession.days or [])
+            },
+            {
+              value: "Thursday",
+              text: "Thursday",
+              exclusiveGroup: "individual-days",
+              checked: true if "Thursday" in (data.newSession.days or [])
+            },
+            {
+              value: "Friday",
+              text: "Friday",
+              exclusiveGroup: "individual-days",
+              checked: true if "Friday" in (data.newSession.days or [])
+            },
+            {
+              value: "Saturday",
+              text: "Saturday",
+              exclusiveGroup: "individual-days",
+              checked: true if "Saturday" in (data.newSession.days or [])
+            },
+            {
+              value: "Sunday",
+              text: "Sunday",
+              exclusiveGroup: "individual-days",
+              checked: true if "Sunday" in (data.newSession.days or [])
+            }
+          ]
+        }) }}
+        
+
+        {{ button({
+          text: "Continue"
+        }) }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

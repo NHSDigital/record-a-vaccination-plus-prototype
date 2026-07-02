@@ -1,0 +1,84 @@
+{% extends '../../layouts/layout.html' %}
+
+{% set pageName = "Check your answers" %}
+
+{% block beforeContent %}
+{{ backLink({
+  href: '/site/' + site_id + '/cancel-availability/sessions-and-bookings'
+}) }}
+{% endblock %}
+
+{% block content %}
+
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      {% set keepOrCancelText = "No, keep bookings" %}
+      {% if data.cancelAvailability.keepOrCancelBookings == 'cancel' %}
+        {% set keepOrCancelText = "Yes, cancel "~data.cancelAvailability.affectedBookings~" bookings" %}
+      {% endif %}
+
+        {{ summaryList({
+          rows: [
+            {
+              key: {
+                text: "Dates"
+              },
+              value: {
+                html: startDate | nhsDateRange(endDate) 
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/site/" + site_id + "/cancel-availability",
+                    text: "Change",
+                    visuallyHiddenText: " dates" 
+                  }
+                ]
+              }
+            }, {
+              key: {
+                text: "Number of clinics"
+              },
+              value: {
+                html: data.cancelAvailability.affectedSessions ~ " clinics"
+              }
+            }, {
+              key: {
+                text: "Cancel bookings?"
+              },
+              value: {
+                text: keepOrCancelText
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/site/" + site_id + "/cancel-availability/sessions-and-bookings",
+                    text: "Change",
+                    visuallyHiddenText: " what you want to do with the bookings"
+                  }
+                ]
+              }
+            } if data.cancelAvailability.affectedBookings | int > 0
+          
+          ]
+        }) }}
+
+        {% set buttonText = "Cancel clinics" %}
+        {% if data.cancelAvailability.affectedBookings | int > 0 and data.cancelAvailability.keepOrCancelBookings == 'cancel' %}
+          {% set buttonText = "Cancel clinics and bookings" %}
+        {% endif %}
+
+
+        <form method="post" action="/site/{{ site_id }}/cancel-availability/check-answers">
+          {{ button({
+            text: buttonText,
+            classes: "nhsuk-button--warning"
+          }) }}
+        </form>
+
+    </div>
+  </div>
+{% endblock %}

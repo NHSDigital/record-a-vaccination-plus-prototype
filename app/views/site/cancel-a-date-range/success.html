@@ -1,0 +1,39 @@
+
+{% extends '../../layouts/layout.html' %}
+
+{% set pageName = 'Clinics cancelled' %}
+{% if data.cancelAvailability.keepOrCancelBookings == 'cancel' %}
+  {% set pageName = ' Clinics and bookings cancelled' %}
+{% endif %}
+
+
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      
+      {{ panel({
+        titleText: pageName
+       }) }}
+      
+    </div>
+  </div>
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      {# summary information #}
+      {% if data.cancelAvailability.keepOrCancelBookings == 'cancel' %}
+      <h2 class="nhsuk-heading-m">{{ data.cancelAvailability.affectedBookings }} bookings have been cancelled</h2>
+      <p>People will be sent a text message or email confirming their bookings has been cancelled.</p>
+      <h2 class="nhsuk-heading-m">3 people have not been contacted</h2>
+      <p>These people did not provide an email or mobile number, and have not been notified that their bookings were cancelled.</p>
+      <p><a href="#">View the list of people who have not been notified.</a></p>
+      {% else %}
+      <p>No bookings were affected by this change. They will stay in your appointments list.</p>
+      
+      {% endif %}
+      <h2 class="nhsuk-heading-m">What to do next</h2>
+      <p><a href="/site/{{ site_id }}/clinics">Go back to clinics list</a></p>
+      
+
+    </div>
+{% endblock %}

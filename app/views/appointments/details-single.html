@@ -1,0 +1,59 @@
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+
+{% set currentSection = "plus" %}
+
+{% if not pageName %}{% set pageName = "Date" %}{% endif %}
+{% if not backUrl %}{% set backUrl = '/site/' + site_id + '/clinics/type-of-clinc' %}{% endif %}
+{% if not formAction %}{% set formAction = '/site/' + site_id + '/clinics/clinic-times' %}{% endif %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form action="" method="post">
+        {{ dateInput({
+          id: "single-date",
+          namePrefix: "newSession[singleDate]",
+          fieldset: {
+            legend: {
+              text: pageName,
+              isPageHeading: true,
+              classes: "nhsuk-fieldset__legend--l"
+            }
+          },
+          hint: {
+            text: "For example, 15 3 2026"
+          },
+          items: [
+            {
+              name: "day",
+              classes: "nhsuk-input--width-2",
+              value: data.newSession.singleDate.day
+            },
+            {
+              name: "month",
+              classes: "nhsuk-input--width-2",
+              value: data.newSession.singleDate.month
+            },
+            {
+              name: "year",
+              classes: "nhsuk-input--width-4",
+              value: data.newSession.singleDate.year
+            }
+          ]
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

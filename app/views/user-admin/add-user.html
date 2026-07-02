@@ -1,0 +1,167 @@
+{% extends 'layout.html' %}
+
+{% set pageName = "Add user" %}
+
+{% set currentSection = "manage-users" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/user-admin",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      {% if (firstNameError or lastNameError or emailError or roleError or vaccinatorError) %}
+        {{ errorSummary({
+          "titleText": "There is a problem",
+          "errorList": [
+            {
+              "text": firstNameError,
+              "href": "#first-name"
+            } if firstNameError,
+            {
+              "text": lastNameError,
+              "href": "#last-name"
+            } if lastNameError,
+            {
+              "text": emailError,
+              "href": "#email"
+            } if emailError,
+            {
+              "text": vaccinatorError,
+              "href": "#vaccinator"
+            } if vaccinatorError,
+            {
+              "text": permissionLevelError,
+              "href": "#permission-level-1"
+            } if permissionLevelError
+          ]
+        }) }}
+      {% endif %}
+
+      <h1 class="nhsuks-heading-l">Add user</h1>
+      <p>Users must have an nhs.net email or another allowed email address. See <a href="https://digital.nhs.uk/services/care-identity-service/applications-and-services/apply-for-care-id/care-identity-email-domain-allow-list" target="_blank">examples of allowed email addresses (opens in new tab)</a>.</p>
+
+      <p>If the email address is not allowed, use a different email or <a href="/contact-us" target="_blank">contact us</a>.</p>
+
+      <form action="/user-admin/check-answers" method="post" novalidate="true">
+
+        {{ input({
+          "label": {
+            "text": "First name"
+          },
+          "id": "first-name",
+          "name": "firstName",
+          classes: "nhsuk-input--width-20",
+          value: data.firstName,
+          "errorMessage": {
+            "text": firstNameError
+          } if firstNameError
+        }) }}
+
+        {{ input({
+          "label": {
+            "text": "Last name"
+          },
+          "id": "last-name",
+          "name": "lastName",
+          classes: "nhsuk-input--width-20",
+          value: data.lastName,
+          "errorMessage": {
+            "text": lastNameError
+          } if lastNameError
+        }) }}
+
+        {{ input({
+          "label": {
+            "text": "Email address"
+          },
+          "id": "email",
+          "name": "email",
+          type: "email",
+          value: data.email,
+          "errorMessage": {
+            "text": emailError
+          } if emailError
+        }) }}
+
+        {{ radios({
+          "name": "vaccinator",
+          "fieldset": {
+            "legend": {
+              "text": "Are they a vaccinator?"
+            }
+          },
+          hint: {
+            text: "Vaccination records include the name of the person who gave the vaccination"
+          },
+          value: data.vaccinator,
+          "items": [
+            {
+              "value": "yes",
+              "text": "Yes",
+              id: "vaccinator"
+            },
+            {
+              "value": "no",
+              "text": "No"
+            }
+          ],
+          "errorMessage": {
+            "text": vaccinatorError
+          } if vaccinatorError
+        }) }}
+
+
+        {{ radios({
+          "name": "permissionLevel",
+          idPrefix: "permission-level",
+          "fieldset": {
+            "legend": {
+              "text": "Permission level"
+            }
+          },
+          value: data.permissionLevel,
+          "items": [
+            {
+              "value": "Recorder",
+              "text": "Recorder",
+              "hint": {
+                "text": "Record vaccinations only"
+              }
+            },
+            {
+              "value": "Administrator",
+              "text": "Administrator",
+              "hint": {
+                "text": "Record vaccinations, create reports and manage vaccines"
+              }
+            },
+            {
+              "value": "Lead administrator",
+              "text": "Lead administrator",
+              "hint": {
+                "text": "Record vaccinations, create reports, manage vaccines and users"
+              }
+            }
+          ],
+          "errorMessage": {
+            "text": permissionLevelError
+          } if permissionLevelError
+        }) }}
+
+
+        {{ button({
+          "text": "Continue"
+      }) }}
+      </form>
+
+
+    </div>
+  </div>
+
+
+{% endblock %}

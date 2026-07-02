@@ -1,0 +1,48 @@
+{% extends '../../../layouts/layout.html' %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">Confirm cancellation</h1>
+
+      {% set allRows = rows or [] %}
+
+      {% if cancelFrom and cancelUntil %}
+        {% set formattedRows = [] %}
+        {% for row in allRows %}
+          {% if row.key and row.key.text == 'Times' %}
+            {% set formattedRows = formattedRows.concat([{
+              key: row.key,
+              value: {
+                text: (cancelFrom | nhsTime) + ' to ' + (cancelUntil | nhsTime)
+              }
+            }]) %}
+          {% else %}
+            {% set formattedRows = formattedRows.concat([row]) %}
+          {% endif %}
+        {% endfor %}
+        {% set allRows = formattedRows %}
+      {% endif %}
+
+      {% if allRows and (allRows | length) > 0 %}
+        {{ summaryList({ rows: allRows }) }}
+      {% elif emptyStateText %}
+        <p class="nhsuk-body">{{ emptyStateText }}</p>
+      {% endif %}
+
+      {% set resolvedButtonText = buttonText or ('Cancel clinic' if not isSeries else 'Cancel clinic series') %}
+      {% set resolvedButtonClasses = buttonClasses or 'nhsuk-button--warning' %}
+      {% set resolvedAbandonHref = abandonHref or ('/site/' ~ site_id ~ '/clinics') %}
+
+      <form action="{{ formAction or ('/site/' ~ site_id ~ '/clinics/cancel/' ~ sessionId ~ '/check-answers') }}" method="post">
+        <div class="nhsuk-button-group">
+          {{ button({
+            text: resolvedButtonText,
+            classes: resolvedButtonClasses
+          }) }}
+          <a href="{{ resolvedAbandonHref }}" class="nhsuk-link">Exit without cancelling</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

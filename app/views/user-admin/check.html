@@ -1,0 +1,120 @@
+{% extends 'layout.html' %}
+
+{% set pageName = "Check" %}
+
+{% set currentSection = "manage-users" %}
+
+{% set organisation = {name: data.nhsTrusts[data.organisationCode]} %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/user-admin/add-user",
+    text: "Back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">Check and {% if existingUserWithSameEmail %}reactivate{% else %}add{% endif %} user</h1>
+
+      {{ summaryList({
+        rows: [
+          {
+            key: {
+              text: "Name"
+            },
+            value: {
+              text: data.firstName + " " + data.lastName
+            },
+            actions: {
+              items: [
+                {
+                  href: "/user-admin/add-user",
+                  text: "Change",
+                  visuallyHiddenText: "name"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Email address"
+            },
+            value: {
+              html: data["email"]
+            },
+            actions: {
+              items: [
+                {
+                  href: "/user-admin/add-user",
+                  text: "Change",
+                  visuallyHiddenText: "email address"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Vaccinator"
+            },
+            value: {
+              html: (data["vaccinator"] | capitalize)
+            },
+            actions: {
+              items: [
+                {
+                  href: "/user-admin/add-user",
+                  text: "Change",
+                  visuallyHiddenText: "vaccinator"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Permission level"
+            },
+            value: {
+              html: data.permissionLevel
+            },
+            actions: {
+              items: [
+                {
+                  href: "/user-admin/add-user",
+                  text: "Change",
+                  visuallyHiddenText: "permission level"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+
+
+      {% if existingUserWithSameEmail %}
+        <p>{{ data.firstName }} will be re-activated and sent this email:</p>
+      {% else %}
+        <p>{{ data.firstName }} will receive this welcome email with information about activating an account:</p>
+      {% endif %}
+
+      <div class="app-email-preview">
+        {% if existingUserWithSameEmail %}
+          {% include "user-admin/_reactivation-email.html" %}
+        {% else %}
+          {% include "user-admin/_welcome-email.html" %}
+        {% endif %}
+      </div>
+
+
+      <form action="/user-admin/add" method="post">
+        {{ button({
+          "text": "Confirm and send"
+        }) }}
+      </form>
+
+
+    </div>
+  </div>
+{% endblock %}

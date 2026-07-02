@@ -1,0 +1,80 @@
+{% extends '../../../layouts/layout.html' %}
+
+{% set pageName = "Remove clinic closure" %}
+{% if not backUrl %}{% set backUrl = '/site/' + site_id + '/clinics/clinic-closures' %}{% endif %}
+{% if not formAction %}{% set formAction = '/site/' + site_id + '/clinics/clinic-closures/' + index + '/remove' %}{% endif %}
+
+{% block beforeContent %}
+{{ backLink({
+  href: backUrl
+}) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      {% set closureDateText %}
+        {% if closure.startDate == closure.endDate %}
+          {{ closure.startDate | formatDate('d MMMM yyyy') }}
+        {% else %}
+          {{ closure.startDate | formatDate('d MMMM yyyy') }} to {{ closure.endDate | formatDate('d MMMM yyyy') }}
+        {% endif %}
+      {% endset %}
+
+      <ul class="nhsuk-list nhsuk-list--bullet">
+        <li><strong>Dates</strong> {{ closureDateText | trim }}</li>
+        <li><strong>Name of closure</strong> {{ closure.label if closure.label else 'Not provided' }}</li>
+      </ul>
+
+      <p>Removing this closure reopens these clinics.</p>
+      <p>The public will be able to book appointments on these dates.</p>
+
+      {% if errors and errors.confirmRemove %}
+        <div class="nhsuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1">
+          <h2 class="nhsuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+          <div class="nhsuk-error-summary__body">
+            <ul class="nhsuk-list nhsuk-error-summary__list">
+              <li><a href="#confirm-remove">{{ errors.confirmRemove }}</a></li>
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
+      <form action="{{ formAction }}" method="post">
+        <input type="hidden" name="newSession[type]" value="Clinic series">
+        {{ radios({
+          idPrefix: "confirm-remove",
+          name: "confirmRemove",
+          fieldset: {
+            legend: {
+              text: "Are you sure you want to remove this closure?",
+              classes: "nhsuk-fieldset__legend--m"
+            }
+          },
+          classes: "nhsuk-radios--inline",
+          errorMessage: {
+            text: errors.confirmRemove
+          } if errors and errors.confirmRemove,
+          items: [
+            {
+              value: "yes",
+              text: "Yes",
+              checked: confirmRemove == 'yes'
+            },
+            {
+              value: "no",
+              text: "No",
+              checked: confirmRemove == 'no'
+            }
+          ]
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

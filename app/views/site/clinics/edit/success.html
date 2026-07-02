@@ -1,0 +1,66 @@
+{% extends '../../../layouts/layout.html' %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      {% set unaffectedReason = unaffectedChildReasonText or 'details' %}
+      {% if cancelSummary %}
+        {{ panel({ titleText: cancelSummary.titleText }) }}
+
+        <p>We have sent a text message or email to everyone we have contact details for to confirm the cancellation.</p>
+
+        {% if cancelSummary.unnotifiedCount > 0 %}
+          {% set hasHaveText = 'has' if cancelSummary.unnotifiedCount == 1 else 'have' %}
+          <h2 class="nhsuk-heading-m">{{ cancelSummary.unnotifiedCount }} {{ 'person' if cancelSummary.unnotifiedCount == 1 else 'people' }} {{ hasHaveText }} not been notified</h2>
+          <p>These people did not provide an email address or mobile number. If you can, you should contact them to tell them their booking is cancelled.</p>
+          <p><a href="/not-in-this-prototype">View the list of people who have not been notified</a></p>
+        {% endif %}
+
+        {% if unaffectedChildClinics and unaffectedChildClinics.length %}
+          {% set unaffectedCount = unaffectedChildClinics.length %}
+          <h2 class="nhsuk-heading-m">{{ unaffectedCount }} {{ 'clinic has' if unaffectedCount == 1 else 'clinics have' }} not been updated</h2>
+          <p>These clinics were not changed because you have already changed their {{ unaffectedReason }}.</p>
+          <ul class="nhsuk-list nhsuk-list--bullet">
+            {% for clinicDate in unaffectedChildClinics %}
+              <li>{{ clinicDate }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        <h2 class="nhsuk-heading-m">What would you like to do next?</h2>
+        <ul class="nhsuk-list nhsuk-list--bullet">
+          {% for action in cancelSummary.nextActions %}
+            <li><a href="{{ action.href }}">{{ action.text }}</a></li>
+          {% endfor %}
+        </ul>
+
+      {% else %}
+        {{ panel({ titleText: titleText or 'Clinic updated' }) }}
+        {% if unaffectedChildClinics and unaffectedChildClinics.length %}
+          {% set unaffectedCount = unaffectedChildClinics.length %}
+          <h2 class="nhsuk-heading-m">{{ unaffectedCount }} {{ 'clinic has' if unaffectedCount == 1 else 'clinics have' }} not been updated</h2>
+          <p>These clinics were not changed because you have already changed their {{ unaffectedReason }}.</p>
+          <ul class="nhsuk-list nhsuk-list--bullet">
+            {% for clinicDate in unaffectedChildClinics %}
+              <li>{{ clinicDate }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        <h2 class="nhsuk-heading-m">What would you like to do next?</h2>
+        <ul class="nhsuk-list nhsuk-list--bullet">
+          {% if primaryHref %}
+            <li><a href="{{ primaryHref }}">{{ primaryText or 'Continue' }}</a></li>
+          {% elif sessionId %}
+            <li><a href="/site/{{ site_id }}/clinics/edit/{{ sessionId }}">Make another change</a></li>
+          {% endif %}
+
+          {% if secondaryHref %}
+            <li><a href="{{ secondaryHref }}">{{ secondaryText }}</a></li>
+          {% elif not primaryHref or sessionId %}
+            <li><a href="/site/{{ site_id }}/clinics">Back to clinics list</a></li>
+          {% endif %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

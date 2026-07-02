@@ -128,89 +128,19 @@
         </tbody>
       </table>
 
-      <!--
-      <dl class="nhsuk-summary-list">
-        <div class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key">
-            File name
-          </dt>
-          <dt class="nhsuk-summary-list__key">
-            Uploaded
-          </dt>
-          <dt class="nhsuk-summary-list__key">
-            Status
-          </dt>
-        </div>
-
-        {# DYNAMIC ENTRY #}
-        {% if (data['uploadedList'] == 'true') or (data['uploadedList'] == 'processing') %}
-          <div class="nhsuk-summary-list__row">
-            <dd class="nhsuk-summary-list__value">
-              {% if data['uploadedList'] == 'true' %}
-                <a href="#/"><span class="nhsuk-u-visually-hidden">View </span>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv</a>&nbsp;(9.7MB)
-              {% else %}
-                dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv&nbsp;(9.7MB)
-              {% endif %}
-            </dt>
-            <dd class="nhsuk-summary-list__value">
-              {{ date({day: 'numeric', month: 'long', year: 'numeric'}) }} at 11:57am,<br>Alex Smith
-            </dd>
-            <dd class="nhsuk-summary-list__value">
-              {% if data['uploadedList'] == 'true' %}
-                <strong class="nhsuk-tag nhsuk-tag--blue">Current list</strong>
-              {% else %}
-                <strong class="nhsuk-tag nhsuk-tag--white">Processing</strong>
-              {% endif %}
-            </dd>
+      {% if (data['uploadedList'] == 'true') or (data['uploadedList'] == 'processing') %}
+        <div class="nhsuk-pagination-wrapper">
+          <div class="nhsuk-pagination-wrapper__results" style="text-align: right;">
+            Showing 1 to 5 of 5 patient lists
           </div>
-        {% endif %}
-
-        <div class="nhsuk-summary-list__row">
-          <dd class="nhsuk-summary-list__value">
-            {% if data['uploadedList'] == 'false' %}
-              <a href="#/"><span class="nhsuk-u-visually-hidden">View </span>dataset-{{ date({ year: 'numeric' }, { day: -7 }) }}-{{ date({ month: '2-digit' }, { day: -7 }) }}-{{ date({ day: '2-digit' }, { day: -7 }) }}.csv</a>&nbsp;(9.1MB)
-            {% else %}
-              dataset-{{ date({ year: 'numeric' }, { day: -7 }) }}-{{ date({ month: '2-digit' }, { day: -7 }) }}-{{ date({ day: '2-digit' }, { day: -7 }) }}.csv&nbsp;(9.1MB)
-            {% endif %}
-          </dt>
-          <dd class="nhsuk-summary-list__value">
-            {{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { day: -7 }) }} at 10:13am,<br>Chloe Liu
-          </dd>
-          <dd class="nhsuk-summary-list__value">
-            {% if data['uploadedList'] == 'true' %}
-              <strong class="nhsuk-tag nhsuk-tag--grey">Processed</strong>
-            {% else %}
-              <strong class="nhsuk-tag nhsuk-tag--blue">Current list</strong>
-            {% endif %}
-          </dd>
         </div>
-
-        <div class="nhsuk-summary-list__row">
-          <dd class="nhsuk-summary-list__value">
-            dataset-{{ date({ year: 'numeric' }, { day: -14 }) }}-{{ date({ month: '2-digit' }, { day: -14 }) }}-{{ date({ day: '2-digit' }, { day: -14 }) }}.csv&nbsp;(9.6MB)
-          </dt>
-          <dd class="nhsuk-summary-list__value">
-            {{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { day: -14 }) }} at 5:47pm,<br>Katie Elliot
-          </dd>
-          <dd class="nhsuk-summary-list__value">
-            <strong class="nhsuk-tag nhsuk-tag--red">Failed</strong>
-          </dd>
+      {% else %}
+        <div class="nhsuk-pagination-wrapper">
+          <div class="nhsuk-pagination-wrapper__results" style="text-align: right;">
+            Showing 1 to 4 of 4 patient lists
+          </div>
         </div>
-
-        <div class="nhsuk-summary-list__row">
-          <dd class="nhsuk-summary-list__value">
-            dataset-{{ date({ year: 'numeric' }, { day: -21 }) }}-{{ date({ month: '2-digit' }, { day: -21 }) }}-{{ date({ day: '2-digit' }, { day: -21 }) }}.csv&nbsp;(4.8MB)
-          </dt>
-          <dd class="nhsuk-summary-list__value">
-            {{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { day: -21 }) }} at 2:04pm,<br>Nadiya Thomas
-          </dd>
-          <dd class="nhsuk-summary-list__value">
-            <strong class="nhsuk-tag nhsuk-tag--grey">Processed</strong>
-          </dd>
-        </div>
-
-      </dl>
-      -->
+      {% endif %}
 
     </div>
   </div>

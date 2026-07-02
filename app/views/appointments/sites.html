@@ -1,0 +1,42 @@
+{% extends 'layouts/layout.html' %}
+{% set pageName = "Sites" %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      <table class="nhsuk-table">
+        <thead class="nhsuk-table__head">
+          <tr>
+            <th scope="col" class="nhsuk-table__header">Name</th>
+            <th scope="col" class="nhsuk-table__header">ICB</th>
+            <th scope="col" class="nhsuk-table__header">ODS</th>
+            <th scope="col" class="nhsuk-table__header">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          {% for id, site in data.sites %}
+          <tr class="nhsuk-table__row">
+            <th scope="row" class="nhsuk-table__header">{{ site.name }}</th>
+            <td class="nhsuk-table__cell">{{ site.icb }}</td>
+            <td class="nhsuk-table__cell">{{ site.ods }}</td>
+            <td class="nhsuk-table__cell">
+              <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                <li>
+                  <a href="/site/{{ id }}">
+                    View
+                    <span class="nhsuk-u-visually-hidden"> site {{ site.name }}</span>
+                  </a>
+                </li>
+              </ul>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        </table>
+      
+    </div>
+  </div>
+{% endblock %}

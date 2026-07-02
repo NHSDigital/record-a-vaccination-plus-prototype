@@ -1,0 +1,112 @@
+{% extends '../../../layouts/layout.html' %}
+{% from '../../../components/app-card.njk' import appCard %}
+
+{% block beforeContent %}
+{{ backLink({
+  href: weekHref
+}) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      {% set changeBasePath = '/site/' ~ site_id ~ '/change/session/' ~ itemId %}
+      {% set isCombinedTimesAndCapacity = features and features.combinedTimesAndCapacity %}
+      {% set bookingLengthText = (draft.duration or 'Not provided') ~ ' minutes' %}
+      {% set vaccinatorText = draft.capacity ~ ' vaccinator' %}
+      {% if draft.capacity != 1 %}
+        {% set vaccinatorText = vaccinatorText ~ 's' %}
+      {% endif %}
+
+      {% set servicesHtml %}
+        {%- for serviceId in draft.services %}
+          {%- if data.services[serviceId] -%}
+            {{ data.services[serviceId].name }}
+          {%- else -%}
+            {{ serviceId }}
+          {%- endif -%}
+          {%- if not loop.last %}<br>{% endif -%}
+        {%- endfor %}
+      {% endset %}
+      
+      <h1 class="nhsuk-heading-l">{{ pageName }} on {{ displayDate }}</h1>
+
+      {% if isCombinedTimesAndCapacity %}
+      {{ appCard({
+        title: 'Times and capacity',
+        action: {
+          href: changeBasePath ~ '/clinic-times',
+          text: 'Change',
+          visuallyHiddenText: ' times and capacity'
+        },
+        items: [
+          {
+            key: 'Start time',
+            value: draft.from | nhsTime
+          },
+          {
+            key: 'End time',
+            value: draft.until | nhsTime
+          },
+          {
+            key: 'Vaccinators',
+            value: vaccinatorText
+          },
+          {
+            key: 'Appointment length',
+            value: bookingLengthText
+          }
+        ]
+      }) }}
+      {% else %}
+      {{ appCard({
+        title: 'Capacity',
+        action: {
+          href: changeBasePath ~ '/appointments-calculator',
+          text: 'Change',
+          visuallyHiddenText: ' vaccinators'
+        },
+        items: [
+          {
+            key: 'Booking length',
+            value: bookingLengthText
+          }, {
+            key: 'Number of vaccinators',
+            value: vaccinatorText
+          }
+        ]
+      }) }}
+
+      {{ appCard({
+        title: 'Clinic times',
+        action: {
+          href: changeBasePath ~ '/clinic-times',
+          text: 'Change',
+          visuallyHiddenText: ' clinic times'
+        },
+        items: [
+          {
+            key: 'Time period',
+            value: draft.from ~ ' to ' ~ draft.until
+          }
+        ]
+      }) }}
+      {% endif %}
+
+      {{ appCard({
+        title: 'Services',
+        action: {
+          href: changeBasePath ~ '/services',
+          text: 'Change',
+          visuallyHiddenText: ' services'
+        },
+        items: [
+          {
+            key: 'Services',
+            html: servicesHtml
+          }
+        ]
+      }) }}
+    </div>
+  </div>
+{% endblock %}

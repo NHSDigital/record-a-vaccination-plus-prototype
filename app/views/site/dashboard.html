@@ -1,0 +1,88 @@
+{% extends '../layouts/layout.html' %}
+
+{% macro statusTag(status) %}
+  <strong class="nhsuk-tag nhsuk-tag--{{ status.colour }}">{{ status.text }}</strong>
+{% endmacro %}
+
+{% set pageName = data.sites[site_id].name %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+    
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+      {{ summaryList({
+        rows: [
+          {
+            key: {
+              text: "Status"
+            },
+            value: {
+              html: statusTag(data.statuses[data.sites[site_id].status_id])
+            }
+          },
+          {
+            key: {
+              text: "Address"
+            },
+            value: {
+              html: data.sites[site_id].address | join('<br>')
+            }
+          },
+          {
+            key: {
+              text: "Phone number"
+            },
+            value: {
+              html: data.sites[site_id].phone
+            }
+          },
+          {
+            key: {
+              text: "ODS code"
+            },
+            value: {
+              text: data.sites[site_id].ods
+            }
+          },
+          {
+            key: {
+              text: "ICB"
+            },
+            value: {
+              text: data.sites[site_id].icb
+            }
+          },
+          {
+            key: {
+              text: "Region"
+            },
+            value: {
+              text: data.sites[site_id].region
+            }
+          }
+        ]
+      }) }}
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        {% set navigationItems = data.navigation.site %}
+        {% for item in navigationItems %}
+        {% set itemHref = item.href %}
+        {% if item.hrefTemplate %}{% set itemHref = item.hrefTemplate | replace(':id', site_id) %}{% endif %}
+        {% if not item.hideCard %}
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+        {{ card({
+          href: itemHref,
+          primary: "true",
+          clickable: "true",
+          heading: item.text,
+          headingClasses: "nhsuk-heading-m",
+          description: item.description if item.description
+        }) }}
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endblock %}

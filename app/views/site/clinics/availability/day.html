@@ -1,0 +1,232 @@
+{% extends '../../../layouts/layout.html' %}
+{% from '../../../components/secondary-navigation.njk' import appSecondaryNavigation %}
+{% from '../../../components/action-control-bar.njk' import appActionControlBar %}
+
+{% set pageName = (date | formatDate('EEEE, d LLLL yyyy')) ~ (date == today and ' (today)' or '') %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      {{
+        appSecondaryNavigation({
+          items: [
+            {
+              text: 'Day view',
+              href: '/site/' ~ site_id ~ '/availability/day',
+              current: true
+            },
+            {
+              text: 'Week view',
+              href: '/site/' ~ site_id ~ '/availability/week'
+            },
+            {
+              text: 'Month view',
+              href: '/site/' ~ site_id ~ '/availability/month'
+            },
+            {
+              text: 'Create and manage clinics',
+              href: '/site/' ~ site_id ~ '/clinics'
+            }
+          ]
+        })
+      }}
+      <h1 class="nhsuk-heading-xl">{{ pageName }}</h1>
+      {{ appActionControlBar({ siteId: site_id, print: '#' }) }}
+
+      {{ pagination({
+        previous: {
+          labelText: (yesterday | formatDate('EEE, d LLL')),
+          href: "/site/"~site_id~"/availability/day?date="~yesterday
+        },
+        next: {
+          labelText: (tomorrow | formatDate('EEE, d LLL')),
+          href: "/site/"~site_id~"/availability/day?date="~tomorrow
+        }
+      }) }}
+
+      {% macro appointmentForToday(opts) %}
+         {# calculate if there's any booked appointments of this type #}
+        {% set hasBookedAppointments = false %}
+        {% for slot in slots[date] %}
+          {% if slot.booking_status == opts.status or slot.booking_status in opts.status %}
+            {% set hasBookedAppointments = true %}
+          {% endif %}
+        {% endfor %}
+
+        <h2 class="nhsuk-heading-m">{{ opts.title }}</h2>
+       
+        {% if hasBookedAppointments %}
+        <table class="nhsuk-table-responsive" role="table">
+          <thead class="nhsuk-table__head" role="rowgroup">
+            <tr>
+              <th scope="col" class="nhsuk-table__header">Time</th>
+              <th scope="col" class="nhsuk-table__header">Name and NHS number</th>
+              <th scope="col" class="nhsuk-table__header">Date of birth</th>
+              <th scope="col" class="nhsuk-table__header">Contact details</th>
+              <th scope="col" class="nhsuk-table__header">Service</th>
+              {% if opts.canCancel %}
+              <th scope="col" class="nhsuk-table__header">Actions</th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+
+            
+
+            {% for slot in slots[date] %}
+            {% if slot.booking_status == opts.status or slot.booking_status in opts.status %}
+            {% set booking = data.bookings[site_id][slot.booking_id] %}
+            <tr class="nhsuk-table__row" role="row">
+              <td class="nhsuk-table__cell">{{ booking.datetime | nhsTime  }}</td>
+              <td class="nhsuk-table__cell">
+                {{ booking.name }}<br>
+                {{ booking.nhsNumber | nhsNumber | safe }}
+              </td>
+              <td class="nhsuk-table__cell">{{ booking.dob | formatDate }}</td>
+              <td class="nhsuk-table__cell nhsuk-u-text-break-word">
+                {% for key, value in booking.contact %}
+                {% if key !== 'phone' -%}
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">{{ value }}</p>
+                {% else %}
+                  <p class="nhsuk-body nhsuk-u-margin-bottom-0">{{ value }}</p>
+                {% endif %}
+                {% endfor %}
+              </td>
+              <td class="nhsuk-table__cell">{{ data.services[booking.service].name }}</td>
+              {% if opts.canCancel %}
+              <td class="nhsuk-table__cell">
+                <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                  <li>
+                    <a href="/not-in-this-prototype">
+                      Cancel
+                      <span class="nhsuk-u-visually-hidden"> appointment for {{ booking.name }} at {{ booking.datetime | nhsTime }}</span>
+                    </a>
+                  </li>
+                </ul>
+              </td>
+              {% endif %}
+            </tr>
+            {% endif %}
+            {% endfor %}
+
+          </tbody>
+        </table>
+        {% else %}
+          <p>No appointments.</p>
+        {% endif %}
+        
+      {% endmacro %}
+
+      {% macro clinicsRunningToday() %}
+        {% set sessions = daySummary.sessions or [] %}
+
+        <h2 class="nhsuk-heading-m">Clinics running today</h2>
+
+        {% if sessions | length %}
+          <table class="nhsuk-table">
+            <thead class="nhsuk-table__head">
+              <tr class="nhsuk-table__row">
+                <th scope="col" class="nhsuk-table__header">Time</th>
+                <th scope="col" class="nhsuk-table__header">Services</th>
+                <th scope="col" class="nhsuk-table__header">Booked</th>
+                <th scope="col" class="nhsuk-table__header">Free</th>
+                <th scope="col" class="nhsuk-table__header">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="nhsuk-table__body">
+              {% for session in sessions %}
+                <tr class="nhsuk-table__row">
+                  <td class="nhsuk-table__cell">
+                    <strong>{{ session.from | nhsTime }} to {{ session.until | nhsTime }}</strong>
+                  </td>
+                  <td class="nhsuk-table__cell">
+                    {% for service in session.services %}
+                      {{ service.name }}{% if not loop.last %}<br>{% endif %}
+                    {% endfor %}
+                  </td>
+                  <td class="nhsuk-table__cell">
+                    {% for service in session.services %}
+                      {{ service.bookedCount }} booked{% if not loop.last %}<br>{% endif %}
+                    {% endfor %}
+                  </td>
+                  <td class="nhsuk-table__cell">{{ session.unbookedTotal }} free</td>
+                  <td class="nhsuk-table__cell">
+                    {% if session.actionHref %}
+                      <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                        <li>
+                          <a href="{{ session.actionHref }}">
+                            View and change
+                            <span class="nhsuk-u-visually-hidden"> clinic on {{ date | formatDate('EEEE d LLLL yyyy') }} at {{ session.from | nhsTime }} to {{ session.until | nhsTime }}</span>
+                          </a>
+                        </li>
+                        {% if session.cancelHref %}
+                          <li>
+                            <a href="{{ session.cancelHref }}">
+                              Cancel
+                              <span class="nhsuk-u-visually-hidden"> clinic on {{ date | formatDate('EEEE d LLLL yyyy') }} at {{ session.from | nhsTime }} to {{ session.until | nhsTime }}</span>
+                            </a>
+                          </li>
+                        {% endif %}
+                      </ul>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p>No clinics running today.</p>
+        {% endif %}
+      {% endmacro %}
+
+      {% set daySlots = slots[date] or [] %}
+      {% set scheduledCount = 0 %}
+      {% set cancelledCount = 0 %}
+      {% set clinicsRunningCount = (daySummary.sessions or []) | length %}
+      {% for slot in daySlots %}
+        {% if slot.booking_status == 'scheduled' or slot.booking_status == 'orphaned' %}
+          {% set scheduledCount = scheduledCount + 1 %}
+        {% elif slot.booking_status == 'cancelled' %}
+          {% set cancelledCount = cancelledCount + 1 %}
+        {% endif %}
+      {% endfor %}
+
+      {{ tabs({ 
+        items: [ 
+        { 
+          label: "Scheduled (" ~ scheduledCount ~ ")", 
+          id: "scheduled", 
+          panel: { 
+            html: appointmentForToday({
+              status: ['scheduled', 'orphaned'], 
+              title: 'Scheduled appointments',
+              canCancel: true
+            }) 
+          } 
+        }, 
+        { 
+          label: "Cancelled (" ~ cancelledCount ~ ")", 
+          id: "cancelled", 
+            panel: { 
+              html: appointmentForToday({
+                status: 'cancelled', 
+                title: 'Cancelled appointments'
+              }) 
+            } 
+          }
+          
+        ] 
+      }) }}
+
+{# {
+            label: "Clinics running today (" ~ clinicsRunningCount ~ ")",
+            id: "clinics-running-today",
+            panel: {
+              html: clinicsRunningToday()
+            }
+          } #}
+
+    </div>  
+  </div>
+{% endblock %}

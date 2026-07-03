@@ -1,0 +1,479 @@
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+
+{% set currentSection = "plus" %}
+
+{% if dayOfWeek == "Sun" %}
+  {% set mondayOffset = -6 %}
+{% elif dayOfWeek == "Mon" %}
+  {% set mondayOffset = 0 %}
+{% elif dayOfWeek == "Tue" %}
+  {% set mondayOffset = -1 %}
+{% elif dayOfWeek == "Wed" %}
+  {% set mondayOffset = -2 %}
+{% elif dayOfWeek == "Thu" %}
+  {% set mondayOffset = -3 %}
+{% elif dayOfWeek == "Fri" %}
+  {% set mondayOffset = -4 %}
+{% else %}
+  {% set mondayOffset = -5 %}
+{% endif %}
+
+{% set sundayOffset = mondayOffset + 6 %}
+{% set previousMondayOffset = mondayOffset - 7 %} 
+
+{% set previousSundayOffset = sundayOffset - 7 %} {% set nextMondayOffset = mondayOffset + 7 %}
+{% set nextSundayOffset = sundayOffset + 7 %} 
+
+{% set previousWeekLabel = date({ day: "numeric" }, { day: previousMondayOffset }) ~ " to " ~ date({ day: "numeric", month: "short" }, { day: previousSundayOffset }) %} 
+
+{% set nextWeekLabel = date({ day: "numeric" }, { day: nextMondayOffset }) ~ " to " ~ date({ day:
+"numeric", month: "short" }, { day: nextSundayOffset }) %}
+
+{% set pageName = date({ weekday: "long", day: "numeric", month: "long", year: "numeric" }) ~ " (today)" %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <nav class="moj-sub-navigation" aria-label="Sub navigation">
+        <ul class="moj-sub-navigation__list">
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" aria-current="page" href="#/"
+              >Day view</a
+            >
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="view-week">Week view</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="view-month">Month view</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="create-and-manage-clinics"
+              >Create and manage clinics</a
+            >
+          </li>
+        </ul>
+      </nav>
+
+      <h1 class="nhsuk-heading-xl">{{ pageName }}</h1>
+
+      <div class="nhsuk-button-group nhsuk-button-group--small">
+        <a
+          class="nhsuk-button nhsuk-button--secondary nhsuk-button--small"
+          data-module="nhsuk-button"
+          href="#/"
+          role="button"
+          draggable="false"
+          >Print page</a
+        >
+      </div>
+
+      <nav class="nhsuk-pagination" role="navigation" aria-label="Pagination">
+        <ul class="nhsuk-list nhsuk-pagination__list">
+          <li class="nhsuk-pagination-item--previous">
+            <a
+              class="nhsuk-pagination__link nhsuk-pagination__link--prev"
+              href="#/"
+              rel="prev"
+            >
+              <span class="nhsuk-pagination__title">
+                Previous<span class="nhsuk-u-visually-hidden"> page</span>
+              </span>
+              <span class="nhsuk-u-visually-hidden">:</span>
+              <span class="nhsuk-pagination__page"
+                >{{ date({ weekday: "short" }, { day: -1 }) ~ ", " ~ date({ day:
+                "numeric", month: "short" }, { day: -1 }) }}</span
+              >
+              <svg
+                class="nhsuk-icon nhsuk-icon--arrow-left"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                focusable="false"
+                aria-hidden="true"
+              >
+                <path
+                  d="M10.7 6.3c.4.4.4 1 0 1.4L7.4 11H19a1 1 0 0 1 0 2H7.4l3.3 3.3c.4.4.4 1 0 1.4a1 1 0 0 1-1.4 0l-5-5A1 1 0 0 1 4 12c0-.3.1-.5.3-.7l5-5a1 1 0 0 1 1.4 0Z"
+                />
+              </svg>
+            </a>
+          </li>
+          <li class="nhsuk-pagination-item--next">
+            <a
+              class="nhsuk-pagination__link nhsuk-pagination__link--next"
+              href="#/"
+              rel="next"
+            >
+              <span class="nhsuk-pagination__title"
+                >Next<span class="nhsuk-u-visually-hidden"> page</span></span
+              >
+              <span class="nhsuk-u-visually-hidden">:</span>
+              <span class="nhsuk-pagination__page"
+                >{{ date({ weekday: "short" }, { day: +1 }) ~ ", " ~ date({ day:
+                "numeric", month: "short" }, { day: +1 }) }}</span
+              >
+              <svg
+                class="nhsuk-icon nhsuk-icon--arrow-right"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                focusable="false"
+                aria-hidden="true"
+              >
+                <path
+                  d="m14.7 6.3 5 5c.2.2.3.4.3.7 0 .3-.1.5-.3.7l-5 5a1 1 0 0 1-1.4-1.4l3.3-3.3H5a1 1 0 0 1 0-2h11.6l-3.3-3.3a1 1 0 1 1 1.4-1.4Z"
+                />
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nhsuk-tabs" data-module="nhsuk-tabs">
+        <h2 class="nhsuk-tabs__title">Contents</h2>
+
+        <ul class="nhsuk-tabs__list">
+          <li class="nhsuk-tabs__list-item nhsuk-tabs__list-item--selected">
+            <a class="nhsuk-tabs__tab" href="#scheduled"> Scheduled (9) </a>
+          </li>
+
+          <li class="nhsuk-tabs__list-item">
+            <a class="nhsuk-tabs__tab" href="#cancelled"> Cancelled (2) </a>
+          </li>
+        </ul>
+
+        <div class="nhsuk-tabs__panel" id="scheduled">
+          <h2 class="nhsuk-heading-m">Scheduled appointments</h2>
+
+          <table class="nhsuk-table-responsive" role="table">
+            <thead class="nhsuk-table__head" role="rowgroup">
+              <tr>
+                <th scope="col" class="nhsuk-table__header">Time</th>
+                <th scope="col" class="nhsuk-table__header">
+                  Name and NHS number
+                </th>
+                <th scope="col" class="nhsuk-table__header">Date of birth</th>
+                <th scope="col" class="nhsuk-table__header">Contact details</th>
+                <th scope="col" class="nhsuk-table__header">Service</th>
+
+                <th scope="col" class="nhsuk-table__header">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="nhsuk-table__body">
+              <tr class="nhsuk-table__row" role="row">
+                <td class="nhsuk-table__cell">11am</td>
+                <td class="nhsuk-table__cell">
+                  Ken Marmalade<br />
+                  553&nbsp;414&nbsp;70324
+                </td>
+                <td class="nhsuk-table__cell">9 June 2020</td>
+                <td class="nhsuk-table__cell nhsuk-u-text-break-word">
+                  <p class="nhsuk-body nhsuk-u-margin-bottom-0">07558036476</p>
+
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    ken.marmalade@gmail.com
+                  </p>
+                </td>
+                <td class="nhsuk-table__cell">COVID 18+</td>
+
+                <td class="nhsuk-table__cell">
+                  <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                    <li>
+                      <a href="/not-in-this-prototype">
+                        Cancel
+                        <span class="nhsuk-u-visually-hidden">
+                          appointment for Ken Marmalade at 11am</span
+                        >
+                      </a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+
+              <tr class="nhsuk-table__row" role="row">
+                <td class="nhsuk-table__cell">11:20am</td>
+                <td class="nhsuk-table__cell">
+                  Gavin Muffin<br />
+                  615&nbsp;874&nbsp;69798
+                </td>
+                <td class="nhsuk-table__cell">28 April 1972</td>
+                <td class="nhsuk-table__cell nhsuk-u-text-break-word">
+                  <p class="nhsuk-body nhsuk-u-margin-bottom-0">07627309228</p>
+
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    gavin.muffin63@icloud.com
+                  </p>
+                </td>
+                <td class="nhsuk-table__cell">COVID and Flu 18 to 64</td>
+
+                <td class="nhsuk-table__cell">
+                  <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                    <li>
+                      <a href="/not-in-this-prototype">
+                        Cancel
+                        <span class="nhsuk-u-visually-hidden">
+                          appointment for Gavin Muffin at 11:20am</span
+                        >
+                      </a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+
+              <tr class="nhsuk-table__row" role="row">
+                <td class="nhsuk-table__cell">11:40am</td>
+                <td class="nhsuk-table__cell">
+                  Kathleen Gherkin<br />
+                  487&nbsp;425&nbsp;29062
+                </td>
+                <td class="nhsuk-table__cell">24 November 1989</td>
+                <td class="nhsuk-table__cell nhsuk-u-text-break-word">
+                  <p class="nhsuk-body nhsuk-u-margin-bottom-0">07774579907</p>
+
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    kathleen.gherkin@outlook.com
+                  </p>
+                </td>
+                <td class="nhsuk-table__cell">COVID and Flu 18 to 64</td>
+
+                <td class="nhsuk-table__cell">
+                  <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                    <li>
+                      <a href="/not-in-this-prototype">
+                        Cancel
+                        <span class="nhsuk-u-visually-hidden">
+                          appointment for Kathleen Gherkin at 11:40am</span
+                        >
+                      </a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+
+              <tr class="nhsuk-table__row" role="row">
+                <td class="nhsuk-table__cell">12:40pm</td>
+                <td class="nhsuk-table__cell">
+                  Colin Sandwich<br />
+                  787&nbsp;250&nbsp;90429
+                </td>
+                <td class="nhsuk-table__cell">21 September 1943</td>
+                <td class="nhsuk-table__cell nhsuk-u-text-break-word">
+                  <p class="nhsuk-body nhsuk-u-margin-bottom-0">07942012991</p>
+
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    colin.sandwich@icloud.com
+                  </p>
+                </td>
+                <td class="nhsuk-table__cell">COVID 18+</td>
+
+                <td class="nhsuk-table__cell">
+                  <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                    <li>
+                      <a href="/not-in-this-prototype">
+                        Cancel
+                        <span class="nhsuk-u-visually-hidden">
+                          appointment for Colin Sandwich at 12:40pm</span
+                        >
+                      </a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+
+              <tr class="nhsuk-table__row" role="row">
+                <td class="nhsuk-table__cell">12:40pm</td>
+                <td class="nhsuk-table__cell">
+                  Lorraine Curtain<br />
+                  849&nbsp;809&nbsp;38526
+                </td>
+                <td class="nhsuk-table__cell">22 July 1986</td>
+                <td class="nhsuk-table__cell nhsuk-u-text-break-word"></td>
+                <td class="nhsuk-table__cell">COVID and Flu 18 to 64</td>
+
+                <td class="nhsuk-table__cell">
+                  <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                    <li>
+                      <a href="/not-in-this-prototype">
+                        Cancel
+                        <span class="nhsuk-u-visually-hidden">
+                          appointment for Lorraine Curtain at 12:40pm</span
+                        >
+                      </a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+
+              <tr class="nhsuk-table__row" role="row">
+                <td class="nhsuk-table__cell">1pm</td>
+                <td class="nhsuk-table__cell">
+                  Collette Muffin<br />
+                  749&nbsp;519&nbsp;40995
+                </td>
+                <td class="nhsuk-table__cell">12 June 2006</td>
+                <td class="nhsuk-table__cell nhsuk-u-text-break-word">
+                  <p class="nhsuk-body nhsuk-u-margin-bottom-0">07515974586</p>
+
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    collette.muffin@outlook.com
+                  </p>
+                </td>
+                <td class="nhsuk-table__cell">Flu 18 to 64</td>
+
+                <td class="nhsuk-table__cell">
+                  <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                    <li>
+                      <a href="/not-in-this-prototype">
+                        Cancel
+                        <span class="nhsuk-u-visually-hidden">
+                          appointment for Collette Muffin at 1pm</span
+                        >
+                      </a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+
+              <tr class="nhsuk-table__row" role="row">
+                <td class="nhsuk-table__cell">1pm</td>
+                <td class="nhsuk-table__cell">
+                  Bernard Doorstop<br />
+                  632&nbsp;002&nbsp;66939
+                </td>
+                <td class="nhsuk-table__cell">29 March 1988</td>
+                <td class="nhsuk-table__cell nhsuk-u-text-break-word">
+                  <p class="nhsuk-body nhsuk-u-margin-bottom-0">07495760739</p>
+
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    bernard.doorstop@hotmail.com
+                  </p>
+                </td>
+                <td class="nhsuk-table__cell">COVID 18+</td>
+
+                <td class="nhsuk-table__cell">
+                  <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                    <li>
+                      <a href="/not-in-this-prototype">
+                        Cancel
+                        <span class="nhsuk-u-visually-hidden">
+                          appointment for Bernard Doorstop at 1pm</span
+                        >
+                      </a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+
+              <tr class="nhsuk-table__row" role="row">
+                <td class="nhsuk-table__cell">2pm</td>
+                <td class="nhsuk-table__cell">
+                  Cliff Umbrella<br />
+                  816&nbsp;311&nbsp;03956
+                </td>
+                <td class="nhsuk-table__cell">10 May 1976</td>
+                <td class="nhsuk-table__cell nhsuk-u-text-break-word">
+                  <p class="nhsuk-body nhsuk-u-margin-bottom-0">07483997782</p>
+                </td>
+                <td class="nhsuk-table__cell">Flu 18 to 64</td>
+
+                <td class="nhsuk-table__cell">
+                  <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                    <li>
+                      <a href="/not-in-this-prototype">
+                        Cancel
+                        <span class="nhsuk-u-visually-hidden">
+                          appointment for Cliff Umbrella at 2pm</span
+                        >
+                      </a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+
+              <tr class="nhsuk-table__row" role="row">
+                <td class="nhsuk-table__cell">2:40pm</td>
+                <td class="nhsuk-table__cell">
+                  Joyce Sandwich<br />
+                  757&nbsp;113&nbsp;97489
+                </td>
+                <td class="nhsuk-table__cell">31 October 1989</td>
+                <td class="nhsuk-table__cell nhsuk-u-text-break-word">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    joyce.sandwich@aol.com
+                  </p>
+                </td>
+                <td class="nhsuk-table__cell">COVID and Flu 18 to 64</td>
+
+                <td class="nhsuk-table__cell">
+                  <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                    <li>
+                      <a href="/not-in-this-prototype">
+                        Cancel
+                        <span class="nhsuk-u-visually-hidden">
+                          appointment for Joyce Sandwich at 2:40pm</span
+                        >
+                      </a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="nhsuk-tabs__panel nhsuk-tabs__panel--hidden" id="cancelled">
+          <h2 class="nhsuk-heading-m">Cancelled appointments</h2>
+
+          <table class="nhsuk-table-responsive" role="table">
+            <thead class="nhsuk-table__head" role="rowgroup">
+              <tr>
+                <th scope="col" class="nhsuk-table__header">Time</th>
+                <th scope="col" class="nhsuk-table__header">
+                  Name and NHS number
+                </th>
+                <th scope="col" class="nhsuk-table__header">Date of birth</th>
+                <th scope="col" class="nhsuk-table__header">Contact details</th>
+                <th scope="col" class="nhsuk-table__header">Service</th>
+              </tr>
+            </thead>
+            <tbody class="nhsuk-table__body">
+              <tr class="nhsuk-table__row" role="row">
+                <td class="nhsuk-table__cell">11:45am</td>
+                <td class="nhsuk-table__cell">
+                  Keith Wheelbarrow<br />
+                  685&nbsp;326&nbsp;50425
+                </td>
+                <td class="nhsuk-table__cell">17 August 1971</td>
+                <td class="nhsuk-table__cell nhsuk-u-text-break-word">
+                  <p class="nhsuk-body nhsuk-u-margin-bottom-0">07739639628</p>
+
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">0176740624</p>
+                </td>
+                <td class="nhsuk-table__cell">COVID 18+</td>
+              </tr>
+
+              <tr class="nhsuk-table__row" role="row">
+                <td class="nhsuk-table__cell">1:15pm</td>
+                <td class="nhsuk-table__cell">
+                  Bob Turnip<br />
+                  825&nbsp;116&nbsp;98435
+                </td>
+                <td class="nhsuk-table__cell">6 October 1965</td>
+                <td class="nhsuk-table__cell nhsuk-u-text-break-word">
+                  <p class="nhsuk-body nhsuk-u-margin-bottom-0">07945262147</p>
+
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    bob.turnip@yahoo.co.uk
+                  </p>
+                </td>
+                <td class="nhsuk-table__cell">COVID 18+</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

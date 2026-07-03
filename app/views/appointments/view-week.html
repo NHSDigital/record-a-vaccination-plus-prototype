@@ -1,0 +1,638 @@
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+
+{% set currentSection = "plus" %}
+
+{% set dayOfWeek = date({ weekday: "short" }) %}
+
+{% if dayOfWeek == "Sun" %}
+  {% set mondayOffset = -6 %}
+{% elif dayOfWeek == "Mon" %}
+  {% set mondayOffset = 0 %}
+{% elif dayOfWeek == "Tue" %}
+  {% set mondayOffset = -1 %}
+{% elif dayOfWeek == "Wed" %}
+  {% set mondayOffset = -2 %}
+{% elif dayOfWeek == "Thu" %}
+  {% set mondayOffset = -3 %}
+{% elif dayOfWeek == "Fri" %}
+  {% set mondayOffset = -4 %}
+{% else %}
+  {% set mondayOffset = -5 %}
+{% endif %}
+
+{% set sundayOffset = mondayOffset + 6 %}
+
+{% set previousMondayOffset = mondayOffset - 7 %}
+{% set previousSundayOffset = sundayOffset - 7 %}
+
+{% set nextMondayOffset = mondayOffset + 7 %}
+{% set nextSundayOffset = sundayOffset + 7 %}
+
+{% set previousWeekLabel =
+  date({ day: "numeric" }, { day: previousMondayOffset }) ~
+  " to " ~
+  date({ day: "numeric", month: "short" }, { day: previousSundayOffset })
+%}
+
+{% set nextWeekLabel =
+  date({ day: "numeric" }, { day: nextMondayOffset }) ~
+  " to " ~
+  date({ day: "numeric", month: "short" }, { day: nextSundayOffset })
+%}
+
+{% set pageName =
+  date({ day: "numeric", month: "long" }, { day: mondayOffset }) ~
+  " to " ~
+  date({ day: "numeric", month: "long", year: "numeric" }, { day: sundayOffset }) ~
+  " (this week)"
+%}
+
+{% block content %}
+  <style>
+    .app-panel-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .app-panel-list__item {
+      list-style: none;
+    }
+  </style>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <nav class="moj-sub-navigation" aria-label="Sub navigation">
+        <ul class="moj-sub-navigation__list">
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="view-day">Day view</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" aria-current="page" href="#/">Week view</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="view-month">Month view</a>
+          </li>
+          <li class="moj-sub-navigation__item">
+            <a class="moj-sub-navigation__link" href="create-and-manage-clinics">Create and manage clinics</a>
+          </li>
+        </ul>
+      </nav>
+
+      <h1 class="nhsuk-heading-xl">{{ pageName }}</h1>
+
+      <nav class="nhsuk-pagination" role="navigation" aria-label="Pagination">
+        <ul class="nhsuk-list nhsuk-pagination__list">
+          <li class="nhsuk-pagination-item--previous">
+            <a class="nhsuk-pagination__link nhsuk-pagination__link--prev" href="#/" rel="prev">
+              <span class="nhsuk-pagination__title">
+                Previous<span class="nhsuk-u-visually-hidden"> page</span>
+              </span>
+              <span class="nhsuk-u-visually-hidden">:</span>
+              <span class="nhsuk-pagination__page">{{ previousWeekLabel }}</span>
+              <svg class="nhsuk-icon nhsuk-icon--arrow-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="M10.7 6.3c.4.4.4 1 0 1.4L7.4 11H19a1 1 0 0 1 0 2H7.4l3.3 3.3c.4.4.4 1 0 1.4a1 1 0 0 1-1.4 0l-5-5A1 1 0 0 1 4 12c0-.3.1-.5.3-.7l5-5a1 1 0 0 1 1.4 0Z"/>
+              </svg>
+            </a>
+          </li>
+          <li class="nhsuk-pagination-item--next">
+            <a class="nhsuk-pagination__link nhsuk-pagination__link--next" href="#/" rel="next">
+              <span class="nhsuk-pagination__title">Next<span class="nhsuk-u-visually-hidden"> page</span></span>
+              <span class="nhsuk-u-visually-hidden">:</span>
+              <span class="nhsuk-pagination__page">{{ nextWeekLabel }}</span>
+              <svg class="nhsuk-icon nhsuk-icon--arrow-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+                <path d="m14.7 6.3 5 5c.2.2.3.4.3.7 0 .3-.1.5-.3.7l-5 5a1 1 0 0 1-1.4-1.4l3.3-3.3H5a1 1 0 0 1 0-2h11.6l-3.3-3.3a1 1 0 1 1 1.4-1.4Z"/>
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <ol class="app-panel-list">
+        <li class="app-panel-list__item">
+          <div class="nhsuk-card nhsuk-u-margin-bottom-4">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">{{ date({ weekday: "long", day: "numeric", month: "long" }, { day: mondayOffset }) }}{% if dayOfWeek == "Mon" %} (today){% endif %}</h2>
+
+              <table class="nhsuk-table">
+                <thead class="nhsuk-table__head">
+                  <tr class="nhsuk-table__row">
+                    <th scope="col" class="nhsuk-table__header">Time</th>
+                    <th scope="col" class="nhsuk-table__header">Services</th>
+                    <th scope="col" class="nhsuk-table__header">Booked</th>
+                    <th scope="col" class="nhsuk-table__header">Free</th>
+                    <th scope="col" class="nhsuk-table__header">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="nhsuk-table__body">
+                  <tr class="nhsuk-table__row">
+                    <td class="nhsuk-table__cell">
+                      <strong>10am to 2pm</strong>
+                    </td>
+                    <td class="nhsuk-table__cell">
+                      COVID 18+<br />
+                      Flu 65+
+                    </td>
+                    <td class="nhsuk-table__cell">
+                      0 booked<br />
+                      0 booked
+                    </td>
+                    <td class="nhsuk-table__cell">12 free</td>
+                    <td class="nhsuk-table__cell"></td>
+                  </tr>
+
+                  <tr class="nhsuk-table__row">
+                    <td class="nhsuk-table__cell">
+                      <strong>11am to 3pm</strong>
+                    </td>
+                    <td class="nhsuk-table__cell">
+                      COVID 18+<br />
+                      COVID and Flu 18 to 64<br />
+                      COVID and Flu 65+<br />
+                      Flu 18 to 64<br />
+                      Flu 65+
+                    </td>
+                    <td class="nhsuk-table__cell">
+                      3 booked<br />
+                      2 booked<br />
+                      2 booked<br />
+                      2 booked<br />
+                      2 booked
+                    </td>
+                    <td class="nhsuk-table__cell">13 free</td>
+                    <td class="nhsuk-table__cell"></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Total appointments:</strong> 36
+                  </p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Booked:</strong> 11
+                  </p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Free:</strong> 25
+                  </p>
+                </div>
+              </div>
+
+              <div class="nhsuk-button-group nhsuk-u-padding-top-3">
+                <a href="/site/1/availability/day?date=2026-06-29">View appointments</a>
+                <a href="/not-in-this-prototype">Add clinic</a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="app-panel-list__item">
+          <div class="nhsuk-card nhsuk-u-margin-bottom-4">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">{{ date({ weekday: "long", day: "numeric", month: "long" }, { day: mondayOffset + 1 }) }}{% if dayOfWeek == "Tue" %} (today){% endif %}</h2>
+
+              <table class="nhsuk-table">
+                <thead class="nhsuk-table__head">
+                  <tr class="nhsuk-table__row">
+                    <th scope="col" class="nhsuk-table__header">Time</th>
+                    <th scope="col" class="nhsuk-table__header">Services</th>
+                    <th scope="col" class="nhsuk-table__header">Booked</th>
+                    <th scope="col" class="nhsuk-table__header">Free</th>
+                    <th scope="col" class="nhsuk-table__header">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="nhsuk-table__body">
+                  <tr class="nhsuk-table__row">
+                    <td class="nhsuk-table__cell">
+                      <strong>11am to 3pm</strong>
+                    </td>
+                    <td class="nhsuk-table__cell">
+                      COVID 18+<br />
+                      COVID and Flu 18 to 64<br />
+                      COVID and Flu 65+<br />
+                      Flu 18 to 64<br />
+                      Flu 65+
+                    </td>
+                    <td class="nhsuk-table__cell">
+                      3 booked<br />
+                      1 booked<br />
+                      1 booked<br />
+                      3 booked<br />
+                      1 booked
+                    </td>
+                    <td class="nhsuk-table__cell">15 free</td>
+                    <td class="nhsuk-table__cell"></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Total appointments:</strong> 24
+                  </p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Booked:</strong> 9
+                  </p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Free:</strong> 15
+                  </p>
+                </div>
+              </div>
+
+              <div class="nhsuk-button-group nhsuk-u-padding-top-3">
+                <a href="/site/1/availability/day?date=2026-06-30">View appointments</a>
+                <a href="/not-in-this-prototype">Add clinic</a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="app-panel-list__item">
+          <div class="nhsuk-card nhsuk-u-margin-bottom-4">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">{{ date({ weekday: "long", day: "numeric", month: "long" }, { day: mondayOffset + 2 }) }}{% if dayOfWeek == "Wed" %} (today){% endif %}</h2>
+
+              <table class="nhsuk-table">
+                <thead class="nhsuk-table__head">
+                  <tr class="nhsuk-table__row">
+                    <th scope="col" class="nhsuk-table__header">Time</th>
+                    <th scope="col" class="nhsuk-table__header">Services</th>
+                    <th scope="col" class="nhsuk-table__header">Booked</th>
+                    <th scope="col" class="nhsuk-table__header">Free</th>
+                    <th scope="col" class="nhsuk-table__header">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="nhsuk-table__body">
+                  <tr class="nhsuk-table__row">
+                    <td class="nhsuk-table__cell">
+                      <strong>11am to 3pm</strong>
+                    </td>
+                    <td class="nhsuk-table__cell">
+                      COVID 18+<br />
+                      COVID and Flu 18 to 64<br />
+                      COVID and Flu 65+<br />
+                      Flu 18 to 64<br />
+                      Flu 65+
+                    </td>
+                    <td class="nhsuk-table__cell">
+                      0 booked<br />
+                      0 booked<br />
+                      2 booked<br />
+                      0 booked<br />
+                      2 booked
+                    </td>
+                    <td class="nhsuk-table__cell">20 free</td>
+                    <td class="nhsuk-table__cell"></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Total appointments:</strong> 24
+                  </p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Booked:</strong> 4
+                  </p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Free:</strong> 20
+                  </p>
+                </div>
+              </div>
+
+              <div class="nhsuk-button-group nhsuk-u-padding-top-3">
+                <a href="/site/1/availability/day?date=2026-07-01">View appointments</a>
+                <a href="/not-in-this-prototype">Add clinic</a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="app-panel-list__item">
+          <div class="nhsuk-card nhsuk-u-margin-bottom-4">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">{{ date({ weekday: "long", day: "numeric", month: "long" }, { day: mondayOffset + 3 }) }}{% if dayOfWeek == "Thu" %} (today){% endif %}</h2>
+
+              <table class="nhsuk-table">
+                <thead class="nhsuk-table__head">
+                  <tr class="nhsuk-table__row">
+                    <th scope="col" class="nhsuk-table__header">Time</th>
+                    <th scope="col" class="nhsuk-table__header">Services</th>
+                    <th scope="col" class="nhsuk-table__header">Booked</th>
+                    <th scope="col" class="nhsuk-table__header">Free</th>
+                    <th scope="col" class="nhsuk-table__header">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="nhsuk-table__body">
+                  <tr class="nhsuk-table__row">
+                    <td class="nhsuk-table__cell">
+                      <strong>10am to 2pm</strong>
+                    </td>
+                    <td class="nhsuk-table__cell">COVID 18+</td>
+                    <td class="nhsuk-table__cell">2 booked</td>
+                    <td class="nhsuk-table__cell">14 free</td>
+                    <td class="nhsuk-table__cell"></td>
+                  </tr>
+
+                  <tr class="nhsuk-table__row">
+                    <td class="nhsuk-table__cell">
+                      <strong>10am to 2pm</strong>
+                    </td>
+                    <td class="nhsuk-table__cell">
+                      COVID 18+<br />
+                      Flu 65+
+                    </td>
+                    <td class="nhsuk-table__cell">
+                      0 booked<br />
+                      0 booked
+                    </td>
+                    <td class="nhsuk-table__cell">12 free</td>
+                    <td class="nhsuk-table__cell"></td>
+                  </tr>
+
+                  <tr class="nhsuk-table__row">
+                    <td class="nhsuk-table__cell">
+                      <strong>11am to 3pm</strong>
+                    </td>
+                    <td class="nhsuk-table__cell">
+                      COVID 18+<br />
+                      COVID and Flu 18 to 64<br />
+                      COVID and Flu 65+<br />
+                      Flu 18 to 64<br />
+                      Flu 65+
+                    </td>
+                    <td class="nhsuk-table__cell">
+                      2 booked<br />
+                      0 booked<br />
+                      2 booked<br />
+                      2 booked<br />
+                      2 booked
+                    </td>
+                    <td class="nhsuk-table__cell">16 free</td>
+                    <td class="nhsuk-table__cell"></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Total appointments:</strong> 52
+                  </p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Booked:</strong> 10
+                  </p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Free:</strong> 42
+                  </p>
+                </div>
+              </div>
+
+              <div class="nhsuk-button-group nhsuk-u-padding-top-3">
+                <a href="/site/1/availability/day?date=2026-07-02">View appointments</a>
+                <a href="/not-in-this-prototype">Add clinic</a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="app-panel-list__item">
+          <div class="nhsuk-card nhsuk-u-margin-bottom-4">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">{{ date({ weekday: "long", day: "numeric", month: "long" }, { day: mondayOffset + 4 }) }}{% if dayOfWeek == "Fri" %} (today){% endif %}</h2>
+
+              <table class="nhsuk-table">
+                <thead class="nhsuk-table__head">
+                  <tr class="nhsuk-table__row">
+                    <th scope="col" class="nhsuk-table__header">Time</th>
+                    <th scope="col" class="nhsuk-table__header">Services</th>
+                    <th scope="col" class="nhsuk-table__header">Booked</th>
+                    <th scope="col" class="nhsuk-table__header">Free</th>
+                    <th scope="col" class="nhsuk-table__header">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="nhsuk-table__body">
+                  <tr class="nhsuk-table__row">
+                    <td class="nhsuk-table__cell">
+                      <strong>10am to 2pm</strong>
+                    </td>
+                    <td class="nhsuk-table__cell">COVID 18+</td>
+                    <td class="nhsuk-table__cell">2 booked</td>
+                    <td class="nhsuk-table__cell">14 free</td>
+                    <td class="nhsuk-table__cell">
+                      <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                        <li>
+                          <a href="/site/1/change/session/cc1e31f766e96367?back=%2Fsite%2F1%2Favailability%2Fweek%3Fdate%3D2026-07-03">View and change<span class="nhsuk-u-visually-hidden"> clinic on Friday 3 July 2026 at 10am to 2pm</span></a>
+                        </li>
+                        <li>
+                          <a href="/site/1/clinics/cancel/cc1e31f766e96367">Cancel<span class="nhsuk-u-visually-hidden"> clinic on Friday 3 July 2026 at 10am to 2pm</span></a>
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+
+                  <tr class="nhsuk-table__row">
+                    <td class="nhsuk-table__cell">
+                      <strong>11am to 3pm</strong>
+                    </td>
+                    <td class="nhsuk-table__cell">
+                      COVID 18+<br />
+                      COVID and Flu 18 to 64<br />
+                      COVID and Flu 65+<br />
+                      Flu 18 to 64<br />
+                      Flu 65+
+                    </td>
+                    <td class="nhsuk-table__cell">
+                      1 booked<br />
+                      4 booked<br />
+                      0 booked<br />
+                      2 booked<br />
+                      0 booked
+                    </td>
+                    <td class="nhsuk-table__cell">17 free</td>
+                    <td class="nhsuk-table__cell">
+                      <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                        <li>
+                          <a href="/site/1/change/session/f9db952e191272aa?back=%2Fsite%2F1%2Favailability%2Fweek%3Fdate%3D2026-07-03">View and change<span class="nhsuk-u-visually-hidden"> clinic on Friday 3 July 2026 at 11am to 3pm</span></a>
+                        </li>
+                        <li>
+                          <a href="/site/1/clinics/cancel/f9db952e191272aa">Cancel<span class="nhsuk-u-visually-hidden"> clinic on Friday 3 July 2026 at 11am to 3pm</span></a>
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Total appointments:</strong> 40
+                  </p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Booked:</strong> 9
+                  </p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Free:</strong> 31
+                  </p>
+                </div>
+              </div>
+
+              <div class="nhsuk-button-group nhsuk-u-padding-top-3">
+                <a href="/site/1/availability/day?date=2026-07-03">View appointments</a><a href="/not-in-this-prototype">Add clinic</a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="app-panel-list__item">
+          <div class="nhsuk-card nhsuk-u-margin-bottom-4">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">{{ date({ weekday: "long", day: "numeric", month: "long" }, { day: mondayOffset + 5 }) }}{% if dayOfWeek == "Sat" %} (today){% endif %}</h2>
+
+              <table class="nhsuk-table">
+                <thead class="nhsuk-table__head">
+                  <tr class="nhsuk-table__row">
+                    <th scope="col" class="nhsuk-table__header">Time</th>
+                    <th scope="col" class="nhsuk-table__header">Services</th>
+                    <th scope="col" class="nhsuk-table__header">Booked</th>
+                    <th scope="col" class="nhsuk-table__header">Free</th>
+                    <th scope="col" class="nhsuk-table__header">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="nhsuk-table__body">
+                  <tr class="nhsuk-table__row">
+                    <td class="nhsuk-table__cell">
+                      <strong>10am to 2pm</strong>
+                    </td>
+                    <td class="nhsuk-table__cell">COVID 18+</td>
+                    <td class="nhsuk-table__cell">3 booked</td>
+                    <td class="nhsuk-table__cell">13 free</td>
+                    <td class="nhsuk-table__cell">
+                      <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                        <li>
+                          <a href="/site/1/change/session/3c18d30b91d17656?back=%2Fsite%2F1%2Favailability%2Fweek%3Fdate%3D2026-07-03">View and change<span class="nhsuk-u-visually-hidden"> clinic on Saturday 4 July 2026 at 10am to 2pm</span></a>
+                        </li>
+                        <li>
+                          <a href="/site/1/clinics/cancel/3c18d30b91d17656">Cancel<span class="nhsuk-u-visually-hidden"> clinic on Saturday 4 July 2026 at 10am to 2pm</span></a>
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Total appointments:</strong> 16
+                  </p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Booked:</strong> 3
+                  </p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Free:</strong> 13
+                  </p>
+                </div>
+              </div>
+
+              <div class="nhsuk-button-group nhsuk-u-padding-top-3">
+                <a href="/site/1/availability/day?date=2026-07-04">View appointments</a>
+                <a href="/not-in-this-prototype">Add clinic</a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="app-panel-list__item">
+          <div class="nhsuk-card nhsuk-u-margin-bottom-4">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">{{ date({ weekday: "long", day: "numeric", month: "long" }, { day: mondayOffset + 6 }) }}{% if dayOfWeek == "Sun" %} (today){% endif %}</h2>
+
+              <table class="nhsuk-table">
+                <thead class="nhsuk-table__head">
+                  <tr class="nhsuk-table__row">
+                    <th scope="col" class="nhsuk-table__header">Time</th>
+                    <th scope="col" class="nhsuk-table__header">Services</th>
+                    <th scope="col" class="nhsuk-table__header">Booked</th>
+                    <th scope="col" class="nhsuk-table__header">Free</th>
+                    <th scope="col" class="nhsuk-table__header">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="nhsuk-table__body">
+                  <tr class="nhsuk-table__row">
+                    <td class="nhsuk-table__cell">
+                      <strong>10am to 2pm</strong>
+                    </td>
+                    <td class="nhsuk-table__cell">COVID 18+</td>
+                    <td class="nhsuk-table__cell">3 booked</td>
+                    <td class="nhsuk-table__cell">12 free</td>
+                    <td class="nhsuk-table__cell">
+                      <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                        <li>
+                          <a href="/site/1/change/session/5a7cefa7bc0dbea3?back=%2Fsite%2F1%2Favailability%2Fweek%3Fdate%3D2026-07-03">View and change<span class="nhsuk-u-visually-hidden"> clinic on Sunday 5 July 2026 at 10am to 2pm</span></a>
+                        </li>
+                        <li>
+                          <a href="/site/1/clinics/cancel/5a7cefa7bc0dbea3">Cancel <span class="nhsuk-u-visually-hidden">clinic on Sunday 5 July 2026 at 10am to 2pm</span></a>
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Total appointments:</strong> 16
+                  </p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Booked:</strong> 4
+                  </p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                    <strong>Free:</strong> 12
+                  </p>
+                </div>
+              </div>
+
+              <div class="nhsuk-button-group nhsuk-u-padding-top-3">
+                <a href="/site/1/availability/day?date=2026-07-05">View appointments</a>
+                <a href="/not-in-this-prototype">Add clinic</a>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+{% endblock %}

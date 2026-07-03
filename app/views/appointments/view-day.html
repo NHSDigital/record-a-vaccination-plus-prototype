@@ -26,8 +26,7 @@
 
 {% set previousWeekLabel = date({ day: "numeric" }, { day: previousMondayOffset }) ~ " to " ~ date({ day: "numeric", month: "short" }, { day: previousSundayOffset }) %} 
 
-{% set nextWeekLabel = date({ day: "numeric" }, { day: nextMondayOffset }) ~ " to " ~ date({ day:
-"numeric", month: "short" }, { day: nextSundayOffset }) %}
+{% set nextWeekLabel = date({ day: "numeric" }, { day: nextMondayOffset }) ~ " to " ~ date({ day: "numeric", month: "short" }, { day: nextSundayOffset }) %}
 
 {% set pageName = date({ weekday: "long", day: "numeric", month: "long", year: "numeric" }) ~ " (today)" %}
 

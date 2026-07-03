@@ -28,24 +28,11 @@
 {% set nextMondayOffset = mondayOffset + 7 %}
 {% set nextSundayOffset = sundayOffset + 7 %}
 
-{% set previousWeekLabel =
-  date({ day: "numeric" }, { day: previousMondayOffset }) ~
-  " to " ~
-  date({ day: "numeric", month: "short" }, { day: previousSundayOffset })
-%}
+{% set previousWeekLabel = date({ day: "numeric" }, { day: previousMondayOffset }) ~ " to " ~ date({ day: "numeric", month: "short" }, { day: previousSundayOffset }) %}
 
-{% set nextWeekLabel =
-  date({ day: "numeric" }, { day: nextMondayOffset }) ~
-  " to " ~
-  date({ day: "numeric", month: "short" }, { day: nextSundayOffset })
-%}
+{% set nextWeekLabel = date({ day: "numeric" }, { day: nextMondayOffset }) ~ " to " ~ date({ day: "numeric", month: "short" }, { day: nextSundayOffset }) %}
 
-{% set pageName =
-  date({ day: "numeric", month: "long" }, { day: mondayOffset }) ~
-  " to " ~
-  date({ day: "numeric", month: "long", year: "numeric" }, { day: sundayOffset }) ~
-  " (this week)"
-%}
+{% set pageName = date({ day: "numeric", month: "long" }, { day: mondayOffset }) ~ " to " ~ date({ day: "numeric", month: "long", year: "numeric" }, { day: sundayOffset }) ~ " (this week)" %}
 
 {% block content %}
   <style>

@@ -7,9 +7,9 @@
 {% if not formAction %}{% set formAction = '/site/' + site_id + '/clinics/clinic-times' %}{% endif %}
 
 {% block beforeContent %}
-{{ backLink({
-  href: backUrl
-}) }}
+  {{ backLink({
+    href: "javascript:window.history.back()"
+  }) }}
 {% endblock %}
 
 {% block content %}

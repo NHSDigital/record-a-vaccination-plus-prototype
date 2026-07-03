@@ -1,0 +1,166 @@
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+
+{% set currentSection = "plus" %}
+
+{% set pageName = "Manage site" %}
+
+{% block content %}
+  <style>
+    .card-list {
+      list-style: none;
+      padding-left: 0;
+    }
+  </style>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <h1 class="nhsuk-heading-l">
+        <span class="nhsuk-caption-l">Example Pharmacy</span>{{ pageName }}
+      </h1>
+
+      <ol class="card-list">
+        <li>
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__heading-container">
+              <h2 class="nhsuk-card__heading">Site details</h2>
+              <ul class="nhsuk-card__actions">
+                <li class="nhsuk-card__action">
+                  <a href="/manage-your-appointments/site/1501ecfb-c638-4b86-b2e8-a683e8b5c5a5/details/edit-details">Edit site details</a>
+                </li>
+                <li class="nhsuk-card__action">
+                  <a href="/manage-your-appointments/site/1501ecfb-c638-4b86-b2e8-a683e8b5c5a5/details/edit-site-status">Change site status</a>
+                </li>
+              </ul>
+            </div>
+            <div class="nhsuk-card__content">
+              <dl class="nhsuk-summary-list">
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">Status</dt>
+                  <dd class="nhsuk-summary-list__value">
+                    <span class="nhsuk-tag nhsuk-tag--green">Online</span>
+                  </dd>
+                </div>
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">Name</dt>
+                  <dd class="nhsuk-summary-list__value">
+                    Example Pharmacy
+                  </dd>
+                </div>
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">Address</dt>
+                  <dd class="nhsuk-summary-list__value">
+                    <div>
+                      <div>15 High Street,</div>
+                      <div>Town QW49 8GH</div>
+                    </div>
+                  </dd>
+                </div>
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">Latitude</dt>
+                  <dd class="nhsuk-summary-list__value">50.741702</dd>
+                </div>
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">Longitude</dt>
+                  <dd class="nhsuk-summary-list__value">-0.31254909</dd>
+                </div>
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">Phone Number</dt>
+                  <dd class="nhsuk-summary-list__value">0711234411</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading">Site reference details</h2>
+              <dl class="nhsuk-summary-list">
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">ODS code</dt>
+                  <dd class="nhsuk-summary-list__value">ASDFG</dd>
+                </div>
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">ICB</dt>
+                  <dd class="nhsuk-summary-list__value">
+                    West Yorkshire Integrated Care Board
+                  </dd>
+                </div>
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">Region</dt>
+                  <dd class="nhsuk-summary-list__value">
+                    North West Region
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__heading-container">
+              <h2 class="nhsuk-card__heading">Access needs</h2>
+              <div class="nhsuk-card__actions">
+                <a href="/manage-your-appointments/site/1501ecfb-c638-4b86-b2e8-a683e8b5c5a5/details/edit-accessibilities">Edit access needs</a>
+              </div>
+            </div>
+            <div class="nhsuk-card__content">
+              <dl class="nhsuk-summary-list">
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">Accessible toilet</dt>
+                  <dd class="nhsuk-summary-list__value">Yes</dd>
+                </div>
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">
+                    Braille translation service
+                  </dt>
+                  <dd class="nhsuk-summary-list__value">Yes</dd>
+                </div>
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">
+                    Disabled car parking
+                  </dt>
+                  <dd class="nhsuk-summary-list__value">Yes</dd>
+                </div>
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">Car parking</dt>
+                  <dd class="nhsuk-summary-list__value">Yes</dd>
+                </div>
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">Induction loop</dt>
+                  <dd class="nhsuk-summary-list__value">Yes</dd>
+                </div>
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">
+                    Sign language service
+                  </dt>
+                  <dd class="nhsuk-summary-list__value">Yes</dd>
+                </div>
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">Step free access</dt>
+                  <dd class="nhsuk-summary-list__value">Yes</dd>
+                </div>
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">Text relay</dt>
+                  <dd class="nhsuk-summary-list__value">Yes</dd>
+                </div>
+                <div class="nhsuk-summary-list__row nhsuk-summary-list__row--no-actions">
+                  <dt class="nhsuk-summary-list__key">Wheelchair access</dt>
+                  <dd class="nhsuk-summary-list__value">Yes</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__heading-container">
+              <h2 class="nhsuk-card__heading">Information for citizens</h2>
+              <div class="nhsuk-card__actions">
+                <a href="/manage-your-appointments/site/1501ecfb-c638-4b86-b2e8-a683e8b5c5a5/details/edit-information-for-citizens">Edit information for citizens</a>
+              </div>
+            </div>
+            <div class="nhsuk-card__content">
+              <p>Use the side door entrance.</p>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+    </div>
+  </div>
+{% endblock %}

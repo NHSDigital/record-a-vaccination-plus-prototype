@@ -11,40 +11,13 @@
 {% block content %}
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-      {% if (firstNameError or lastNameError or emailError or roleError or vaccinatorError) %}
-        {{ errorSummary({
-          "titleText": "There is a problem",
-          "errorList": [
-            {
-              "text": firstNameError,
-              "href": "#first-name"
-            } if firstNameError,
-            {
-              "text": lastNameError,
-              "href": "#last-name"
-            } if lastNameError,
-            {
-              "text": emailError,
-              "href": "#email"
-            } if emailError,
-            {
-              "text": vaccinatorError,
-              "href": "#vaccinator"
-            } if vaccinatorError,
-            {
-              "text": permissionLevelError,
-              "href": "#permission-level-1"
-            } if permissionLevelError
-          ]
-        }) }}
-      {% endif %}
-
+     
       <h1 class="nhsuks-heading-l">Add user</h1>
       <p>Users must have an nhs.net email or another allowed email address. See <a href="https://digital.nhs.uk/services/care-identity-service/applications-and-services/apply-for-care-id/care-identity-email-domain-allow-list" target="_blank">examples of allowed email addresses (opens in new tab)</a>.</p>
 
-      <p>If the email address is not allowed, use a different email or <a href="/contact-us" target="_blank">contact us</a>.</p>
+      <p>If the email address is not allowed, use a different email or <a href="#/">contact us</a>.</p>
 
-      <form action="add-pathways" method="post" novalidate="true">
+      <form action="/user-management/add-user" method="post" novalidate="true">
 
         {{ input({
           "label": {
@@ -53,10 +26,7 @@
           "id": "first-name",
           "name": "firstName",
           classes: "nhsuk-input--width-20",
-          value: data.firstName,
-          "errorMessage": {
-            "text": firstNameError
-          } if firstNameError
+          value: data.firstName
         }) }}
 
         {{ input({
@@ -66,10 +36,7 @@
           "id": "last-name",
           "name": "lastName",
           classes: "nhsuk-input--width-20",
-          value: data.lastName,
-          "errorMessage": {
-            "text": lastNameError
-          } if lastNameError
+          value: data.lastName
         }) }}
 
         {{ input({
@@ -79,10 +46,7 @@
           "id": "email",
           "name": "email",
           type: "email",
-          value: data.email,
-          "errorMessage": {
-            "text": emailError
-          } if emailError
+          value: data.email
         }) }}
 
         {{ radios({
@@ -106,10 +70,7 @@
               "value": "no",
               "text": "No"
             }
-          ],
-          "errorMessage": {
-            "text": vaccinatorError
-          } if vaccinatorError
+          ]
         }) }}
 
         {{ radios({
@@ -122,6 +83,7 @@
           hint: {
             text: "Additional functionality, etc., etc."
           },
+          value: data.ravsplus,
           "items": [
             {
               "value": "yes",
@@ -165,21 +127,17 @@
                 "text": "Record vaccinations, create reports, manage vaccines and users"
               }
             }
-          ],
-          "errorMessage": {
-            "text": permissionLevelError
-          } if permissionLevelError
+          ]
         }) }}
 
 
         {{ button({
           "text": "Continue"
       }) }}
-      </form>
 
+      </form>
 
     </div>
   </div>
-
 
 {% endblock %}

@@ -6,6 +6,18 @@
 
 {% set organisation = {name: data.nhsTrusts[data.organisationCode]} %}
 
+{% set ravsPlusFeaturesHtml %}
+  {% if data.pathways and ("maternity" in data.pathways) %}
+    Maternity<br>
+  {% endif %}
+  {% if data.pathways and ("occupational-Health" in data.pathways) %}
+    Occupational Health
+  {% endif %}
+  {% if not data.pathways %}
+    None selected
+  {% endif %}
+{% endset %}
+
 {% block beforeContent %}
   {{ backLink({ href: "javascript:history.back()", text: "Back" }) }}
 {% endblock %}
@@ -28,7 +40,7 @@
             actions: {
               items: [
                 {
-                  href: "/user-admin/add-user",
+                  href: "/user-management/add-user",
                   text: "Change",
                   visuallyHiddenText: "name"
                 }
@@ -45,7 +57,7 @@
             actions: {
               items: [
                 {
-                  href: "/user-admin/add-user",
+                  href: "/user-management/add-user",
                   text: "Change",
                   visuallyHiddenText: "email address"
                 }
@@ -62,7 +74,7 @@
             actions: {
               items: [
                 {
-                  href: "/user-admin/add-user",
+                  href: "/user-management/add-user",
                   text: "Change",
                   visuallyHiddenText: "vaccinator"
                 }
@@ -79,13 +91,30 @@
             actions: {
               items: [
                 {
-                  href: "/user-admin/add-user",
+                  href: "/user-management/add-user",
                   text: "Change",
                   visuallyHiddenText: "vaccinator"
                 }
               ]
             }
           },
+          {
+            key: {
+              text: "RAVS+ features"
+            },
+            value: {
+              html: ravsPlusFeaturesHtml
+            },
+            actions: {
+              items: [
+                {
+                  href: "/user-management/add-features",
+                  text: "Change",
+                  visuallyHiddenText: "RAVS+ features"
+                }
+              ]
+            }
+          } if data.ravsplus == "yes",
           {
             key: {
               text: "Permission level"
@@ -96,7 +125,7 @@
             actions: {
               items: [
                 {
-                  href: "/user-admin/add-user",
+                  href: "/user-management/add-user",
                   text: "Change",
                   visuallyHiddenText: "permission level"
                 }
@@ -115,9 +144,9 @@
 
       <div class="app-email-preview">
         {% if existingUserWithSameEmail %}
-          {% include "user-admin/_reactivation-email.html" %}
+          {% include "user-management/_reactivation-email.html" %}
         {% else %}
-          {% include "user-admin/_welcome-email.html" %}
+          {% include "user-management/_welcome-email.html" %}
         {% endif %}
       </div>
 

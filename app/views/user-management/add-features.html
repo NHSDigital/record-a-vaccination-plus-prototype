@@ -1,0 +1,51 @@
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+
+{% set pageName = "RAVS+ options" %}
+
+{% set currentSection = "manage" %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "javascript:history.back()", text: "Back" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form class="form" action="check" method="post">
+
+        <div class="nhsuk-form-group">
+          <fieldset class="nhsuk-fieldset" aria-describedby="pathways-hint">
+            <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+              <h1 class="nhsuk-fieldset__heading">RAVS+ features</h1>
+            </legend>
+
+            <div class="nhsuk-hint" id="pathways-hint">
+              Some description to be added here
+            </div>
+
+            <div class="nhsuk-checkboxes" data-module="nhsuk-checkboxes">
+
+              <!-- Maternity -->
+              <div class="nhsuk-checkboxes__item">
+                <input class="nhsuk-checkboxes__input" id="maternity" name="pathways" type="checkbox" value="maternity" aria-controls="conditional-maternity" aria-expanded="false">
+                <label class="nhsuk-label nhsuk-checkboxes__label" for="maternity">Maternity</label>
+              </div>
+
+              <!-- Occupational Health -->
+              <div class="nhsuk-checkboxes__item">
+                <input class="nhsuk-checkboxes__input" id="occupational" name="pathways" type="checkbox" value="occupational-Health" aria-controls="conditional-occupational" aria-expanded="false">
+                <label class="nhsuk-label nhsuk-checkboxes__label" for="occupational">Occupational Health</label>
+              </div>
+
+            </div>
+
+          </fieldset>
+        </div>
+
+        {{ button({ "text": "Continue" }) }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

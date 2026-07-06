@@ -12,14 +12,14 @@ router.use('/javascripts', [
 require('./routes/prototype-admin')(router)
 
 // user-management/add-user
-router.post('/user-management/add-user', function (req, res) {
-  const choice = req.session.data['ravsplus']; 
-  if (choice === 'yes') {
-    res.redirect('/user-management/add-features')
-  } else {
-    res.redirect('/user-management/check')
-  }
-});
+//router.post('/user-management/add-user', function (req, res) {
+//  const choice = req.session.data['ravsplus']; 
+//  if (choice === 'yes') {
+//    res.redirect('/user-management/add-features')
+//  } else {
+//    res.redirect('/user-management/check')
+//  }
+//});
 
 // mvp-patient-list-and-export/export-patients
 router.post('/mvp-patient-list-and-export/export-patients', function (req, res) {

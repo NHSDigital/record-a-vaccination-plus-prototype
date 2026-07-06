@@ -6,13 +6,34 @@
 
 {% set currentSection = "manage" %}
 
+{% set ravsPlusFeaturesHtml %}
+  {% if data.additionalFunctionality and ("functionalityMaternity" in data.additionalFunctionality) %}
+    Maternity<br>
+  {% endif %}
+  {% if data.additionalFunctionality and ("functionalityOccupationalHealth" in data.additionalFunctionality) %}
+    Occupational health
+  {% endif %}
+  {% if not data.additionalFunctionality %}
+    No
+  {% endif %}
+{% endset %}
+
 {% block content %}
+  <style>
+    #manage-users-table th,
+    #manage-users-table td {
+      font-size: 16px;
+      line-height: 1.4;
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+  </style>
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <h1 class="nhsuk-heading-l">Manage users</h1>
 
-      {{ button({ "text": "Add user", "href": "add-user" }) }}
+      {{ button({ "text": "Add user", "href": "add-user?newUser&firstName&lastName&email&vaccinator&ravsplus&functionalityMaternity&functionalityOccupationalHealth&permissionLevel" }) }}
       
       {% include "user-management/_deactivated-users-notice.html" %}
       {% include "user-management/_search-filter.html" %}
@@ -33,28 +54,43 @@
             </ul>
           </nav>
 
-          <table class="nhsuk-table nhsuk-u-margin-top-4">
+          <table id="manage-users-table" class="nhsuk-table nhsuk-u-margin-top-4">
             <caption class="nhsuk-table__caption nhsuk-table__caption--m">
               3 active users
             </caption>
             <thead role="rowgroup" class="nhsuk-table__head">
               <tr role="row">
-                <th role="columnheader" class="app-table__header--min-width-200" scope="col">Name</th>
+                <th role="columnheader" class="" scope="col">Name</th>
                 <th role="columnheader" class="" scope="col">Email</th>
                 <th role="columnheader" class="" scope="col">Vaccinator</th>
                 <th role="columnheader" class="" scope="col">RAVS+</th>
                 <th role="columnheader" class="" scope="col">Permission</th>
                 <th role="columnheader" class="" scope="col">Last log in</th>
-                <th role="columnheader" class="app-table__header--min-width-100" scope="col"></th>
+                <th role="columnheader" class="" scope="col"></th>
               </tr>
             </thead>
             <tbody class="nhsuk-table__body">
+
+              {% if data.newUser == "added" %}
+                <tr class="nhsuk-table__row">
+                  <td class="nhsuk-table__cell">{{ data.firstName }} {{ data.lastName }}</td>
+                  <td class="nhsuk-table__cell">{{ data.email }}</td>
+                  <td class="nhsuk-table__cell">{{ data.vaccinator | capitalize }}</td>
+                  <td class="nhsuk-table__cell">{% if data.ravsplus == "yes" %}{{ ravsPlusFeaturesHtml | safe }}{% else %}No{% endif %}</td>
+                  <td class="nhsuk-table__cell">{{ data.permissionLevel }}</td>
+                  <td class="nhsuk-table__cell">Not applicable</td>
+                  <td class="nhsuk-table__cell app-table__cell--right-aligned">
+                    <a href="change-role?user=Gary" class="nhsuk-link" >Change<span class="nhsuk-u-visually-hidden"> details for {{ data.firstName }}</span></a>
+                  </td>
+                </tr>
+              {% endif %}
+
               <tr class="nhsuk-table__row">
                 <td class="nhsuk-table__cell">Grady Campos</td>
                 <td class="nhsuk-table__cell">grady.campos@nhs.net</td>
-                <td class="nhsuk-table__cell">Yes</td>
                 <td class="nhsuk-table__cell">No</td>
-                <td class="nhsuk-table__cell">Lead administrator</td>
+                <td class="nhsuk-table__cell">No</td>
+                <td class="nhsuk-table__cell">Recorder</td>
                 <td class="nhsuk-table__cell">1 day ago</td>
                 <td class="nhsuk-table__cell app-table__cell--right-aligned">
                   <a href="change-role?user=Gary" class="nhsuk-link" >Change<span class="nhsuk-u-visually-hidden"> details for Grady</span></a>
@@ -64,9 +100,9 @@
               <tr class="nhsuk-table__row">
                 <td class="nhsuk-table__cell">Jeremy Blue</td>
                 <td class="nhsuk-table__cell">jeremy.blue@nhs.net</td>
-                <td class="nhsuk-table__cell">Yes</td>
                 <td class="nhsuk-table__cell">No</td>
-                <td class="nhsuk-table__cell">Lead administrator</td>
+                <td class="nhsuk-table__cell">No</td>
+                <td class="nhsuk-table__cell">Administrator</td>
                 <td class="nhsuk-table__cell">2 days ago</td>
                 <td class="nhsuk-table__cell app-table__cell--right-aligned">
                   <a href="change-role?user=Jeremy" class="nhsuk-link">Change<span class="nhsuk-u-visually-hidden"> details for Jeremy</span></a>
@@ -77,8 +113,8 @@
                 <td class="nhsuk-table__cell">Nina Hunt</td>
                 <td class="nhsuk-table__cell">nina.hunt@nhs.net</td>
                 <td class="nhsuk-table__cell">Yes</td>
-                <td class="nhsuk-table__cell">Ye,<br>Maternity</td>
-                <td class="nhsuk-table__cell">Administrator</td>
+                <td class="nhsuk-table__cell">Yes,<br>Maternity</td>
+                <td class="nhsuk-table__cell">Lead administrator</td>
                 <td class="nhsuk-table__cell">3 days ago</td>
                 <td class="nhsuk-table__cell app-table__cell--right-aligned">
                   <a href="change-role?user=Nina" class="nhsuk-link">Change<span class="nhsuk-u-visually-hidden"> details for Nina</span></a>

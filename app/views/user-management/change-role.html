@@ -10,18 +10,24 @@
   {% set displayName = "Gary Campos" %}
   {% set email = "gary.campos@nhs.net" %}
   {% set lastLogin = "1 day ago" %}
+  {% set vaccinator = "no" %}
+  {% set ravsplus = "no" %}
   {% set permissionLevel = "Recorder" %}
 
 {% elif selectedUser == "Jeremy" %}
   {% set displayName = "Jeremy Blue" %}
   {% set email = "jeremy.blue@nhs.net" %}
   {% set lastLogin = "2 days ago" %}
+  {% set vaccinator = "no" %}
+  {% set ravsplus = "no" %}
   {% set permissionLevel = "Administrator" %}
 
 {% elif selectedUser == "Nina" %}
   {% set displayName = "Nina Hunt" %}
   {% set email = "nina.hunt@nhs.net" %}
   {% set lastLogin = "3 days ago" %}
+  {% set vaccinator = "yes" %}
+  {% set ravsplus = "yes" %}
   {% set permissionLevel = "Lead administrator" %}
 
 {% else %}
@@ -62,7 +68,7 @@
         </div>
       </dl>
 
-      <form action="" method="post" novalidate="true">
+      <form action="manage-users?changeRole=true" method="post" novalidate="true">
 
         {{ radios({
           "name": "vaccinator",
@@ -76,7 +82,7 @@
           hint: {
             text: "Vaccination records include the name of the person who gave the vaccination"
           },
-          value: ("yes" if userOrganisationSettings.vaccinator else "no"),
+          value: vaccinator,
           "items": [
             {
               "value": "yes",
@@ -88,24 +94,41 @@
             }
           ]
         }) }}
+
+        {# START: RAVS+ Additional functionality #}
+        {% set conditionalAdditionalFunctionality %}
+          {{ checkboxes({
+            idPrefix: "additionalFunctionality",
+            name: "additionalFunctionality",
+            fieldset: { legend: { text: "Additional functionality", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+            classes: "nhsuk-checkboxes",
+            items: [
+              { value: "functionalityMaternity", text: "Maternity", hint: { text: "Additional maternity functionality, etc." } },
+              { value: "functionalityOccupationalHealth", text: "Occupational health", hint: { text: "Additional occupational health functionality, etc." } }
+            ]
+          }) }}
+        {% endset %}
 
         {{ radios({
           "name": "ravsplus",
           "fieldset": {
             "legend": {
-              "text": "Do they require access to RAVS+?",
+              "text": "Enable RAVS+ additional functionality?",
               classes: "nhsuk-fieldset__legend--s"
 
             }
           },
           hint: {
-            text: "Additional functionality, etc., etc."
+            text: "Additional functionality, etc."
           },
-          value: "no",
+          value: ravsplus,
           "items": [
             {
               "value": "yes",
-              "text": "Yes"
+              "text": "Yes",
+              conditional: {
+                html: conditionalAdditionalFunctionality
+              }
             },
             {
               "value": "no",
@@ -113,6 +136,7 @@
             }
           ]
         }) }}
+        {# END: RAVS+ Additional functionality #}
 
         {{ radios({
           "name": "permissionLevel",

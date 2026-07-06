@@ -28,6 +28,18 @@
 
       <h1 class="nhsuk-heading-l">Check and {% if existingUserWithSameEmail %}reactivate{% else %}add{% endif %} user</h1>
 
+      {% set ravsPlusFeaturesHtml %}
+        {% if data.additionalFunctionality and ("functionalityMaternity" in data.additionalFunctionality) %}
+          Maternity<br>
+        {% endif %}
+        {% if data.additionalFunctionality and ("functionalityOccupationalHealth" in data.additionalFunctionality) %}
+          Occupational health
+        {% endif %}
+        {% if not data.additionalFunctionality %}
+          None selected
+        {% endif %}
+      {% endset %}
+
       {{ summaryList({
         rows: [
           {
@@ -83,38 +95,21 @@
           },
           {
             key: {
-              text: "RAVS+ access"
+              text: "RAVS+ features"
             },
             value: {
-              html: (data["ravsplus"] | capitalize)
+              html: ravsPlusFeaturesHtml if data.ravsplus == "yes" else "No"
             },
             actions: {
               items: [
                 {
                   href: "/user-management/add-user",
                   text: "Change",
-                  visuallyHiddenText: "vaccinator"
-                }
-              ]
-            }
-          },
-          {
-            key: {
-              text: "RAVS+ features"
-            },
-            value: {
-              html: ravsPlusFeaturesHtml
-            },
-            actions: {
-              items: [
-                {
-                  href: "/user-management/add-features",
-                  text: "Change",
                   visuallyHiddenText: "RAVS+ features"
                 }
               ]
             }
-          } if data.ravsplus == "yes",
+          },
           {
             key: {
               text: "Permission level"
@@ -135,11 +130,10 @@
         ]
       }) }}
 
-
       {% if existingUserWithSameEmail %}
-        <p>{{ data.firstName }} will be re-activated and sent this email:</p>
+        <p>{{ data.firstName | capitalize }} will be re-activated and sent this email:</p>
       {% else %}
-        <p>{{ data.firstName }} will receive this welcome email with information about activating an account:</p>
+        <p>{{ data.firstName | capitalize }} will receive this welcome email with information about activating an account:</p>
       {% endif %}
 
       <div class="app-email-preview">
@@ -150,8 +144,7 @@
         {% endif %}
       </div>
 
-
-      <form action="manage-users" method="post">
+      <form action="manage-users?newUser=added" method="post">
         {{ button({
           "text": "Confirm and send"
         }) }}

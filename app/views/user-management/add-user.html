@@ -17,7 +17,7 @@
 
       <p>If the email address is not allowed, use a different email or <a href="#/">contact us</a>.</p>
 
-      <form action="/user-management/add-user" method="post" novalidate="true">
+      <form action="check" method="post" novalidate="true">
 
         {{ input({
           "label": {
@@ -73,21 +73,56 @@
           ]
         }) }}
 
+        {# START: RAVS+ Additional functionality #}
+        {% set conditionalAdditionalFunctionality %}
+          {{ checkboxes({
+            idPrefix: "additionalFunctionality",
+            name: "additionalFunctionality",
+            values: data.additionalFunctionality,
+            fieldset: {
+              legend: {
+                text: "Additional functionality",
+                classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden"
+              }
+            },
+            classes: "nhsuk-checkboxes",
+            items: [
+              {
+                value: "functionalityMaternity",
+                text: "Maternity",
+                hint: {
+                  text: "Additional maternity functionality, etc."
+                }
+              },
+              {
+                value: "functionalityOccupationalHealth",
+                text: "Occupational health",
+                hint: {
+                  text: "Additional occupational health functionality, etc."
+                }
+              }
+            ]
+          }) }}
+        {% endset %}
+
         {{ radios({
           "name": "ravsplus",
           "fieldset": {
             "legend": {
-              "text": "Do they require access to RAVS+?"
+              "text": "Enable RAVS+ additional functionality?"
             }
           },
           hint: {
-            text: "Additional functionality, etc., etc."
+            text: "Additional functionality, etc."
           },
           value: data.ravsplus,
           "items": [
             {
               "value": "yes",
-              "text": "Yes"
+              "text": "Yes",
+              conditional: {
+                html: conditionalAdditionalFunctionality
+              }
             },
             {
               "value": "no",
@@ -95,6 +130,7 @@
             }
           ]
         }) }}
+        {# END: RAVS+ Additional functionality #}
 
         {{ radios({
           "name": "permissionLevel",

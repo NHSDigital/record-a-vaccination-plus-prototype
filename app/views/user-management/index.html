@@ -1,0 +1,50 @@
+{% extends 'layouts/layout-index-only.html' %}
+
+{% set pageName = "NHS Record a vaccination prototypes" %}
+
+{% block beforeContent %}
+	{{ backLink({
+	href: "/", text: "Back"
+	}) }}
+{% endblock %}
+
+{% block content %}
+	<div class="nhsuk-grid-row">
+		<div class="nhsuk-grid-column-two-thirds">
+			<span class="nhsuk-caption-l">Feature</span>
+			<h1 class="nhsuk-heading-l">User management</h1>
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Description</h2>
+			<p class="nhsuk-body">
+				Description.
+			</p>
+		</div>
+
+		<div class="nhsuk-grid-column-full">
+			<hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+		</div>
+
+		<div class="nhsuk-grid-column-one-half">
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Entry point</h2>
+			<ol>
+				<li><a href="manage-users">Manage users</a></li>
+			</ol>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">New user</h2>
+			<ol start="2">
+				<li><a href="add-user">Add user</a></li>
+				<li><a href="add-pathways">RAVS+ functionality</a></li>
+				<li><a href="check">Check answers</a></li>
+			</ol>
+
+			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Change current user</h2>
+			<ol start="3">
+				<li><a href="change-role">Change user role</a></li>
+				<li><a href="add-pathways">Add pathways / options</a></li>
+			</ol>
+
+		</div>
+
+		<div class="nhsuk-grid-column-one-half">
+		</div>
+	</div>
+{% endblock %}

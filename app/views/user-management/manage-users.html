@@ -1,0 +1,90 @@
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+
+{% block pageTitle %}
+  Manage users and permissions
+{% endblock %}
+
+{% set currentSection = "manage" %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <h1 class="nhsuk-heading-l">Manage users</h1>
+
+      {{ button({ "text": "Add user", "href": "add-user" }) }}
+      
+      {% include "user-management/_deactivated-users-notice.html" %}
+      {% include "user-management/_search-filter.html" %}
+
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <nav class="moj-sub-navigation" aria-label="Sub navigation">
+            <ul class="moj-sub-navigation__list">
+              <li class="moj-sub-navigation__item">
+                <a class="moj-sub-navigation__link" href="patients-data-errors">Invited (4)</a>
+              </li>
+              <li class="moj-sub-navigation__item">
+                <a class="moj-sub-navigation__link" aria-current="page" href="#/">Active (3)</a>
+              </li>
+              <li class="moj-sub-navigation__item">
+                <a class="moj-sub-navigation__link" href="patients-data-errors">Deactivated (2)</a>
+              </li>
+            </ul>
+          </nav>
+
+          <table class="nhsuk-table nhsuk-u-margin-top-4">
+            <caption class="nhsuk-table__caption nhsuk-table__caption--m">
+              3 active users
+            </caption>
+            <thead role="rowgroup" class="nhsuk-table__head">
+              <tr role="row">
+                <th role="columnheader" class="app-table__header--min-width-200" scope="col">Name</th>
+                <th role="columnheader" class="" scope="col">Email</th>
+                <th role="columnheader" class="" scope="col">Vaccinator</th>
+                <th role="columnheader" class="" scope="col">Permission</th>
+                <th role="columnheader" class="" scope="col">Last log in</th>
+                <th role="columnheader" class="app-table__header--min-width-100" scope="col"></th>
+              </tr>
+            </thead>
+            <tbody class="nhsuk-table__body">
+              <tr class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">Grady Campos</td>
+                <td class="nhsuk-table__cell">grady.campos@nhs.net</td>
+                <td class="nhsuk-table__cell">Yes</td>
+                <td class="nhsuk-table__cell">Lead administrator</td>
+                <td class="nhsuk-table__cell">Today</td>
+                <td class="nhsuk-table__cell app-table__cell--right-aligned">
+                  <a href="change-role?user=Gary" class="nhsuk-link" >Change<span class="nhsuk-u-visually-hidden"> details for Grady</span></a>
+                </td>
+              </tr>
+
+              <tr class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">Jeremy Blue</td>
+                <td class="nhsuk-table__cell">jeremy.blue@nhs.net</td>
+                <td class="nhsuk-table__cell">Yes</td>
+                <td class="nhsuk-table__cell">Lead administrator</td>
+                <td class="nhsuk-table__cell">Today</td>
+                <td class="nhsuk-table__cell app-table__cell--right-aligned">
+                  <a href="change-role?user=Jeremy" class="nhsuk-link">Change<span class="nhsuk-u-visually-hidden"> details for Jeremy</span></a>
+                </td>
+              </tr>
+
+              <tr class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">Nina Hunt</td>
+                <td class="nhsuk-table__cell">nina.hunt@nhs.net</td>
+                <td class="nhsuk-table__cell">Yes</td>
+                <td class="nhsuk-table__cell">Administrator</td>
+                <td class="nhsuk-table__cell">Today</td>
+                <td class="nhsuk-table__cell app-table__cell--right-aligned">
+                  <a href="change-role?user=Nina" class="nhsuk-link">Change<span class="nhsuk-u-visually-hidden"> details for Nina</span></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

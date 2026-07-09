@@ -64,13 +64,13 @@
             <tr class="nhsuk-table__row" role="row">
               <th scope="row" class="nhsuk-table__header" role="rowheader">
                 {% if data['uploadedList'] == 'true' %}
-                  <span class="nhsuk-table-responsive__heading" aria-hidden="true">File name </span><a href="#/"><span class="nhsuk-u-visually-hidden">View </span>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv&nbsp;(9.7MB)</a>
+                  <span class="nhsuk-table-responsive__heading" aria-hidden="true">File name </span><a href="/mvp-patient-list-and-export/patients?showData&filtersApplied"><span class="nhsuk-u-visually-hidden">View </span>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv&nbsp;(9.7MB)</a>
                 {% else %}
                   <span class="nhsuk-table-responsive__heading" aria-hidden="true">File name </span>dataset-{{ date({ year: 'numeric' }) }}-{{ date({ month: '2-digit' }) }}-{{ date({ day: '2-digit' }) }}.csv&nbsp;(9.7MB)
                 {% endif %}
               </th>
               <td class="nhsuk-table__cell" role="cell">
-                <span class="nhsuk-table-responsive__heading" aria-hidden="true">Uploaded </span>{{ date({day: 'numeric', month: 'long', year: 'numeric'}) }} at 11:57am,<br>Alex Smith
+                <span class="nhsuk-table-responsive__heading" aria-hidden="true">Uploaded </span>{{ date({day: 'numeric', month: 'long', year: 'numeric'}) }} at 11:57am,<br>Chloe Liu
               </td>
               <td class="nhsuk-table__cell" role="cell">
                 {% if data['uploadedList'] == 'true' %}
@@ -91,7 +91,7 @@
               {% endif %}
             </th>
             <td class="nhsuk-table__cell" role="cell">
-              <span class="nhsuk-table-responsive__heading" aria-hidden="true">Uploaded </span>{{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { day: -7 }) }} at 10:13am,<br>Chloe Liu
+              <span class="nhsuk-table-responsive__heading" aria-hidden="true">Uploaded </span>{{ date({ day: 'numeric', month: 'long', year: 'numeric' }, { day: -7 }) }} at 10:13am,<br>Alex Smith
             </td>
             <td class="nhsuk-table__cell" role="cell">
               {% if data['uploadedList'] == 'true' %}

@@ -66,6 +66,22 @@
           If you are the person who uploaded that file, you will get an email when the process is complete.
         </p> 
         <p class="nhsuk-body"><a href="change-log?uploadedList=processing">View patient upload history</a>.</p>
+        
+        {% if data.researchSession == "one" %}
+          <div class="nhsuk-notification-banner nhsuk-u-margin-top-8" data-module="nhsuk-notification-banner" role="region" aria-labelledby="nhsuk-notification-banner-title">
+            <div class="nhsuk-notification-banner__header">
+              <h2 class="nhsuk-notification-banner__title" id="nhsuk-notification-banner-title">
+                Research interrupt
+              </h2>
+            </div>
+            <div class="nhsuk-notification-banner__content">
+              <p class="nhsuk-notification-banner__heading">
+                <a href="email-success?firstName=Jodie&lastName=Brown">View enrichment success email</a>
+              </p>
+            </div>
+          </div>
+        {% endif %}
+
      {% else %}
         {% if data.scenario == "updateExisting" %}
           <p class="nhsuk-body">
@@ -73,7 +89,7 @@
           </p>
           <p class="nhsuk-body">
             There are currently <strong>768</strong> pregnant patients for your organisation. 
-            The most recent upload was by <strong>Chloe Liu</strong> on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+            The most recent upload was by <strong>Alex Smith</strong> on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
           </p>
         {% else %}
           <p class="nhsuk-body">

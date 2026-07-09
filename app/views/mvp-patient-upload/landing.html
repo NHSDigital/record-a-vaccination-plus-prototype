@@ -24,7 +24,16 @@
           <div class="nhsuk-card nhsuk-card--clickable nhsuk-card--primary">
             <div class="nhsuk-card__content">
               <h2 class="nhsuk-card__heading nhsuk-heading-m">
-                <a class="nhsuk-card__link" href="add-patients?scenario=firstUpload">Add patients</a>
+                {% if data.scenario === "" %}
+                  <a class="nhsuk-card__link" href="add-patients?scenario=firstUpload">Add patients</a>
+                {% else %}
+                  <a class="nhsuk-card__link" href="add-patients?scenario=processing">Add patients</a>
+                {% endif %}
+                <!--{% if data.uploadedList == "processing" %}
+                  <a class="nhsuk-card__link" href="add-patients?scenario=processing">Add patients</a>
+                {% else %}
+                  <a class="nhsuk-card__link" href="add-patients?scenario=firstUpload">Add patients</a>
+                {% endif %}-->
               </h2>
               <p class="nhsuk-card__description">Add or replace a list of pregnant patients</p>
               <svg class="nhsuk-icon nhsuk-icon--chevron-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">

@@ -1,9 +1,11 @@
-{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+{% extends 'layouts/layout-index-only.html' %}
 
-{% set currentSection = "plus" %}
+{% set pageName = "NHS Record a vaccination prototypes" %}
 
-{% block pageTitle %}
-  Staff vaccinations
+{% block beforeContent %}
+	{{ backLink({
+	href: "/", text: "Back"
+	}) }}
 {% endblock %}
 
 {% block content %}

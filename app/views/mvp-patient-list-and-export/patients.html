@@ -2,8 +2,15 @@
 
 {% set currentSection = "plus" %}
 
+{% set errorMessages = {
+  noFiltersChosen: "Choose filters"
+} %}
+
+{% set errorMessage = errorMessages[data.scenario] %}
+{% set hasError = errorMessage %}
+
 {% block pageTitle %}
-  Patients
+  {% if hasError %}Error: {% endif %}Patients
 {% endblock %}
 
 {% block beforeContent %}
@@ -175,6 +182,23 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-two-thirds">
 
+    {% if hasError %}
+      <div class="nhsuk-error-summary" data-module="nhsuk-error-summary">
+        <div role="alert">
+          <h2 class="nhsuk-error-summary__title">
+            There is a problem
+          </h2>
+          <div class="nhsuk-error-summary__body">
+            <ul class="nhsuk-list nhsuk-error-summary__list">
+              <li>
+                <a href="#filter-options-error">{{ errorMessage }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
     <h1 class="nhsuk-heading-l">
       Patients
     </h1>
@@ -189,6 +213,8 @@
     </div>
 
     {% include "mvp-patient-list-and-export/_FilterAndSort.html" %}
+
+    <!-- -->
 
     {% if data.filtersApplied == "true" %}
       <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3">

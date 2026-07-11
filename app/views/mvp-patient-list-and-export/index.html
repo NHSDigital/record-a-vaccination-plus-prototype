@@ -42,11 +42,14 @@
 
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">View patient list</h2>
 			<ol start="2">
-				<!--<li><a href="patients-govuk-component?showData&filtersApplied">Patient list [no filters] </a></li>-->
-				<!--<li><a href="patients-govuk-component?showData&filtersApplied=true">Patient list [filters applied]</a></li>-->
-				<li><a href="patients?showData&filtersApplied">No filters</a></li>
-				<li><a href="patients?showData&filtersApplied=true">Filters applied</a></li>
-				<li><a href="patients-data-errors">Row level errors</a></li>
+				<li><a href="patients?showData&filtersApplied&scenario">No filters</a></li>
+				<li><a href="patients?showData&filtersApplied=true&scenario">Filters applied</a></li>
+				<li><a href="patients-data-errors?scenario">Row level errors</a></li>
+			</ol>
+
+			<p class="nhsuk-body nhsuk-u-margin-bottom-2">Error state:</li>
+			<ol start="5">
+				<li><a href="patients?showData&filtersApplied&scenario=noFiltersChosen">Apply filters when no filters selected</a></li>
 			</ol>
 
 		</div>
@@ -54,11 +57,16 @@
 		<div class="nhsuk-grid-column-one-half">
 
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Export patient list</h2>
-			<ol start="5">
-				<li><a href="export-patients?filtersApplied">Export (no filters)</a></li>
-				<li><a href="export-patients?filtersApplied=true">Export (filters applied)</a></li>
+			<ol start="6">
+				<li><a href="export-patients?filtersApplied&scenario">Export (no filters)</a></li>
+				<li><a href="export-patients?filtersApplied=true&scenario">Export (filters applied)</a></li>
 				<li><a href="export-patients-completed?filtersApplied">Export completed (no filters)</a></li>
 				<li><a href="export-patients-completed?filtersApplied=true">Export completed (filters applied)</a></li>
+			</ol>
+
+			<p class="nhsuk-body nhsuk-u-margin-bottom-2">Error state:</li>
+			<ol start="10">
+				<li><a href="export-patients?filtersApplied=true&scenario=noOptionChosen">Export (filters applied): No option selected</a></li>
 			</ol>
 
 		</div>

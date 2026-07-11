@@ -1,4 +1,4 @@
-<details class="nhsuk-details">
+<details class="nhsuk-details" {% if hasError %}open{% endif %}>
 
   <summary class="nhsuk-details__summary">
     <span class="nhsuk-details__summary-text">
@@ -10,68 +10,82 @@
 
     <form action="#/" method="post" novalidate>
 
-      {# Status #}
-      {% set conditionalRSVstatus %}
-        {{ checkboxes({
-          idPrefix: "current-rsv-status",
-          name: "currentRSVstatus",
-          fieldset: { legend: { text: "RSV status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
-          classes: "nhsuk-checkboxes--small",
-          items: [
-            { value: "statusRSVeligible", text: "Eligible" },
-            { value: "statusRSVnotYetElligible", text: "Not yet eligible" },
-            { value: "statusRSVvaccinated", text: "Vaccinated" }
-          ]
-        }) }}
-      {% endset %}
+      <div class="nhsuk-form-group {% if hasError %}nhsuk-form-group--error{% endif %}">
+        <fieldset class="nhsuk-fieldset" {% if hasError %}aria-describedby="filter-options-error"{% endif %}>
+          <legend class="nhsuk-fieldset__legend nhsuk-u-visually-hidden" id="filter-options">
+            Filter options
+          </legend>
 
-      {% set conditionalPertussisStatus %}
-        {{ checkboxes({
-          idPrefix: "current-pertussis-status",
-          name: "currentPertussisStatus",
-          fieldset: { legend: { text: "Pertussis status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
-          classes: "nhsuk-checkboxes--small",
-          items: [
-            { value: "statusPertussisEligible", text: "Eligible" },
-            { value: "statusPertussisNotYetElligible", text: "Not yet eligible" },
-            { value: "statusPertussisVaccinated", text: "Vaccinated" }
-          ]
-        }) }}
-      {% endset %}
+          {% if hasError %}
+            <span class="nhsuk-error-message" id="filter-options-error">
+              <span class="nhsuk-u-visually-hidden">Error:</span> {{ errorMessage }}
+            </span>
+          {% endif %}
 
-      {{ checkboxes({
-        idPrefix: "eligibilityStatus",
-        name: "eligibilityStatus",
-        fieldset: { legend: { text: "Status", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
-        classes: "nhsuk-checkboxes--small",
-        items: [
-          { value: "rsvStatus", text: "RSV status", conditional: { html: conditionalRSVstatus } },
-          { value: "pertussisStatus", text: "Pertussis status", conditional: { html: conditionalPertussisStatus } }
-        ]
-      }) }}
+          {# Status #}
+          {% set conditionalRSVstatus %}
+            {{ checkboxes({
+              idPrefix: "current-rsv-status",
+              name: "currentRSVstatus",
+              fieldset: { legend: { text: "RSV status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+              classes: "nhsuk-checkboxes--small",
+              items: [
+                { value: "statusRSVeligible", text: "Eligible", checked: data.filtersApplied == "true" },
+                { value: "statusRSVnotYetElligible", text: "Not yet eligible" },
+                { value: "statusRSVvaccinated", text: "Vaccinated" }
+              ]
+            }) }}
+          {% endset %}
 
-      {# Weeks pregnant #}
-      {{ checkboxes({
-        idPrefix: "weeks-pregnant",
-        name: "weeksPregnant",
-        fieldset: { legend: { text: "Weeks pregnant", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
-        classes: "nhsuk-checkboxes--small",
-        items: [
-          { value: "weeksPregnantUpTo20", text: "Up to 20 weeks" },
-          { value: "weeksPregnant20to23", text: "20 to 23 weeks" },
-          { value: "weeksPregnant24to27", text: "24 to 27 weeks" },
-          { value: "weeksPregnant28to31", text: "28 to 31 weeks" },
-          { value: "weeksPregnant32to35", text: "32 to 35 weeks" },
-          { value: "weeksPregnant36orMore", text: "36 weeks or more" }
-        ]
-      }) }}
+          {% set conditionalPertussisStatus %}
+            {{ checkboxes({
+              idPrefix: "current-pertussis-status",
+              name: "currentPertussisStatus",
+              fieldset: { legend: { text: "Pertussis status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+              classes: "nhsuk-checkboxes--small",
+              items: [
+                { value: "statusPertussisEligible", text: "Eligible" },
+                { value: "statusPertussisNotYetElligible", text: "Not yet eligible" },
+                { value: "statusPertussisVaccinated", text: "Vaccinated" }
+              ]
+            }) }}
+          {% endset %}
+
+          {{ checkboxes({
+            idPrefix: "eligibilityStatus",
+            name: "eligibilityStatus",
+            fieldset: { legend: { text: "Status", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+            classes: "nhsuk-checkboxes--small",
+            items: [
+              { value: "rsvStatus", text: "RSV status", checked: data.filtersApplied == "true", conditional: { html: conditionalRSVstatus } },
+              { value: "pertussisStatus", text: "Pertussis status", conditional: { html: conditionalPertussisStatus } }
+            ]
+          }) }}
+
+          {# Weeks pregnant #}
+          {{ checkboxes({
+            idPrefix: "weeks-pregnant",
+            name: "weeksPregnant",
+            fieldset: { legend: { text: "Weeks pregnant", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
+            classes: "nhsuk-checkboxes--small",
+            items: [
+              { value: "weeksPregnantUpTo20", text: "Up to 20 weeks" },
+              { value: "weeksPregnant20to23", text: "20 to 23 weeks" },
+              { value: "weeksPregnant24to27", text: "24 to 27 weeks" },
+              { value: "weeksPregnant28to31", text: "28 to 31 weeks", checked: data.filtersApplied == "true" },
+              { value: "weeksPregnant32to35", text: "32 to 35 weeks" },
+              { value: "weeksPregnant36orMore", text: "36 weeks or more" }
+            ]
+          }) }}
+        </fieldset>
+      </div>
 
       {# Form submit #}
       <div class="app-actions">
-        <button type="button" class="nhsuk-button nhsuk-button--small" data-module="nhsuk-button" onclick="window.location.href = window.location.pathname + '?filtersApplied=true'">
+        <button type="button" class="nhsuk-button nhsuk-button--small" data-module="nhsuk-button" onclick="window.location.href = window.location.pathname + '?filtersApplied=true&scenario'">
           Apply
         </button>
-        <button type="button" class="nhsuk-button nhsuk-button--secondary nhsuk-button--small" data-module="nhsuk-button" onclick="window.location.href = window.location.pathname + '?filtersApplied'">
+        <button type="button" class="nhsuk-button nhsuk-button--secondary nhsuk-button--small" data-module="nhsuk-button" onclick="window.location.href = window.location.pathname + '?filtersApplied&scenario'">
           Clear all
         </button>
       </div>

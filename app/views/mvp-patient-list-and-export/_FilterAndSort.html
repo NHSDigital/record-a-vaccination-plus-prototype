@@ -30,9 +30,9 @@
               fieldset: { legend: { text: "RSV status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
               classes: "nhsuk-checkboxes--small",
               items: [
+                { value: "statusRSVvaccinated", text: "Vaccinated" },
                 { value: "statusRSVeligible", text: "Eligible", checked: data.filtersApplied == "true" },
-                { value: "statusRSVnotYetElligible", text: "Not yet eligible" },
-                { value: "statusRSVvaccinated", text: "Vaccinated" }
+                { value: "statusRSVnotYetElligible", text: "Not yet eligible" }
               ]
             }) }}
           {% endset %}
@@ -44,9 +44,9 @@
               fieldset: { legend: { text: "Pertussis status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
               classes: "nhsuk-checkboxes--small",
               items: [
+                { value: "statusPertussisVaccinated", text: "Vaccinated" },
                 { value: "statusPertussisEligible", text: "Eligible" },
-                { value: "statusPertussisNotYetElligible", text: "Not yet eligible" },
-                { value: "statusPertussisVaccinated", text: "Vaccinated" }
+                { value: "statusPertussisNotYetElligible", text: "Not yet eligible" }
               ]
             }) }}
           {% endset %}

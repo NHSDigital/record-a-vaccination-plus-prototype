@@ -18,15 +18,16 @@
         <p class="nhsuk-body">Subject: Your list of pregnant patients is ready</p>
 
         <p class="nhsuk-body">Dear {{ data.firstName }} {{ data.lastName }},</p>
-        <p class="nhsuk-body">Your upload to the Record a vaccination service (RAVS) is complete and you can <a href="/mvp-patient-list-and-export/patients?showData&filtersApplied&scenario&researchSession" class="nhsuk-link">view your new list of pregnant patients</a>.</p>
+        <p class="nhsuk-body">Your upload to the Record a vaccination service (RAVS) is complete.</p>
+        <p class="nhsuk-body"><a href="/mvp-patient-list-and-export/patients?showData&filtersApplied&scenario&researchSession" class="nhsuk-link">View your list of pregnant patients</a>.</p>
         <p class="nhsuk-body">The patient information you uploaded has been checked and matched to the vaccination information we already hold.</p>
         <p class="nhsuk-body">We removed patients in your CSV file that did not have an NHS number. Those patients do not appear in your list of pregnant patients in RAVS.</p>
+        
         <h2 class="nhsuk-heading-s">Questions and support</h2>
         <p class="nhsuk-body">If you have any questions about using RAVS, contact our support team by going to <a href="https://www.ravs.england.nhs.uk/help-and-support" class="nhsuk-link">Record a vaccination: Help and support</a>.</p>
+        
         <p class="nhsuk-body">Kind regards,<br>NHS Record a vaccination</p>
-
         <p class="nhsuk-body">Do not reply to this email as we do not check this inbox.</p>
-        <!--<p>To contact us, go to: <a href="https://www.ravs.england.nhs.uk/help-and-support" class="nhsuk-link">Record a vaccination: Help and support</a>.</p>-->
       </div>
 
       {% if data.researchSession == "one" %}

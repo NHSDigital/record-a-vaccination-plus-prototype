@@ -98,6 +98,14 @@
           </p>
         {% endif %}
 
+        {{ warningCallout({
+          heading: "Important",
+          html:
+            "<p class='nhsuk-body'>Do not add people who have recently had a miscarriage, experienced baby loss or had a termination.
+            <p class='nhsuk-body'>Patients with no NHS number in your CSV file will not appear in your list of patients.</p>
+            <p class='nhsuk-body'><a href='#/' class='nhsuk-link'>Read full guidance</a></p>"
+        }) }}
+
         <details class="nhsuk-details nhsuk-expander">
           <summary class="nhsuk-details__summary">
             <span class="nhsuk-details__summary-text">

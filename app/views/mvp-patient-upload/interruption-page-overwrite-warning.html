@@ -2,8 +2,10 @@
 
 {% set currentSection = "plus" %}
 
+{% set pageTitle = "Confirm you want to replace your list of pregnant patients" %}
+
 {% block pageTitle %}
-  Confirm you want to replace your list of patients
+  {{ pageTitle }}
 {% endblock %}
 
 {% block content %}
@@ -12,10 +14,10 @@
 
       <div class="nhsuk-panel nhsuk-panel--interruption">
         <h1 class="nhsuk-panel__title nhsuk-panel__title--l">
-          Confirm you want to replace your list of patients
+          {{ pageTitle }}
         </h1>
         <div class="nhsuk-panel__body">
-          <p>The patient records in your new CSV file will overwrite and replace your current list of patients.</p>
+          <p>The patient records in your new CSV file will overwrite and replace your current list of pregnant patients.</p>
           <p>Replacing your list of patients cannot be undone.</p>
           <div class="nhsuk-button-group">
             <a class="nhsuk-button nhsuk-button--reverse" data-module="nhsuk-button" href="upload-complete" role="button" draggable="false">

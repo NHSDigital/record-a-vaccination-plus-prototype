@@ -2,8 +2,10 @@
 
 {% set currentSection = "plus" %}
 
+{% set pageTitle = "Patient upload history" %}
+
 {% block pageTitle %}
-  Patient upload history
+  {{ pageTitle }}
 {% endblock %}
 
 {% block beforeContent %}
@@ -23,7 +25,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <h1 class="nhsuk-heading-xl">
-        Patient upload history
+        {{ pageTitle }}
       </h1>
 
 {% if data['uploadedList'] != 'noPatients' %}

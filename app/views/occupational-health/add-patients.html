@@ -2,6 +2,8 @@
 
 {% set currentSection = "plus" %}
 
+{% set pageTitle = "Add patients" %}
+
 {% set errorMessages = {
   invalidFileType: "The selected file must be a CSV",
   fileTooLarge: "The CSV file must be smaller than 10MB",
@@ -19,7 +21,7 @@
 {% set hasError = errorMessage %}
 
 {% block pageTitle %}
-  {% if hasError %}Error: {% endif %}Add patients
+  {% if hasError %}Error: {% endif %}{{ pageTitle }}
 {% endblock %}
 
 {% block beforeContent %}
@@ -28,14 +30,10 @@
       <li class="nhsuk-breadcrumb__list-item">
         <a class="nhsuk-breadcrumb__link" href="landing">Staff vaccinations</a>
       </li>
-      <li class="nhsuk-breadcrumb__list-item">Add patients</li>
     </ol>
     <a class="nhsuk-back-link" href="landing">
       <span class="nhsuk-u-visually-hidden">Back to</span> Staff vaccinations
     </a>
-    <!--<a class="nhsuk-back-link" href="javascript:history.back()">
-      Go back
-    </a>-->
   </nav>
 {% endblock %}
 
@@ -61,7 +59,7 @@
       {% endif %}
 
       <h1 class="nhsuk-heading-l">
-        Add patients
+        {{ pageTitle }}
       </h1>
 
       {% if data.scenario == "processing" %}

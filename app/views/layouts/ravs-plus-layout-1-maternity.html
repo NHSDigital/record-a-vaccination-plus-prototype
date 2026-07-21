@@ -1,14 +1,6 @@
 {% set userType = data['ravsPlusCurrentUserType'] | default('') %}
 
-{% if userType == 'admin' %}
-  {% set userRole = 'Admin: MVP v1.0' %}
-{% elif userType == 'OH' %}
-  {% set userRole = 'Occupational Health: MVP v1.0' %}
-{% elif userType == 'infant' %}
-  {% set userRole = 'Infant: MVP v1.0' %}
-{% else %}
-  {% set userRole = 'Clinician: MVP v1.0' %}
-{% endif %}
+{% set userRole = 'Maternity' %}
 
 <!-- Extends the layout from /docs/views/template.html -->
 {% extends "prototype-kit-template.njk" %}
@@ -56,7 +48,7 @@
           text: "Reset prototype test data"
         },
         {
-          href: "#/",
+          href: "/",
           text: (userRole) | safe
         }
       ]

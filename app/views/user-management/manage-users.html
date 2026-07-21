@@ -1,4 +1,4 @@
-{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
 
 {% block pageTitle %}
   Manage users and permissions
@@ -76,7 +76,8 @@
                   <td class="nhsuk-table__cell">{{ data.firstName }} {{ data.lastName }}</td>
                   <td class="nhsuk-table__cell">{{ data.email }}</td>
                   <td class="nhsuk-table__cell">{{ data.vaccinator | capitalize }}</td>
-                  <td class="nhsuk-table__cell">{% if data.ravsplus == "yes" %}{{ ravsPlusFeaturesHtml | safe }}{% else %}No{% endif %}</td>
+                  <td class="nhsuk-table__cell">{% if data.ravsplus == "yes" %}Yes{% else %}No{% endif %}</td>
+                  <!--<td class="nhsuk-table__cell">{% if data.ravsplus == "yes" %}{{ ravsPlusFeaturesHtml | safe }}{% else %}No{% endif %}</td>-->
                   <td class="nhsuk-table__cell">{{ data.permissionLevel }}</td>
                   <td class="nhsuk-table__cell">Not applicable</td>
                   <td class="nhsuk-table__cell app-table__cell--right-aligned">
@@ -113,7 +114,8 @@
                 <td class="nhsuk-table__cell">Nina Hunt</td>
                 <td class="nhsuk-table__cell">nina.hunt@nhs.net</td>
                 <td class="nhsuk-table__cell">Yes</td>
-                <td class="nhsuk-table__cell">Maternity</td>
+                <td class="nhsuk-table__cell">Yes</td>
+                <!--<td class="nhsuk-table__cell">Maternity</td>-->
                 <td class="nhsuk-table__cell">Lead administrator</td>
                 <td class="nhsuk-table__cell">3 days ago</td>
                 <td class="nhsuk-table__cell app-table__cell--right-aligned">

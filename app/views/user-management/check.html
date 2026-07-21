@@ -1,4 +1,4 @@
-{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
 
 {% set pageName = "Check" %}
 
@@ -29,14 +29,17 @@
       <h1 class="nhsuk-heading-l">Check and {% if existingUserWithSameEmail %}reactivate{% else %}add{% endif %} user</h1>
 
       {% set ravsPlusFeaturesHtml %}
-        {% if data.additionalFunctionality and ("functionalityMaternity" in data.additionalFunctionality) %}
+        {% if data.additionalFunctionality %}
+          Yes
+        {% endif %}
+        <!--{% if data.additionalFunctionality and ("functionalityMaternity" in data.additionalFunctionality) %}
           Maternity<br>
         {% endif %}
         {% if data.additionalFunctionality and ("functionalityOccupationalHealth" in data.additionalFunctionality) %}
           Occupational health
-        {% endif %}
+        {% endif %}-->
         {% if not data.additionalFunctionality %}
-          None selected
+          No
         {% endif %}
       {% endset %}
 
@@ -95,7 +98,7 @@
           },
           {
             key: {
-              text: "RAVS+ features"
+              text: "RAVS+ enabled"
             },
             value: {
               html: ravsPlusFeaturesHtml if data.ravsplus == "yes" else "No"
@@ -105,7 +108,7 @@
                 {
                   href: "/user-management/add-user",
                   text: "Change",
-                  visuallyHiddenText: "RAVS+ features"
+                  visuallyHiddenText: "RAVS+ enabled"
                 }
               ]
             }

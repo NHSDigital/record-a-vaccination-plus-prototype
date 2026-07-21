@@ -1,4 +1,4 @@
-{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
 
 {% set pageName = "Change role for user" %}
 
@@ -113,22 +113,15 @@
           "name": "ravsplus",
           "fieldset": {
             "legend": {
-              "text": "Enable RAVS+ additional functionality?",
+              "text": "Enable RAVS+ functionality?",
               classes: "nhsuk-fieldset__legend--s"
-
             }
-          },
-          hint: {
-            text: "Additional functionality, etc."
           },
           value: ravsplus,
           "items": [
             {
               "value": "yes",
-              "text": "Yes",
-              conditional: {
-                html: conditionalAdditionalFunctionality
-              }
+              "text": "Yes"
             },
             {
               "value": "no",

@@ -1,4 +1,4 @@
-{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
 
 {% set pageName = "Add user" %}
 
@@ -109,20 +109,14 @@
           "name": "ravsplus",
           "fieldset": {
             "legend": {
-              "text": "Enable RAVS+ additional functionality?"
+              "text": "Enable RAVS+ functionality?"
             }
-          },
-          hint: {
-            text: "Additional functionality, etc."
           },
           value: data.ravsplus,
           "items": [
             {
               "value": "yes",
-              "text": "Yes",
-              conditional: {
-                html: conditionalAdditionalFunctionality
-              }
+              "text": "Yes"
             },
             {
               "value": "no",

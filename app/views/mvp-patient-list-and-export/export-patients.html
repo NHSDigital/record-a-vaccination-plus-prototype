@@ -9,8 +9,10 @@
 {% set errorMessage = errorMessages[data.scenario] %}
 {% set hasError = errorMessage %}
 
+{% set pageTitle = "Export list of patients" %}
+
 {% block pageTitle %}
-  {% if hasError %}Error: {% endif %}Export list of patients
+  {% if hasError %}Error: {% endif %}{{ pageTitle }} - Record a vaccination - NHS
 {% endblock %}
 
 {% block beforeContent %}

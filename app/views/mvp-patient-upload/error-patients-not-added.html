@@ -2,15 +2,17 @@
 
 {% set currentSection = "plus" %}
 
+{% set pageTitle = "There was a problem with your upload" %}
+
 {% block pageTitle %}
-  There was a problem with your upload
+  {{ pageTitle }} - Record a vaccination - NHS
 {% endblock %}
 
 {% block content %}
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <h1 class="nhsuk-heading-l">
-        There was a problem with your upload
+        {{ pageTitle }}
       </h1>
       <p class="nhsuk-body">
         There were issues with the data in the CSV file you uploaded.

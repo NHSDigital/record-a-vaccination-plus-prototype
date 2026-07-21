@@ -2,8 +2,10 @@
 
 {% set currentSection = "plus" %}
 
+{% set pageTitle = "Patients" %}
+
 {% block pageTitle %}
-  Patients
+  {{ pageTitle }} - Record a vaccination - NHS
 {% endblock %}
 
 {% block beforeContent %}
@@ -24,7 +26,7 @@
     <div class="nhsuk-grid-column-two-thirds">
 
       <h1 class="nhsuk-heading-l">
-        Patients
+        {{ pageTitle }}
       </h1>
 
       {% if data.scenario == "processing" %}

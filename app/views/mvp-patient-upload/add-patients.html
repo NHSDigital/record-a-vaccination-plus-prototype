@@ -18,8 +18,10 @@
 {% set errorMessage = errorMessages[data.scenario] %}
 {% set hasError = errorMessage %}
 
+{% set pageTitle = 'Add patients' %}
+  
 {% block pageTitle %}
-  {% if hasError %}Error: {% endif %}Add patients
+  {% if hasError %}Error: {% endif %}{{ pageTitle }} - Record a vaccination - NHS
 {% endblock %}
 
 {% block beforeContent %}
@@ -57,7 +59,7 @@
       {% endif %}
 
       <h1 class="nhsuk-heading-l">
-        Add patients
+        {{ pageTitle }}
       </h1>
 
       {% if data.scenario == "processing" %}

@@ -9,8 +9,10 @@
 {% set errorMessage = errorMessages[data.scenario] %}
 {% set hasError = errorMessage %}
 
+{% set pageTitle = "Patients" %}
+
 {% block pageTitle %}
-  {% if hasError %}Error: {% endif %}Patients
+  {% if hasError %}Error: {% endif %}{{ pageTitle }} - Record a vaccination - NHS
 {% endblock %}
 
 {% block beforeContent %}
@@ -199,7 +201,7 @@
     {% endif %}
 
     <h1 class="nhsuk-heading-l">
-      Patients
+      {{ pageTitle }}
     </h1>
 
     <p class="nhsuk-body">
@@ -261,9 +263,9 @@
       <ul class="moj-sub-navigation__list">
         <li class="moj-sub-navigation__item">
           {% if data.filtersApplied == "true" %}
-            <a class="moj-sub-navigation__link" aria-current="page" href="#/">Patients (238)</a>
+            <a class="moj-sub-navigation__link" aria-current="page" href="#/">{{ pageTitle }} (238)</a>
           {% else %}
-            <a class="moj-sub-navigation__link" aria-current="page" href="#/">Patients (1,995)</a>
+            <a class="moj-sub-navigation__link" aria-current="page" href="#/">{{ pageTitle }} (1,995)</a>
           {% endif %}
         </li>
         <li class="moj-sub-navigation__item">

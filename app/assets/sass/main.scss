@@ -53,6 +53,34 @@ $govuk-brand-colour: $nhsuk-link-colour;
 
 
 // Custom styles
+
+// Phase banner
+.app-phase-banner {
+  border-bottom: 1px solid #d8dde0;
+}
+
+.app-phase-banner__content {
+  font-size: 16px;
+  line-height: 1.5;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0;
+  padding: 14px 0;
+}
+
+.app-phase-banner__content .nhsuk-tag {
+  flex-shrink: 0;
+}
+
+@media (max-width: 40.0525em) {
+  .app-phase-banner__content {
+    align-items: flex-start;
+    padding: 12px 0;
+  }
+}
+
+// Hidden panel
 .hiddenPanel {
   display: none;
 }

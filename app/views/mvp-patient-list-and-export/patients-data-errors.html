@@ -2,8 +2,10 @@
 
 {% set currentSection = "plus" %}
 
+{% set pageTitle = "Import issues" %}
+
 {% block pageTitle %}
-  Import issues
+  {{ pageTitle }} - Record a vaccination - NHS
 {% endblock %}
 
 {% block beforeContent %}
@@ -142,52 +144,12 @@
   <div class="nhsuk-grid-column-two-thirds">
 
     <h1 class="nhsuk-heading-l">
-      Import issues
+      {{ pageTitle }}
     </h1>
 
     <p class="nhsuk-body">
       This list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
     </p>
-
-    {#
-    {% include "mvp-patient-list-and-export/_FilterAndSort.html" %}
-
-    {% if data.filtersApplied == "true" %}
-      <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3">
-
-      <p class="nhsuk-body nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-3">Active filters</p>
-
-      <div class="govuk-applied-filters">
-        <a href="#/" class="govuk-applied-filter">
-          <span class="govuk-applied-filter__remove" aria-hidden="true">
-            ×
-          </span>
-          <span class="govuk-applied-filter__label">
-            RSV status: Eligible
-          </span>
-          <span class="nhsuk-u-visually-hidden">
-            Remove filter RSV status Eligible
-          </span>
-        </a>
-        <a href="#/" class="govuk-applied-filter">
-          <span class="govuk-applied-filter__remove" aria-hidden="true">
-            ×
-          </span>
-          <span class="govuk-applied-filter__label">
-            Weeks pregnant: 28 to 31 weeks
-          </span>
-          <span class="nhsuk-u-visually-hidden">
-            Remove filter Weeks pregnant 28 to 31 weeks
-          </span>
-        </a>
-      </div>
-
-      <p class="nhsuk-body"><a href="?filtersApplied=false" class="nhsuk-link">Clear all filters and sorting</a></p>
-
-    {% endif %}
-
-    <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
-    #}
 
   </div>
 </div>
@@ -205,7 +167,7 @@
           {% endif %}
         </li>
         <li class="moj-sub-navigation__item">
-          <a class="moj-sub-navigation__link" aria-current="page" href="#/">Import issues (5)</a>
+          <a class="moj-sub-navigation__link" aria-current="page" href="#/">{{ pageTitle }} (5)</a>
         </li>
       </ul>
     </nav>

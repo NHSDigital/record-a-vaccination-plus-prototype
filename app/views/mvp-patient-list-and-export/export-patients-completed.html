@@ -2,8 +2,10 @@
 
 {% set currentSection = "plus" %}
 
+{% set pageTitle = "Export ready" %}
+
 {% block pageTitle %}
-  Export ready
+  {{ pageTitle }} - Record a vaccination - NHS
 {% endblock %}
 
 {% block content %}
@@ -11,7 +13,7 @@
     <div class="nhsuk-grid-column-two-thirds">
       <div class="nhsuk-panel">
         <h1 class="nhsuk-panel__title">
-          Export ready
+          {{ pageTitle }}
         </h1>
         <div class="nhsuk-panel__body">
           {% if data.filtersApplied == "true" %}

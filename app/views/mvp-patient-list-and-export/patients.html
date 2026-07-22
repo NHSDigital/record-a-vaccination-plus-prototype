@@ -213,13 +213,15 @@
       <p>Weeks pregnant and eligibility status will update automatically over time for each patient. To change who is on your list, you will need to upload a new CSV file.</p>
     </div>
 
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
     {% include "mvp-patient-list-and-export/_FilterAndSort.html" %}
 
-    <!-- -->
-
     {% if data.filtersApplied == "true" %}
-      <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3">
-
       <p class="nhsuk-body nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-3">Active filters</p>
 
       <div class="govuk-applied-filters">
@@ -249,15 +251,9 @@
 
       <p class="nhsuk-body"><a href="?filtersApplied=false" class="nhsuk-link">Clear all filters and sorting</a></p>
 
+      <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3">
+
     {% endif %}
-
-    <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
-
-  </div>
-</div>
-
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
 
     <nav class="moj-sub-navigation" aria-label="Sub navigation">
       <ul class="moj-sub-navigation__list">

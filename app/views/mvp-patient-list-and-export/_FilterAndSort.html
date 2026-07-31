@@ -63,20 +63,40 @@
           }) }}
 
           {# Weeks pregnant #}
+
           {{ checkboxes({
             idPrefix: "weeks-pregnant",
             name: "weeksPregnant",
             fieldset: { legend: { text: "Weeks pregnant", classes: "nhsuk-fieldset__legend nhsuk-u-font-weight-bold" } },
             classes: "nhsuk-checkboxes--small",
+            hint: {
+              text: "You can select more than one"
+            },
             items: [
-              { value: "weeksPregnantUpTo20", text: "Up to 20 weeks" },
-              { value: "weeksPregnant20to23", text: "20 to 23 weeks" },
-              { value: "weeksPregnant24to27", text: "24 to 27 weeks" },
-              { value: "weeksPregnant28to31", text: "28 to 31 weeks", checked: data.filtersApplied == "true" },
-              { value: "weeksPregnant32to35", text: "32 to 35 weeks" },
-              { value: "weeksPregnant36orMore", text: "36 weeks or more" }
+              { value: "weeksPregnant16", text: "Up to 16 weeks" },
+              { value: "weeksPregnant17", text: "17 weeks" },
+              { value: "weeksPregnant18", text: "18 weeks" },
+              { value: "weeksPregnant19", text: "19 weeks" },
+              { value: "weeksPregnant20", text: "20 weeks" },
+              { value: "weeksPregnant21", text: "21 weeks" },
+              { value: "weeksPregnant22", text: "22 weeks" },
+              { value: "weeksPregnant23", text: "23 weeks" },
+              { value: "weeksPregnant24", text: "24 weeks" },
+              { value: "weeksPregnant25", text: "25 weeks" },
+              { value: "weeksPregnant26", text: "26 weeks", checked: data.filtersApplied == "true"  },
+              { value: "weeksPregnant27", text: "27 weeks" },
+              { value: "weeksPregnant28", text: "28 weeks" },
+              { value: "weeksPregnant29", text: "29 weeks" },
+              { value: "weeksPregnant30", text: "30 weeks" },
+              { value: "weeksPregnant31", text: "31 weeks" },
+              { value: "weeksPregnant32", text: "32 weeks" },
+              { value: "weeksPregnant33", text: "33 weeks" },
+              { value: "weeksPregnant34", text: "34 weeks" },
+              { value: "weeksPregnant35", text: "35 weeks" },
+              { value: "weeksPregnant36", text: "36 weeks or more" }
             ]
           }) }}
+
         </fieldset>
       </div>
 

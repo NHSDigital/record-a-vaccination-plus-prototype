@@ -20,15 +20,28 @@
       <p class="nhsuk-body">
         The CSV file should include a header row followed by data rows. The header row must include two columns: NHS number, Due date.
       </p>
+      <p class="nhsuk-body">
+        You must use a UK format for all due dates.
+      </p>
       <p class="nhsuk-body nhsuk-u-margin-bottom-2">
         For example:
       </p>
       <code class="nhsuk-body" data-line="">
-        NHS number, Due date<br>1234567890, 2026-04-27<br>0987654321, 2026-11-12  
+        NHS number, Due date<br>
+        1234567890, 27/04/2026<br>
+        0987654321, 11/12/2026  
       </code>
       <p class="nhsuk-body">  
-        Your file may have failed to upload because there was a problem with one or more NHS numbers in your file. NHS numbers must be valid, 
-        contain 10 digits and only include numbers.
+        Your file may have failed if the due date for one or more records is:
+      </p>
+      <ul class="nhsuk-list nhsuk-list--bullet">
+        <li>invalid</li>
+        <li>missing</li>
+        <li>not in a UK format</li>
+        <li>duplicated</li>
+      </ul>
+      <p class="nhsuk-body">
+        NHS numbers must be valid, contain 10 digits and only include numbers.
       </p>
       <p class="nhsuk-body">
         Check the data and upload a new CSV file.

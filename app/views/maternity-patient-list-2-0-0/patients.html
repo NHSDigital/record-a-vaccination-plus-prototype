@@ -86,7 +86,7 @@
     table-layout: auto;
   }
 
-  .nhsuk-table th, .nhsuk-table td {
+  .nhsuk-table th, .nhsuk-table td, .nhsuk-table-responsive th, .nhsuk-table-responsive td {
     /*padding: 8px 12px;*/
     padding: 8px 12px 8px 0;
     vertical-align: top;
@@ -116,7 +116,7 @@
     margin-bottom: 0;
   }
 
-  .nhsuk-table {
+  .nhsuk-table, .nhsuk-table-responsive {
     margin-bottom: 8px; /* tighten space above pagination */
   }
 
@@ -210,7 +210,6 @@
 
     <div class="nhsuk-inset-text nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
       <span class="nhsuk-u-visually-hidden">Information: </span>
-      <p>Vaccination information is updated overnight and not in real time. For a patient’s eligibility status to change, their vaccination must be recorded in RAVS or a GP system.</p>
       <p>Weeks pregnant and eligibility status will update automatically over time for each patient. To change who is on your list, you will need to upload a new CSV file.</p>
     </div>
 
@@ -220,7 +219,7 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
 
-    {% include "mvp-patient-list-and-export/_FilterAndSort.html" %}
+    {% include "maternity-patient-list-2-0-0/_FilterAndSort.html" %}
 
     {% if data.filtersApplied == "true" %}
       <p class="nhsuk-body nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-3">Active filters</p>
@@ -242,10 +241,10 @@
             ×
           </span>
           <span class="govuk-applied-filter__label">
-            Weeks pregnant: 26 weeks
+            Weeks pregnant: 28 to 31 weeks
           </span>
           <span class="nhsuk-u-visually-hidden">
-            Remove filter Weeks pregnant 26 weeks
+            Remove filter Weeks pregnant 28 to 31 weeks
           </span>
         </a>
       </div>
@@ -271,7 +270,7 @@
       </ul>
     </nav>
 
-    {% include "mvp-patient-list-and-export/_secondayNavContentAllVaccinations.html" %}
+    {% include "maternity-patient-list-2-0-0/_AllVaccinations.html" %}
 
   </div>
 </div>

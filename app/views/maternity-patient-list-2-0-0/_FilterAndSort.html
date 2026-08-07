@@ -23,6 +23,21 @@
           {% endif %}
 
           {# Status #}
+
+          {% set conditionalflustatus %}
+            {{ checkboxes({
+              idPrefix: "current-flu-status",
+              name: "currentflustatus",
+              fieldset: { legend: { text: "flu status", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+              classes: "nhsuk-checkboxes--small",
+              items: [
+                { value: "statusfluvaccinated", text: "Vaccinated" },
+                { value: "statusflueligible", text: "Eligible", checked: data.filtersApplied == "true" },
+                { value: "statusflunotYetElligible", text: "Not yet eligible" }
+              ]
+            }) }}
+          {% endset %}
+          
           {% set conditionalRSVstatus %}
             {{ checkboxes({
               idPrefix: "current-rsv-status",
@@ -58,12 +73,13 @@
             classes: "nhsuk-checkboxes--small",
             items: [
               { value: "rsvStatus", text: "RSV status", checked: data.filtersApplied == "true", conditional: { html: conditionalRSVstatus } },
-              { value: "pertussisStatus", text: "Pertussis status", conditional: { html: conditionalPertussisStatus } }
+              { value: "pertussisStatus", text: "Pertussis status", conditional: { html: conditionalPertussisStatus } },
+              { value: "fluStatus", text: "Flu status", checked: data.filtersApplied == "true", conditional: { html: conditionalflustatus } }
+
             ]
           }) }}
 
           {# Weeks pregnant #}
-
           {{ checkboxes({
             idPrefix: "weeks-pregnant",
             name: "weeksPregnant",
@@ -96,7 +112,6 @@
               { value: "weeksPregnant36", text: "36 weeks or more" }
             ]
           }) }}
-
         </fieldset>
       </div>
 

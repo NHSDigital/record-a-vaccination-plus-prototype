@@ -30,6 +30,11 @@
 
 {% set pageName = date({ weekday: "long", day: "numeric", month: "long", year: "numeric" }) ~ " (today)" %}
 
+{% block pageTitle %}
+  {{ pageName }} - Record a vaccination - NHS
+{% endblock %}
+
+
 {% block content %}
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">

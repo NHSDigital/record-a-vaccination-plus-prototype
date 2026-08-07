@@ -2,7 +2,7 @@
 
 {% set currentSection = "plus" %}
 
-{% if not pageName %}{% set pageName = "Date" %}{% endif %}
+{% if not pageTitle %}{% set pageTitle = "Date" %}{% endif %}
 {% if not backUrl %}{% set backUrl = '/site/' + site_id + '/clinics/type-of-clinc' %}{% endif %}
 {% if not formAction %}{% set formAction = '/site/' + site_id + '/clinics/clinic-times' %}{% endif %}
 
@@ -10,6 +10,10 @@
   {{ backLink({
     href: "javascript:window.history.back()"
   }) }}
+{% endblock %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
 {% endblock %}
 
 {% block content %}
@@ -22,7 +26,7 @@
           namePrefix: "newSession[singleDate]",
           fieldset: {
             legend: {
-              text: pageName,
+              text: pageTitle,
               isPageHeading: true,
               classes: "nhsuk-fieldset__legend--l"
             }

@@ -8,10 +8,14 @@
   }) }}
 {% endblock %}
 
-{% if not pageName %}{% set pageName = "Clinic closures" %}{% endif %}
+{% if not pageTitle %}{% set pageTitle = "Clinic closures" %}{% endif %}
 {% if not backUrl %}{% set backUrl = '/site/' + site_id + '/clinics/services' %}{% endif %}
 {% if not formAction %}{% set formAction = '/site/' + site_id + '/clinics/clinic-closures' %}{% endif %}
 {% if not addClosureHref %}{% set addClosureHref = formAction + '/add' %}{% endif %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
+{% endblock %}
 
 {% macro closureText(closure) %}
   {% set closureStart = closure.startDate | formatDate('d MMM yyyy') %}

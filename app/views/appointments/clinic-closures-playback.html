@@ -1,0 +1,49 @@
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+
+{% set currentSection = "plus" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% set pageName = "Clinic closures" %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+      <h2 class="nhsuk-heading-m">There is 1 clinic closure</h2>
+
+      <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-3">
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Staff training closure
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            5 Aug 2026 to 6 Aug 2026
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <ul class="nhsuk-summary-list__actions-list">
+              <li class="nhsuk-summary-list__actions-list-item">
+                <a class="nhsuk-link" href="/site/1/clinics/clinic-closures/0/change">Change<span class="nhsuk-u-visually-hidden">  closure 1</span></a>
+              </li>
+              <li class="nhsuk-summary-list__actions-list-item">
+                <a class="nhsuk-link" href="/site/1/clinics/clinic-closures/0/remove">Remove<span class="nhsuk-u-visually-hidden">  closure 1</span></a>
+              </li>
+            </ul>
+          </dd>
+        </div>
+      </dl>
+
+      <p class="nhsuk-u-margin-bottom-6"><a class="nhsuk-link--no-visited-state" href="/site/1/clinics/clinic-closures/add">Add another closure</a></p>
+      
+      <form action="" method="post">
+        <input type="hidden" name="newSession[type]" value="Clinic series">
+        <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Continue</button>
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

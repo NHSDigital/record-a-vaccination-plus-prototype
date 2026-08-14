@@ -1,0 +1,104 @@
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+
+{% set currentSection = "plus" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% if not pageName %}{% set pageName = "Clinic closures" %}{% endif %}
+{% if not backUrl %}{% set backUrl = '/site/' + site_id + '/clinics/services' %}{% endif %}
+{% if not formAction %}{% set formAction = '/site/' + site_id + '/clinics/clinic-closures' %}{% endif %}
+{% if not addClosureHref %}{% set addClosureHref = formAction + '/add' %}{% endif %}
+
+{% macro closureText(closure) %}
+  {% set closureStart = closure.startDate | formatDate('d MMM yyyy') %}
+  {% set closureEnd = closure.endDate | formatDate('d MMM yyyy') %}
+  {% if closureStart == closureEnd %}
+    {{ closureStart }}
+  {% else %}
+    {{ closureStart }} to {{ closureEnd }}
+  {% endif %}
+{% endmacro %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">Add clinic closure</h1>
+      <form action="" method="post">
+        <input type="hidden" name="newSession[type]" value="Clinic series">
+<div class="nhsuk-form-group">
+  <label class="nhsuk-label nhsuk-label--m" for="closure-name">Name of closure (optional)</label>
+  <div id="closure-name-hint" class="nhsuk-hint">
+    Add a short name for these dates. For example, Christmas closure
+  </div>
+  <input class="nhsuk-input nhsuk-input--width-20" id="closure-name" name="closure[name]" type="text" value="" aria-describedby="closure-name-hint">
+</div>
+<div class="nhsuk-form-group">
+  <fieldset class="nhsuk-fieldset" role="group" aria-describedby="closure-start-date-hint">
+    <legend class="nhsuk-fieldset__legend nhsuk-label--m">Start date</legend>
+      <div id="closure-start-date-hint" class="nhsuk-hint">
+        For example, 25 12 2026
+      </div>
+    <div id="closure-start-date" class="nhsuk-date-input">
+      <div class="nhsuk-date-input__item">
+        <div class="nhsuk-form-group">
+          <label class="nhsuk-label nhsuk-date-input__label" for="closure-start-date-day">Day</label>
+          <input class="nhsuk-input nhsuk-date-input__input nhsuk-input--width-2" id="closure-start-date-day" name="closure[startDate][day]" type="text" inputmode="numeric">
+        </div>
+      </div>
+      <div class="nhsuk-date-input__item">
+        <div class="nhsuk-form-group">
+          <label class="nhsuk-label nhsuk-date-input__label" for="closure-start-date-month">Month</label>
+          <input  class="nhsuk-input nhsuk-date-input__input nhsuk-input--width-2" id="closure-start-date-month" name="closure[startDate][month]" type="text" inputmode="numeric">
+        </div>
+      </div>
+      <div class="nhsuk-date-input__item">
+        <div class="nhsuk-form-group">
+          <label class="nhsuk-label nhsuk-date-input__label" for="closure-start-date-year">Year</label>
+          <input class="nhsuk-input nhsuk-date-input__input nhsuk-input--width-4" id="closure-start-date-year" name="closure[startDate][year]" type="text" inputmode="numeric">
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+<div class="nhsuk-form-group">
+  <fieldset class="nhsuk-fieldset" role="group" aria-describedby="closure-end-date-hint">
+    <legend class="nhsuk-fieldset__legend nhsuk-label--m">End date</legend>
+    <div id="closure-end-date-hint" class="nhsuk-hint">
+      For example, 27 12 2026
+    </div>
+    <div id="closure-end-date" class="nhsuk-date-input">
+      <div class="nhsuk-date-input__item">
+        <div class="nhsuk-form-group">
+          <label class="nhsuk-label nhsuk-date-input__label" for="closure-end-date-day">Day</label>
+          <input class="nhsuk-input nhsuk-date-input__input nhsuk-input--width-2" id="closure-end-date-day" name="closure[endDate][day]" type="text" inputmode="numeric">
+        </div>
+      </div>
+
+      <div class="nhsuk-date-input__item">
+        <div class="nhsuk-form-group">
+          <label class="nhsuk-label nhsuk-date-input__label" for="closure-end-date-month">Month</label>
+          <input class="nhsuk-input nhsuk-date-input__input nhsuk-input--width-2" id="closure-end-date-month" name="closure[endDate][month]" type="text" inputmode="numeric">
+        </div>
+      </div>
+      
+      <div class="nhsuk-date-input__item">
+        <div class="nhsuk-form-group">
+          <label class="nhsuk-label nhsuk-date-input__label" for="closure-end-date-year">Year</label>
+          <input class="nhsuk-input nhsuk-date-input__input nhsuk-input--width-4" id="closure-end-date-year" name="closure[endDate][year]" type="text" inputmode="numeric">
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+<button class="nhsuk-button" data-module="nhsuk-button" type="submit">Continue</button>
+</form>
+
+    </div>
+  </div>
+{% endblock %}

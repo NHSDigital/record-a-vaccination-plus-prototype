@@ -1,0 +1,51 @@
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+
+{% set currentSection = "plus" %}
+
+{% set pageName = "What type of clinic do you want to create?" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      <form action="" method="post">
+
+        {{ radios({
+          idPrefix: "type-of-clinc",
+          name: "typeOfClinic",
+          items: [
+            {
+              value: "Clinic series",
+              text: "Clinic series",
+              hint: {
+                text: "A repeating schedule that runs at the same times every week."
+              },
+              checked: true if data.newSession.type == 'Clinic series'
+
+            },
+            {
+              value: "Single clinic",
+              text: "Single clinic",
+              hint: {
+                text: "A clinic that runs on one day and does not repeat"
+              },
+              checked: true if data.newSession.type == 'Single clinic'
+            }
+          ]
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

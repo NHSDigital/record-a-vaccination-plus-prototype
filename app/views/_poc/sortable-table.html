@@ -1,0 +1,96 @@
+{% extends 'layout-index-only.html' %}
+
+{% set pageName = "NHS Record a vaccination prototypes" %}
+
+{% block content %}
+	<div class="nhsuk-grid-row">
+		<div class="nhsuk-grid-column-full">
+
+			<h1 class="nhsuk-heading-xl">
+				Sortable table working example
+			</h1>
+						
+			<table class="nhsuk-table" data-module="nhsuk-table">
+			<caption class="nhsuk-table__caption nhsuk-table__caption--m">
+				Childhood vaccination coverage
+			</caption>
+			<thead class="nhsuk-table__head">
+				<tr class="nhsuk-table__row">
+				<th scope="col" class="nhsuk-table__header">
+					Nation
+				</th>
+				<th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="descending">
+					MMR
+				</th>
+				<th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+					6-in-1
+				</th>
+				<th scope="col" class="nhsuk-table__header nhsuk-table__header--numeric" aria-sort="none">
+					Rotavirus
+				</th>
+				</tr>
+			</thead>
+			<tbody class="nhsuk-table__body">
+				<tr class="nhsuk-table__row">
+				<td class="nhsuk-table__cell">
+					England
+				</td>
+				<td class="nhsuk-table__cell nhsuk-table__cell--numeric">
+					83.7%
+				</td>
+				<td class="nhsuk-table__cell nhsuk-table__cell--numeric">
+					92.8%
+				</td>
+				<td class="nhsuk-table__cell nhsuk-table__cell--numeric">
+					88.8%
+				</td>
+				</tr>
+				<tr class="nhsuk-table__row">
+				<td class="nhsuk-table__cell">
+					Northern Ireland
+				</td>
+				<td class="nhsuk-table__cell nhsuk-table__cell--numeric">
+					86.4%
+				</td>
+				<td class="nhsuk-table__cell nhsuk-table__cell--numeric">
+					94.6%
+				</td>
+				<td class="nhsuk-table__cell nhsuk-table__cell--numeric">
+					88.0%
+				</td>
+				</tr>
+				<tr class="nhsuk-table__row">
+				<td class="nhsuk-table__cell">
+					Scotland
+				</td>
+				<td class="nhsuk-table__cell nhsuk-table__cell--numeric">
+					89.2%
+				</td>
+				<td class="nhsuk-table__cell nhsuk-table__cell--numeric">
+					96.9%
+				</td>
+				<td class="nhsuk-table__cell nhsuk-table__cell--numeric">
+					92.2%
+				</td>
+				</tr>
+				<tr class="nhsuk-table__row">
+				<td class="nhsuk-table__cell">
+					Wales
+				</td>
+				<td class="nhsuk-table__cell nhsuk-table__cell--numeric">
+					89.5%
+				</td>
+				<td class="nhsuk-table__cell nhsuk-table__cell--numeric">
+					95.4%
+				</td>
+				<td class="nhsuk-table__cell nhsuk-table__cell--numeric">
+					92.0%
+				</td>
+				</tr>
+			</tbody>
+			</table>
+
+
+	    </div>
+  	</div>
+{% endblock %}

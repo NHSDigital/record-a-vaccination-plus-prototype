@@ -1,14 +1,18 @@
-{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
 
 {% set currentSection = "plus" %}
 
-{% set pageName = 'Clinic series created' %}
+{% set pageTitle = 'Clinic series created' %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
+{% endblock %}
 
 {% block content %}
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       {{ panel({
-        titleText: pageName
+        titleText: pageTitle
       }) }}
 
       <h2 class="nhsuk-heading-m">What would you like to do next?</h2>

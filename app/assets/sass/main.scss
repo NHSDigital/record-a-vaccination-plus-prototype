@@ -1,3 +1,6 @@
+// Set the location of NHS.UK images and other assets
+$nhsuk-assets-path: "/nhsuk-frontend/assets/";
+
 // Import NHS.UK frontend library
 @import "nhsuk-frontend/dist/nhsuk";
 
@@ -53,6 +56,194 @@ $govuk-brand-colour: $nhsuk-link-colour;
 
 
 // Custom styles
+
+
+  @media (max-width: 48.0525em) {
+    .nhsuk-table-responsive .nhsuk-table__body .nhsuk-table__header,
+    .nhsuk-table-responsive .nhsuk-table__body .nhsuk-table__cell {
+      justify-content: flex-start;
+      gap: 16px;
+      text-align: left;
+    }
+
+    .nhsuk-table-responsive__heading {
+      flex: 0 0 140px;
+      padding-right: 0;
+    }
+
+    .app-table-cell-value {
+      min-width: 0;
+      text-align: left;
+    }
+  }
+
+  .app-table-secondary-value {
+    margin-left: 4px;
+  }
+
+  @media (min-width: 40.0625em) {
+    .app-table-secondary-value {
+      display: block;
+      margin-top: 4px;
+      margin-left: 0;
+    }
+  }
+
+  .app-table-secondary-value--stacked {
+    display: block;
+    margin-top: 4px;
+    margin-left: 0;
+  }
+
+  .govuk-applied-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 14px;
+    margin-bottom: 20px;
+  }
+
+  .govuk-applied-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    min-height: 38px;
+    padding: 0 14px;
+
+    border: 2px solid #b1b4b6;
+    border-radius: 8px;
+    background: #f3f2f1;
+
+    color: #0b0c0c;
+    text-decoration: none;
+
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 400;
+  }
+
+  .govuk-applied-filter:hover {
+    background: #e8e8e8;
+    border-color: #6f777b;
+    text-decoration: none;
+  }
+
+  .govuk-applied-filter:focus {
+    background: #ffdd00;
+    border-color: #0b0c0c;
+    box-shadow: none;
+  }
+
+  .govuk-applied-filter__label {
+    display: inline-block;
+  }
+
+  .govuk-applied-filter__remove {
+    font-size: 24px;
+    line-height: 1;
+    margin-top: -1px;
+  }
+
+  /* Table overrides */
+
+  /* Prevent wrapping + tighten table */
+  .nhsuk-table {
+    table-layout: auto;
+  }
+
+  .nhsuk-table th, .nhsuk-table td, .nhsuk-table-responsive th, .nhsuk-table-responsive td {
+    /*padding: 8px 12px;*/
+    padding: 8px 12px 8px 0;
+    vertical-align: top;
+    font-size: 16px;
+  }
+
+  .nhsuk-table__header--wrap {
+    white-space: normal;
+    line-height: 1.2;
+    max-width: 150px;
+  }
+
+  .nhsuk-table__header--wrap span {
+    display: block;
+  }
+
+  /* Pagination overrides */
+  .nhsuk-pagination-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* keeps pagination + "Showing..." on same line */
+    margin-top: 8px; /* tighten gap from table */
+  }
+
+  .nhsuk-pagination {
+    margin-top: 0; /* remove default big gap */
+    margin-bottom: 0;
+  }
+
+  .nhsuk-table, .nhsuk-table-responsive {
+    margin-bottom: 8px; /* tighten space above pagination */
+  }
+
+  .nhsuk-pagination-wrapper__results {
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  
+  /* Eligibility Expander table */
+  .eligibility-table .nhsuk-list--bullet li {
+    font-size: 16px;
+  }
+
+  .eligibility-table .nhsuk-list--bullet {
+    margin-bottom: 0;
+  }
+
+  .eligibility-table .nhsuk-list--bullet:last-child {
+    margin-bottom: 0;
+  }
+
+  .eligibility-table .nhsuk-list--bullet li:last-child {
+    margin-bottom: 0;
+  }
+  
+  .eligibility-table .nhsuk-body-s {
+    margin-bottom: 4px;
+  }
+
+  /* Recommended window Summary list */
+  .recommended-window .nhsuk-summary-list {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+
+  .recommended-window .nhsuk-list--bullet li {
+    font-size: 16px;
+    
+  }
+
+  .recommended-window .nhsuk-list--bullet {
+    margin-bottom: 0;
+  }
+
+  .recommended-window .nhsuk-list--bullet:last-child {
+    margin-bottom: 0;
+  }
+
+  .recommended-window .nhsuk-list--bullet li:last-child {
+    margin-bottom: 0;
+  }
+
+  .recommended-window .nhsuk-summary-list__key {
+    width: 140px;
+    padding-right: 12px;
+  }
+
+  .recommended-window .nhsuk-summary-list__value {
+    padding-left: 0;
+  }
+
+
 
 // Phase banner
 .app-phase-banner {

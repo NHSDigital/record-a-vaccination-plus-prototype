@@ -5,6 +5,8 @@
 <!-- Extends the layout from /docs/views/template.html -->
 {% extends "prototype-kit-template.njk" %}
 
+{% from "secondary-navigation/macro.njk" import appSecondaryNavigation %}
+
 {% block head %}
   <!-- Add your custom CSS or Sass in /app/assets/sass/main.scss -->
   <link href="/css/main.css" rel="stylesheet">

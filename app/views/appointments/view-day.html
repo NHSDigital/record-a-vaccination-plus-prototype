@@ -1,4 +1,4 @@
-{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
 
 {% set currentSection = "plus" %}
 
@@ -29,6 +29,11 @@
 {% set nextWeekLabel = date({ day: "numeric" }, { day: nextMondayOffset }) ~ " to " ~ date({ day: "numeric", month: "short" }, { day: nextSundayOffset }) %}
 
 {% set pageName = date({ weekday: "long", day: "numeric", month: "long", year: "numeric" }) ~ " (today)" %}
+
+{% block pageTitle %}
+  {{ pageName }} - Record a vaccination - NHS
+{% endblock %}
+
 
 {% block content %}
   <div class="nhsuk-grid-row">

@@ -1,0 +1,80 @@
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
+
+{% set pageTitle = "Check answers" %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">{{ pageTitle }}</h1>
+
+      {{ summaryList({
+        rows: [
+          {
+            key: {
+              text: "Patient list"
+            },
+            value: {
+              text: "[XXX] patients"
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "patient list"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Template"
+            },
+            value: {
+              text: "RSV invitation"
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "template"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Method"
+            },
+            value: {
+              html: "SMS text message"
+            },
+            actions: {
+              items: [
+                {
+                  href: "#",
+                  text: "Change",
+                  visuallyHiddenText: "method"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+
+      <form action="/form-handler" method="post" novalidate>
+        <button class="nhsuk-button" data-module="nhsuk-button" type="submit">
+            Confirm and send
+          </button>
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

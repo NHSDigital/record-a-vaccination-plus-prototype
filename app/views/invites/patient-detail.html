@@ -1,0 +1,177 @@
+{# Based on record in RAVS Core https://record-a-vaccination-prototype-283fe8650179.herokuapp.com/records/records/464743636  #}
+
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
+
+{% set pageTitle = "Patient detail" %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
+{% endblock %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-three-quarters">
+
+      <h1 class="nhsuk-heading-l">{{ pageTitle }}</h1>
+
+      {{ summaryList({
+        rows: [
+          {
+            key: {
+              text: "Name"
+            },
+            value: {
+              text: "Bailey, Sarah"
+            }
+          },
+          {
+            key: {
+              text: "NHS number"
+            },
+            value: {
+              text: "104 832 7715"
+            }
+          },
+          {
+            key: {
+              text: "Weeks pregnant"
+            },
+            value: {
+              html: "39 weeks"
+            }
+          },
+          {
+            key: {
+              text: "Due date"
+            },
+            value: {
+              html: "6 May 2026"
+            }
+          },
+          {
+            key: {
+              text: "RSV"
+            },
+            value: {
+              html: "<strong class='nhsuk-tag nhsuk-tag--yellow'>Eligible</strong>  from 11 Feb 2026"
+            }
+          },
+          {
+            key: {
+              text: "Pertussis"
+            },
+            value: {
+              html: "<strong class='nhsuk-tag nhsuk-tag--green'>Vaccinated</strong>"
+            }
+          },
+          {
+            key: {
+              text: "Flu"
+            },
+            value: {
+              html: "<strong class='nhsuk-tag nhsuk-tag--green'>Vaccinated</strong>"
+            }
+          },
+          {
+            key: {
+              text: "Message preferences"
+            },
+            value: {
+              html: "Opt in"
+            }
+          }
+        ]
+      }) }}
+
+      <div class="nhsuk-button-group">
+        {{ button({
+          text: "Send patient a message"
+        }) }}
+      </div>
+
+      {{ table({
+        caption: "Timeline",
+        firstCellIsHeader: true,
+        head: [
+          {
+            text: "Event"
+          },
+          {
+            text: "Method"
+          },
+          {
+            text: "Date"
+          },
+          {
+            text: "User"
+          },
+          {
+            text: "Organisation"
+          }
+          ,
+          {
+            text: "Actions"
+          }
+        ],
+        rows: [
+          [
+            {
+              text: "RSV reminder sent"
+            },
+            {
+              text: "RAVS"
+            },
+            {
+              text: "18 Aug 2026"
+            },
+            {
+              text: "Jeremy Blue"
+            },
+            {
+              text: "Royal Berkshire"
+            },
+            {
+              html: "<a href='#'>View</a>"
+            }
+          ],
+          [
+            {
+              text: "RSV invite sent"
+            },
+            {
+              text: "Telephone"
+            },
+            {
+              text: "11 July 2026"
+            },
+            {
+              text: "Jane Smith"
+            },
+            {
+              text: "Royal Berkshire"
+            },
+            {
+              html: ""
+            }
+          ]
+        ]
+      }) }}
+
+      <br>
+
+
+        {{ button({
+          text: "Add to timeline",
+          classes: "nhsuk-button--secondary"
+        }) }}
+
+
+    </div>
+  </div>
+{% endblock %}

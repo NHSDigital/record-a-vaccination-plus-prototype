@@ -1,0 +1,26 @@
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
+
+{% set pageTitle = "Message sent" %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {{ panel({
+        titleText: pageTitle,
+        text: "[XXX] patients have been invited to get a [vaccination]"
+      }) }}
+      
+      <p class="nhsuk-body">When a patient receives a [vaccination], they will show as <strong>'Vaccinated'</strong> in your list of patients.</p>
+
+      <p class="nhsuk-body">
+        <a href="#">View list of patients</a>
+      </p>
+
+    </div>
+  </div>
+{% endblock %}

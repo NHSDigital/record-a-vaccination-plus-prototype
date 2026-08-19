@@ -1,0 +1,58 @@
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
+
+{% set pageTitle = "Invites and reminders" %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
+{% endblock %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-three-quarters">
+
+      <h1 class="nhsuk-heading-l">{{ pageTitle }}</h1>
+
+      <ul class="nhsuk-card-group">
+        <li class="nhsuk-card-group__item">
+          {{ card({
+            href: "#",
+            primary: "true",
+            clickable: "true",
+            heading: "Send",
+            headingSize: "m",
+            description: "Send an invite or reminder to a group of patients"
+            }) }}
+        </li>
+        <li class="nhsuk-card-group__item">
+          {{ card({
+            href: "#",
+            primary: "true",
+            clickable: "true",
+            heading: "History",
+            headingSize: "m",
+            description: "View a list of messages your organisation has sent"
+            }) }}
+        </li>
+        <li class="nhsuk-card-group__item">
+          {{ card({
+            href: "#",
+            primary: "true",
+            clickable: "true",
+            heading: "Templates",
+            headingSize: "m",
+            description: "View, edit or create existing templates, or create new ones"
+            }) }}
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+{% endblock %}

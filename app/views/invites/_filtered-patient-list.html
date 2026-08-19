@@ -1,0 +1,40 @@
+{{ summaryList({
+        card: {
+          heading: "Filtered patient list",
+          headingSize: "m",
+          actions: {
+            items: [
+              {
+                text: "Edit",
+                href: "#"
+              }
+            ]
+          }
+        },
+        rows: [
+          {
+            key: {
+              text: "Patients"
+            },
+            value: {
+              text: "354"
+            }
+          },
+          {
+            key: {
+              text: "Filters"
+            },
+            value: {
+              html: "RSV status: Eligible<br>Weeks pregnant: 20 weeks"
+            }
+          },
+          {
+            key: {
+              text: "Excluded"
+            },
+            value: {
+              html: "22 patients have no mobile number"
+            }
+          }
+        ]
+      }) }}

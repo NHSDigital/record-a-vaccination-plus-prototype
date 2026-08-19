@@ -15,6 +15,44 @@
 {% endblock %}
 
 {% block content %}
+  <style>
+    .prototype-text {
+      position: relative;
+      max-width: 400px;
+      padding: 16px;
+      border-radius: 16px;
+      background-color: #eceef0;
+      font-family: Helvetica, Arial, sans-serif;
+    }
+
+    .prototype-text:before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      bottom: 0;
+      left: -8px;
+      width: 24px;
+      height: 16px;
+      border-bottom-right-radius: 16px;
+      background: #eceef0;
+    }
+
+    .prototype-text:after {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      bottom: 0;
+      left: -8px;
+      width: 8px;
+      height: 16px;
+      border-bottom-right-radius: 8px;
+      background: #fff;
+    }
+
+    .prototype-text *:last-child {
+      margin: 0;
+    }
+  </style>
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-three-quarters">
 
@@ -32,7 +70,7 @@
           },
           {
             key: {
-              text: "Template version"
+              text: "Version"
             },
             value: {
               text: "7"
@@ -57,9 +95,17 @@
         ]
       }) }}
 
-       <h2 class="nhsuk-heading-m">Message content</h2>
+      <h2 class="nhsuk-heading-m">Message content</h2>
 
-       <p class="nhsuk-body">[Message body here]</p>
+      <div class="nhsuk-card">
+        <div class="nhsuk-card__content">
+
+          <article class="prototype-text">
+            <p class="nhsuk-body">This is 160 characters, the limit for 1 text. Seed perspiciatis unde omnis iste natus error sit <a href="#">voluptatem accusantium</a> doloremque laudantium, totam rem aperiam.</p>
+          </article>
+
+        </div>
+      </div>
 
     </div>
   </div>

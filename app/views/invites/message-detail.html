@@ -1,0 +1,66 @@
+{# Based on record in RAVS Core https://record-a-vaccination-prototype-283fe8650179.herokuapp.com/records/records/464743636  #}
+
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
+
+{% set pageTitle = "Message detail" %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
+{% endblock %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-three-quarters">
+
+      <h1 class="nhsuk-heading-l">{{ pageTitle }}</h1>
+
+      {{ summaryList({
+        rows: [
+          {
+            key: {
+              text: "Template"
+            },
+            value: {
+              text: "RSV reminder"
+            }
+          },
+          {
+            key: {
+              text: "Template version"
+            },
+            value: {
+              text: "7"
+            }
+          },
+          {
+            key: {
+              text: "User"
+            },
+            value: {
+              text: "Jeremy Blue"
+            }
+          },
+          {
+            key: {
+              text: "Date"
+            },
+            value: {
+              html: "18 Aug 2026"
+            }
+          }
+        ]
+      }) }}
+
+       <h2 class="nhsuk-heading-m">Message content</h2>
+
+       <p class="nhsuk-body">[Message body here]</p>
+
+    </div>
+  </div>
+{% endblock %}

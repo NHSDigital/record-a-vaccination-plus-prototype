@@ -12,25 +12,16 @@
 
       <h1 class="nhsuk-heading-l">{{ pageTitle }}</h1>
 
+      {% include "invites/_bereavement-warning.html" %}
+
+      {% include "invites/_filtered-patient-list.html" %}
+
       {{ summaryList({
+        card: {
+          heading: "Message",
+          headingSize: "m"
+        },
         rows: [
-          {
-            key: {
-              text: "Patient list"
-            },
-            value: {
-              text: "[XXX] patients"
-            },
-            actions: {
-              items: [
-                {
-                  href: "#",
-                  text: "Change",
-                  visuallyHiddenText: "patient list"
-                }
-              ]
-            }
-          },
           {
             key: {
               text: "Template"

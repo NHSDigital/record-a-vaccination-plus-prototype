@@ -1,0 +1,46 @@
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
+
+{% set currentSection = "plus" %}
+
+{% set pageTitle = "Maternity" %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-three-quarters">
+
+      <h1 class="nhsuk-heading-xl">{{ pageTitle }}</h1>
+
+      <p>View, filter and export vaccination information for your pregnant patients.</p>
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          {{ card({
+            href: "#",
+            primary: "true",
+            clickable: "true",
+            heading: "Patients",
+            headingSize: "m",
+            description: "View, update and filter patient list"
+            }) }}
+        </li>
+        <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+          {{ card({
+            href: "invites-landing",
+            primary: "true",
+            clickable: "true",
+            heading: "Invites",
+            headingSize: "m",
+            description: "Send invites and manage templates"
+            }) }}
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+{% endblock %}

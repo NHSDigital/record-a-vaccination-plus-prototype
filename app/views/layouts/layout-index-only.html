@@ -4,8 +4,7 @@
     - add custom CSS and JavaScript
 -->
 
-<!-- Extends the layout from /docs/views/template.html -->
-{% extends "layout.html" %} <!-- was template.html -->
+{% extends "layout.html" %}
 
 <!-- Add your custom CSS or Sass in /app/assets/sass/main.scss -->
 {% block headCSS %}
@@ -15,7 +14,7 @@
 
 <!-- Set the page title -->
 {% block pageTitle %}
-  {% if pageName %}{{ pageName }} – {% endif %}NHS {{ serviceName }}
+  {% if pageName %}{{ pageName }} - {% endif %}NHS {{ serviceName }}
 {% endblock %}
 
 {% block header %}

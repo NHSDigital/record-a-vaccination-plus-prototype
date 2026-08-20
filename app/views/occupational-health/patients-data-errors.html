@@ -1,4 +1,4 @@
-{% extends 'ravs-plus-layout-1-oh.html' %}
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
 
 {% set currentSection = "plus" %}
 
@@ -20,9 +20,6 @@
     <a class="nhsuk-back-link" href="patients?scenario&filtersApplied">
       <span class="nhsuk-u-visually-hidden">Back to</span> Patients
     </a>
-    <!--<a class="nhsuk-back-link" href="javascript:history.back()">
-      Go back
-    </a>-->
   </nav>
 {% endblock %}
 
@@ -153,6 +150,7 @@
       This list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
     </p>
 
+    {#
     {% include "./_ohFilterAndSort.html" %}
 
     {% if data.filtersApplied == "true" %}
@@ -190,6 +188,7 @@
     {% endif %}
 
     <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+    #}
 
   </div>
 </div>
@@ -201,9 +200,9 @@
       <ul class="moj-sub-navigation__list">
         <li class="moj-sub-navigation__item">
           {% if data.filtersApplied == "true" %}
-            <a class="moj-sub-navigation__link" href="patients">Patients (238)</a>
+            <a class="moj-sub-navigation__link" href="patients?scenario">Patients (238)</a>
           {% else %}
-            <a class="moj-sub-navigation__link" href="patients">Patients (15,995)</a>
+            <a class="moj-sub-navigation__link" href="patients?scenario">Patients (15,995)</a>
           {% endif %}
         </li>
         <li class="moj-sub-navigation__item">

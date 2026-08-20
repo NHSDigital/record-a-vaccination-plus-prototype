@@ -1,0 +1,173 @@
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
+
+{% set pageName = "Add user" %}
+
+{% set currentSection = "manage" %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "javascript:history.back()", text: "Back" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+     
+      <h1 class="nhsuks-heading-l">Add user</h1>
+      <p>Users must have an nhs.net email or another allowed email address. See <a href="https://digital.nhs.uk/services/care-identity-service/applications-and-services/apply-for-care-id/care-identity-email-domain-allow-list" target="_blank">examples of allowed email addresses (opens in new tab)</a>.</p>
+
+      <p>If the email address is not allowed, use a different email or <a href="#/">contact us</a>.</p>
+
+      <form action="check" method="post" novalidate="true">
+
+        {{ input({
+          "label": {
+            "text": "First name"
+          },
+          "id": "first-name",
+          "name": "firstName",
+          classes: "nhsuk-input--width-20",
+          value: data.firstName
+        }) }}
+
+        {{ input({
+          "label": {
+            "text": "Last name"
+          },
+          "id": "last-name",
+          "name": "lastName",
+          classes: "nhsuk-input--width-20",
+          value: data.lastName
+        }) }}
+
+        {{ input({
+          "label": {
+            "text": "Email address"
+          },
+          "id": "email",
+          "name": "email",
+          type: "email",
+          value: data.email
+        }) }}
+
+        {{ radios({
+          "name": "vaccinator",
+          "fieldset": {
+            "legend": {
+              "text": "Are they a vaccinator?"
+            }
+          },
+          hint: {
+            text: "Vaccination records include the name of the person who gave the vaccination"
+          },
+          value: data.vaccinator,
+          "items": [
+            {
+              "value": "yes",
+              "text": "Yes",
+              id: "vaccinator"
+            },
+            {
+              "value": "no",
+              "text": "No"
+            }
+          ]
+        }) }}
+
+        {# START: RAVS+ Additional functionality #}
+        {% set conditionalAdditionalFunctionality %}
+          {{ checkboxes({
+            idPrefix: "additionalFunctionality",
+            name: "additionalFunctionality",
+            values: data.additionalFunctionality,
+            fieldset: {
+              legend: {
+                text: "Additional functionality",
+                classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden"
+              }
+            },
+            classes: "nhsuk-checkboxes",
+            items: [
+              {
+                value: "functionalityMaternity",
+                text: "Maternity",
+                hint: {
+                  text: "Additional maternity functionality, etc."
+                }
+              },
+              {
+                value: "functionalityOccupationalHealth",
+                text: "Occupational health",
+                hint: {
+                  text: "Additional occupational health functionality, etc."
+                }
+              }
+            ]
+          }) }}
+        {% endset %}
+
+        {{ radios({
+          "name": "ravsplus",
+          "fieldset": {
+            "legend": {
+              "text": "Enable RAVS+ functionality?"
+            }
+          },
+          value: data.ravsplus,
+          "items": [
+            {
+              "value": "yes",
+              "text": "Yes"
+            },
+            {
+              "value": "no",
+              "text": "No"
+            }
+          ]
+        }) }}
+        {# END: RAVS+ Additional functionality #}
+
+        {{ radios({
+          "name": "permissionLevel",
+          idPrefix: "permission-level",
+          "fieldset": {
+            "legend": {
+              "text": "Permission level"
+            }
+          },
+          value: data.permissionLevel,
+          "items": [
+            {
+              "value": "Recorder",
+              "text": "Recorder",
+              "hint": {
+                "text": "Record vaccinations only"
+              }
+            },
+            {
+              "value": "Administrator",
+              "text": "Administrator",
+              "hint": {
+                "text": "Record vaccinations, create reports and manage vaccines"
+              }
+            },
+            {
+              "value": "Lead administrator",
+              "text": "Lead administrator",
+              "hint": {
+                "text": "Record vaccinations, create reports, manage vaccines and users"
+              }
+            }
+          ]
+        }) }}
+
+
+        {{ button({
+          "text": "Continue"
+      }) }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

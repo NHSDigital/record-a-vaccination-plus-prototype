@@ -1,6 +1,10 @@
-{% extends "layout-index-only.html" %}
+{% extends "layout.html" %}
 
 {% set pageName = "Reset data" %}
+
+{% block header %}
+  {% include "includes/header-index-only.html" %}
+{% endblock %}
 
 {% block beforeContent %}
   {{ backLink({

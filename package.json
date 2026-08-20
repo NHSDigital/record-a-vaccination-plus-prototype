@@ -32,7 +32,7 @@
     "browser-sync": "^3.0.4",
     "client-sessions": "^0.8.0",
     "cookie-parser": "^1.4.7",
-    "date-and-time": "^3.6.0",
+    "date-and-time": "^4.5.1",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "express-session": "^1.18.1",

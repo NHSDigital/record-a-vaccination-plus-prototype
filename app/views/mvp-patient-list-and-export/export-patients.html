@@ -1,9 +1,18 @@
-{% extends 'ravs-plus-layout-1.html' %}
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
 
 {% set currentSection = "plus" %}
 
+{% set errorMessages = {
+  noOptionChosen: "Select a list type"
+} %}
+
+{% set errorMessage = errorMessages[data.scenario] %}
+{% set hasError = errorMessage %}
+
+{% set pageTitle = "Export list of patients" %}
+
 {% block pageTitle %}
-  Export partients
+  {% if hasError %}Error: {% endif %}{{ pageTitle }} - Record a vaccination - NHS
 {% endblock %}
 
 {% block beforeContent %}
@@ -13,29 +22,60 @@
 {% block content %}
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
+
+      {% if hasError %}
+        <div class="nhsuk-error-summary" data-module="nhsuk-error-summary">
+          <div role="alert">
+            <h2 class="nhsuk-error-summary__title">
+              There is a problem
+            </h2>
+            <div class="nhsuk-error-summary__body">
+              <ul class="nhsuk-list nhsuk-error-summary__list">
+                <li>
+                  <a href="#export-list">{{ errorMessage }}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
       <form method="post" action="export-patients">
 
-        <div class="nhsuk-form-group">
+        <div class="nhsuk-form-group {% if hasError %}nhsuk-form-group--error{% endif %}">
           <fieldset class="nhsuk-fieldset" aria-describedby="export-patients-hint">
             <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
-              <h1 class="nhsuk-fieldset__heading">
-                Export patients
+              <h1 class="nhsuk-fieldset__heading" id="export-list">
+                Export list of patients
               </h1>
             </legend>
             {% if data.filtersApplied == "true" %}
               <p class="nhsuk-hint" id="export-patients-hint">
+                Your current list of pregnant patients was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+              </p>
+              <p class="nhsuk-body nhsuk-u-margin-bottom-4">
                 There are 238 patients in your list with 2 filters applied.
               </p>
+
+              {% if hasError %}
+                <span class="nhsuk-error-message" id="file-hint-error">
+                  <span class="nhsuk-u-visually-hidden">Error:</span> {{ errorMessage }}
+                </span>
+              {% endif %}
+
               <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">
                 Active filters
               </h2>
               <ul class="nhsuk-list nhsuk-list--bullet">
                 <li>RSV status: Eligible</li>
-                <li>Weeks pregnant: 28 to 31 weeks</li>
-                {#<li>Last pertussis vaccination: From 1 February 2023 to 10 May 2026</li>#}
+                <li>Weeks pregnant: 26 weeks</li>
               </ul>
             {% else %}
               <p class="nhsuk-hint" id="export-patients-hint">
+              <p class="nhsuk-hint" id="export-patients-hint">
+                Your current list of pregnant patients was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+              </p>
+              <p class="nhsuk-body nhsuk-u-margin-bottom-4">
                 There are 1,995 patients in your list and no filters applied.
               </p>
             {% endif %}

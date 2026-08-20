@@ -1,0 +1,143 @@
+{% extends '../../../layouts/layout.html' %}
+{% from '../../../components/appointments-summary.njk' import appointmentsSummary %}
+
+{% if not pageName %}{% set pageName = "Capacity calculator" %}{% endif %}
+{% if not backUrl %}{% set backUrl = '/site/' + site_id + '/clinics/clinic-times' %}{% endif %}
+{% if not formAction %}{% set formAction = '/site/' + site_id + '/clinics/services' %}{% endif %}
+{% set durationCanChange = canChangeAppointmentLength if canChangeAppointmentLength is defined else (features and (features.canChangeAppointmentLength is defined) and features.canChangeAppointmentLength) %}
+{% if not (canChangeAppointmentLength is defined) and not (features and (features.canChangeAppointmentLength is defined)) %}{% set durationCanChange = true %}{% endif %}
+
+{% set startHour = data.newSession.startTime.hour or '09' %}
+{% set startMinute = data.newSession.startTime.minute or '00' %}
+{% set endHour = data.newSession.endTime.hour or '12' %}
+{% set endMinute = data.newSession.endTime.minute or '00' %}
+
+{% block beforeContent %}
+{{ backLink({
+  href: backUrl
+}) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      <form action="{{ formAction }}" method="post" id="appointments-calculator-form" data-start-hour="{{ startHour }}" data-start-minute="{{ startMinute }}" data-end-hour="{{ endHour }}" data-end-minute="{{ endMinute }}">
+
+        {{ input({
+          label: {
+            text: "How long do you need for each appointment?",
+            classes: "nhsuk-label--m"
+          },
+          hint: {
+            text: "Up to a maximum of 60 minutes" if durationCanChange else "You cannot change the appointment length"
+          },
+          id: "duration",
+          inputmode: "numeric",
+          name: "newSession[duration]",
+          classes: "nhsuk-input--width-2",
+          suffix: "minutes",
+          spellcheck: false,
+          value: data.newSession.duration or '10',
+          disabled: not durationCanChange
+        }) }}
+
+        {% if not durationCanChange %}
+          <input type="hidden" name="newSession[duration]" value="{{ data.newSession.duration or '10' }}">
+        {% endif %}
+
+        {{ input({
+          label: {
+            text: "How many vaccinators are in this clinic?",
+            classes: "nhsuk-label--m"
+          },
+          id: "capacity",
+          name: "newSession[capacity]",
+          classes: "nhsuk-input--width-2",
+          value: data.newSession.capacity,
+          inputmode: "numeric",
+          spellcheck: false,
+          suffix: {
+            text: "vaccinators"
+          }
+        }) }}
+
+        {{ appointmentsSummary({
+          items: [
+            { figure: "-", label: "appointments per hour" },
+            { figure: "-", label: "appointments per clinic" }
+          ],
+          attributes: {
+            "data-module": "app-appointments-summary"
+          }
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+      </form>
+
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const form = document.getElementById('appointments-calculator-form');
+      if (!form) return;
+
+      const durationInput = document.getElementById('duration');
+      const capacityInput = document.getElementById('capacity');
+      const summary = form.querySelector('[data-module="app-appointments-summary"]');
+      if (!durationInput || !capacityInput || !summary) return;
+
+      const figures = summary.querySelectorAll('.app-appointments-summary__figure');
+      const perHourEl = figures[0];
+      const perClinicEl = figures[1];
+
+      function parseIntSafe(value) {
+        const n = parseInt(value, 10);
+        return Number.isFinite(n) ? n : null;
+      }
+
+      function toMinutes(hour, minute) {
+        const h = parseIntSafe(hour);
+        const m = parseIntSafe(minute);
+        if (h === null || m === null) return null;
+        return (h * 60) + m;
+      }
+
+      function render() {
+        const duration = parseIntSafe(durationInput.value);
+        const capacity = parseIntSafe(capacityInput.value);
+        const start = toMinutes(form.dataset.startHour, form.dataset.startMinute || '0');
+        const end = toMinutes(form.dataset.endHour, form.dataset.endMinute || '0');
+
+        const clinicMinutes = (start !== null && end !== null) ? (end - start) : null;
+
+        const valid = Boolean(
+          duration && capacity && clinicMinutes &&
+          duration > 0 && duration <= 60 &&
+          capacity > 0 && clinicMinutes > 0
+        );
+
+        if (!valid) {
+          perHourEl.textContent = '-';
+          perClinicEl.textContent = '-';
+          return;
+        }
+
+        const appointmentsPerHour = Math.floor((60 / duration) * capacity);
+        const appointmentsPerClinic = Math.floor((clinicMinutes / duration) * capacity);
+
+        perHourEl.textContent = String(appointmentsPerHour);
+        perClinicEl.textContent = String(appointmentsPerClinic);
+      }
+
+      durationInput.addEventListener('input', render);
+      capacityInput.addEventListener('input', render);
+
+      render();
+    })();
+  </script>
+{% endblock %}

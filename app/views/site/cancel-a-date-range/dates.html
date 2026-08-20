@@ -1,0 +1,84 @@
+{% extends '../../layouts/layout.html' %}
+
+{% set pageName = "Select dates to cancel" %}
+
+{% block beforeContent %}
+{{ backLink({
+  href: '/site/' ~ site_id ~ '/clinics'
+}) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+      <form method="post" action="/site/{{ site_id }}/cancel-availability/sessions-and-bookings">
+        {{ dateInput({
+          id: "start-date",
+          namePrefix: "[cancelAvailability][startDate]",
+          fieldset: {
+            legend: {
+              text: "Start date",
+              size: "s"
+            }
+          },
+          hint: {
+            text: "For example, 15 3 2026"
+          },
+          items: [
+            {
+              name: "day",
+              classes: "nhsuk-input--width-2",
+              value: data.cancelAvailability.startDate.day
+            },
+            {
+              name: "month",
+              classes: "nhsuk-input--width-2",
+              value: data.cancelAvailability.startDate.month
+            },
+            {
+              name: "year",
+              classes: "nhsuk-input--width-4",
+              value: data.cancelAvailability.startDate.year
+            }
+          ]
+        }) }}
+
+        {{ dateInput({
+          id: "end-date",
+          namePrefix: "[cancelAvailability][endDate]",
+          fieldset: {
+            legend: {
+              text: "End date",
+              size: "s"
+            }
+          },
+          hint: {
+            text: "For example, 15 5 2026"
+          },
+          items: [
+            {
+              name: "day",
+              classes: "nhsuk-input--width-2",
+              value: data.cancelAvailability.endDate.day
+            },
+            {
+              name: "month",
+              classes: "nhsuk-input--width-2",
+              value: data.cancelAvailability.endDate.month
+            },
+            {
+              name: "year",
+              classes: "nhsuk-input--width-4",
+              value: data.cancelAvailability.endDate.year
+            }
+          ]
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

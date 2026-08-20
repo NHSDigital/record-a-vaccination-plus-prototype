@@ -1,4 +1,4 @@
-{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
 
 {% set currentSection = "plus" %}
 
@@ -8,12 +8,16 @@
   }) }}
 {% endblock %}
 
-{% set pageName = "Clinic closures" %}
+{% set pageTitle = "Clinic closures" %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
+{% endblock %}
 
 {% block content %}
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+      <h1 class="nhsuk-heading-l">{{ pageTitle }}</h1>
 
       <form action="" method="post">
         <input type="hidden" name="newSession[type]" value="Clinic series">

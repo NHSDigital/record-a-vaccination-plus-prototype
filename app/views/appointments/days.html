@@ -1,8 +1,8 @@
-{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
 
 {% set currentSection = "plus" %}
 
-{% if not pageName %}{% set pageName = "Which days will this clinic series run on?" %}{% endif %}
+{% if not pageTitle %}{% set pageTitle = "Which days will this clinic series run on?" %}{% endif %}
 {% if not backUrl %}{% set backUrl = '/site/' + site_id + '/clinics/details' %}{% endif %}
 {% if not formAction %}{% set formAction = '/site/' + site_id + '/clinics/clinic-times' %}{% endif %}
 
@@ -12,8 +12,11 @@
   }) }}
 {% endblock %}
 
-{% block content %}
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
+{% endblock %}
 
+{% block content %}
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
@@ -28,7 +31,7 @@
           },
           fieldset: {
             legend: {
-              text: pageName,
+              text: pageTitle,
               isPageHeading: true,
               classes: "nhsuk-fieldset__legend--l"
             }

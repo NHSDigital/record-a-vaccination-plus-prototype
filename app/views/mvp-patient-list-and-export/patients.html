@@ -1,9 +1,18 @@
-{% extends 'ravs-plus-layout-1.html' %}
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
 
 {% set currentSection = "plus" %}
 
+{% set errorMessages = {
+  noFiltersChosen: "Select a filter"
+} %}
+
+{% set errorMessage = errorMessages[data.scenario] %}
+{% set hasError = errorMessage %}
+
+{% set pageTitle = "Patients" %}
+
 {% block pageTitle %}
-  Patients
+  {% if hasError %}Error: {% endif %}{{ pageTitle }} - Record a vaccination - NHS
 {% endblock %}
 
 {% block beforeContent %}
@@ -12,10 +21,9 @@
       <li class="nhsuk-breadcrumb__list-item">
         <a class="nhsuk-breadcrumb__link" href="landing">Maternity</a>
       </li>
-      <li class="nhsuk-breadcrumb__list-item">Patients</li>
     </ol>
-    <a class="nhsuk-back-link" href="javascript:history.back()">
-      Go back
+    <a class="nhsuk-back-link" href="landing">
+      <span class="nhsuk-u-visually-hidden">Back to</span> Maternity
     </a>
   </nav>
 {% endblock %}
@@ -133,6 +141,10 @@
   .eligibility-table .nhsuk-list--bullet li:last-child {
     margin-bottom: 0;
   }
+  
+  .eligibility-table .nhsuk-body-s {
+    margin-bottom: 4px;
+  }
 
   /* Recommended window Summary list */
   .recommended-window .nhsuk-summary-list {
@@ -171,19 +183,46 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-two-thirds">
 
+    {% if hasError %}
+      <div class="nhsuk-error-summary" data-module="nhsuk-error-summary">
+        <div role="alert">
+          <h2 class="nhsuk-error-summary__title">
+            There is a problem
+          </h2>
+          <div class="nhsuk-error-summary__body">
+            <ul class="nhsuk-list nhsuk-error-summary__list">
+              <li>
+                <a href="#filter-options-error">{{ errorMessage }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
     <h1 class="nhsuk-heading-l">
-      Patients
+      {{ pageTitle }}
     </h1>
 
     <p class="nhsuk-body">
-      This list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+      This list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({day: 'numeric', month: 'long', year: 'numeric'}) }}</strong>.
     </p>
+
+    <div class="nhsuk-inset-text nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
+      <span class="nhsuk-u-visually-hidden">Information: </span>
+      <p>Vaccination information is updated overnight and not in real time. For a patient’s eligibility status to change, their vaccination must be recorded in RAVS or a GP system.</p>
+      <p>Weeks pregnant and eligibility status will update automatically over time for each patient. To change who is on your list, you will need to upload a new CSV file.</p>
+    </div>
+
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
 
     {% include "mvp-patient-list-and-export/_FilterAndSort.html" %}
 
     {% if data.filtersApplied == "true" %}
-      <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3">
-
       <p class="nhsuk-body nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-3">Active filters</p>
 
       <div class="govuk-applied-filters">
@@ -203,62 +242,37 @@
             ×
           </span>
           <span class="govuk-applied-filter__label">
-            Weeks pregnant: 28 to 31 weeks
+            Weeks pregnant: 26 weeks
           </span>
           <span class="nhsuk-u-visually-hidden">
-            Remove filter Weeks pregnant 28 to 31 weeks
+            Remove filter Weeks pregnant 26 weeks
           </span>
         </a>
-        {#<a href="#/" class="govuk-applied-filter">
-          <span class="govuk-applied-filter__remove" aria-hidden="true">
-            ×
-          </span>
-          <span class="govuk-applied-filter__label">
-            Last pertussis vaccination: From 1 February 2023
-          </span>
-          <span class="govuk-visually-hidden">
-            Remove filter Last pertussis vaccination from 1 February 2023
-          </span>
-        </a>
-        <a href="#/" class="govuk-applied-filter">
-          <span class="govuk-applied-filter__remove" aria-hidden="true">
-            ×
-          </span>
-          <span class="govuk-applied-filter__label">
-            Last pertussis vaccination: To 10 May 2026
-          </span>
-          <span class="govuk-visually-hidden">
-            Remove filter Last pertussis vaccination to 10 May 2026
-          </span>
-        </a>#}
       </div>
 
       <p class="nhsuk-body"><a href="?filtersApplied=false" class="nhsuk-link">Clear all filters and sorting</a></p>
 
+      <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3">
+
     {% endif %}
 
-    <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+    {% set patientCount = "238" if data.filtersApplied == "true" else "1,995" %}
 
-  </div>
-</div>
-
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
-
-    <nav class="moj-sub-navigation" aria-label="Sub navigation">
-      <ul class="moj-sub-navigation__list">
-        <li class="moj-sub-navigation__item">
-          {% if data.filtersApplied == "true" %}
-            <a class="moj-sub-navigation__link" aria-current="page" href="#/">Patients (238)</a>
-          {% else %}
-            <a class="moj-sub-navigation__link" aria-current="page" href="#/">Patients (1,995)</a>
-          {% endif %}
-        </li>
-        <li class="moj-sub-navigation__item">
-          <a class="moj-sub-navigation__link" href="patients-data-errors">Data errors (5)</a>
-        </li>
-      </ul>
-    </nav>
+    {{ appSecondaryNavigation({
+      visuallyHiddenTitle: "Secondary menu",
+      classes: "nhsuk-u-margin-bottom-4",
+      items: [
+        {
+          text: pageTitle ~ " (" ~ patientCount ~ ")",
+          href: "#/",
+          current: true
+        },
+        {
+          text: "Import issues (5)",
+          href: "patients-data-errors"
+        }
+      ]
+    }) }}
 
     {% include "mvp-patient-list-and-export/_secondayNavContentAllVaccinations.html" %}
 

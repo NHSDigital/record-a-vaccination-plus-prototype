@@ -1,13 +1,11 @@
-{% extends 'ravs-plus-layout-1.html' %}
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
 
 {% set currentSection = "plus" %}
 
+{% set pageTitle = "Upload in progress" %}
+  
 {% block pageTitle %}
-  Upload complete
-{% endblock %}
-
-{% block beforeContent %}
-  {#<a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>#}
+  {{ pageTitle }} - Record a vaccination - NHS
 {% endblock %}
 
 {% block content %}
@@ -16,21 +14,25 @@
 
       <div class="nhsuk-panel nhsuk-panel--interruption">
         <h1 class="nhsuk-panel__title">
-          Upload complete
+          {{ pageTitle }}
         </h1>
+        <div class="nhsuk-panel__body">
+            You will get an email when your new list of patients is ready
+        </div>
       </div>
+
       <p class="nhsuk-body">
-        We are checking the records you uploaded match the vaccination information we hold about your patients. 
-        Any patients in your CSV file that do not have an NHS number will not appear in your list of maternity 
-        patients in RAVS.
+        We are checking the patient records you uploaded match the vaccination information we hold about your patients. Any patients in your CSV file that do not have an NHS number will not appear in your list of pregnant patients in RAVS. 
       </p>
       <p class="nhsuk-body">
-        This process could take several hours. You cannot view your list of patients during this time.
+        It could take several hours to match vaccination information. You cannot view your list of patients during this time.
       </p>
+      {# <p class="nhsuk-body">
+        We will send you an email when your list is ready to view.
+      </p> #}
       <p class="nhsuk-body">
-        You will get an email when the check is complete.
+        <a href="change-log?uploadedList=processing">View patient upload history</a>
       </p>
-      <p class="nhsuk-body"><a href="change-log?uploadedList=processing">View patient upload history</a>.</p>
 
     </div>
   </div>

@@ -1,9 +1,9 @@
-{% extends 'ravs-plus-layout-1-oh.html' %}
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
 
 {% set currentSection = "plus" %}
 
 {% block pageTitle %}
-  Data errors
+  Import issues
 {% endblock %}
 
 {% block beforeContent %}
@@ -13,12 +13,12 @@
         <a class="nhsuk-breadcrumb__link" href="landing">Staff vaccinations</a>
       </li>
       <li class="nhsuk-breadcrumb__list-item">
-        <a class="nhsuk-breadcrumb__link" href="javascript:history.back()">Patients</a>
+        <a class="nhsuk-breadcrumb__link" href="patients?scenario&filtersApplied">Patients</a>
       </li>
-      <li class="nhsuk-breadcrumb__list-item">Data errors</li>
+      <li class="nhsuk-breadcrumb__list-item">Import issues</li>
     </ol>
-    <a class="nhsuk-back-link" href="javascript:history.back()">
-      Go back
+    <a class="nhsuk-back-link" href="patients?scenario&filtersApplied">
+      <span class="nhsuk-u-visually-hidden">Back to</span> Patients
     </a>
   </nav>
 {% endblock %}
@@ -143,13 +143,14 @@
   <div class="nhsuk-grid-column-two-thirds">
 
     <h1 class="nhsuk-heading-l">
-      Data errors
+      Import issues
     </h1>
 
     <p class="nhsuk-body">
       This list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
     </p>
 
+    {#
     {% include "./_ohFilterAndSort.html" %}
 
     {% if data.filtersApplied == "true" %}
@@ -163,10 +164,10 @@
             ×
           </span>
           <span class="govuk-applied-filter__label">
-            RSV status: Eligible
+            Flu eligibility: Eligible
           </span>
           <span class="nhsuk-u-visually-hidden">
-            Remove filter RSV status Eligible
+            Remove filter Flu status Eligible
           </span>
         </a>
         <a href="#/" class="govuk-applied-filter">
@@ -174,34 +175,12 @@
             ×
           </span>
           <span class="govuk-applied-filter__label">
-            Weeks pregnant: 28 to 31 weeks
+            Location: Northern General Hospital
           </span>
           <span class="nhsuk-u-visually-hidden">
-            Remove filter Weeks pregnant 28 to 31 weeks
+            Remove filter Location Nothern General Hospital
           </span>
         </a>
-        {#<a href="#/" class="govuk-applied-filter">
-          <span class="govuk-applied-filter__remove" aria-hidden="true">
-            ×
-          </span>
-          <span class="govuk-applied-filter__label">
-            Last pertussis vaccination: From 1 February 2023
-          </span>
-          <span class="govuk-visually-hidden">
-            Remove filter Last pertussis vaccination from 1 February 2023
-          </span>
-        </a>
-        <a href="#/" class="govuk-applied-filter">
-          <span class="govuk-applied-filter__remove" aria-hidden="true">
-            ×
-          </span>
-          <span class="govuk-applied-filter__label">
-            Last pertussis vaccination: To 10 May 2026
-          </span>
-          <span class="govuk-visually-hidden">
-            Remove filter Last pertussis vaccination to 10 May 2026
-          </span>
-        </a>#}
       </div>
 
       <p class="nhsuk-body"><a href="?filtersApplied=false" class="nhsuk-link">Clear all filters and sorting</a></p>
@@ -209,6 +188,7 @@
     {% endif %}
 
     <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+    #}
 
   </div>
 </div>
@@ -220,13 +200,13 @@
       <ul class="moj-sub-navigation__list">
         <li class="moj-sub-navigation__item">
           {% if data.filtersApplied == "true" %}
-            <a class="moj-sub-navigation__link" href="patients">Patients (238)</a>
+            <a class="moj-sub-navigation__link" href="patients?scenario">Patients (238)</a>
           {% else %}
-            <a class="moj-sub-navigation__link" href="patients">Patients (1,995)</a>
+            <a class="moj-sub-navigation__link" href="patients?scenario">Patients (15,995)</a>
           {% endif %}
         </li>
         <li class="moj-sub-navigation__item">
-          <a class="moj-sub-navigation__link" aria-current="page" href="#/">Data errors (5)</a>
+          <a class="moj-sub-navigation__link" aria-current="page" href="#/">Import issues (5)</a>
         </li>
       </ul>
     </nav>

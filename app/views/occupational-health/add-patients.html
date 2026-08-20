@@ -1,24 +1,27 @@
-{% extends 'ravs-plus-layout-1-oh.html' %}
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
 
 {% set currentSection = "plus" %}
+
+{% set pageTitle = "Add patients" %}
 
 {% set errorMessages = {
   invalidFileType: "The selected file must be a CSV",
   fileTooLarge: "The CSV file must be smaller than 10MB",
   fileIsEmpty: "The selected file is empty",
-  fileIsMissingHeaders: "The selected file is missing required headers: NHS number, Due date",
+  fileIsMissingHeaders: "The selected file is missing the required header: Name",
   tooManyRows: "Too many rows. Maximum allowed is 10,000",
   fileNotUploaded: "The selected file could not be uploaded - try again ",
   validateSelectedFile: "Select a CSV file",
   fileContainsAvirus: "The selected file contains a virus",
-  fileIsPasswordProtected: "The selected file is password protected"
+  fileIsPasswordProtected: "The selected file is password protected",
+  noFileSelected: "No file selected"
 } %}
 
 {% set errorMessage = errorMessages[data.scenario] %}
 {% set hasError = errorMessage %}
 
 {% block pageTitle %}
-  {% if hasError %}Error: {% endif %}Add patients
+  {% if hasError %}Error: {% endif %}{{ pageTitle }}
 {% endblock %}
 
 {% block beforeContent %}
@@ -27,10 +30,9 @@
       <li class="nhsuk-breadcrumb__list-item">
         <a class="nhsuk-breadcrumb__link" href="landing">Staff vaccinations</a>
       </li>
-      <li class="nhsuk-breadcrumb__list-item">Add patients</li>
     </ol>
-    <a class="nhsuk-back-link" href="javascript:history.back()">
-      Go back
+    <a class="nhsuk-back-link" href="landing">
+      <span class="nhsuk-u-visually-hidden">Back to</span> Staff vaccinations
     </a>
   </nav>
 {% endblock %}
@@ -57,13 +59,13 @@
       {% endif %}
 
       <h1 class="nhsuk-heading-l">
-        Add patients
+        {{ pageTitle }}
       </h1>
 
       {% if data.scenario == "processing" %}
         <p class="nhsuk-body">
           You cannot add patients because we are processing patient information from a recent file upload. 
-          If you are the person who uploaded that file, you will get an email when the process is complete.
+          If you are the person who uploaded that file, you will get an email when the process is complete.   
         </p> 
         <p class="nhsuk-body"><a href="change-log?uploadedList=processing">View patient upload history</a>.</p>
      {% else %}
@@ -95,31 +97,27 @@
               A CSV file is a plain-text format that makes it easy to transfer table-based data from one system to another.
             </p>
             <p class="nhsuk-body">
-              First, export patient information from the Electronic Staff Record (ESR) or the system that you use to store and manage patient records.
+              First, export patient information from the Electronic Staff Record (ESR) or the system that you use to store and manage patient records. 
+              You must export the information as a CSV file.  
             </p>
             <p class="nhsuk-body">
-              You must export the information as a CSV file.
-            </p>
-            <p class="nhsuk-body">
-              The CSV file should include a header row followed by data rows. The header row must include one mandatory column: Name.
+              The CSV file should include a header row followed by data rows.  
             </p>
             <p class="nhsuk-body nhsuk-u-margin-bottom-2">
-              For example, your header row could include:
+              We recommend including the following columns.
             </p>
             <ul class="nhsuk-list nhsuk-list--bullet">
-              <li>Name 
+              <li>Name (mandatory column)</li>
               <li>NHS number</li>
               <li>Email address</li>
-              <li>Internal identifier</li>
-              <li>Team</li>
-              <li>Profession</li>
-              <li>Site</li>
+              <li>Personal ID</li>
+              <li>Job Role</li>
+              <li>Staff group</li>
+              <li>Location </li>
             </ul>
             <p class="nhsuk-body">
-              You do not need to include any other patient information in your exported file.
-            </p>
-            <p class="nhsuk-body">
-              Patients in your CSV file that do not have an NHS number will appear in your list, but they will not have any vaccination information. We cannot find and match a patient's vaccination information without an NHS number.
+              Patients that do not have an NHS number in your CSV file will appear in your list without vaccination information. 
+              We cannot find and match a patient's vaccination information without an NHS number.  
             </p>
             <p class="nhsuk-body">
               It is your responsibility to make sure the patient information is accurate.
@@ -133,7 +131,7 @@
             <div class="nhsuk-inset-text">
               <span class="nhsuk-u-visually-hidden">Information:</span>
               <p>It may take several hours to carry out this check.</p>
-              <p>If you are replacing a list of patients, you will not be able to view your previous list of patients during this time.</p>
+              <p>If you are replacing a list of patients, you will not be able to view your previous 	list of patients during this time.</p>
               <p>We recommend uploading at the end of the day, so your list is ready to view in the morning.</p>
               <p>You will receive an email when the check is complete.</p>
             </div>

@@ -1,85 +1,139 @@
-{% extends 'ravs-plus-layout-1-oh.html' %}
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
 
 {% set currentSection = "plus" %}
 
 {% block pageTitle %}
-  Review and send invite
+  {% if (data.filtersApplied == "true") and (data.eligibleIssues == "true") %}
+      There are no eligible patients on your filtered list
+  {% else %}
+      Send invitations 
+  {% endif %}
 {% endblock %}
 
 {% block beforeContent %}
   <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Back</a>
 {% endblock %}
 
-<!-- For adding page content -->
-<!-- Page layout code can be found at https://service-manual.nhs.uk/design-system/styles/layout -->
 {% block content %}
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-two-thirds">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
 
-    <h1 class="nhsuk-heading-l">
-      Review and send {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}flu{% endif %} invite
-    </h1>
+      <!--
+      {% if data.filtersApplied == "true" %}
+        <p>filtersApplied = true</p>
+      {% else %}
+        <p>filtersApplied = false</p>
+      {% endif %}
 
-    <p class="nhsuk-body-l">
-      Review communications summary before sending.
-    </p>
+      {% if data.eligibleIssues == "true" %}
+        <p>eligibleIssues = true</p>
+      {% else %}
+        <p>eligibleIssues = false</p>
+      {% endif %}
+      -->
+      
+      <form method="post" action="send-invites-completed">
 
-    <h2 class="nhsuk-heading-m">
-      Patients selected for {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}flu{% endif %} invite
-    </h2>
-
-    <p class="nhsuk-body">
-      There are 1,995 patients in your invite list and no filters applied.
-    </p>
-
-    <p class="nhsuk-body nhsuk-u-margin-bottom-6">
-      <a href="patients" class="nhsuk-link">Edit patient list</a>
-    </p>
-
-    <h2 class="nhsuk-heading-m">
-      Message being sent to patient list
-    </h2>
-
-    <div class="nhsuk-card nhsuk-u-margin-bottom-4" id="card-rsv-focus">
-      <div class="nhsuk-card__content nhsuk-u-padding-bottom-2">
-        <div id="rsv-editable" aria-label="RSV message content" aria-live="polite">
-          <p class="nhsuk-body">Hello [First name],</p>
-          <p class="nhsuk-body">
-            You are invited to book an appointment for a {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}flu{% endif %} vaccination as you are eligible. Follow
-            <a href="#/" class="nhsuk-link">this link for further information on the {% if data['e2eCurrentUserType'] == 'OH' %}Td/IPV{% else %}flu{% endif %} vaccine</a>.
-          </p>
-          <p class="nhsuk-body">
-            If you would like to make an appointment, please book
-            <a href="#/" class="nhsuk-link">using our online tool</a> or call us on {% if data['e2eCurrentUserType'] == 'OH' %}01209{% else %}0121{% endif %} 472 1377.
-          </p>
-          <p class="nhsuk-body">
-            If you have already contacted us, please accept our apologies and ignore this reminder.
-          </p>
-          <p class="nhsuk-body">
-            {% if data['e2eCurrentUserType'] == 'OH' %}
-              Kind regards,<br />Royal Cornwall Hospitals Occupational Health team
+        <div class="nhsuk-form-group">
+          <fieldset class="nhsuk-fieldset" aria-describedby="export-patients-hint">
+            <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+              <h1 class="nhsuk-fieldset__heading">
+                {% if (data.filtersApplied == "true") and (data.eligibleIssues == "true") %}
+                  There are no eligible patients on your filtered list
+                {% else %}
+                  Send invitations
+                {% endif %}
+              </h1>
+            </legend>
+            {% if data.filtersApplied == "true" %}
+              <p class="nhsuk-hint" id="invite-patients-hint">
+                Your current list of patients contains 15,995 patients in total. It was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+              </p>
+              {% if data.eligibleIssues == "true" %}
+                <p class="nhsuk-body nhsuk-u-margin-bottom-4">
+                  There are no eligible patients on your filtered list.
+                </p>
+                <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">
+                  Active filters
+                </h2>
+                <ul class="nhsuk-list nhsuk-list--bullet">
+                  <li>Flu eligibility: Vaccinated</li>
+                  <li>Location: Northern General Hospital</li>
+                </ul>
+                <div class="nhsuk-inset-text nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
+                  <span class="nhsuk-u-visually-hidden">Information: </span>
+                  <p>You cannot send invitations to patients who are already vaccinated or who have declined a vaccination.</p>
+                </div>
+              {% else %}
+                <p class="nhsuk-body nhsuk-u-margin-bottom-4">
+                  There are 238 eligible patients on your list with 2 filters applied.
+                </p>
+                <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">
+                  Active filters
+                </h2>
+                <ul class="nhsuk-list nhsuk-list--bullet">
+                  <li>Flu eligibility: Eligible</li>
+                  <li>Location: Northern General Hospital</li>
+                </ul>
+                <div class="nhsuk-inset-text nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
+                  <span class="nhsuk-u-visually-hidden">Information: </span>
+                  <p>Patients who are already vaccinated or who have declined a vaccination will not be sent an invitation.</p>
+                </div>
+              {% endif %}
+              {% if data.eligibleIssues !== "true" %}
+                <p class="nhsuk-body">
+                  This is the message that will be sent to 238 eligible patients by email.  
+                </p>
+              {% else %}
+                <p class="nhsuk-body">
+                  To send invitations to eligible patients, go back to your list of patients and change the filters.
+                </p>
+              {% endif %}
             {% else %}
-              Kind regards,<br />BWC Trust
-            {% endif %}
-          </p>
+              <p class="nhsuk-hint" id="invite-patients-hint">
+                Your current list of patients contains 15,995 patients in total. It was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+              </p>
+              <p class="nhsuk-body">
+                You have not applied any filters to your list. This means all patients who are eligible for a flu vaccination will receive an invitation by email.
+              </p>
+              <div class="nhsuk-inset-text nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
+                <span class="nhsuk-u-visually-hidden">Information: </span>
+                <p>Patients who are already vaccinated or who have declined a vaccination will not be sent an invitation.</p>
+              </div>
+              <p class="nhsuk-body">
+                This is the message that will be sent to 11,655 eligible patients by email.
+              </p>
+              {% endif %}
+              {% if data.eligibleIssues !== "true" %}
+                <div class="nhsuk-card nhsuk-u-margin-bottom-0">
+                  <div class="nhsuk-card__content">
+                    <p class="nhsuk-body">Hello [First name]</p>
+
+                    <p class="nhsuk-body">Your yearly flu vaccination is due.</p>
+                    <p class="nhsuk-body">Visit out Trust's website to book an appointment and choose how you want to receive your vaccination.</p>
+                    <p class="nhsuk-body"><a href="#/" class="nhsuk-link">Book a flu vaccination appointment</a>.</p>
+
+                    <h2 class="nhsuk-heading-s">Why it matters</h2>
+                    <p class="nhsuk-body">During the 2024 to 2025 seasonal campaign, 37.8% of eligible frontline healthcare workers received the flu vaccine.</p>
+                    <p class="nhsuk-body">The vaccination helps protect you and others against flu, which can be a serious or life-threatening illness, especially for vulnerable people.</p>
+                    <p class="nhsuk-body">If you would like more information before you book, you can <a href="#/" class="nhsuk-link">learn more about the flu vaccine and its benefits</a>.</p>
+
+                    <h2 class="nhsuk-heading-s">If you have been vaccinated</h2>
+                    <p class="nhsuk-body">If you have already been vaccinated, booked an appointment or opted out, please ignore this message and sorry for contacting you again.</p>
+                    <p class="nhsuk-body">Kind regards<br>[Organisation name]</p>
+                  </div>
+                </div>
+              {% endif %}
+          </fieldset>
         </div>
-      </div>
+        {% if data.eligibleIssues !== "true" %}
+          <div class="nhsuk-button-group">
+            <button class="nhsuk-button" data-module="nhsuk-button" type="submit">Confirm and send</button><a href="#" onclick="window.history.back(); return false;">Cancel</a>
+          </div>
+        {% else %}
+          <p class="nhsuk-body nhsuk-u-margin-top-0"><a href="patients?filtersApplied=true&eligibleIssues">View patient list</a></p>
+        {% endif %}
+      </form>
     </div>
-
-    <p class="nhsuk-body nhsuk-u-margin-bottom-6">
-      <a href="invite" class="nhsuk-link">Edit content</a>
-    </p>
-
-    <form class="form" action="invites-completed" method="post" class="submit">
-      <div class="govuk-button-group">
-        <button class="nhsuk-button" data-module="nhsuk-button" type="submit">
-          Confirm and send
-        </button>
-        <p class="nhsuk-body nhsuk-u-padding-left-4"><a class="nhsuk-link" href="/iteration-2/landing-organise-clinics?invitesSent">Cancel</a></p>
-      </div>
-    </form>
-
   </div>
-</div>
-
 {% endblock %}

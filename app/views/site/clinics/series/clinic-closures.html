@@ -1,0 +1,109 @@
+{% extends '../../../layouts/layout.html' %}
+
+{% if not pageName %}{% set pageName = "Clinic closures" %}{% endif %}
+{% if not backUrl %}{% set backUrl = '/site/' + site_id + '/clinics/services' %}{% endif %}
+{% if not formAction %}{% set formAction = '/site/' + site_id + '/clinics/clinic-closures' %}{% endif %}
+{% if not addClosureHref %}{% set addClosureHref = formAction + '/add' %}{% endif %}
+
+{% macro closureText(closure) %}
+  {% set closureStart = closure.startDate | formatDate('d MMM yyyy') %}
+  {% set closureEnd = closure.endDate | formatDate('d MMM yyyy') %}
+  {% if closureStart == closureEnd %}
+    {{ closureStart }}
+  {% else %}
+    {{ closureStart }} to {{ closureEnd }}
+  {% endif %}
+{% endmacro %}
+
+{% block beforeContent %}
+{{ backLink({
+  href: backUrl
+}) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      {% if closures | length > 0 %}
+        <h2 class="nhsuk-heading-m">There {{ 'is' if closures | length == 1 else 'are' }} {{ closures | length }} clinic closure{{ 's' if closures | length != 1 }}</h2>
+
+        {% set closureRows = [] %}
+        {% for closure in closures %}
+          {% set closureTitle = closure.label | trim %}
+          {% if not closureTitle %}
+            {% set closureTitle = "Closure " + loop.index %}
+          {% endif %}
+          {% set closureRows = closureRows.concat({
+            key: {
+              text: closureTitle
+            },
+            value: {
+              text: closureText(closure) | trim
+            },
+            actions: {
+              items: [
+                {
+                  href: formAction + "/" + loop.index0 + "/change",
+                  text: "Change",
+                  visuallyHiddenText: " closure " + loop.index
+                },
+                {
+                  href: formAction + "/" + loop.index0 + "/remove",
+                  text: "Remove",
+                  visuallyHiddenText: " closure " + loop.index
+                }
+              ]
+            }
+          }) %}
+        {% endfor %}
+
+        {{ summaryList({
+          rows: closureRows,
+          classes: "nhsuk-u-margin-bottom-3"
+        }) }}
+      {% endif %}
+
+      {% if closures | length > 0 %}
+        <p class="nhsuk-u-margin-bottom-6"><a class="nhsuk-link--no-visited-state" href="{{ addClosureHref }}">Add another closure</a></p>
+      {% endif %}
+
+      <form action="{{ formAction }}" method="post">
+        <input type="hidden" name="newSession[type]" value="Clinic series">
+        {% if closures | length == 0 %}
+          {{ radios({
+            idPrefix: "add-another-closure",
+            name: "addAnother",
+            fieldset: {
+              legend: {
+                text: "Are there any dates when this clinic will not run?",
+                classes: "nhsuk-fieldset__legend--m"
+              }
+            },
+            classes: "nhsuk-radios--inline",
+            hint: {
+              text: "For example, bank holidays"
+            },
+            items: [
+              {
+                value: "yes",
+                text: "Yes",
+                checked: addAnother == 'yes'
+              },
+              {
+                value: "no",
+                text: "No",
+                checked: addAnother == 'no'
+              }
+            ]
+          }) }}
+        {% endif %}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

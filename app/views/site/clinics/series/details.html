@@ -1,0 +1,90 @@
+{% extends '../../../layouts/layout.html' %}
+
+{% if not pageName %}{% set pageName = "Dates" %}{% endif %}
+{% if not backUrl %}{% set backUrl = '/site/' + site_id + '/clinics/type-of-clinc' %}{% endif %}
+{% if not formAction %}{% set formAction = '/site/' + site_id + '/clinics/days' %}{% endif %}
+
+{% block beforeContent %}
+{{ backLink({
+  href: backUrl
+}) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      <form action="{{ formAction }}" method="post">
+        {% if not hideDateFields %}
+        {{ dateInput({
+          id: "start-date",
+          namePrefix: "newSession[startDate]",
+          fieldset: {
+            legend: {
+              text: "Start date",
+              classes: "nhsuk-label--m"
+            }
+          },
+          hint: {
+            text: "For example, 15 3 " + 'now' | formatDate('yyyy')
+          },
+          items: [
+            {
+              name: "day",
+              classes: "nhsuk-input--width-2",
+              value: data.newSession.startDate.day
+            },
+            {
+              name: "month",
+              classes: "nhsuk-input--width-2",
+              value: data.newSession.startDate.month
+            },
+            {
+              name: "year",
+              classes: "nhsuk-input--width-4",
+              value: data.newSession.startDate.year
+            }
+          ]
+        }) }}
+
+        {{ dateInput({
+          id: "end-date",
+          namePrefix: "newSession[endDate]",
+          fieldset: {
+            legend: {
+              text: "End date",
+              classes: "nhsuk-label--m"
+            }
+          },
+          hint: {
+            text: "For example, 15 3 " + 'now' | formatDate('yyyy')
+          },
+          items: [
+            {
+              name: "day",
+              classes: "nhsuk-input--width-2",
+              value: data.newSession.endDate.day
+            },
+            {
+              name: "month",
+              classes: "nhsuk-input--width-2",
+              value: data.newSession.endDate.month
+            },
+            {
+              name: "year",
+              classes: "nhsuk-input--width-4",
+              value: data.newSession.endDate.year
+            }
+          ]
+        }) }}
+        {% endif %}
+
+        {{ button({
+          text: buttonText or "Continue"
+        }) }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

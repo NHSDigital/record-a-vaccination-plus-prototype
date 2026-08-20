@@ -1,0 +1,29 @@
+{% extends 'ravs-plus-layout-1.html' %}
+
+{% set currentSection = "plus" %}
+
+{% set pageName = "CSV export is ready" %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      <a href="export-list" id="download" value="download" role="button" draggable="false" class="nhsuk-button" data-module="nhsuk-button">
+        Download CSV export
+      </a>
+
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    var button = document.getElementById('download');
+    button.onclick = downloadReport;
+    function downloadReport() {
+      window.open("/download/download-csv-export.csv");
+    }
+  </script>
+{% endblock %}

@@ -1,0 +1,195 @@
+{% extends '../../../layouts/layout.html' %}
+
+{% set pageName = "Times and capacity" %}
+{% if not backUrl %}{% set backUrl = '/site/' + site_id + '/clinics/details' %}{% endif %}
+{% if not formAction %}{% set formAction = '/site/' + site_id + '/clinics/appointments-calculator' %}{% endif %}
+{% if not includeCapacityFields %}{% set includeCapacityFields = false %}{% endif %}
+{% if not showSimplifiedCapacityCalculator %}{% set showSimplifiedCapacityCalculator = false %}{% endif %}
+{% set durationCanChange = canChangeAppointmentLength if canChangeAppointmentLength is defined else (features and (features.canChangeAppointmentLength is defined) and features.canChangeAppointmentLength) %}
+{% if not (canChangeAppointmentLength is defined) and not (features and (features.canChangeAppointmentLength is defined)) %}{% set durationCanChange = true %}{% endif %}
+
+{% block beforeContent %}
+{{ backLink({
+  href: backUrl
+}) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      <form action="{{ formAction }}" method="post">
+        {{ dateInput({
+          id: "start-time",
+          namePrefix: "newSession[startTime]",
+          fieldset: {
+            legend: {
+              text: "Start time",
+              classes: "nhsuk-label--m"
+            }
+          },
+          hint: {
+            text: "For example, 10:00"
+          },
+          items: [
+            {
+              name: "hour",
+              classes: "nhsuk-input--width-2",
+              value: data.newSession.startTime.hour
+            },
+            {
+              name: "minute",
+              classes: "nhsuk-input--width-2",
+              value: data.newSession.startTime.minute
+            }
+          ]
+        }) }}
+
+        {{ dateInput({
+          id: "end-time",
+          namePrefix: "newSession[endTime]",
+          fieldset: {
+            legend: {
+              text: "End time",
+              classes: "nhsuk-label--m"
+            }
+          },
+          hint: {
+            text: "For example, 17:00"
+          },
+          items: [
+            {
+              name: "hour",
+              classes: "nhsuk-input--width-2",
+              value: data.newSession.endTime.hour
+            },
+            {
+              name: "minute",
+              classes: "nhsuk-input--width-2",
+              value: data.newSession.endTime.minute
+            }
+          ]
+        }) }}
+
+        {% if includeCapacityFields %}
+          {{ input({
+            label: {
+              text: "How many vaccinators are in this clinic?",
+              classes: "nhsuk-label--m"
+            },
+            id: "capacity",
+            inputmode: "numeric",
+            name: "newSession[capacity]",
+            classes: "nhsuk-input--width-2",
+            value: data.newSession.capacity,
+            spellcheck: false,
+            suffix: {
+              text: "vaccinators"
+            }
+          }) }}
+
+          {{ input({
+            label: {
+              text: "How long do you need for each appointment?",
+              classes: "nhsuk-label--m"
+            },
+            hint: {
+              text: "Appointment length must be a maximum of 60 minutes" if durationCanChange else "You cannot change the appointment length after a clinic series is created. If you need a different appointment length, you must create a new series."
+            },
+            id: "duration",
+            inputmode: "numeric",
+            name: "newSession[duration]",
+            classes: "nhsuk-input--width-2",
+            suffix: "minutes",
+            value: data.newSession.duration,
+            spellcheck: false,
+            disabled: not durationCanChange
+          }) }}
+
+          {% if not durationCanChange %}
+            <input type="hidden" name="newSession[duration]" value="{{ data.newSession.duration }}">
+          {% endif %}
+
+          {% if showSimplifiedCapacityCalculator %}
+            {% set simplifiedCalculatorHtml %}
+              <p class="nhsuk-body nhsuk-u-margin-bottom-1"><strong>Capacity calculator</strong></p>
+              <p class="nhsuk-body nhsuk-u-margin-bottom-1"><span data-capacity-calculator-total>X</span> total appointments in the session</p>
+              <p class="nhsuk-body nhsuk-u-margin-bottom-0">Up to <span data-capacity-calculator-hourly>X</span> appointments per hour</p>
+            {% endset %}
+
+            {{ insetText({
+              html: simplifiedCalculatorHtml
+            }) }}
+          {% endif %}
+        {% endif %}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+      </form>
+
+    </div>
+  </div>
+
+  {% if showSimplifiedCapacityCalculator %}
+    <script>
+      (function () {
+        const capacityInput = document.getElementById('capacity');
+        const durationInput = document.getElementById('duration');
+        const totalEl = document.querySelector('[data-capacity-calculator-total]');
+        const hourlyEl = document.querySelector('[data-capacity-calculator-hourly]');
+        const startHourInput = document.querySelector('input[name="newSession[startTime][hour]"]');
+        const startMinuteInput = document.querySelector('input[name="newSession[startTime][minute]"]');
+        const endHourInput = document.querySelector('input[name="newSession[endTime][hour]"]');
+        const endMinuteInput = document.querySelector('input[name="newSession[endTime][minute]"]');
+
+        if (!capacityInput || !durationInput || !totalEl || !hourlyEl) return;
+
+        function parseIntSafe(value) {
+          const parsed = parseInt(value, 10);
+          return Number.isFinite(parsed) ? parsed : null;
+        }
+
+        function toMinutes(hourValue, minuteValue) {
+          const hour = parseIntSafe(hourValue);
+          const minute = parseIntSafe(minuteValue);
+          if (hour === null || minute === null) return null;
+          return (hour * 60) + minute;
+        }
+
+        function render() {
+          const startMinutes = toMinutes(startHourInput?.value, startMinuteInput?.value || '0');
+          const endMinutes = toMinutes(endHourInput?.value, endMinuteInput?.value || '0');
+          const capacity = parseIntSafe(capacityInput.value);
+          const duration = parseIntSafe(durationInput.value);
+          const sessionMinutes = (startMinutes !== null && endMinutes !== null) ? (endMinutes - startMinutes) : null;
+
+          const valid = Boolean(
+            duration && capacity && sessionMinutes
+            && duration > 0 && duration <= 60
+            && capacity > 0 && sessionMinutes > 0
+          );
+
+          if (!valid) {
+            totalEl.textContent = 'X';
+            hourlyEl.textContent = 'X';
+            return;
+          }
+
+          const totalAppointments = Math.floor((sessionMinutes / duration) * capacity);
+          const hourlyAppointments = Math.floor((60 / duration) * capacity);
+
+          totalEl.textContent = String(totalAppointments);
+          hourlyEl.textContent = String(hourlyAppointments);
+        }
+
+        [capacityInput, durationInput, startHourInput, startMinuteInput, endHourInput, endMinuteInput]
+          .filter(Boolean)
+          .forEach((element) => element.addEventListener('input', render));
+
+        render();
+      })();
+    </script>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends '../../../layouts/layout.html' %}
+
+{% block beforeContent %}
+{{ backLink({
+  href: backHref
+}) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">This change affects {{ affectedCount }} {{ 'bookings' if affectedCount != 1 else 'booking' }}</h1>
+      <p class="nhsuk-body">What do you want to do with the booked appointments?</p>
+
+      <form action="{{ formAction or ('/site/' ~ site_id ~ '/clinics/edit/' ~ sessionId ~ '/affected-bookings') }}" method="post">
+        {{ radios({
+          idPrefix: 'booking-action',
+          name: 'bookingAction',
+          items: [
+            {
+              value: 'orphan',
+              text: 'Keep booked appointments',
+              hint: {
+                text: 'These will stay in your appointments list'
+              },
+              checked: selectedBookingAction == 'orphan'
+            },
+            {
+              value: 'cancel',
+              text: 'Cancel booked appointments',
+              hint: {
+                text: 'We will email or text people to confirm the cancellation'
+              },
+              checked: selectedBookingAction == 'cancel'
+            }
+          ]
+        }) }}
+
+        {{ button({ text: 'Continue' }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

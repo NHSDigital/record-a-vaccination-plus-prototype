@@ -1,0 +1,159 @@
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
+
+{% set pageName = "Check" %}
+
+{% set currentSection = "manage" %}
+
+{% set organisation = {name: data.nhsTrusts[data.organisationCode]} %}
+
+{% set ravsPlusFeaturesHtml %}
+  {% if data.pathways and ("maternity" in data.pathways) %}
+    Maternity<br>
+  {% endif %}
+  {% if data.pathways and ("occupational-Health" in data.pathways) %}
+    Occupational Health
+  {% endif %}
+  {% if not data.pathways %}
+    None selected
+  {% endif %}
+{% endset %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "javascript:history.back()", text: "Back" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">Check and {% if existingUserWithSameEmail %}reactivate{% else %}add{% endif %} user</h1>
+
+      {% set ravsPlusFeaturesHtml %}
+        {% if data.additionalFunctionality %}
+          Yes
+        {% endif %}
+        <!--{% if data.additionalFunctionality and ("functionalityMaternity" in data.additionalFunctionality) %}
+          Maternity<br>
+        {% endif %}
+        {% if data.additionalFunctionality and ("functionalityOccupationalHealth" in data.additionalFunctionality) %}
+          Occupational health
+        {% endif %}-->
+        {% if not data.additionalFunctionality %}
+          No
+        {% endif %}
+      {% endset %}
+
+      {{ summaryList({
+        rows: [
+          {
+            key: {
+              text: "Name"
+            },
+            value: {
+              text: data.firstName + " " + data.lastName
+            },
+            actions: {
+              items: [
+                {
+                  href: "/user-management/add-user",
+                  text: "Change",
+                  visuallyHiddenText: "name"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Email address"
+            },
+            value: {
+              html: data["email"]
+            },
+            actions: {
+              items: [
+                {
+                  href: "/user-management/add-user",
+                  text: "Change",
+                  visuallyHiddenText: "email address"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Vaccinator"
+            },
+            value: {
+              html: (data["vaccinator"] | capitalize)
+            },
+            actions: {
+              items: [
+                {
+                  href: "/user-management/add-user",
+                  text: "Change",
+                  visuallyHiddenText: "vaccinator"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "RAVS+ enabled"
+            },
+            value: {
+              html: ravsPlusFeaturesHtml if data.ravsplus == "yes" else "No"
+            },
+            actions: {
+              items: [
+                {
+                  href: "/user-management/add-user",
+                  text: "Change",
+                  visuallyHiddenText: "RAVS+ enabled"
+                }
+              ]
+            }
+          },
+          {
+            key: {
+              text: "Permission level"
+            },
+            value: {
+              html: data.permissionLevel
+            },
+            actions: {
+              items: [
+                {
+                  href: "/user-management/add-user",
+                  text: "Change",
+                  visuallyHiddenText: "permission level"
+                }
+              ]
+            }
+          }
+        ]
+      }) }}
+
+      {% if existingUserWithSameEmail %}
+        <p>{{ data.firstName | capitalize }} will be re-activated and sent this email:</p>
+      {% else %}
+        <p>{{ data.firstName | capitalize }} will receive this welcome email with information about activating an account:</p>
+      {% endif %}
+
+      <div class="app-email-preview">
+        {% if existingUserWithSameEmail %}
+          {% include "user-management/_reactivation-email.html" %}
+        {% else %}
+          {% include "user-management/_welcome-email.html" %}
+        {% endif %}
+      </div>
+
+      <form action="manage-users?newUser=added" method="post">
+        {{ button({
+          "text": "Confirm and send"
+        }) }}
+      </form>
+
+
+    </div>
+  </div>
+{% endblock %}

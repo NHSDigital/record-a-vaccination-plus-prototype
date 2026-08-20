@@ -1,0 +1,183 @@
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
+
+{% set currentSection = "plus" %}
+
+{% set pageTitle = "Import issues" %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item">
+        <a class="nhsuk-breadcrumb__link" href="landing">Maternity</a>
+      </li>
+      <li class="nhsuk-breadcrumb__list-item">
+        <a class="nhsuk-breadcrumb__link" href="patients">Patients</a>
+      </li>
+    </ol>
+    <a class="nhsuk-back-link" href="patients">
+      <span class="nhsuk-u-visually-hidden">Back to</span> Patients
+    </a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+<style>
+  .govuk-applied-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 14px;
+    margin-bottom: 20px;
+  }
+
+  .govuk-applied-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    min-height: 38px;
+    padding: 0 14px;
+
+    border: 2px solid #b1b4b6;
+    border-radius: 8px;
+    background: #f3f2f1;
+
+    color: #0b0c0c;
+    text-decoration: none;
+
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 400;
+  }
+
+  .govuk-applied-filter:hover {
+    background: #e8e8e8;
+    border-color: #6f777b;
+    text-decoration: none;
+  }
+
+  .govuk-applied-filter:focus {
+    background: #ffdd00;
+    border-color: #0b0c0c;
+    box-shadow: none;
+  }
+
+  .govuk-applied-filter__label {
+    display: inline-block;
+  }
+
+  .govuk-applied-filter__remove {
+    font-size: 24px;
+    line-height: 1;
+    margin-top: -1px;
+  }
+
+  /* Table overrides */
+
+  /* Prevent wrapping + tighten table */
+  .nhsuk-table {
+    table-layout: auto;
+  }
+
+  .nhsuk-table th, .nhsuk-table td {
+    /*padding: 8px 12px;*/
+    padding: 8px 12px 8px 0;
+    vertical-align: top;
+    font-size: 16px;
+  }
+
+  .nhsuk-table__header--wrap {
+    white-space: normal;
+    line-height: 1.2;
+    max-width: 150px;
+  }
+
+  .nhsuk-table__header--wrap span {
+    display: block;
+  }
+
+  /* Pagination overrides */
+  .nhsuk-pagination-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* keeps pagination + "Showing..." on same line */
+    margin-top: 8px; /* tighten gap from table */
+  }
+
+  .nhsuk-pagination {
+    margin-top: 0; /* remove default big gap */
+    margin-bottom: 0;
+  }
+
+  .nhsuk-table {
+    margin-bottom: 8px; /* tighten space above pagination */
+  }
+
+  .nhsuk-pagination-wrapper__results {
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  
+  /* Eligibility Expander table */
+  .eligibility-table .nhsuk-list--bullet li {
+    font-size: 16px;
+  }
+
+  .eligibility-table .nhsuk-list--bullet {
+    margin-bottom: 0;
+  }
+
+  .eligibility-table .nhsuk-list--bullet:last-child {
+    margin-bottom: 0;
+  }
+
+  .eligibility-table .nhsuk-list--bullet li:last-child {
+    margin-bottom: 0;
+  }
+
+</style>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      {{ pageTitle }}
+    </h1>
+
+    <p class="nhsuk-body">
+      This list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+    </p>
+
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    {% set patientCount = "238" if data.filtersApplied == "true" else "1,995" %}
+
+    {{ appSecondaryNavigation({
+      visuallyHiddenTitle: "Secondary menu",
+      classes: "nhsuk-u-margin-bottom-4",
+      items: [
+        {
+          text: "Patients (" ~ patientCount ~ ")",
+          href: "patients"
+        },
+        {
+          text: pageTitle ~ " (5)",
+          href: "#/",
+          current: true
+        }
+      ]
+    }) }}
+
+    {% include "mvp-patient-list-and-export/_secondayNavContentDataQualityIssues.html" %}
+
+  </div>
+</div>
+
+{% endblock %}

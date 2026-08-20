@@ -1,0 +1,234 @@
+{% extends '../../layouts/layout.html' %}
+{% from '../../components/secondary-navigation.njk' import appSecondaryNavigation %}
+{% from '../../components/action-control-bar.njk' import appActionControlBar %}
+
+{% set pageName = "Create and manage clinics" %}
+
+{% macro services(service_ids) %}
+  {% set serviceTypes = [] %}
+
+  {% for service_id in service_ids %}
+    {% if data.services[service_id] %}
+      {% set serviceName = data.services[service_id].name %}
+      {% if serviceName not in serviceTypes %}
+        {% set serviceTypes = serviceTypes.concat([serviceName]) %}
+      {% endif %}
+    {% elif service_id and service_id not in serviceTypes %}
+      {% set serviceTypes = serviceTypes.concat([service_id]) %}
+    {% endif %}
+  {% endfor %}
+
+  {% if serviceTypes | length > 0 %}
+    <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+      {% for serviceType in serviceTypes %}
+        <li>{{ serviceType }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <span class="nhsuk-u-secondary-text-colour">No services</span>
+  {% endif %}
+{% endmacro %}
+
+{% macro timeLabel(session) %}
+  {{ session.from | nhsTime }} to {{ session.until | nhsTime }}
+{% endmacro %}
+
+{% macro typeLabel(session) %}
+  {% set text = "Single" %}
+  {% set colour = "grey" %}
+
+  {% set isSeries = false %}
+  {% if session.type == 'Clinic series' %}
+    {% set isSeries = true %}
+  {% elif session.date and session.endDate and session.endDate != session.date %}
+    {% set isSeries = true %}
+  {% endif %}
+
+  {% if isSeries %}
+    {% set text = "Series" %}
+    {% set colour = "blue" %}
+  {% endif %}
+
+  {{ tag({
+    text: text,
+    classes: "nhsuk-tag--" ~ colour
+  }) }}
+{% endmacro %}
+
+{% macro dateLabel(session) %}
+  {% set isSingle = false %}
+  {% if session.type == 'Single clinic' %}
+    {% set isSingle = true %}
+  {% elif session.startDate and session.endDate and session.startDate == session.endDate %}
+    {% set isSingle = true %}
+  {% endif %}
+
+  {% if session.endDate and session.endDate != session.date %}
+    {% if isSingle %}
+      {{ session.date | formatDate('d MMM yyyy') }}
+    {% else %}
+      {{ session.date | formatDate('d MMM yyyy') }} to {{ session.endDate | formatDate('d MMM yyyy') }}
+    {% endif %}
+  {% else %}
+    {{ session.date | formatDate('d MMM yyyy') }}
+  {% endif %}
+{% endmacro %}
+
+{% macro daysLabel(session) %}
+  {% set isSeries = false %}
+  {% if session.type == 'Clinic series' %}
+    {% set isSeries = true %}
+  {% elif session.date and session.endDate and session.endDate != session.date %}
+    {% set isSeries = true %}
+  {% endif %}
+
+  {% set byDay = [] %}
+  {% if session.recurrencePattern and session.recurrencePattern.byDay %}
+    {% set byDay = session.recurrencePattern.byDay %}
+  {% elif session.days %}
+    {% set byDay = session.days %}
+  {% endif %}
+
+  {% if isSeries %}
+    {% if (byDay | length) > 0 %}
+      <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+        {% for day in byDay %}
+          <li>{{ day }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <span class="nhsuk-u-secondary-text-colour">Not set</span>
+    {% endif %}
+  {% else %}
+    {% if session.date %}
+      {{ session.date | formatDate('EEEE') }}
+    {% elif session.startDate %}
+      {{ session.startDate | formatDate('EEEE') }}
+    {% else %}
+      <span class="nhsuk-u-secondary-text-colour">Not set</span>
+    {% endif %}
+  {% endif %}
+{% endmacro %}
+
+{% macro clinicsTable(sessions, includeActions) %}
+  <table class="nhsuk-table-responsive" role="table">
+    <thead class="nhsuk-table__head" role="rowgroup">
+      <tr role="row">
+        <th scope="col" class="nhsuk-table__header" role="columnheader">Type</th>
+        <th scope="col" class="nhsuk-table__header" role="columnheader">Days</th>
+        <th scope="col" class="nhsuk-table__header" role="columnheader">Time and date</th>
+        <th scope="col" class="nhsuk-table__header" role="columnheader">Services</th>
+        {% if includeActions %}
+          <th scope="col" class="nhsuk-table__header" role="columnheader">Actions</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody class="nhsuk-table__body" role="rowgroup">
+      {% for session in sessions %}
+        <tr class="nhsuk-table__row" role="row">
+          <td class="nhsuk-table__cell" role="cell">{{ typeLabel(session) }}</td>
+          <td class="nhsuk-table__cell" role="cell">{{ daysLabel(session) }}</td>
+          <td class="nhsuk-table__cell" role="cell">
+            <div>{{ timeLabel(session) }}</div>
+            <div class="nhsuk-u-margin-top-2">{{ dateLabel(session) }}</div>
+          </td>
+          <td class="nhsuk-table__cell" role="cell">{{ services(session.services) }}</td>
+          {% if includeActions %}
+            <td class="nhsuk-table__cell" role="cell">
+              {# <ul class="nhsuk-list nhsuk-u-margin-bottom-0">
+                <li>
+                  <a href="/site/{{ site_id }}/clinics/edit/{{ session.id }}">
+                    View and change
+                    <span class="nhsuk-u-visually-hidden"> clinic on {{ dateLabel(session) }} at {{ timeLabel(session) }}</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/site/{{ site_id }}/clinics/cancel/{{ session.id }}">
+                    Cancel
+                    <span class="nhsuk-u-visually-hidden"> clinic on {{ dateLabel(session) }} at {{ timeLabel(session) }}</span>
+                  </a>
+                </li>
+              </ul> #}
+              
+              {% set isSeries = false %}
+              {% if session.type == 'Clinic series' %}
+                {% set isSeries = true %}
+              {% elif session.date and session.endDate and session.endDate != session.date %}
+                {% set isSeries = true %}
+              {% endif %}
+
+              {% if isSeries %}
+              <a href="/site/{{ site_id }}/clinics/cancel/{{ session.id }}">
+                Cancel
+                <span class="nhsuk-u-visually-hidden"> clinic on {{ dateLabel(session) }} at {{ timeLabel(session) }}</span>
+              </a>
+              {% else %}
+              <a href="" onclick="alert('Existing change journey for single clinics'); return false;">
+                Change
+              </a>
+              {% endif %}
+            </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endmacro %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      {{
+        appSecondaryNavigation({
+          items: [
+            {
+              text: 'Day view',
+              href: '/site/' ~ site_id ~ '/availability/day'
+            },
+            {
+              text: 'Week view',
+              href: '/site/' ~ site_id ~ '/availability/week'
+            },
+            {
+              text: 'Month view',
+              href: '/site/' ~ site_id ~ '/availability/month'
+            },
+            {
+              text: 'Create and manage clinics',
+              href: '/site/' ~ site_id ~ '/clinics',
+              current: true
+            }
+          ]
+        })
+      }}
+      <h1 class="nhsuk-heading-xl">{{ pageName }}</h1>
+      {{ appActionControlBar({ siteId: site_id, create: true }) }}
+
+      
+
+      {% set sessionHistory = sessionHistory or [] %}
+      {% set pastSessionHistory = pastSessionHistory or [] %}
+
+      {% if (sessionHistory | length) == 0 %}
+        {{ insetText({ text: "No clinics have been created yet." }) }}
+      {% else %}
+        {{ clinicsTable(sessionHistory, true) }}
+        
+          {% if clinicsPagination %}
+            {{ pagination(clinicsPagination) }}
+          {% endif %}
+      {% endif %}
+
+      {{ details({
+        summaryText: "Completed clinic series",
+        html: (
+          insetText({ text: "No completed clinics" })
+          if (pastSessionHistory | length) == 0
+          else clinicsTable(pastSessionHistory, false)
+        )
+      }) }}
+
+      
+    </div>
+  </div>
+{% endblock %}

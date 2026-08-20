@@ -1,0 +1,58 @@
+{% extends '../../../layouts/layout.html' %}
+
+{% if not pageName %}{% set pageName = "Which services will you offer?" %}{% endif %}
+{% if not backUrl %}{% set backUrl = '/site/' + site_id + '/clinics/appointments-calculator' %}{% endif %}
+{% if not formAction %}{% set formAction = '/site/' + site_id + '/clinics/clinic-closures' %}{% endif %}
+
+{% block beforeContent %}
+{{ backLink({
+  href: backUrl
+}) }}
+{% endblock %}
+
+{% block content %}
+
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      
+
+      <form action="{{ formAction }}" method="post">
+        <input type="hidden" name="newSession[type]" value="Clinic series">
+
+        <div class="nhsuk-form-group {{ 'nhsuk-form-group--error' if error }}">
+        <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+        {% if error %}
+        <p id="services-error" class="nhsuk-error-message">
+          <span class="nhsuk-u-visually-hidden">Error:</span> Select a service
+        </p>
+        {% endif %}
+        <p class="nhsuk-body">Co-admin appointments can only be booked by people eligible for both vaccinations.</p>
+        {% for groupId, group in data.serviceGroups %}
+          <fieldset class="nhsuk-fieldset app-checkbox-group" {% if error %}aria-describedby="services-error"{% endif %}>
+            <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--s">
+            <span class="nhsuk-u-visually-hidden">Add </span>{{ group.title }}<span class="nhsuk-u-visually-hidden"> to your clinic</span>
+            </legend>
+            <div class="nhsuk-checkboxes" data-module="nhsuk-checkboxes">
+
+              {% for id, service in data.services %}
+              {% if service.group == groupId %}
+              <div class="nhsuk-checkboxes__item">
+                <input class="nhsuk-checkboxes__input" id="service-{{ id }}" name="newSession[services]" type="checkbox" value="{{ id }}" data-checkbox-exclusive-group="services-list" {% if id in (data.newSession.services or []) %}checked{% endif %}>
+                <label class="nhsuk-label nhsuk-checkboxes__label" for="service-{{ id }}">{{ service.name }}</label>
+              </div>
+              {% endif %}
+              {% endfor %}
+            </div>
+          </fieldset>
+        {% endfor %}
+        </div>
+
+        {{ button({
+          text: buttonText or "Continue"
+        }) }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Reactivate user" %}
+
+
+{% set currentSection = "prepare" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/user-admin/deactivated",
+    text: "Go back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">Reactivate Wallace West</h1>
+
+      <p>Once you have reactivated Wallace West, they can sign in to NHS Record a vaccination again using their Okta account.</p>
+
+      <form action="/user-admin/{{ user.id }}/reactivate" method="post" novalidate="true">
+        {{ button({
+          "text": "Reactivate"
+        }) }}
+      </form>
+
+    </div>
+  </div>
+
+
+{% endblock %}

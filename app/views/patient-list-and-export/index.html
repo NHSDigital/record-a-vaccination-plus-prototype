@@ -1,4 +1,4 @@
-{% extends 'layout-index-only.html' %}
+{% extends 'layouts/layout-index-only.html' %}
 
 {% set pageName = "NHS Record a vaccination prototypes" %}
 
@@ -43,9 +43,16 @@
 
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Patient list</h2>
 			<ol start="2">
-				<li><a href="patients">Patient list</a></li>
-				<li><a href="alt-patients?showData">Patient list [working alternative] </a></li>
-				<li><a href="alt-patients?showData=dueDate">Patient list [working alternative &amp; adjusted data]</a></li>
+				<li><a href="patients?filtersApplied">Patient list [no filters]</a></li>
+				<li><a href="patients?filtersApplied=true">Patient list [filters applied]</a></li>
+				<li>Single data and error tab:
+					<ul>
+						<li><a href="alt-patients?showData&filtersApplied">Patient list [no filters] </a></li>
+						<li><a href="alt-patients?showData&filtersApplied=true">Patient list [filters applied]</a></li>
+						<li><a href="alt-patients?showData=dueDate">Patient list [adjusted data, no filters]</a></li>
+						<li><a href="alt-patients?showData=dueDate&filtersApplied=true">Patient list [adjusted data, filters applied]</a></li>
+					</ul>
+				</li>
 			</ol>
 
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Row level errors</h2>
@@ -55,7 +62,10 @@
 
 			<h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Export patient list</h2>
 			<ol start="6">
-				<li><a href="export-list">Export patient list</a></li>
+				<li><a href="export-patients?filtersApplied">Export patients (no filters)</a></li>
+				<li><a href="export-patients?filtersApplied=true">Export patients (filters)</a></li>
+				<li><a href="export-patients-completed?filtersApplied">Export patients completed (no filters)</a></li>
+				<li><a href="export-patients-completed?filtersApplied=true">Export patients completed (filters)</a></li>
 			</ol>
 
 		</div>

@@ -1,53 +1,12 @@
-{% extends 'e2e-layout3.html' %}
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
 
 {% set pageName = "Update your name" %}
 
-{% set currentSection = "user-profile" %}
-
-{% if data["e2eCurrentUserType"] == "admin" %}
-  {% set userFullName = 'Alex Shah' %}
-{% elif data["e2eCurrentUserType"] == "OH" %}
-  {% set userFullName = 'Kirsty Green' %}
-{% elif data["e2eCurrentUserType"] == "infant" %}
-  {% set userFullName = 'Samantha Walker' %}
-{% else %}
-  {% set userFullName = 'Jane Smith' %}
-{% endif %}
-
-{# Full name on the same page #}
-{% set fullName = (userFullName | default("Infant User")) | trim %}
-
-{# Prepare holders #}
-{% set firstName = "" %}
-{% set lastName = "" %}
-{% set seenSpace = false %}
-{% set startedLast = false %}
-
-{# Build firstName: chars until the first space #}
-{% for ch in fullName %}
-  {% if not seenSpace %}
-    {% if ch == ' ' %}
-      {% set seenSpace = true %}
-    {% else %}
-      {% set firstName = firstName ~ ch %}
-    {% endif %}
-  {% else %}
-    {# After we've seen a space, keep only the last token for lastName #}
-    {% if ch == ' ' %}
-      {% set startedLast = false %}
-    {% else %}
-      {% if not startedLast %}
-        {% set lastName = "" %}
-        {% set startedLast = true %}
-      {% endif %}
-      {% set lastName = lastName ~ ch %}
-    {% endif %}
-  {% endif %}
-{% endfor %}
+{% set currentSection = "manage" %}
 
 {% block beforeContent %}
   {{ backLink({
-    text: "Go back",
+    text: "Back",
     href: "/user-profile"
   }) }}
 {% endblock %}
@@ -60,23 +19,23 @@
       <form action="/user-profile/update" method="post" novalidate="true">
 
         {{ input({
-          label: {
-            text: "First name"
+          "label": {
+            "text": "First name"
           },
-          id: "first-name",
-          name: "firstName",
+          "id": "first-name",
+          "name": "firstName",
           classes: "nhsuk-input--width-20",
-          value: firstName
+          value: currentUser.firstName
         }) }}
 
         {{ input({
-          label: {
-            text: "Last name"
+          "label": {
+            "text": "Last name"
           },
-          id: "last-name",
-          name: "lastName",
+          "id": "last-name",
+          "name": "lastName",
           classes: "nhsuk-input--width-20 nhsuk-u-margin-bottom-4",
-          value: lastName
+          value: currentUser.lastName
         }) }}
 
         {{ button({

@@ -1,0 +1,116 @@
+{% extends '../../layouts/layout.html' %}
+
+{% macro sessionsAndBookings(sessions, bookings) %}
+<table class="nhsuk-table-responsive" role="table">
+  <caption class="nhsuk-table__caption">
+    Clinic details
+  </caption>
+  <thead class="nhsuk-table__head" role="rowgroup">
+    <tr class="nhsuk-table__row" role="row">
+      <th scope="col" class="nhsuk-table__header nhsuk-u-width-one-quarter" role="columnheader">Date and time</th>
+      <th scope="col" class="nhsuk-table__header nhsuk-u-width-one-quarter" role="columnheader">Bookings per service</th>
+      <th scope="col" class="nhsuk-table__header nhsuk-u-width-one-quarter" role="columnheader">Unbooked</th>
+    </tr>
+  </thead>
+  <tbody class="nhsuk-table__body">
+    {% for session in sessions %}
+    <tr class="nhsuk-table__row" role="row">
+      <td class="nhsuk-table__cell" role="cell">
+        <span class="nhsuk-table-responsive__heading" aria-hidden="true">Date time </span>{{ session.date | nhsDate }}<br>{{ session.from | nhsTime }} to {{ session.until | nhsTime }}
+      </td>
+      <td class="nhsuk-table__cell" role="cell">
+        <span class="nhsuk-table-responsive__heading" aria-hidden="true">Bookings </span>
+        <ul class="nhsuk-list">
+        {% for serviceId in session.services %}
+          {% set serviceName = data.services[serviceId].name if data.services[serviceId] else serviceId %}
+          {% set bookingCount = session.serviceBookingCounts[serviceId] if session.serviceBookingCounts else 0 %}
+          <li>{{ serviceName }} ({{ bookingCount }} {{ 'booking' | plural(bookingCount) }})</li>
+        {% endfor %}
+        </ul>
+      </td>
+      <td class="nhsuk-table__cell" role="cell">
+        <span class="nhsuk-table-responsive__heading" aria-hidden="true">Unbooked </span>
+        {{ session.unbookedCount or 0 }}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endmacro %}
+
+{% set pageName = "You are about to cancel " ~affectedSessions|length~ " "~ 'clinic' | plural(affectedSessions | length) %}
+
+{% block beforeContent %}
+{{ backLink({
+  href: '/site/' + site_id + '/cancel-availability/dates'
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+    {% if affectedBookings|length > 0 %}
+    <p class="nhsuk-u-width-two-thirds">There are {{ affectedBookings | length }} bookings for these {{ 'clinic' | plural(affectedSessions | length) }}</p>
+
+    {% call details({
+      summaryText: "View clinics and bookings",
+      classes: "nhsuk-expander"
+    }) %}
+      {{ sessionsAndBookings(affectedSessions, affectedBookings) }}
+    {% endcall %}
+    
+      <form method="post" action="/site/{{ site_id }}/cancel-availability/check-answers" class="nhsuk-u-width-two-thirds">
+        <input type="hidden" name="[cancelAvailability][affectedSessions]" value="{{ affectedSessions | length }}">
+        <input type="hidden" name="[cancelAvailability][affectedBookings]" value="{{ affectedBookings | length }}">
+        {{ radios({
+          idPrefix: "keepOrCancel",
+          name: "[cancelAvailability][keepOrCancelBookings]",
+          fieldset: {
+            legend: {
+              text: "What do you want to do with the "~ affectedBookings|length ~ " bookings?",
+              size: "m"
+            }
+          },
+          items: [
+            {
+              value: "keep",
+              text: "Keep bookings",
+              checked: true if data.cancelAvailability.keepOrCancelBookings == 'keep',
+              hint: {
+                text: "These will stay in your appointments list"
+              }
+            },
+            {
+              value: "cancel",
+              text: "Cancel bookings",
+              checked: true if data.cancelAvailability.keepOrCancelBookings == 'cancel',
+              hint: {
+                text: "We will email or text them to confirm the cancellation"
+              }
+            }
+          ]
+        }) }}
+        {{ button({
+          text: "Continue"
+        }) }}
+      </form>
+
+    {% else %}
+
+      <p>There are no bookings for these clinics.</p>
+      {% call details({
+        summaryText: "View clinics",
+        classes: "nhsuk-expander"
+      }) %}
+        {{ sessionsAndBookings(affectedSessions, affectedBookings) }}
+      {% endcall %}
+      {{
+        button({
+          text: "Continue",
+          href: "/site/" + site_id + "/cancel-availability/check-answers"
+        })
+      }}
+    {% endif %}
+  </div>
+{% endblock %}

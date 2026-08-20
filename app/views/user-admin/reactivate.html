@@ -1,14 +1,14 @@
-{% extends 'e2e-layout3.html' %}
+{% extends 'layout.html' %}
 
 {% set pageName = "Reactivate user" %}
 
 
-{% set currentSection = "prepare" %}
+{% set currentSection = "manage-users" %}
 
 {% block beforeContent %}
   {{ backLink({
     href: "/user-admin/deactivated",
-    text: "Go back"
+    text: "Back"
   }) }}
 {% endblock %}
 

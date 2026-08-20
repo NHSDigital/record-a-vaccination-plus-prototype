@@ -1,0 +1,30 @@
+{% extends 'ravs-plus-layout-1-oh.html' %}
+
+{% set currentSection = "plus" %}
+
+{% block pageTitle %}
+  Patients and invitation type don't match
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <div class="nhsuk-panel nhsuk-panel--interruption">
+        <h1 class="nhsuk-panel__title nhsuk-panel__title--l">
+          Patients and invitation type don't match
+        </h1>
+        <div class="nhsuk-panel__body">
+          <p>Patient list view doesn't match the chosen invitation type. [Wording TBC]</p>
+          <div class="nhsuk-button-group">
+            <a class="nhsuk-button nhsuk-button--reverse" data-module="nhsuk-button" href="invite" role="button" draggable="false">
+              Confirm
+            </a>
+            <a href="#" onclick="window.history.back(); return false;">Cancel</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

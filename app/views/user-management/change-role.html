@@ -1,0 +1,179 @@
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
+
+{% set pageName = "Change role for user" %}
+
+{% set currentSection = "manage" %}
+
+{% set selectedUser = data.user %}
+
+{% if selectedUser == "Gary" %}
+  {% set displayName = "Gary Campos" %}
+  {% set email = "gary.campos@nhs.net" %}
+  {% set lastLogin = "1 day ago" %}
+  {% set vaccinator = "no" %}
+  {% set ravsplus = "no" %}
+  {% set permissionLevel = "Recorder" %}
+
+{% elif selectedUser == "Jeremy" %}
+  {% set displayName = "Jeremy Blue" %}
+  {% set email = "jeremy.blue@nhs.net" %}
+  {% set lastLogin = "2 days ago" %}
+  {% set vaccinator = "no" %}
+  {% set ravsplus = "no" %}
+  {% set permissionLevel = "Administrator" %}
+
+{% elif selectedUser == "Nina" %}
+  {% set displayName = "Nina Hunt" %}
+  {% set email = "nina.hunt@nhs.net" %}
+  {% set lastLogin = "3 days ago" %}
+  {% set vaccinator = "yes" %}
+  {% set ravsplus = "yes" %}
+  {% set permissionLevel = "Lead administrator" %}
+
+{% else %}
+  {% set displayName = user.firstName + " " + user.lastName %}
+  {% set email = user.email %}
+  {% set lastLogin = "86 days ago" %}
+  {% set permissionLevel = userOrganisationSettings.permissionLevel %}
+{% endif %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "#", text: "Back", attributes: { onclick: "if (history.length > 1) { history.back(); } else { window.location.href='/'; } return false;" } }) }}
+{% endblock %}
+
+{% set userOrganisationSettings = (user.organisations | findById(data.currentOrganisationId)) %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">{{ displayName }}</h1>
+
+      <dl class="nhsuk-summary-list">
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Email
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ email }}
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Last log in
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ lastLogin }}
+          </dd>
+        </div>
+      </dl>
+
+      <form action="manage-users?changeRole=true" method="post" novalidate="true">
+
+        {{ radios({
+          "name": "vaccinator",
+          "fieldset": {
+            "legend": {
+              "text": "Are they a vaccinator?",
+              classes: "nhsuk-fieldset__legend--s"
+
+            }
+          },
+          hint: {
+            text: "Vaccination records include the name of the person who gave the vaccination"
+          },
+          value: vaccinator,
+          "items": [
+            {
+              "value": "yes",
+              "text": "Yes"
+            },
+            {
+              "value": "no",
+              "text": "No"
+            }
+          ]
+        }) }}
+
+        {# START: RAVS+ Additional functionality #}
+        {% set conditionalAdditionalFunctionality %}
+          {{ checkboxes({
+            idPrefix: "additionalFunctionality",
+            name: "additionalFunctionality",
+            fieldset: { legend: { text: "Additional functionality", classes: "nhsuk-fieldset__legend nhsuk-u-visually-hidden" } },
+            classes: "nhsuk-checkboxes",
+            items: [
+              { value: "functionalityMaternity", text: "Maternity", hint: { text: "Additional maternity functionality, etc." } },
+              { value: "functionalityOccupationalHealth", text: "Occupational health", hint: { text: "Additional occupational health functionality, etc." } }
+            ]
+          }) }}
+        {% endset %}
+
+        {{ radios({
+          "name": "ravsplus",
+          "fieldset": {
+            "legend": {
+              "text": "Enable RAVS+ functionality?",
+              classes: "nhsuk-fieldset__legend--s"
+            }
+          },
+          value: ravsplus,
+          "items": [
+            {
+              "value": "yes",
+              "text": "Yes"
+            },
+            {
+              "value": "no",
+              "text": "No"
+            }
+          ]
+        }) }}
+        {# END: RAVS+ Additional functionality #}
+
+        {{ radios({
+          "name": "permissionLevel",
+          "fieldset": {
+            "legend": {
+              "text": "Permission level",
+              classes: "nhsuk-fieldset__legend--s"
+            }
+          },
+          value: permissionLevel,
+          "items": [
+            {
+              "value": "Recorder",
+              "text": "Recorder",
+              "hint": {
+                "text": "Record vaccinations only"
+              }
+            },
+            {
+              "value": "Administrator",
+              "text": "Administrator",
+              "hint": {
+                "text": "Record vaccinations, create reports and manage vaccines"
+              }
+            },
+            {
+              "value": "Lead administrator",
+              "text": "Lead administrator",
+              "hint": {
+                "text": "Record vaccinations, create reports, manage vaccines and users"
+              }
+            }
+          ]
+        }) }}
+
+        <p>Do they still need an account? <a href="#/">Deactivate this account</a></p>
+
+        {{ button({
+          "text": "Continue"
+      }) }}
+      </form>
+
+    </div>
+  </div>
+
+
+{% endblock %}

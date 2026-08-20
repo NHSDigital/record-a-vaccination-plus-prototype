@@ -1,0 +1,81 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set currentSection = "organise" %}
+
+{% block pageTitle %}
+  Upload patient list and send invites
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/">Home</a></li>
+      <li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/iteration-2/landing-organise-clinics">Organise clinics</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Send invites</li>
+      {#<li class="nhsuk-breadcrumb__list-item"><a class="nhsuk-breadcrumb__link" href="/send-invites/choose-task?taskChoice">Send invites</a></li>
+      <li class="nhsuk-breadcrumb__list-item">Upload patient list and send invites</li>#}
+    </ol>
+    <a class="nhsuk-back-link" href="javascript:history.back()">
+      Go back
+    </a>
+  </nav>
+  {#<a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>#}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l">
+        <!--<span class="nhsuk-caption-l">Engage patients</span>-->
+        Upload patient list and send invites
+      </h1>
+
+      {#<p class="nhsuk-body">
+        Before you start this process you need to be sure that you are happy with the rules you have set and the templates that you will send.
+      </p>#}
+
+      <p class="nhsuk-body">
+        It is important to make sure that you are handling data in line with your organisation's Information Governance rules.
+      </p>
+
+      <details class="nhsuk-details nhsuk-expander">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">
+            Guidance on how structure inputted data
+          </span>
+        </summary>
+        <div class="nhsuk-details__text">
+          <p>Structure of input data:</p>
+          <ul>
+            <li>All patients where: pregnancy status = yes AND week 10+ into pregnancy</li>
+            <li>Name</li>
+            <li>NHS No</li>
+            <li>Pregnancy status = yes</li>
+            <li>Due date</li>
+            <li>Email address/ phone number</li>
+            <li>Contact preferences</li>
+          </ul>
+        </div>
+      </details>
+
+      <form class="form" action="uploading" method="post" class="submit">
+        <div class="govuk-form-group">
+          <label class="nhsuk-label" for="file-upload-1">
+            Upload patient list
+          </label>
+          <input class="govuk-file-upload" id="file-upload-1" name="fileUpload1" type="file">
+        </div>
+
+        <div class="govuk-button-group">
+          <button type="submit" class="nhsuk-button nhsuk-u-margin-right-3" data-module="nhsuk-button">
+            Upload file
+          </button>
+          {#<p class="nhsuk-body"><a class="nhsuk-link" href="/send-invites/choose-task?taskChoice">Cancel</a></p>#}
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

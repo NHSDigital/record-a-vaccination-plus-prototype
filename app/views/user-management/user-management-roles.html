@@ -1,0 +1,125 @@
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+
+{% set currentSection = "plus" %}
+
+{% set pageName = "USER ROLE MANAGEMENT" %}
+
+{% block beforeContent %}
+  {{ backLink({ href: "javascript:window.history.back()" }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+      <h1 class="">Additional details</h1>
+
+      <form method="post" action="e">
+        <h2>Email</h2>
+        <p>gemma.buchanan2@nhs.net</p>
+
+        <div class="nhsuk-form-group">
+          <fieldset class="nhsuk-fieldset">
+            <legend class="nhsuk-fieldset__legend">
+              <h1 class="nhsuk-fieldset__heading">Roles</h1>
+            </legend>
+            <div class="nhsuk-form-group">
+              <div class="nhsuk-checkboxes" data-module="nhsuk-checkboxes">
+                <div class="nhsuk-checkboxes__item">
+                  <input
+                    class="nhsuk-checkboxes__input"
+                    id="canned:appointment-manager"
+                    type="checkbox"
+                    aria-describedby="canned:appointment-manager--hint"
+                    name="roleIds"
+                    value="canned:appointment-manager"
+                  /><label
+                    class="nhsuk-label nhsuk-checkboxes__label"
+                    id="canned:appointment-manager--label"
+                    for="canned:appointment-manager"
+                    >Appointment manager</label
+                  >
+                  <div
+                    class="nhsuk-hint nhsuk-checkboxes__hint"
+                    id="canned:appointment-manager--hint"
+                  >
+                    A user can view and cancel appointments.
+                  </div>
+                </div>
+                <div class="nhsuk-checkboxes__item">
+                  <input
+                    class="nhsuk-checkboxes__input"
+                    id="canned:availability-manager"
+                    type="checkbox"
+                    aria-describedby="canned:availability-manager--hint"
+                    name="roleIds"
+                    value="canned:availability-manager"
+                  /><label
+                    class="nhsuk-label nhsuk-checkboxes__label"
+                    id="canned:availability-manager--label"
+                    for="canned:availability-manager"
+                    >Availability manager</label
+                  >
+                  <div
+                    class="nhsuk-hint nhsuk-checkboxes__hint"
+                    id="canned:availability-manager--hint"
+                  >
+                    A user can create, view, and manage site availability.
+                  </div>
+                </div>
+                <div class="nhsuk-checkboxes__item">
+                  <input
+                    class="nhsuk-checkboxes__input"
+                    id="canned:site-details-manager"
+                    type="checkbox"
+                    aria-describedby="canned:site-details-manager--hint"
+                    name="roleIds"
+                    value="canned:site-details-manager"
+                  /><label
+                    class="nhsuk-label nhsuk-checkboxes__label"
+                    id="canned:site-details-manager--label"
+                    for="canned:site-details-manager"
+                    >Site details manager</label
+                  >
+                  <div
+                    class="nhsuk-hint nhsuk-checkboxes__hint"
+                    id="canned:site-details-manager--hint"
+                  >
+                    A user can edit site details and accessibility information.
+                  </div>
+                </div>
+                <div class="nhsuk-checkboxes__item">
+                  <input
+                    class="nhsuk-checkboxes__input"
+                    id="canned:user-manager"
+                    type="checkbox"
+                    aria-describedby="canned:user-manager--hint"
+                    name="roleIds"
+                    value="canned:user-manager"
+                  /><label
+                    class="nhsuk-label nhsuk-checkboxes__label"
+                    id="canned:user-manager--label"
+                    for="canned:user-manager"
+                    >User manager</label
+                  >
+                  <div
+                    class="nhsuk-hint nhsuk-checkboxes__hint"
+                    id="canned:user-manager--hint"
+                  >
+                    A user can view and manage user role assignments.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="nhsuk-button-group">
+          <a class="nhsuk-button" data-module="nhsuk-button" href="#/">Continue</a>
+          <a class="nhsuk-button nhsuk-button--secondary" data-module="nhsuk-button" href="#/">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

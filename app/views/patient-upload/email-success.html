@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% set pageName = "Email inbox" %}
+
+{% block header %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-l">Email inbox</h1>
+
+      <div class="app-email-preview">
+        <p class="nhsuk-body">Dear {{ data.firstName }} {{ data.lastName }},</p>
+
+        <p class="nhsuk-body">Your upload to the Record a vaccination service (RAVS) is now complete.</p>
+        
+        <p class="nhsuk-body">The patient information you uploaded has been checked and matched to the vaccination information we already hold in RAVS.</p>
+        
+        <p class="nhsuk-body">There are XX patients on your new list.</p>
+
+        <p class="nhsuk-body">Your list of patients includes:</p>
+        <ul class="nhsuk-list nhsuk-list--bullet">
+          <li>XX eligible for an RSV vaccination</li>
+          <li>XX eligible for a pertussis vaccination</li>
+          <li>XX eligible for both RSV and pertussis vaccinations</li>
+        </ul>
+
+        <p class="nhsuk-body">There are XX patients whose information is not complete because there was a problem with the data.</p>
+
+        <h2 class="nhsuk-heading-s">Any questions?</h2>
+
+        <p class="nhsuk-body">If you have any questions about using RAVS, contact our helpdesk by emailing <a href="mailto:ravs.support@england.nhs.uk">ravs.support@england.nhs.uk</a>.</p>
+
+        <p class="nhsuk-body">Kind regards,<br>NHS Record a vaccination</p>
+
+        <p class="nhsuk-body">Do not reply to this email as we do not check this inbox.</p>
+        <p class="nhsuk-body">To contact us, go to: <a href="https://www.ravs.england.nhs.uk/help-and-support">Record a vaccination: Help and support</a>.</p>
+
+      </div>
+
+      <a href="#" class="nhsuk-back-link nhsuk-u-margin-top-0" onclick="window.history.back(); return false;">Go back</a>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends '../../../layouts/layout.html' %}
+{% from '../../../components/secondary-navigation.njk' import appSecondaryNavigation %}
+{% from '../../../components/action-control-bar.njk' import appActionControlBar %}
+{% from 'nhsuk/components/card/macro.njk' import card %}
+
+{% set isThisMonth = (currentDate | formatDate('yyyy-MM')) == (today | formatDate('yyyy-MM')) %}
+{% set pageName = (currentDate | formatDate("LLLL yyyy")) ~ (isThisMonth and ' (this month)' or '') %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      {{
+        appSecondaryNavigation({
+          items: [
+            {
+              text: 'Day view',
+              href: '/site/' ~ site_id ~ '/availability/day'
+            },
+            {
+              text: 'Week view',
+              href: '/site/' ~ site_id ~ '/availability/week'
+            },
+            {
+              text: 'Month view',
+              href: '/site/' ~ site_id ~ '/availability/month',
+              current: true
+            },
+            {
+              text: 'Create and manage clinics',
+              href: '/site/' ~ site_id ~ '/clinics'
+            }
+          ]
+        })
+      }}
+
+      <h1 class="nhsuk-heading-xl">{{ pageName }}</h1>
+
+      {{ pagination({
+        previous: {
+          labelText: (previousMonthDate | formatDate('LLLL yyyy')),
+          href: "/site/" ~ site_id ~ "/availability/month?date=" ~ previousMonthDate
+        },
+        next: {
+          labelText: (nextMonthDate | formatDate('LLLL yyyy')),
+          href: "/site/" ~ site_id ~ "/availability/month?date=" ~ nextMonthDate
+        }
+      }) }}
+
+      <ol class="app-panel-list">
+        {% for week in monthWeeks %}
+        <li class="app-panel-list__item">
+          {% call card({
+            heading: week.start | nhsDateRange(week.end),
+            headingClasses: 'nhsuk-heading-s',
+            classes: 'nhsuk-u-margin-bottom-4'
+          }) %}
+            {% if week.services and week.services.length %}
+              <table class="nhsuk-table">
+                <thead class="nhsuk-table__head">
+                  <tr class="nhsuk-table__row">
+                    <th scope="col" class="nhsuk-table__header">Services</th>
+                    <th scope="col" class="nhsuk-table__header">Booked appointments</th>
+                  </tr>
+                </thead>
+                <tbody class="nhsuk-table__body">
+                  {% for service in week.services %}
+                  <tr class="nhsuk-table__row">
+                    <td class="nhsuk-table__cell">{{ service.name }}</td>
+                    <td class="nhsuk-table__cell">{{ service.bookedCount }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+              <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0"><strong>Total appointments:</strong> {{ week.totalAppointments }}</p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0"><strong>Booked:</strong> {{ week.bookedAppointments }}</p>
+                </div>
+                <div class="nhsuk-grid-column-one-third">
+                  <p class="nhsuk-body-s nhsuk-u-margin-bottom-0"><strong>Free:</strong> {{ week.unbookedAppointments }}</p>
+                </div>
+              </div>
+
+              <p class="nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-0">
+                <a href="{{ week.weekViewHref }}">View week</a>
+              </p>
+            {% else %}
+              <p class="nhsuk-body nhsuk-u-margin-bottom-0">No appointments.</p>
+            {% endif %}
+          {% endcall %}
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+{% endblock %}

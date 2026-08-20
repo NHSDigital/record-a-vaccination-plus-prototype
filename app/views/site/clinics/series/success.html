@@ -1,0 +1,20 @@
+{% extends '../../../layouts/layout.html' %}
+
+{% set pageName = 'Clinic series created' %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      {{ panel({
+        titleText: pageName
+      }) }}
+
+      <h2 class="nhsuk-heading-m">What would you like to do next?</h2>
+
+      <ul class="nhsuk-list nhsuk-list--bullet">
+        <li><a href="/site/{{ site_id }}/clinics">Go back to clinics list</a></li>
+        <li><a href="/site/{{ site_id }}/clinics/type-of-clinic?new=1">Create more clinics</a></li>
+      </ul>
+    </div>
+  </div>
+{% endblock %}

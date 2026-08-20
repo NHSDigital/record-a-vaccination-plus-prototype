@@ -27,7 +27,7 @@
           <strong class="nhsuk-tag nhsuk-tag--yellow">Eligible</strong>
         </th>
         <td class="nhsuk-table__cell">
-          Not vaccinated in this vaccination season and was last vaccinated more than XX months ago.
+          Patient has not been vaccinated in this vaccination season and they were last vaccinated more than XX months ago.
         </td>
       </tr>
       <tr class="nhsuk-table__row">
@@ -35,7 +35,7 @@
           <strong class="nhsuk-tag nhsuk-tag--green" style="white-space: nowrap;">Vaccinated</strong>
         </th>
         <td class="nhsuk-table__cell">
-          Vaccinated in this vaccination season.
+          Patient has been vaccinated in this vaccination season.
         </td>
       </tr>
       <tr class="nhsuk-table__row">
@@ -43,7 +43,7 @@
           <strong class="nhsuk-tag nhsuk-tag--red">Declined</strong>
         </th>
         <td class="nhsuk-table__cell">
-          Chose not to be vaccinated in this vaccination season.
+          Patient has chosen not to be vaccinated in this vaccination season.
         </td>
       </tr>
       </tbody>
@@ -57,10 +57,10 @@
   <thead role="rowgroup" class="nhsuk-table__head">
     <tr role="row">
       <th role="columnheader" class="nhsuk-table__header" scope="col">Name and NHS number</th>
-      <th role="columnheader" class="nhsuk-table__header" scope="col">Personal ID</th>
-      <th role="columnheader" class="nhsuk-table__header" scope="col">Job role and staff group</th>
-      <th role="columnheader" class="nhsuk-table__header" scope="col">Location</th>
-      <th role="columnheader" class="nhsuk-table__header" scope="col">Flu eligibility</th>
+      <th role="columnheader" class="nhsuk-table__header" scope="col" aria-sort="ascending">Personal ID</th>
+      <th role="columnheader" class="nhsuk-table__header" scope="col" aria-sort="none">Job role and staff group</th>
+      <th role="columnheader" class="nhsuk-table__header" scope="col" aria-sort="none">Location</th>
+      <th role="columnheader" class="nhsuk-table__header" scope="col" aria-sort="none">Flu eligibility</th>
     </tr>
   </thead>
   <tbody class="nhsuk-table__body">
@@ -340,10 +340,6 @@
 </div>
 
 <div class="nhsuk-button-group">
-  {% if data.filtersApplied == "true" %}
-    <a class="nhsuk-button" data-module="nhsuk-button" href="send-invites">Send invitations</a>
-  {% else %}
-    <a class="nhsuk-button" data-module="nhsuk-button" href="review-and-send">Send invitations</a>
-  {% endif %}
-  <a class="nhsuk-button nhsuk-button--secondary" data-module="nhsuk-button" href="export-patients">Export patients</a>
+  <a class="nhsuk-button" data-module="nhsuk-button" href="review-and-send">Send invitations</a>
+  <a class="nhsuk-button nhsuk-button--secondary" data-module="nhsuk-button" href="export-patients">Export list of patients</a>
 </div>

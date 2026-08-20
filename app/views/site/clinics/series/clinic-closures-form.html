@@ -1,0 +1,120 @@
+{% extends '../../../layouts/layout.html' %}
+
+{% set pageName = "Add clinic closure" %}
+{% if mode == 'change' %}{% set pageName = "Change clinic closure" %}{% endif %}
+{% if not backUrl %}{% set backUrl = '/site/' + site_id + '/clinics/clinic-closures' %}{% endif %}
+
+{% block beforeContent %}
+{{ backLink({
+  href: backUrl
+}) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      {% if errors %}
+        <div class="nhsuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1">
+          <h2 class="nhsuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+          <div class="nhsuk-error-summary__body">
+            <ul class="nhsuk-list nhsuk-error-summary__list">
+              {% if errors.startDate %}<li><a href="#closure-start-date-day">{{ errors.startDate }}</a></li>{% endif %}
+              {% if errors.endDate %}<li><a href="#closure-end-date-day">{{ errors.endDate }}</a></li>{% endif %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
+      <form action="{{ actionHref }}" method="post">
+        <input type="hidden" name="newSession[type]" value="Clinic series">
+        {{ input({
+          label: {
+            text: "Name of closure (optional)",
+            classes: "nhsuk-label--m"
+          },
+          id: "closure-name",
+          name: "closure[name]",
+          classes: "nhsuk-input--width-20",
+          hint: {
+            text: "Add a short name for these dates. For example, Christmas closure"
+          },
+          value: closure.name
+        }) }}
+
+        {{ dateInput({
+          id: "closure-start-date",
+          namePrefix: "closure[startDate]",
+          errorMessage: {
+            text: errors.startDate
+          } if errors and errors.startDate,
+          fieldset: {
+            legend: {
+              text: "Start date",
+              classes: "nhsuk-label--m"
+            }
+          },
+          hint: {
+            text: "For example, 25 12 2026"
+          },
+          items: [
+            {
+              name: "day",
+              classes: "nhsuk-input--width-2",
+              value: closure.startDate.day
+            },
+            {
+              name: "month",
+              classes: "nhsuk-input--width-2",
+              value: closure.startDate.month
+            },
+            {
+              name: "year",
+              classes: "nhsuk-input--width-4",
+              value: closure.startDate.year
+            }
+          ]
+        }) }}
+
+        {{ dateInput({
+          id: "closure-end-date",
+          namePrefix: "closure[endDate]",
+          errorMessage: {
+            text: errors.endDate
+          } if errors and errors.endDate,
+          fieldset: {
+            legend: {
+              text: "End date",
+              classes: "nhsuk-label--m"
+            }
+          },
+          hint: {
+            text: "For example, 27 12 2026"
+          },
+          items: [
+            {
+              name: "day",
+              classes: "nhsuk-input--width-2",
+              value: closure.endDate.day
+            },
+            {
+              name: "month",
+              classes: "nhsuk-input--width-2",
+              value: closure.endDate.month
+            },
+            {
+              name: "year",
+              classes: "nhsuk-input--width-4",
+              value: closure.endDate.year
+            }
+          ]
+        }) }}
+
+        {{ button({
+          text: "Continue"
+        }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

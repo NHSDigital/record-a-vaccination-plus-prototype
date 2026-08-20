@@ -1,0 +1,140 @@
+{% set userType = data['e2eCurrentUserType'] | default('') %}
+
+{% if userType == 'admin' %}
+  {% set userEmail = 'alex.shah@nhs.net' %}
+  {% set userName = 'Alex Shah' %}
+  {% set prototypeServiceName = 'Admin' %}
+{% elif userType == 'OH' %}
+  {% set userEmail = 'kirsty.green@nhs.net' %}
+  {% set userName = 'Kirsty Green' %}
+  {% set prototypeServiceName = 'Occupational health' %}
+{% elif userType == 'infant' %}
+  {% set userEmail = 'samantha.walker@nhs.net' %}
+  {% set userName = 'Samantha Walker' %}
+  {% set prototypeServiceName = 'Infant' %}
+{% else %}
+  {% set userEmail = 'jane.smith@nhs.net' %}
+  {% set userName = 'Jane Smith' %}
+  {% set prototypeServiceName = 'Record a vaccination' %}
+{% endif %}
+
+
+{% if data.loggedOutStatus == "true" %}
+  {{ header({
+    service: {
+      text: (prototypeServiceName),
+      href: "/"
+    },
+    account: {
+      items: [
+        {
+          href: '/auth/log-in',
+          text: 'Log in'
+        }
+      ]
+    },
+    navigation: {
+      items: [
+        {
+          href: "/",
+          text: "Record vaccinations",
+          active: (currentSection == "record")
+        },
+        {
+          href: "/",
+          text: "Dashboard",
+          active: (currentSection == "home")
+        },
+
+        {
+          href: "/",
+          text: ("Records") | safe,
+          active: (currentSection == "records")
+        },
+        {
+          href: "/",
+          text: "Reports",
+          active: (currentSection == "reports")
+        },
+        {
+          href: "/",
+          text: ("Vaccines") | safe,
+          active: (currentSection == "vaccines")
+        },
+        {
+          href: "landing",
+          text: "Staff vaccinations",
+          active: (currentSection == "plus")
+        },
+        {
+          href: "/",
+          text: "Manage users",
+          active: (currentSection == "manage")
+        }
+      ]
+    }
+  }) }}
+{% else %}
+  {{ header({
+    service: {
+      text: (prototypeServiceName),
+      href: "/"
+    },
+    account: {
+      items: [
+        {
+          href: "#/",
+          icon: true,
+          text: (userName) | safe
+        },
+        { 
+          text: "BWC Trust"
+        },
+        {
+          href: '#/',
+          text: 'Log out'
+        }
+      ]
+    },
+    navigation: {
+      items: [
+        {
+          href: "/",
+          text: "Record vaccinations",
+          active: (currentSection == "record")
+        },
+        {
+          href: "/",
+          text: "Dashboard",
+          active: (currentSection == "home")
+        },
+
+        {
+          href: "/",
+          text: ("Records") | safe,
+          active: (currentSection == "records")
+        },
+        {
+          href: "/",
+          text: "Reports",
+          active: (currentSection == "reports")
+        },
+        {
+          href: "/",
+          text: ("Vaccines") | safe,
+          active: (currentSection == "vaccines")
+        },
+        {
+          href: "landing",
+          text: "Staff vaccinations",
+          active: (currentSection == "plus")
+        },
+        {
+          href: "/",
+          text: "Manage users",
+          active: (currentSection == "manage")
+        }
+      ]
+    }
+  }) }}
+{% endif %}

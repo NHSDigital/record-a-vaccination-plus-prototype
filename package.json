@@ -37,7 +37,7 @@
     "express": "^5.1.0",
     "express-session": "^1.18.1",
     "gulp": "^5.0.1",
-    "gulp-babel": "^8.0.0",
+    "gulp-babel": "^8.1.0",
     "gulp-clean": "^0.4.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-nodemon": "^2.5.0",

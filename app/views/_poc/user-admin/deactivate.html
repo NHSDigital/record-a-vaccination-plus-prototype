@@ -1,0 +1,50 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Deactivate your account" %}
+
+{% set currentSection = "prepare" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/user-admin/index",
+    text: "Go back"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      {% if user.id === currentUser.id %}
+
+        <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+        <p>Once you deactivate your account, you’ll be signed out and cannot sign in and use NHS Record a vaccination.</p>
+
+        <p>Your Okta account will remain active, so you can continue to access other services.</p>
+
+        <p>Another lead admin can reactivate your account anytime.</p>
+
+      {% else %}
+
+        <h1 class="nhsuk-heading-l">Deactivate {{ data['userName'] }}</h1>
+
+        <p>Once you deactivate {{ data['userName'] }} ({{ data['userEmail'] }}), they cannot sign in and use NHS Record a vaccination. They’ll receive an email to confirm their account has been deactivated.</p>
+
+        <p>Their Okta account will remain active, so they can continue to access other services.</p>
+
+        <p>You can reactivate their account anytime.</p>
+      {% endif %}
+
+      <form action="/user-admin/deactivated" method="post" novalidate="true">
+        {{ button({
+          "text": "Deactivate",
+          classes: "nhsuk-button--warning"
+        }) }}
+      </form>
+
+    </div>
+  </div>
+
+
+{% endblock %}

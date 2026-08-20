@@ -1,0 +1,284 @@
+{% extends '../../../layouts/layout.html' %}
+
+{% set pageName = "Check your answers" %}
+
+{% macro closureText(closure) %}
+  {% set closureStart = closure.startDate | formatDate('d MMM yyyy') %}
+  {% set closureEnd = closure.endDate | formatDate('d MMM yyyy') %}
+  {% if closureStart == closureEnd %}
+    {{ closureStart }}
+  {% else %}
+    {{ closureStart }} to {{ closureEnd }}
+  {% endif %}
+  {% if closure.label %}
+    - {{ closure.label }}
+  {% endif %}
+{% endmacro %}
+
+{% block beforeContent %}
+{{ backLink({
+  href: '/site/' + site_id + '/clinics/clinic-closures'
+}) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      {% set resolvedButtonText = buttonText or 'Publish clinic series' %}
+      {% set resolvedButtonClasses = '' %}
+      {% if bookingAction == 'cancel' %}
+        {% set resolvedButtonText = 'Publish clinic series and cancel bookings' %}
+        {% set resolvedButtonClasses = 'nhsuk-button--warning' %}
+      {% endif %}
+
+      <form action="/site/{{ site_id }}/clinics/process-new-session" method="post">
+        {% set startDate -%}
+          {{ data.newSession.startDate.year }}-{{ data.newSession.startDate.month }}-{{ data.newSession.startDate.day }}
+        {%- endset %}
+        {% set endDate -%}
+          {{ data.newSession.endDate.year }}-{{ data.newSession.endDate.month }}-{{ data.newSession.endDate.day }}
+        {%- endset %}
+        {% set displayDate -%}
+          {{ startDate | formatDate }} to {{ endDate | formatDate }}
+        {%- endset %}
+
+        {% set displayDays = (data.newSession.days or []) | join(", ") %}
+
+        {% set startTime = (data.newSession.startTime.hour) + ':' + (data.newSession.startTime.minute | default('00')) %}
+        {% set endTime = (data.newSession.endTime.hour) + ':' + (data.newSession.endTime.minute | default('00')) %}
+        {% set displayTime = (startTime | nhsTime) + " to " + (endTime | nhsTime) %}
+
+        {% set startParts = startTime.split(':') %}
+        {% set endParts = endTime.split(':') %}
+        {% set startMinutes = (startParts[0] | int * 60) + (startParts[1] | int) %}
+        {% set endMinutes = (endParts[0] | int * 60) + (endParts[1] | int) %}
+        {% set sessionMinutes = endMinutes - startMinutes %}
+        {% set totalAppointmentsPerClinic = 0 %}
+        {% if sessionMinutes > 0 and (data.newSession.duration | int) > 0 and (data.newSession.capacity | int) > 0 %}
+          {% set totalAppointmentsPerClinic = (sessionMinutes // (data.newSession.duration | int)) * (data.newSession.capacity | int) %}
+        {% endif %}
+
+        {% set servicesAvailable = [] %}
+        {% set selectedServices = data.newSession.services or [] %}
+        {% if selectedServices is string %}
+          {% set selectedServices = [selectedServices] %}
+        {% endif %}
+
+        {% if "All" in selectedServices %}
+          {% for id, service in data.services %}
+            {% set servicesAvailable = servicesAvailable.concat(service.name) %}
+          {% endfor %}
+        {% else %}
+          {% for id in selectedServices %}
+            {% set service = data.services[id] %}
+            {% if service %}
+              {% set servicesAvailable = servicesAvailable.concat(service.name) %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+          {% set servicesSummaryHtml %}
+            {% if servicesAvailable and (servicesAvailable | length > 0) %}
+                <ul class="nhsuk-list nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-0">
+                {% for serviceName in servicesAvailable %}
+                  <li>{{ serviceName }}</li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              None selected
+            {% endif %}
+          {% endset %}
+
+        {% set closuresSummaryHtml %}
+          {% if data.newSession.closures and (data.newSession.closures | length > 0) %}
+            <ul class="nhsuk-list nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-0">
+              {% for closure in data.newSession.closures %}
+                <li>{{ closureText(closure) | trim }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            None added
+          {% endif %}
+        {% endset %}
+
+        {% set isCombinedTimesAndCapacity = features and features.combinedTimesAndCapacity %}
+        {% set timesAndCapacitySummaryHtml %}
+          <ul class="nhsuk-list nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-0">
+            <li>Start time: {{ startTime | nhsTime }}</li>
+            <li>End time: {{ endTime | nhsTime }}</li>
+            <li>Vaccinators: {{ data.newSession.capacity }}</li>
+            <li>Appointment length: {{ data.newSession.duration }} minutes</li>
+            <li>Total appointments per clinic: {{ totalAppointmentsPerClinic }}</li>
+          </ul>
+        {% endset %}
+
+        {% set checkAnswersRows = [
+          {
+            key: {
+              text: "Dates"
+            },
+            value: {
+              text: displayDate
+            },
+            actions: {
+              items: [
+                {
+                  href: "/site/" + site_id + "/clinics/details",
+                  text: "Change",
+                  visuallyHiddenText: " dates"
+                }
+              ]
+            }
+          }, {
+            key: {
+              text: "Days"
+            },
+            value: {
+              text: displayDays
+            },
+            actions: {
+              items: [
+                {
+                  href: "/site/" + site_id + "/clinics/days",
+                  text: "Change",
+                  visuallyHiddenText: " days"
+                }
+              ]
+            }
+          }
+        ] %}
+
+        {% if isCombinedTimesAndCapacity %}
+          {% set checkAnswersRows = checkAnswersRows.concat([
+            {
+              key: {
+                text: "Times and capacity"
+              },
+              value: {
+                html: timesAndCapacitySummaryHtml
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/site/" + site_id + "/clinics/clinic-times",
+                    text: "Change",
+                    visuallyHiddenText: " times and capacity"
+                  }
+                ]
+              }
+            }
+          ]) %}
+        {% else %}
+          {% set checkAnswersRows = checkAnswersRows.concat([
+            {
+              key: {
+                text: "Time"
+              },
+              value: {
+                text: displayTime
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/site/" + site_id + "/clinics/clinic-times",
+                    text: "Change",
+                    visuallyHiddenText: " time"
+                  }
+                ]
+              }
+            }, {
+              key: {
+                text: "Vaccinators available"
+              },
+              value: {
+                text: data.newSession.capacity
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/site/" + site_id + "/clinics/appointments-calculator",
+                    text: "Change",
+                    visuallyHiddenText: " vaccinators available"
+                  }
+                ]
+              }
+            }, {
+              key: {
+                text: "Total appointments per clinic"
+              },
+              value: {
+                text: totalAppointmentsPerClinic
+              }
+            }, {
+              key: {
+                text: "Appointment length"
+              },
+              value: {
+                text: data.newSession.duration ~ " minutes"
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/site/" + site_id + "/clinics/appointments-calculator",
+                    text: "Change",
+                    visuallyHiddenText: " appointment length"
+                  }
+                ]
+              }
+            }
+          ]) %}
+        {% endif %}
+
+        {% set checkAnswersRows = checkAnswersRows.concat([
+          {
+            key: {
+              text: "Services available"
+            },
+            value: {
+              html: servicesSummaryHtml
+            },
+            actions: {
+              items: [
+                {
+                  href: "/site/" + site_id + "/clinics/services",
+                  text: "Change",
+                  visuallyHiddenText: " services available"
+                }
+              ]
+            }
+          }, {
+            key: {
+              text: "Clinic closures"
+            },
+            value: {
+              html: closuresSummaryHtml
+            },
+            actions: {
+              items: [
+                {
+                  href: "/site/" + site_id + "/clinics/clinic-closures",
+                  text: "Change",
+                  visuallyHiddenText: " clinic closures"
+                }
+              ]
+            }
+          }
+        ]) %}
+
+        {{ summaryList({
+          rows: checkAnswersRows
+        }) }}
+
+        <h2 class="nhsuk-heading-m nhsuk-u-margin-top-6">Before you continue</h2>
+        <p class="nhsuk-body">By publishing this clinic series, you confirm that your site is assured to deliver the services you have selected.</p>
+
+        {{ button({
+          text: resolvedButtonText,
+          classes: resolvedButtonClasses
+        }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

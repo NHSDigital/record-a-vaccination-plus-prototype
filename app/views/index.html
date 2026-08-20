@@ -1,28 +1,90 @@
-{% extends 'layout-index-only.html' %}
+{% extends 'layout.html' %}
 
-{% set pageName = "NHS Record a vaccination prototypes" %}
+{% set pageName = "NHS Record a vaccination plus prototypes" %}
+
+{% block header %}
+  {% include "includes/header-index-only.html" %}
+{% endblock %}
 
 {% block content %}
 	<div class="nhsuk-grid-row">
-		<div class="nhsuk-grid-column-full">
+		<div class="nhsuk-grid-column-two-thirds">
 
 			<h1 class="nhsuk-heading-xl">
-				Prototype
+				RAVS+ prototype
 			</h1>
+
+			<h2 class="nhsuk-heading-m">MVP: Maternity Private beta</h2>
+			<ul>
+				<li><a href="/mvp-patient-upload/index">Upload patient list</a></li>
+				<li><a href="/mvp-patient-list-and-export/index">Patient list and export</a></li>
+			</ul>
+
+			<hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+	
+			<h2 class="nhsuk-heading-m">Common functions and shared components</h2>
+			<ul>
+				<li><a href="/user-management/index">User management</a></li>
+				<li><a href="/common-components/header-maternity">Maternity header</a></li>
+				<li><a href="/common-components/header-occupational-health">Occupational health header</a></li>
+			</ul>
+
+			<hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+
+
+			<h2 class="nhsuk-heading-m">MVP: Occupational health</h2>
+			<ul>
+				<li><a href="/occupational-health/index">Upload, enrich, patient history, patient list, export, and invite</a></li>
+			</ul>
 			
-			<h2>Patient list variant 1</h2>
+			<hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
 
-			<ul>
-				<li><a href="/patient-list-variant-1/mvp-choose-cohort">Choose cohort</a></li>
-				<li><a href="/patient-list-variant-1/mvp-patient-list">Patient list</a></li>
-			</ul>
+			<details class="nhsuk-details">
+			<summary class="nhsuk-details__summary">
+				<span class="nhsuk-details__summary-text">Post MVP features</span>
+			</summary>
+			<div class="nhsuk-details__text">
+				<h2 class="nhsuk-heading-s">Post MVP features</h2>
+				<ul>
+					<li><a href="/maternity-patient-list-2-0-0/patients">Expanded patient list</a></li>
+					<li><a href="/patient-upload/index">Upload patient list</a></li>
+					<li><a href="/patient-list-and-export/index">Patient list and export</a></li>
+				</ul>
+			</div>
+			</details>
 
-			<h2>Patient list variant 2</h2>
+			<p class="nhsuk-body"><a href="/appointments/home">Clinics / sessions</a></p>
 
-			<ul>
-				<li><a href="/patient-list-variant-2/patients">Patient list</a></li>
-			</ul>
+			<hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
 
-	    </div>
-  	</div>
+			<h2 class="nhsuk-heading-s"><a href="/mvp-patient-upload/landing?scenario&researchSession=one">Research journey 1</a></h2>
+			<details class="nhsuk-details">
+				<summary class="nhsuk-details__summary">
+					<span class="nhsuk-details__summary-text">
+						Research journey 1 details
+					</span>
+				</summary>
+				<div class="nhsuk-details__text">
+					<p>Linked order:</p>
+					<ol>
+						<li>Maternity landing &gt; Add patients</li>
+						<li>Add patients &gt; Upload file</li>
+						<li>Upload complete &gt; View patient upload history</li>
+						<li>View patient upload history &gt; Maternity (primary / breadcrumb)</li>
+						<li>Maternity landing &gt; Add patients</li>
+						<li>Add patients &gt; View enrichment success email</li>
+						<li>Enrichment success email &gt; View patient list</li>
+						<li>Patients &gt; Filter and sort &gt; Apply</li>
+						<li>Patients &gt; Export list of patients &gt; Export filtered list of patients</li>
+						<li>Export list of patients &gt; Export filtered list of patients</li>
+						<li>Export ready &gt; View list of patients</li>
+						<li>Footer &gt; Reset prototype test data to clear everything down</li>
+					</ol>
+				</div>
+			</details>
+
+			<hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible">
+
+		</div>
+	</div>
 {% endblock %}

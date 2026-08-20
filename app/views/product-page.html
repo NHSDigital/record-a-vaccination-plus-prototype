@@ -1,10 +1,6 @@
-{% extends 'layout.html' %}
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
 
 {% set pageName = "" %}
-
-{% block header %}
-  {% include "includes/header-logged-out.html" %}
-{% endblock %}
 
 {% block main %}
 <div class="nhsuk-hero">
@@ -14,18 +10,18 @@
         <div class="nhsuk-hero__wrapper">
           <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-5">The simplest way to record vaccinations</h1>
 
-          <p>Record COVID-19, flu, RSV and pertussis vaccinations.</p>
+          <p>Record NHS vaccinations, including COVID-19, flu, RSV and pertussis.</p>
 
           <p class="nhsuk-body">Used by community pharmacies, NHS trusts and GPs.</p>
 
-          <div class="app-button-group nhsuk-u-margin-bottom-0">
+          <div class="nhsuk-button-group nhsuk-u-margin-bottom-0">
             {{ button({
               text: "Sign up for free",
               href: "/apply/start",
               classes: "nhsuk-button--reverse"
             }) }}
 
-            <p class="nhsuk-body nhsuk-u-margin-bottom-0">or <a href="/okta-sign-in" class="nhsuk-link nhsuk-link--reverse nhsuk-u-font-weight-bold">log in</a></p>
+            <p class="nhsuk-body nhsuk-u-margin-bottom-0">or <a href="/auth/log-in" class="nhsuk-link nhsuk-link--reverse nhsuk-u-font-weight-bold">log in</a></p>
           </div>
         </div>
       </div>
@@ -46,7 +42,7 @@
 
         <div class="nhsuk-grid-column-one-third">
           <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">Connected</h2>
-          <p class="">Integrated with GP records and BSA payments.</p>
+          <p class="">Integrated with GP records and NHSBSA payments.</p>
         </div>
         <div class="nhsuk-grid-column-one-third">
           <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">Get access today</h2>
@@ -72,7 +68,7 @@
           <span class="app-numbered-heading__title">Sign up</span>
         </h3>
         <div class="app-numbered-heading__content">
-          <p>Sign up with your NHS email and get an account.</p>
+          <p>Sign up with your NHS email to get a Record a vaccination (RAVS) account.</p>
         </div>
       </div>
       <div class="nhsuk-grid-column-one-half nhsuk-u-margin-top-0 nhsuk-u-padding-left-8 nhsuk-u-padding-left-4 nhsuk-u-padding-bottom-8">
@@ -103,7 +99,7 @@
           <span class="app-numbered-heading__title">Record vaccinations</span>
         </h3>
         <div class="app-numbered-heading__content">
-          <p>Check a patient’s history and record vaccinations you give. </p>
+          <p>Check a patient's history and record vaccinations you give. </p>
 
           <p>These will automatically appear in the patient's GP record and in the NHS App. </p>
 
@@ -137,7 +133,7 @@
           <span class="app-numbered-heading__title">Get paid</span>
         </h3>
         <div class="app-numbered-heading__content">
-          <p>Pharmacies are paid automatically by the NHS Business Services Authority through Manage Your Service (MYS).</p>
+          <p>Pharmacies are paid automatically for flu and COVID-19 vaccinations by the NHS Business Services Authority (NHSBSA), through Manage Your Service (MYS).</p>
         </div>
       </div>
       <div class="nhsuk-grid-column-one-half nhsuk-u-margin-top-0 nhsuk-u-padding-left-8 nhsuk-u-padding-left-4 nhsuk-u-padding-bottom-4">
@@ -157,22 +153,21 @@
       <div class="nhsuk-grid-column-one-third">
         <div class="nhsuk-u-font-size-19 nhsuk-u-margin-top-2">
           More than<br>
-          <span class="nhsuk-u-font-size-36 nhsuk-u-font-weight-bold">1.4 million</span><br> vaccinations recorded
+          <span class="nhsuk-u-font-size-36 nhsuk-u-font-weight-bold">3 million</span><br> vaccinations recorded
         </div>
       </div>
 
       <div class="nhsuk-grid-column-one-third">
         <div class="nhsuk-u-font-size-19 nhsuk-u-margin-top-2">
           Over<br>
-          <span class="nhsuk-u-font-size-36 nhsuk-u-font-weight-bold">13,000</span><br>
-          users
+          <span class="nhsuk-u-font-size-36 nhsuk-u-font-weight-bold">15,000</span><br> users
         </div>
       </div>
       <div class="nhsuk-grid-column-one-third">
         <div class="nhsuk-u-font-size-19 nhsuk-u-margin-top-2">
           Used by<br>
-          <span class="nhsuk-u-font-size-36 nhsuk-u-font-weight-bold">300+</span><br>
-          pharmacies and NHS trusts
+          <span class="nhsuk-u-font-size-36 nhsuk-u-font-weight-bold">800+</span><br>
+          pharmacies and trusts
 
         </div>
       </div>
@@ -181,19 +176,38 @@
 </div>
 </div>
 
-<div style="background-color: #005eb8; color: white;">
+ 
+<div>
+  <div class="nhsuk-width-container" id="find-out-more">
+    <div class="nhsuk-main-wrapper">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-two-thirds">
+
+          <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-5">Switching from another pharmacy system</h2>
+
+          <p>From 1 September 2026, community pharmacies must use Record a vaccination for all NHS vaccinations, including COVID-19 and flu.</p>
+          
+          <p>You can sign up for an account to use the service any time before the start of autumn vaccinations.</p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div style="background-color: #005eb8; color: white;">
 <div class="nhsuk-width-container" id="find-out-more">
   <div class="nhsuk-main-wrapper nhsuk-u-padding-top-4 nhsuk-u-padding-bottom-4">
 
     <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-<div style="width: 100px; height: 100px; background-image: url('/images/pharmacist.jpg'); background-size: cover; border-radius: 50px; float: left;"></div>
-      <div style="margin-left: 150px; max-width: 700px;" class="nhsuk-body nhsuk-u-font-size-26 nhsuk-u-margin-top-2">
-        <blockquote class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-margin-bottom-1 nhsuk-u-padding-top-3">
-          “It's easy and quick to use. Our staff love it.”
+      <div class="nhsuk-grid-column-full-width">
+        <div style="width: 100px; height: 100px; background-image: url('/images/pharmacist.jpg'); background-size: cover; border-radius: 50px; float: left;"></div>
+      <div style="margin-left: 150px; max-width: 700px;" class="nhsuk-body nhsuk-u-font-size-26 nhsuk-u-margin-top-0">
+        <blockquote class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-margin-bottom-1 nhsuk-u-padding-top-2">
+          “Our pharmacists prefer using RAVS. <br>It's straightforward and easy to use.”
         </blockquote>
 
-        <div class="nhsuk-body nhsuk-u-font-size-19">– Sam Jenkins, Holloway Pharmacy</div>
+        <div class="nhsuk-body nhsuk-u-font-size-19">- Natasha Jones, Operations Lead, GM Graham Pharmacies</div>
       </div>
       </div>
       <div class="nhsuk-grid-column-one-third">
@@ -204,25 +218,27 @@
 </div>
 
 
-<div class="xapp-section--white">
+
+   <div>
   <div class="nhsuk-width-container" id="find-out-more">
     <div class="nhsuk-main-wrapper">
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-two-thirds">
 
-          <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-5">Switching from another pharmacy system?</h2>
+          <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-5">Trusts and GPs</h2>
 
-          <p>You can switch point of care systems at any time, and use different systems for different pharmacies.</p>
+          <p>This includes teams vaccinating in occupational health, maternity, in-patient and outreach settings.</p>
+          
+          <p>Your regions are responsible for inviting you to use Record a vaccination.</p>
 
-          <p>You will still have access to your previous system for at least 6 months so you can download reports.</p>
-
-          <p>Other questions? <a href="#">Get in touch</a>.</p>
+          <p>If you want to use the service, <a href="https://future.nhs.uk/connect.ti/vaccsandscreening/view?objectId=1004883">contact your Regional Vaccination Operations Centre (RVOC)</a>.</p>
 
         </div>
       </div>
     </div>
   </div>
 </div>
+
 
 <div class="app-section--white">
   <div class="nhsuk-width-container" id="find-out-more">
@@ -232,9 +248,9 @@
         <div class="nhsuk-grid-column-one-third">
           <h3 class="nhsuk-heading-s">Training</h3>
 
-          <p>Regular online training sessions available.</p>
+          <p>Regular drop-in sessions available, plus a user guide with short videos.</p>
 
-          <p><a href="https://outlook.office365.com/book/agemAppsTrainingRAVSTrainingRAVS@nhs.onmicrosoft.com/">Book an online webinar</a></p>
+          <p><a href="https://guide.ravs.england.nhs.uk/">User guide and training</a></p>
 
         </div>
 
@@ -245,10 +261,9 @@
 
         </div>
         <div class="nhsuk-grid-column-one-third">
-          <h3 class="nhsuk-heading-s">Helpdesk</h3>
+          <h3 class="nhsuk-heading-s">Help and support</h3>
 
-          <p>0333 038 4268<br>
-          <a href="mailto:ravs.support@england.nhs.uk">ravs.support@england.nhs.uk</a></p>
+          <p><a href="/help-and-support">Contact our support team</a></p>
 
           <p>Monday to Friday, 8am to 6pm</p>
 

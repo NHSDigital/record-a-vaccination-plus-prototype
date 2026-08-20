@@ -1,0 +1,369 @@
+{% extends '../../../layouts/layout.html' %}
+{% from '../../../components/app-card.njk' import appCard %}
+
+{% set editBasePath = '/site/' ~ site_id ~ '/clinics/edit/' ~ sessionId %}
+{% set isSeries = draft.type == 'Clinic series' %}
+{% set isCombinedTimesAndCapacity = features and features.combinedTimesAndCapacity %}
+{% set pageName = 'Change clinic series' if isSeries else 'Change single clinic' %}
+{% set datesTitle = 'Dates' if isSeries else 'Date' %}
+{% set vaccinatorText = draft.capacity ~ ' vaccinator' %}
+{% if draft.capacity != 1 %}
+  {% set vaccinatorText = vaccinatorText ~ 's' %}
+{% endif %}
+
+{% block beforeContent %}
+{{ backLink({
+  href: backHref or ('/site/' + site_id + '/clinics')
+}) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      {% macro oneOffChangesSummary(childSession) %}
+        {% set hasChange = false %}
+        <dl>
+          {% if childSession.from and childSession.until %}
+            {% set hasChange = true %}
+            <dt class="nhsuk-u-font-weight-bold">Times</dt>
+            <dd class="nhsuk-u-margin-left-0 nhsuk-u-margin-bottom-2">{{ childSession.from | nhsTime }} to {{ childSession.until | nhsTime }}</dd>
+          {% endif %}
+
+          {% if childSession.capacity %}
+            {% set hasChange = true %}
+            <dt class="nhsuk-u-font-weight-bold">Vaccinators</dt>
+            <dd class="nhsuk-u-margin-left-0 nhsuk-u-margin-bottom-2">{{ childSession.capacity }}</dd>
+          {% endif %}
+
+          {% if childSession.services and (childSession.services | length) > 0 %}
+            {% set hasChange = true %}
+            <dt class="nhsuk-u-font-weight-bold">Services</dt>
+            <dd class="nhsuk-u-margin-left-0 nhsuk-u-margin-bottom-2">
+              {% set baseServices = draft.services or [] %}
+              {% set effectiveServices = baseServices %}
+              {% set isReplaceMode = false %}
+
+              {% if childSession.services[0] is string %}
+                {% set effectiveServices = childSession.services %}
+                {% set isReplaceMode = true %}
+              {% else %}
+                {% for operation in childSession.services %}
+                  {% set opService = operation.service %}
+                  {% if operation.operation == 'replace' %}
+                    {% if not isReplaceMode %}
+                      {% set effectiveServices = [] %}
+                      {% set isReplaceMode = true %}
+                    {% endif %}
+                    {% if opService and (opService not in effectiveServices) %}
+                      {% set effectiveServices = effectiveServices.concat([opService]) %}
+                    {% endif %}
+                  {% elif operation.operation == 'add' %}
+                    {% if opService and (opService not in effectiveServices) %}
+                      {% set effectiveServices = effectiveServices.concat([opService]) %}
+                    {% endif %}
+                  {% elif operation.operation == 'remove' %}
+                    {% set nextServices = [] %}
+                    {% for existingService in effectiveServices %}
+                      {% if existingService != opService %}
+                        {% set nextServices = nextServices.concat([existingService]) %}
+                      {% endif %}
+                    {% endfor %}
+                    {% set effectiveServices = nextServices %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+              {% set serviceLines = [] %}
+
+              {% if isReplaceMode %}
+                {% for serviceId in effectiveServices %}
+                  {% set serviceName = data.services[serviceId].name if data.services[serviceId] else serviceId %}
+                  {% set serviceLines = serviceLines.concat([serviceName]) %}
+                {% endfor %}
+              {% else %}
+                {% for serviceId in baseServices %}
+                  {% set serviceName = data.services[serviceId].name if data.services[serviceId] else serviceId %}
+                  {% if serviceId in effectiveServices %}
+                    {% set serviceLines = serviceLines.concat([serviceName]) %}
+                  {% else %}
+                    {% set serviceLines = serviceLines.concat(['<span class="nhsuk-u-secondary-text-colour">' + serviceName + ' (removed)</span>']) %}
+                  {% endif %}
+                {% endfor %}
+
+                {% for serviceId in effectiveServices %}
+                  {% if serviceId not in baseServices %}
+                    {% set serviceName = data.services[serviceId].name if data.services[serviceId] else serviceId %}
+                    {% set serviceLines = serviceLines.concat([serviceName + ' (added)']) %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+              {{ serviceLines | join('<br>') | safe }}
+            </dd>
+          {% endif %}
+
+          {% if not hasChange %}
+            <dt class="nhsuk-u-font-weight-bold">No changes</dt>
+            <dd class="nhsuk-u-margin-left-0 nhsuk-u-margin-bottom-0">No one-off changes recorded</dd>
+          {% endif %}
+        </dl>
+      {% endmacro %}
+
+
+      {# slots calculation #}
+      {% set fromParts = draft.from.split(':') %}
+      {% set untilParts = draft.until.split(':') %}
+      {% set startMinutes = (fromParts[0] | int * 60) + (fromParts[1] | int) %}
+      {% set endMinutes = (untilParts[0] | int * 60) + (untilParts[1] | int) %}
+      {% set sessionMinutes = endMinutes - startMinutes %}
+      {% set totalAppointments = 0 %}
+      {% if sessionMinutes > 0 and (draft.duration | int) > 0 and (draft.capacity | int) > 0 %}
+        {% set totalAppointments = (sessionMinutes // (draft.duration | int)) * (draft.capacity | int) %}
+      {% endif %}
+      {# end:slots calculation #}
+
+      {% set servicesHtml %}
+        {%- for serviceId in draft.services %}
+          {%- if data.services[serviceId] -%}
+            {{ data.services[serviceId].name }}
+          {%- else -%}
+            {{ serviceId }}
+          {%- endif -%}
+          {%- if not loop.last %}<br>{% endif -%}
+        {%- endfor %}
+      {% endset %}
+
+      {% set closuresItems = [] %}
+      {% if draft.closures and draft.closures.length %}
+        {% for closure in draft.closures %}
+          {% set closureKeyHtml %}
+            {% if closure.label %}
+              {{ closure.label }}
+            {% else %}
+              <span class="nhsuk-body-s nhsuk-u-margin-bottom-0">No label</span>
+            {% endif %}
+          {% endset %}
+          {% set closuresItems = closuresItems.concat([{
+            keyHtml: closureKeyHtml,
+            value: closure.startDate | nhsDateRange(closure.endDate)
+          }]) %}
+        {% endfor %}
+      {% endif %}
+
+      <h1 class="nhsuk-heading-l">{{ pageName }}</h1>
+
+      {{ appCard({
+        title: datesTitle,
+        action: {
+          href: editBasePath ~ '/details',
+          text: 'Change',
+          visuallyHiddenText: ' clinic details'
+        },
+        items: [
+          {
+            key: 'Start date' if isSeries else 'Date',
+            value: draft.startDate | nhsDate
+          },
+          {
+            key: 'End date',
+            value: draft.endDate | nhsDate
+          } if isSeries
+        ]
+      }) }}
+      
+
+
+      {% if isSeries %}
+        {{ appCard({
+          title: 'Day pattern',
+          action: {
+            href: editBasePath ~ '/days',
+            text: 'Change',
+            visuallyHiddenText: ' day pattern'
+          },
+          items: [
+            {
+              key: 'Days',
+              value: draft.days | join(', ')
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      {% if isCombinedTimesAndCapacity %}
+        {{ appCard({
+          title: 'Times and capacity',
+          action: {
+            href: editBasePath ~ '/clinic-times',
+            text: 'Change',
+            visuallyHiddenText: ' times and capacity'
+          },
+          items: [
+            {
+              key: 'Start time',
+              value: draft.from | nhsTime
+            },
+            {
+              key: 'End time',
+              value: draft.until | nhsTime
+            },
+            {
+              key: 'Vaccinators',
+              value: vaccinatorText
+            },
+            {
+              key: 'Appointment length',
+              value: draft.duration ~ ' minutes'
+            },
+            {
+              key: 'Total appointments per clinic',
+              value: totalAppointments
+            }
+          ]
+        }) }}
+      {% else %}
+        {{ appCard({
+          title: 'Start and end times',
+          action: {
+            href: editBasePath ~ '/clinic-times',
+            text: 'Change',
+            visuallyHiddenText: ' start and end times'
+          },
+          items: [
+            {
+              key: 'Start time',
+              value: draft.from | nhsTime
+            },
+            {
+              key: 'End time',
+              value: draft.until | nhsTime
+            }
+          ]
+        }) }}
+
+        {{ appCard({
+          title: 'Capacity',
+          action: {
+            href: editBasePath ~ '/appointments-calculator',
+            text: 'Change',
+            visuallyHiddenText: ' booking length'
+          },
+          items: [
+            {
+              key: 'Booking length',
+              value: draft.duration ~ ' minutes'
+            },
+            {
+              key: 'Vaccinators',
+              value: vaccinatorText
+            },
+            {
+              key: 'Total appointments per clinic',
+              value: totalAppointments
+            }
+          ]
+        }) }}
+      {% endif %}
+
+      {{ appCard({
+        title: 'Services',
+        action: {
+          href: editBasePath ~ '/services',
+          text: 'Change',
+          visuallyHiddenText: ' services'
+        },
+        items: [
+          {
+            key: 'Services',
+            html: servicesHtml
+          }
+        ]
+      }) }}
+
+      {% if isSeries %}
+        {% if closuresItems | length > 0 %}
+        {{ appCard({
+          title: 'Closures',
+          action: {
+            href: editBasePath ~ '/clinic-closures',
+            text: 'Change',
+            visuallyHiddenText: ' closures'
+          },
+          items: closuresItems
+        }) }}
+        {% else %}
+        {{ appCard({
+          title: 'Closures',
+          action: {
+            href: editBasePath ~ '/clinic-closures',
+            text: 'Change',
+            visuallyHiddenText: ' closures'
+          },
+          html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-0">No closures added</p>'
+         }) }}
+         {% endif %}
+
+        {% set oneOffChangesItems = [] %}
+        {% if draft.childSessions and draft.childSessions.length %}
+          {% for childSession in draft.childSessions %}
+            {% set includeOneOffChange = true %}
+            {% if not childSession.date or childSession.date < draft.startDate or childSession.date > draft.endDate %}
+              {% set includeOneOffChange = false %}
+            {% endif %}
+
+            {% if includeOneOffChange and draft.closures and draft.closures.length %}
+              {% for closure in draft.closures %}
+                {% if closure.startDate and closure.endDate and childSession.date >= closure.startDate and childSession.date <= closure.endDate %}
+                  {% set includeOneOffChange = false %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+
+            {% if includeOneOffChange %}
+              {% set childDate = childSession.date | formatDate('d MMM yyyy') %}
+              {% set childInstanceId = '' %}
+              {% set daySessions = dailyAvailability[childSession.date].sessions if dailyAvailability and dailyAvailability[childSession.date] and dailyAvailability[childSession.date].sessions else [] %}
+              {% for daySession in daySessions %}
+                {% if daySession.recurringId == sessionId and not childInstanceId %}
+                  {% set childInstanceId = daySession.id %}
+                {% endif %}
+              {% endfor %}
+
+              {% if childInstanceId %}
+                {% set backHref = editBasePath %}
+                {% set oneOffChangesItems = oneOffChangesItems.concat([
+                  {
+                    key: childDate,
+                    html: oneOffChangesSummary(childSession),
+                    actions: {
+                      items: [
+                        {
+                          href: '/site/' + site_id + '/change/session/' + childInstanceId + '?back=' + (backHref | urlencode),
+                          text: 'Change',
+                          visuallyHiddenText: ' one-off changes for ' + childDate
+                        }
+                      ]
+                    }
+                  }
+                ]) %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        {% if oneOffChangesItems | length > 0 %}
+          {{ appCard({
+            title: 'Clinics with changes',
+            items: oneOffChangesItems
+          }) }}
+        {% else %}
+          {{ appCard({
+            title: 'Clinics with changes',
+            html: '<p class="nhsuk-body-s nhsuk-u-margin-bottom-0">No clinics with changes.</p>'
+          }) }}
+        {% endif %}
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}

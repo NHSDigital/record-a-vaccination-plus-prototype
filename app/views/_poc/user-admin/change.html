@@ -1,0 +1,188 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Change role for user" %}
+
+{% set currentSection = "prepare" %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "/user-admin/index",
+    text: "Go back"
+  }) }}
+{% endblock %}
+
+{% set userOrganisationSettings = (user.organisations | findById(data.currentOrganisationId)) %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 class="nhsuk-heading-l"><!--{{ user.firstName }} {{ user.lastName }}-->{{ data['userName'] }}</h1>
+
+      <dl class="nhsuk-summary-list">
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Email
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            <!--{{ user.email }}-->{{ data['userEmail'] }}
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            Last log in
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            <!--86 days ago-->{{ data['userLastLogin'] }}
+          </dd>
+        </div>
+      </dl>
+
+
+      <form action="/user-admin/users/{{ user.id }}/update" method="post" novalidate="true">
+
+        {{ radios({
+          "name": "vaccinator",
+          "fieldset": {
+            "legend": {
+              "text": "Are they a clinician?",
+              classes: "nhsuk-fieldset__legend--s"
+
+            }
+          },
+          value: ("yes" if data['userVaccinator'] else "no"),
+          "items": [
+            {
+              "value": "yes",
+              "text": "Yes"
+            },
+            {
+              "value": "no",
+              "text": "No"
+            }
+          ]
+        }) }}
+
+
+        {{ checkboxes({
+          "name": "e2ePermissionLevel",
+          idPrefix: "e2e-permission-level",
+          "fieldset": {
+            "legend": {
+              "text": "Permission level"
+            }
+          },
+          value: data.e2ePermissionLevel,
+          "items": [
+            {
+              "value": "userGroup1",
+              "text": "Manage clinics and sessions",
+              "hint": {
+                "text": "Create vaccination clinics and set availability limits"
+              }
+            },
+            {
+              "value": "userGroup2",
+              "text": "Manage vaccines",
+              "hint": {
+                "text": "Add vaccine types to clinics, add batches to clinics"
+              }
+            },
+            {
+              "value": "userGroup3",
+              "text": "Create invite templates",
+              "hint": {
+                "text": "Create the content templates that will be sent to patients"
+              }
+            },
+            {
+              "value": "userGroup4",
+              "text": "Send invites",
+              "hint": {
+                "text": "Decide when invites are sent, be accountable for uploading accurate patient list"
+              }
+            },
+            {
+              "value": "userGroup5",
+              "text": "Record Vaccinations",
+              "hint": {
+                "text": "Create new and edit existing vaccine records, record sentiment, declines and non attendance. Add batches to clinics. View clinic lists"
+              }
+            },
+            {
+              "value": "userGroup6",
+              "text": "Manage users",
+              "hint": {
+                "text": "Add and remove users, change access rights for users"
+              }
+            },
+            {
+              "value": "userGroup7",
+              "text": "Reporting",
+              "hint": {
+                "text": "Run reports on vaccine uptake and bookings"
+              }
+            },
+            {
+              "value": "userGroup8",
+              "text": "View clinic manager's dashboard",
+              "hint": {
+                "text": "Access to live information about non attendance, disengaged patients, stock estimates and other insights"
+              }
+            },
+            {
+              "value": "userGroup9",
+              "text": "Publish information in service",
+              "hint": {
+                "text": "Create new and edit content in the guidance, updates and contact sections"
+              }
+            }
+          ]
+        }) }}
+
+        <!--{{ radios({
+          "name": "permissionLevel",
+          "fieldset": {
+            "legend": {
+              "text": "Permission level",
+              classes: "nhsuk-fieldset__legend--s"
+            }
+          },
+          value: userOrganisationSettings.permissionLevel,
+          "items": [
+            {
+              "value": "Recorder",
+              "text": "Recorder",
+              "hint": {
+                "text": "Record vaccinations only"
+              }
+            },
+            {
+              "value": "Administrator",
+              "text": "Administrator",
+              "hint": {
+                "text": "Record vaccinations, create reports and manage vaccines"
+              }
+            },
+            {
+              "value": "Lead administrator",
+              "text": "Lead administrator",
+              "hint": {
+                "text": "Record vaccinations, create reports, manage vaccines and users"
+              }
+            }
+          ]
+        }) }}-->
+
+        <p>Do they still need an account? <a href="/user-admin/deactivate">Deactivate this account</a></p>
+
+        {{ button({
+          "text": "Continue"
+      }) }}
+      </form>
+
+    </div>
+  </div>
+
+
+{% endblock %}

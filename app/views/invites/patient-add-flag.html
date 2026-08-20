@@ -34,11 +34,11 @@
         items: [
           {
             value: "invite-sent",
-            text: "Invite sent"
+            text: "Invited via telephone"
           },
           {
             value: "reminder-sent",
-            text: "Reminder sent"
+            text: "Reminded via telephone"
           },
           {
             value: "opt-out",
@@ -46,19 +46,19 @@
           },
           {
             value: "bereavement",
-            text: "Bereavement"
+            text: "Baby loss, miscarriage or termination"
           }
         ]
       }) }}
 
       <div class="nhsuk-button-group">
         {{ button({
-          text: "Continue"
+          text: "Continue",
+          href: "patient-add-flag-check"
         }) }}
 
-        <a href="#" class="nhsuk-link">Cancel</a>
+        <a href="patient-detail" class="nhsuk-link">Cancel</a>
       </div>
-
 
     </div>
   </div>

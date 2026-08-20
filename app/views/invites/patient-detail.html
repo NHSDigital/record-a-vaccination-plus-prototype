@@ -9,14 +9,37 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {{ backLink({
-    href: "javascript:window.history.back()"
+  {{ breadcrumb({
+    items: [
+      {
+        href: "landing",
+        text: "Maternity"
+      },
+      {
+        href: "#",
+        text: "Patients"
+      }
+    ]
   }) }}
 {% endblock %}
 
 {% block content %}
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-three-quarters">
+
+      {% set html %}
+      <p>Flag added to patient details and timeline updated.</p>
+      {% endset %}
+
+      {% if data.flag === "success" %}
+
+      {{ notificationBanner({
+        heading: "Patient record updated",
+        html: html,
+        variant: "success"
+      }) }}
+
+      {% endif %}
 
       <h1 class="nhsuk-heading-l">{{ pageTitle }}</h1>
 
@@ -91,11 +114,13 @@
 
       <div class="nhsuk-button-group">
         {{ button({
-          text: "Send patient a message"
+          text: "Send invite or reminder",
+          href: "message-start"
         }) }}
 
         {{ button({
-          text: "Add flag to patient",
+          text: "Add patient flag",
+          href: "patient-add-flag",
           classes: "nhsuk-button--secondary"
         }) }}
       </div>
@@ -167,7 +192,6 @@
           ]
         ]
       }) }}
-
 
     </div>
   </div>

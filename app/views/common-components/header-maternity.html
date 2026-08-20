@@ -1,0 +1,32 @@
+{% extends "layouts/ravs-plus-layout-1-maternity.html" %}
+
+{% set currentSection = "plus" %}
+
+{% set pageTitle = "Maternity header" %}
+
+{% block pageTitle %}
+  {{ pageTitle }}
+{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <style>
+    .nhsuk-main-wrapper,
+    .nhsuk-footer {
+      display: none;
+    }
+
+    body {
+      background: #ffffff;
+    }
+  </style>
+{% endblock %}
+
+{% block beforeContent %}
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

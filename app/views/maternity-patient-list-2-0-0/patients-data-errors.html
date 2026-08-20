@@ -1,0 +1,69 @@
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
+
+{% set currentSection = "plus" %}
+
+{% set pageTitle = "Import issues" %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
+{% endblock %}
+
+{% block beforeContent %}
+  <nav class="nhsuk-breadcrumb" aria-label="Breadcrumb">
+    <ol class="nhsuk-breadcrumb__list">
+      <li class="nhsuk-breadcrumb__list-item">
+        <a class="nhsuk-breadcrumb__link" href="landing">Maternity</a>
+      </li>
+      <li class="nhsuk-breadcrumb__list-item">
+        <a class="nhsuk-breadcrumb__link" href="patients">Patients</a>
+      </li>
+    </ol>
+    <a class="nhsuk-back-link" href="patients">
+      <span class="nhsuk-u-visually-hidden">Back to</span> Patients
+    </a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-l">
+      {{ pageTitle }}
+    </h1>
+
+    <p class="nhsuk-body">
+      This list was uploaded by <strong>Chloe Liu</strong> at 11:57am on <strong>{{ date({ day: "numeric", month: "long", year: "numeric" }, { day: -7 }) }}</strong>.
+    </p>
+
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    {% set patientCount = "238" if data.filtersApplied == "true" else "1,995" %}
+
+    {{ appSecondaryNavigation({
+      visuallyHiddenTitle: "Secondary menu",
+      classes: "nhsuk-u-margin-bottom-4",
+      items: [
+        {
+          text: "Patients (" ~ patientCount ~ ")",
+          href: "patients"
+        },
+        {
+          text: pageTitle ~ " (5)",
+          href: "#/",
+          current: true
+        }
+      ]
+    }) }}
+
+    {% include "maternity-patient-list-2-0-0/_DataQualityIssues.html" %}
+
+  </div>
+</div>
+
+{% endblock %}

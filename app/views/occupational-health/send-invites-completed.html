@@ -1,0 +1,35 @@
+{% extends 'layouts/ravs-plus-layout-1-oh.html' %}
+
+{% set currentSection = "plus" %}
+
+{% block pageTitle %}
+  Invitations sent
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <div class="nhsuk-panel">
+        <h1 class="nhsuk-panel__title">
+          Invitations sent
+        </h1>
+        <div class="nhsuk-panel__body">
+          {% if data.filtersApplied == "true" %}
+            238 patients have been invited to get a flu vaccination
+          {% else %}
+            11,655 patients have been invited to get a flu vaccination
+          {% endif %}
+        </div>
+      </div>
+
+      <p class="nhsuk-body">When a patient receives a flu vaccination, they will show as <strong>'Vaccinated'</strong> in your list of patients.</p>
+
+      {% if data.filtersApplied == "true" %}
+        <p class="nhsuk-body"><a href="patients?filtersApplied=true">View list of patients</a></p>
+      {% else %}
+        <p class="nhsuk-body"><a href="patients?filtersApplied">View list of patients</a></p>
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}

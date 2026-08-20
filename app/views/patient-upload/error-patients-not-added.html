@@ -1,39 +1,19 @@
-{% extends 'e2e-layout3.html' %}
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
 
-{% set currentSection = "organise" %}
+{% set currentSection = "plus" %}
 
 {% block pageTitle %}
-  Error, patients not added
+  There was a problem with your upload
 {% endblock %}
 
 {% block content %}
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
-      <h1 class="nhsuk-heading-l">Error, patients not added</h1>
-
-      <p class="nhsuk-body">There is a problem adding patients for your organisation.</p>
-
-      <p class="nhsuk-body">This could be because the:</p>
-      <ul>
-        <li>file format is not CSV </li>
-        <li>file is empty</li>
-        <li>data structure is incorrect</li>
-      </ul>
-
-      <p class="nhsuk-body">
-        Check for these common problems and upload the file again.  
-      </p>
-
-      <p class="nhsuk-body">
-        If you still have a problem, export a new CSV file from your existing system and try uploading that again. 
-      </p>
-
-      <h2 class="nhsuk-heading-m">Get support</p>
-      <p class="nhsuk-body">
-        Email <a href="#" class="nhsuk-link">xxxxxxxxxx@nhs.net</a> or call XXXX XXX XXX if you continue to have problems or need help with this service.  
-      </p>
-      
+      <h1 class="nhsuk-heading-l">There was a problem with your upload</h1>
+      <p class="nhsuk-body">You need to fix issues for XX patients in your CSV file.</p>
+      <p class="nhsuk-body">The CSV file must include a header row with two columns: NHS number, due date.</p>
+      <p class="nhsuk-body">Fix the issues and upload a new CSV file.</p>
+      <p class="nhsuk-body"><a href="add-patients?scenario=firstUpload" class="nhsuk-button" data-module="nhsuk-button">Add patients</a></p>
     </div>
   </div>
 {% endblock %}

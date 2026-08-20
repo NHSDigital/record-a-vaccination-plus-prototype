@@ -1,0 +1,93 @@
+{% extends 'e2e-layout3.html' %}
+
+{% set pageName = "Update your name" %}
+
+{% set currentSection = "user-profile" %}
+
+{% if data["e2eCurrentUserType"] == "admin" %}
+  {% set userFullName = 'Alex Shah' %}
+{% elif data["e2eCurrentUserType"] == "OH" %}
+  {% set userFullName = 'Kirsty Green' %}
+{% elif data["e2eCurrentUserType"] == "infant" %}
+  {% set userFullName = 'Samantha Walker' %}
+{% else %}
+  {% set userFullName = 'Jane Smith' %}
+{% endif %}
+
+{# Full name on the same page #}
+{% set fullName = (userFullName | default("Infant User")) | trim %}
+
+{# Prepare holders #}
+{% set firstName = "" %}
+{% set lastName = "" %}
+{% set seenSpace = false %}
+{% set startedLast = false %}
+
+{# Build firstName: chars until the first space #}
+{% for ch in fullName %}
+  {% if not seenSpace %}
+    {% if ch == ' ' %}
+      {% set seenSpace = true %}
+    {% else %}
+      {% set firstName = firstName ~ ch %}
+    {% endif %}
+  {% else %}
+    {# After we've seen a space, keep only the last token for lastName #}
+    {% if ch == ' ' %}
+      {% set startedLast = false %}
+    {% else %}
+      {% if not startedLast %}
+        {% set lastName = "" %}
+        {% set startedLast = true %}
+      {% endif %}
+      {% set lastName = lastName ~ ch %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% block beforeContent %}
+  {{ backLink({
+    text: "Go back",
+    href: "/user-profile"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h1 class="nhsuk-heading-l">Update your name</h1>
+
+      <form action="/user-profile/update" method="post" novalidate="true">
+
+        {{ input({
+          label: {
+            text: "First name"
+          },
+          id: "first-name",
+          name: "firstName",
+          classes: "nhsuk-input--width-20",
+          value: firstName
+        }) }}
+
+        {{ input({
+          label: {
+            text: "Last name"
+          },
+          id: "last-name",
+          name: "lastName",
+          classes: "nhsuk-input--width-20 nhsuk-u-margin-bottom-4",
+          value: lastName
+        }) }}
+
+        {{ button({
+          text: "Save and continue"
+        }) }}
+
+      </form>
+
+
+    </div>
+  </div>
+
+
+{% endblock %}

@@ -1,13 +1,13 @@
-{% extends 'e2e-layout3.html' %}
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
 
-{% set currentSection = "organise" %}
+{% set currentSection = "plus" %}
 
 {% block pageTitle %}
   Upload complete
 {% endblock %}
 
 {% block beforeContent %}
-  <a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>
+  {#<a href="#" class="nhsuk-back-link" onclick="window.history.back(); return false;">Go back</a>#}
 {% endblock %}
 
 {% block content %}
@@ -21,15 +21,16 @@
       </div>
 
       <p class="nhsuk-body">
-        We are checking the records you uploaded match the vaccination information we hold about your patients. This could take up to 30 minutes.  
+        We are checking the records you uploaded match the vaccination information we hold about your patients. 
+        This could take up to 30 minutes. You cannot view your list of patients during this time. 
       </p>
-      <p class="nhsuk-body">
-        You cannot view your list of patients during this time. 
-      </p>
+      
       <p class="nhsuk-body">
         You will get an email when the check is complete.
       </p>
-      
+
+      <p class="nhsuk-body"><a href="change-log?uploadedList=processing">View patient upload history</a>.</p>
+
     </div>
   </div>
 {% endblock %}

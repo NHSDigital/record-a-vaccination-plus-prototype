@@ -1,6 +1,6 @@
-{% extends 'e2e-layout3.html' %}
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
 
-{% set currentSection = "organise" %}
+{% set currentSection = "plus" %}
 
 {% block pageTitle %}
   Confirm you want to replace your list of patients
@@ -15,13 +15,12 @@
           Confirm you want to replace your list of patients
         </h1>
         <div class="nhsuk-panel__body">
-          <p>The patient records in your new CSV file will overwrite your current information.</p>
+          <p>The patient records in your new CSV file will overwrite and replace your current list of patients.</p>
           <p>Replacing your list of patients cannot be undone.</p>
           <div class="nhsuk-button-group">
             <a class="nhsuk-button nhsuk-button--reverse" data-module="nhsuk-button" href="upload-complete" role="button" draggable="false">
               Confirm file upload
             </a>
-
             <a href="#" onclick="window.history.back(); return false;">Cancel</a>
           </div>
         </div>

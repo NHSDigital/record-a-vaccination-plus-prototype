@@ -1,0 +1,65 @@
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
+
+{% set currentSection = "plus" %}
+
+{% set pageTitle = "Add patient flag" %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
+{% endblock %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-three-quarters">
+
+      {{ radios({
+        idPrefix: "example-hints",
+        name: "exampleHints",
+        fieldset: {
+          legend: {
+            text: pageTitle,
+            size: "l",
+            isPageHeading: true
+          }
+        },
+        hint: {
+          text: "Select 1 option"
+        },
+        items: [
+          {
+            value: "invite-sent",
+            text: "Invited via telephone"
+          },
+          {
+            value: "reminder-sent",
+            text: "Reminded via telephone"
+          },
+          {
+            value: "opt-out",
+            text: "Opted out"
+          },
+          {
+            value: "bereavement",
+            text: "Baby loss, miscarriage or termination"
+          }
+        ]
+      }) }}
+
+      <div class="nhsuk-button-group">
+        {{ button({
+          text: "Continue",
+          href: "patient-add-flag-check"
+        }) }}
+
+        <a href="patient-detail" class="nhsuk-link">Cancel</a>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

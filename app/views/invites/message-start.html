@@ -1,0 +1,36 @@
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
+
+{% set currentSection = "plus" %}
+
+{% set pageTitle = "Send a message" %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
+{% endblock %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-three-quarters">
+
+      <h1 class="nhsuk-heading-l">{{ pageTitle }}</h1>
+
+      {% include "invites/_bereavement-warning.html" %}
+
+      {% include "invites/_filtered-patient-list.html" %}
+      
+      <br>
+
+      {{ button({
+        text: "Start message"
+      }) }}
+
+    </div>
+  </div>
+{% endblock %}

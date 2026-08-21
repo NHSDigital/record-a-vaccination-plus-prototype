@@ -1,0 +1,57 @@
+{% extends 'layouts/ravs-plus-layout-1-maternity.html' %}
+
+{% set currentSection = "plus" %}
+
+{% set pageTitle = "Edit template" %}
+
+{% block pageTitle %}
+  {{ pageTitle }} - Record a vaccination - NHS
+{% endblock %}
+
+{% block beforeContent %}
+  {{ backLink({
+    href: "javascript:window.history.back()"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-three-quarters">
+
+      <h1 class="nhsuk-heading-l">{{ pageTitle }}</h1>
+
+      {{ input({
+        id: "title",
+        name: "title",
+        label: {
+          text: "Title"
+        },
+        value: "Invite for RSV at 20 weeks"
+      }) }}
+
+      {{ textarea({
+        name: "exampleRightSize",
+        id: "example-right-size",
+        rows: "5",
+        label: {
+          text: "Message body"
+        },
+        hint: {
+          text: "Please be aware that text messages are 120 characters, if you go over this it will send across two messages."
+        },
+        value: "um dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit i"
+      }) }}
+
+      <div class="nhsuk-button-group">
+        {{ button({
+          text: "Save changes"
+        }) }}
+
+        <a href="#" class="nhsuk-link">Cancel</a>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}

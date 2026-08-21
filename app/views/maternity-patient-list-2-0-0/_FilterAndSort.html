@@ -32,7 +32,7 @@
               classes: "nhsuk-checkboxes--small",
               items: [
                 { value: "statusfluvaccinated", text: "Vaccinated" },
-                { value: "statusflueligible", text: "Eligible", checked: data.filtersApplied == "true" },
+                { value: "statusflueligible", text: "Eligible" },
                 { value: "statusflunotYetElligible", text: "Not yet eligible" }
               ]
             }) }}
@@ -74,7 +74,7 @@
             items: [
               { value: "rsvStatus", text: "RSV status", checked: data.filtersApplied == "true", conditional: { html: conditionalRSVstatus } },
               { value: "pertussisStatus", text: "Pertussis status", conditional: { html: conditionalPertussisStatus } },
-              { value: "fluStatus", text: "Flu status", checked: data.filtersApplied == "true", conditional: { html: conditionalflustatus } }
+              { value: "fluStatus", text: "Flu status", conditional: { html: conditionalflustatus } }
 
             ]
           }) }}
